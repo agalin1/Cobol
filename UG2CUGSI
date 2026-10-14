@@ -1,0 +1,1063 @@
+﻿      *================================================================*
+      *  UG2CUGSI  PROGRAMA QUE SE ENCARGA DE REALIZAR LA SIMULACION   *
+      *            OPCION 1:REALIZA EL CALCULO DE LA CUOTA             *
+      *                                                                *
+      *================================================================*
+      *        I D E N T I F I C A T I O N      D I V I S I O N        *
+      *================================================================*
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.    UG2CUGSI.
+       AUTHOR. DIEGO SUAREZ - SCRUM TEAM JEAGER.
+       DATE-WRITTEN.  2018-01-05.
+       DATE-COMPILED.
+      *================================================================*
+      *        L O G    D E   M O D I F I C A C I O N E S              *
+      *================================================================*
+      * USUARIO FECHA MODI MARCA MODIFICACION                          *00002210
+      * ======= ========== ===== ======================================*00002220
+      * CE49857 23-04-2018 COL01 GP15518 - COL72318S617613             *
+      * SCRUM TEAM               SE CREA CAMPO QUE INDICA SI CUMPLE O  *00002221
+      * DIEGO SUAREZ             NO EL BURO REQUERIDO, SE ELIMINA EL   *00002222
+      *                          CAMPO DE BURO.                        *00002222
+      * ======= ========== ===== ======================================*00006530
+      * CE49857 13-06-2018 COL02 SE AJUSTA CAMPOS PARA MOSTRAS LA TASA *00006540
+      * JAEGER - SCRUM TEAM      EFECTIVA ANUAL EN LUGAR DE LA NOMINAL.*00006550
+      * DIEGO SUAREZ             COL72318S617613                       *00006560
+      *================================================================*00002230
+      * CE42028 12-08-2020 COL03 GP17212 CLICK AND PAY EPICA CSPP-188  *00006540
+      * CE59519            FEATURE CCSS-3282                           *
+      * YBRAN - SCRUM CASH TEAM SE INCLUYE CALCULO COMISION E IVA      *00006550
+      *================================================================*
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+      *================================================================*
+      *                   D A T A      D I V I S I O N                 *
+      *================================================================*
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+      *================================================================*
+      *                       CONSTANTES                               *
+      *================================================================*
+       01  PGM.
+           05 PGM-PROGRAMA              PIC X(08) VALUE 'UG2CUGSI'.
+      *
+       01  CT-CONSTANTES.
+           05 CT-LIBRE-INVERSION        PIC X(18)
+                                            VALUE 'FREE_INVESTMENT   '.
+           05 CT-COMPRA-CARTERA         PIC X(18)
+                                            VALUE 'PURCHASE_PORTFOLIO'.
+           05 CT-KNE9997                PIC X(07) VALUE 'KNE9997'.
+           05 CT-UGE0331                PIC X(07) VALUE 'UGE0331'.
+           05 CT-UGE0297                PIC X(07) VALUE 'UGE0297'.
+           05 CT-UGE0298                PIC X(07) VALUE 'UGE0298'.
+           05 CT-UGE0517                PIC X(07) VALUE 'UGE0517'.
+           05 CT-UGE0939                PIC X(07) VALUE 'UGE0939'.
+           05 CT-INICIO                 PIC X(12) VALUE '1000-INICIO '.
+           05 CT-PROCESO                PIC X(12) VALUE '2000-PROCESO'.
+           05 CT-POLITICA               PIC X(08) VALUE 'POLITICS'.
+           05 CT-PORTAFOLIO             PIC X(09) VALUE 'PORTFOLIO'.
+           05 CT-NOMINA                 PIC X(27)
+                                   VALUE 'RISK_ADJUSTED_PROFITABILITY'.
+      *COL01-I
+           05 CT-SATISFACTORY           PIC X(14)
+                                        VALUE 'SATISFACTORY  '.
+           05 CT-UNSATISFACTORY         PIC X(14)
+                                        VALUE 'UNSATISFACTORY'.
+      *COL01-F
+           05 CT-FIN                    PIC X(12) VALUE '3000-FIN    '.
+           05 CT-COP                    PIC X(03) VALUE 'COP'.
+           05 CT-P                      PIC X(01) VALUE 'P'.
+           05 CT-N                      PIC X(01) VALUE 'N'.
+           05 CT-S                      PIC X(01) VALUE 'S'.
+           05 CT-M                      PIC X(01) VALUE 'M'.
+           05 CT-C                      PIC X(01) VALUE 'C'.
+           05 CT-1                      PIC 9(01) VALUE 1.
+           05 CT-2                      PIC X(01) VALUE '2'.
+           05 CT-3                      PIC X(01) VALUE '3'.
+           05 CT-00                     PIC X(02) VALUE '00'.
+           05 CT-01                     PIC X(02) VALUE '01'.
+           05 CT-02                     PIC X(02) VALUE '02'.
+           05 CT-10                     PIC X(02) VALUE '10'.
+           05 CT-12                     PIC 9(02) VALUE 12.
+           05 CT-20                     PIC X(02) VALUE '20'.
+           05 CT-47                     PIC X(02) VALUE '47'.
+           05 CT-48                     PIC X(02) VALUE '48'.
+           05 CT-98                     PIC X(02) VALUE '98'.
+           05 CT-96                     PIC X(02) VALUE '96'.
+           05 CT-99                     PIC X(02) VALUE '99'.
+           05 CT-101                    PIC X(03) VALUE '101'.
+           05 CT-365-COMP3              PIC S999  VALUE +365.
+           05 CT-360-COMP3              PIC S999  VALUE +360.
+      * COL03-I
+           05 CTE-1                     PIC 9(01) VALUE 1.
+           05 CTE-2                     PIC X(01) VALUE '2'.
+           05 CTE-C                     PIC X(01) VALUE 'C'.
+           05 CTE-B                     PIC X(01) VALUE 'B'.
+           05 CTE-S                     PIC X(01) VALUE 'S'.
+           05 CTE-00                    PIC X(02) VALUE '00'.
+           05 CTE-96                    PIC X(02) VALUE '96'.
+           05 CTE-UG                    PIC X(02) VALUE 'UG'.
+           05 CTE-CYP                   PIC X(03) VALUE 'CYP'.
+           05 CTE-IVA                   PIC X(03) VALUE 'IVA'.
+           05 CTE-COP                   PIC X(03) VALUE 'COP'.
+           05 CTE-0013                  PIC X(04) VALUE '0013'.
+           05 CTE-0547                  PIC X(04) VALUE '0547'.
+           05 CTE-COMI-OK               PIC X(07) VALUE '       '.
+           05 CTE-UGE0939               PIC X(07) VALUE 'UGE0939'.
+           05 CTE-BGE0426               PIC X(07) VALUE 'BGE0426'.
+           05 CTE-UG2CUGSI              PIC X(08) VALUE 'UG2CUGSI'.
+           05 RUT-PE9C1000              PIC X(08) VALUE 'PE9C1000'.
+           05 CTE-PE9C5200              PIC X(08) VALUE 'PE9C5200'.
+           05 CTE-DTOS-IMCOMPLETOS      PIC X(08) VALUE 'ERRCOM10'.
+           05 CON-ERROR-IMPORTE-NEGAT   PIC X(08) VALUE 'ERRCOM30'.
+           05 CTE-NO-RELACION-PRODCOMI  PIC X(08) VALUE 'ERRCOM15'.
+           05 CTE-ERROR-IVA-BR7CRRF0    PIC X(08) VALUE 'ERRCOM25'.
+      * ----- MENSAJES DE RETORNO ------------------------------------ *
+           05 CTE-MENSAJE1       PIC X(20) VALUE 'NOVEDAD RUT QG7CCOM0'.
+           05 CTE-MENSAJE2       PIC X(20) VALUE 'FALTAN DATOS PROCESO'.
+           05 CTE-MENSAJE3       PIC X(20) VALUE 'SALDO EN NEGATIVO   '.
+           05 CTE-MENSAJE4       PIC X(20) VALUE 'PRODUCTO-COMISION   '.
+           05 CTE-MENSAJE5       PIC X(20) VALUE 'COMISION IVA        '.
+           05 CTE-MENSAJE6       PIC X(20) VALUE 'NOVEDAD CONSULTA T37'.
+           05 CTE-MENSAJE7       PIC X(20) VALUE 'SIN CLAVE COMISION  '.
+           05 CTE-MENSAJE8       PIC X(20) VALUE 'SELECT EN TABLA     '.
+           05 CTE-MENSAJE9       PIC X(20) VALUE 'NOVEDAD CONSULTA    '.
+           05 CTE-MENSAJ10       PIC X(20) VALUE 'ERROR RUT PE9C1000: '.
+           05 CTE-MENSAJ11       PIC X(20) VALUE 'ERROR RUT PE9C5200  '.
+      * ----- SWITCHES ----------------------------------------------- *
+       01 WS-SWITCHES.
+          05 SW-ERREVAL         PIC X(01) VALUE 'N'.
+             88 SW-ERREVAL-SI   VALUE 'S'.
+             88 SW-ERREVAL-NO   VALUE 'N'.
+          05 SW-VALIDA-ROLLBACK PIC X(1)  VALUE 'N'.
+             88 SW-NO-ROLLBACK  VALUE 'N'.
+             88 SW-SI-ROLLBACK  VALUE 'S'.
+      * COL03-F
+      *
+      *================================================================*
+      *                 DEFINICION DE VARIABLES                        *
+      *================================================================*
+       01 WS-VARIABLES.
+          03 WS-IND                   PIC 9(1).
+          03 WS-PERIODICIDAD          PIC X(3).
+          03 WS-UGCDIPAG              PIC X(02).
+          03 WS-RESTO                 PIC S9(13) COMP-3.
+          03 WS-COT-AMO-ANNO          PIC  9(5).
+          03 WS-CODIGO-PERIODO.
+            05  WS-CODIGO             PIC 9.
+            05  WS-PERIODO            PIC 99.
+          03 WS-MONTO                 PIC S9(15)V99.
+          03 WS-CUOTA-POL             PIC S9(15)V99.
+          03 WS-CUOTA-NOM             PIC S9(15)V99.
+          03 WS-CUOTA-PRO             PIC S9(15)V99.
+          03 WS-FECHOY                PIC X(10).
+          03 WS-FECHA-LIQ             PIC X(10).
+          03 WS-FECHA-LIQ-ANT         PIC X(10).
+          03 WS-FECHA-AMO             PIC X(10).
+          03 WS-FECOVALI              PIC X(10).
+          03 WS-FECHA-AMO-ANT         PIC X(10).
+          03 WS-FECHA-SOLICITUD       PIC X(10).
+          03 WS-CI-TEAP-LQS           PIC 9(03)V9(05).
+          03 WS-PUNTOS-DESCUENTO      PIC 9(03)V9(05).
+      * COL03-I
+          03 WS-CLAVE-COMI            PIC X(04).
+          03 WS-VALIDA-CYP            PIC X(20).
+          03 WS-PORC-IVA-ED           PIC ----.99999.
+          03 WS-PORC-COM-ED           PIC ----.99999.
+          03 WS-IMPORTE-TEORI-ED      PIC ----------------.99.
+          03 WS-IMPORTE-APLIC-ED      PIC ----------------.99.
+          03 WS-IMP-IVA-TEOR-ED       PIC ----------------.99.
+      * COL03-F
+      *COL01-I
+      *   03 WS-PUNTOS-NOMINA         PIC 9(03)V9(05).
+      *   03 WS-PUNTOS-PRODUCTOS      PIC 9(03)V9(05).
+      *   03 WS-PUNTOS-BURO           PIC 9(03)V9(05).
+      *   03 WS-PUNTOS-INGRESOS       PIC 9(03)V9(05).
+          03 WS-PUNTOS-NOMINA         PIC S9(03)V9(05).
+          03 WS-PUNTOS-PRODUCTOS      PIC S9(03)V9(05).
+          03 WS-PUNTOS-BURO           PIC S9(03)V9(05).
+          03 WS-PUNTOS-INGRESOS       PIC S9(03)V9(05).
+      *COL01-F
+          03 WS-NOMBRE-COLA-TS        PIC X(08) VALUE SPACES.
+          03 WS-LONG-TS               PIC S9(4) COMP VALUE ZEROES.
+      *
+          03 WS-TASA                  PIC 9(03)V9(05).
+          03 WS-TASA-AUX              REDEFINES WS-TASA.
+             05 WS-TASA-ALF           PIC X(08).
+      *
+          03 WS-CUOTA                 PIC 9(15)V9(02).
+          03 WS-CUOTA-AUX             REDEFINES WS-CUOTA.
+             05 WS-CUOTA-ALF          PIC X(17).
+      *
+          03 WS-CONTENIDO-TS.
+             05 WS-CONTENIDO-IND      PIC X(04) VALUE SPACES.
+             05 WS-CONTENIDO-TOT      PIC X(532) VALUE SPACES.
+      *
+          03 W-FECHA-HOY.
+             05 W-ANO-HOY             PIC  9(02).
+             05 W-MES-DIS-HOY         PIC  9(02).
+             05 W-DIA-DIS-HOY         PIC  9(02).
+      *
+          03 W-FECHA-DISPLAY.
+             05 W-ANO-DIS             PIC  9(04).
+             05 FILLER                PIC  X(01) VALUE '-'.
+             05 W-MES-DIS             PIC  9(02).
+             05 FILLER                PIC  X(01) VALUE '-'.
+             05 W-DIA-DIS             PIC  9(02).
+      *
+          03 W-HORA-ANM.
+             05 W-HH-ANM              PIC  9(02).
+             05 FILLER                PIC  X(01) VALUE '.'.
+             05 W-MM-ANM              PIC  9(02).
+             05 FILLER                PIC  X(01) VALUE '.'.
+             05 W-SS-ANM              PIC  9(02).
+      *
+          03 W-HORA-HOY.
+             05 W-HH-HOY              PIC  9(02).
+             05 W-MM-HOY              PIC  9(02).
+             05 W-SS-HOY              PIC  9(02).
+             05 W-MS-HOY              PIC  9(02).
+      *
+          03 W-HORA-DISPLAY.
+             05 W-HH-DIS              PIC  9(02).
+             05 FILLER                PIC  X(01)        VALUE ':'.
+             05 W-MM-DIS              PIC  9(02).
+             05 FILLER                PIC  X(01)        VALUE ':'.
+             05 W-SS-DIS              PIC  9(02).
+             05 FILLER                PIC  X(01)        VALUE ':'.
+             05 W-MS-DIS              PIC  9(02).
+      *
+      *================================================================*      00
+       01  RUTINAS.
+           05 RUT-UG2CSITP            PIC X(08) VALUE 'UG2CSITP'.
+           05 RUT-UR1CDFP0            PIC X(08) VALUE 'UR1CDFP0'.
+           05 RUT-UR1CCOT0            PIC X(08) VALUE 'UR1CCOT0'.
+           05 RUT-UG2CPARA            PIC X(08) VALUE 'UG2CPARA'.
+      *                                                                       00
+      *================================================================*
+      *                       SWITCHES                                 *
+      *================================================================*
+          01 DB2-RETURN-CDE           PIC S9(9) COMP.
+            88 DB2-OK                                   VALUE +0.
+            88 DB2-NOTFND                               VALUE +100.
+            88 DB2-DUPREC                               VALUE -803.
+            88 DB2-305                                  VALUE -305.
+            88 DB2-811                                  VALUE -811.
+
+      *================================================================*
+      *                  DECLARACIONES DE TABLAS                       *
+      *================================================================*
+
+      *================================================================*
+      *                  DECLARACIONES DB2                             *
+      *================================================================*
+      *
+           EXEC SQL INCLUDE SQLCA END-EXEC.
+      *
+      *================================================================*
+      *                  INCLUDE DE LA TABLA UGDTLQS                   *
+      *================================================================*
+      *
+           EXEC SQL INCLUDE UGGTLQS END-EXEC.
+           EXEC SQL INCLUDE UGTCLQS END-EXEC.
+      * COL03-I
+      * ----- WORKAS DE LA TABLA DE DB2: UGDTT37 --------------------- *
+           EXEC SQL INCLUDE UGGTT37 END-EXEC.
+           EXEC SQL INCLUDE UGTCT37 END-EXEC.
+      * COL03-F
+      *
+      *================================================================*
+      *                 AREA DE DECLARACION DE CURSORES                *
+      *================================================================*
+      *
+      *================================================================*
+      *                    AREA DE COPYS                               *
+      *================================================================*
+      *COPY PARA TRAER LA TASA POLITICA DEL SUBPRODUCTO
+           COPY UGWCSITP.
+      *
+      *================================================================*
+      *                     COPY DE ERRORES CICS                       *
+      *================================================================*
+      *
+           COPY QGECABC.
+      *
+      * COPY TRACE MEDIOS DE PAGO
+           COPY MCWCTRC.
+      *
+      *================================================================*
+      *                                                                *
+      *       COPY DE LA RUTINA DE CALCULO DE CUOTAS                   *
+      *                                                                *
+      *================================================================*
+      *
+       01  COT-NIVEL-01.
+       COPY URWCCOT.
+      *PARA EL CALCULO DE CUOTAS ESPECIALES MAY97
+       COPY URWCCUA.
+      *================================================================*
+      *                                                                *
+      *       COPY DE LA RUTINA DE DESPLAZAMIENTO DE FECHAS POR        *
+      *       PERIODICIDAD                                             *
+      *                                                                *
+      *================================================================*
+      *
+       01  DFP-NIVEL-01.
+       COPY URWCDFP.
+
+      *================================================================*
+      *       COPY DE LA RUTINA DE PARAMETRIA PARA LOS PUNTOS A        *
+      *       DISMINUIR EN LA TASA                                     *
+      *================================================================*
+      *
+       01 UGECPARA-01.
+       COPY UGECPARA.
+
+      * COL03-I
+      *----------- COPY PARA ACCESO A MODULO DE FLEXIBILIZACION -------*
+       01 QGECCOM0-01.
+          COPY QGECCOM0.
+       COPY PEWC1000.
+      *
+       COPY BRECRRF.
+
+      * ----- MODULO DE PERSONAS (DATOS COMPLEMENTARIOS) ------------- *
+       01 PEWC5200-01.
+          COPY PEWC5200.
+      * COL03-F
+
+      *================================================================*
+      *                    LINKAGE SECTION                             *
+      *================================================================*
+       LINKAGE SECTION.
+       01  DFHCOMMAREA.
+         COPY UGWCUGSI.
+
+      *================================================================*
+      *                      PROCEDURE DIVISION                        *
+      *================================================================*
+       PROCEDURE DIVISION.
+      *
+           PERFORM  1000-INICIO
+           PERFORM  2000-PROCESO
+           PERFORM  3000-FINAL.
+      *
+      *================================================================*
+      * 1000-INICIO
+      *================================================================*
+       1000-INICIO.
+      *
+           EXEC CICS
+              IGNORE CONDITION ERROR
+           END-EXEC
+
+           EXEC SQL
+              SET :WS-FECHOY = CURRENT DATE
+           END-EXEC
+
+           PERFORM 1100-BORRA-COLA-TS
+
+           MOVE PGM-PROGRAMA            TO WS-NOMBRE-COLA-TS
+           PERFORM 2990-ESCRIBE-COLA-TS
+
+           MOVE CT-INICIO               TO WS-CONTENIDO-TOT(01:20)
+           PERFORM 2990-ESCRIBE-COLA-TS.
+      *
+      *================================================================*
+      *                        1100-BORRA-COLA-TS                      *
+      *================================================================*
+       1100-BORRA-COLA-TS.
+      *
+           IF UGSI-TRAZA   NOT = CT-P
+              MOVE  PGM-PROGRAMA         TO WS-NOMBRE-COLA-TS
+
+              EXEC CICS
+                   DELETEQ TS
+                   QUEUE(WS-NOMBRE-COLA-TS)
+                   NOHANDLE
+              END-EXEC
+           END-IF.
+      *
+      *================================================================*
+      *                      2000-PROCESO                              *
+      *================================================================*
+       2000-PROCESO.
+      *
+           INITIALIZE UGSI-SALIDA
+                      UGSI-CONTROL
+      *
+           MOVE CT-00                    TO UGSI-CODRETO
+           MOVE CT-PROCESO               TO WS-CONTENIDO-TOT(01:20)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           PERFORM 2100-VALIDA-ENTRADA
+           PERFORM 2200-PROCESO-SIMULACION.
+      *
+      *================================================================*
+      *                       2100-VALIDA-ENTRADA                      *
+      *                    VALIDA LOS DATOS DE ENTRADA                 *
+      *================================================================*
+       2100-VALIDA-ENTRADA.
+      *
+           MOVE '2100-VALIDA-ENTRADA'  TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           MOVE UGWCUGSI               TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           IF UGSI-TIPOCREDITO = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR TIPO  '   TO UGSI-DESCRI1
+              MOVE 'DE CREDITO.         '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR TIPO DE CREDITO.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           IF UGSI-SUBPRODUC = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR TIPO  '   TO UGSI-DESCRI1
+              MOVE 'EL SUBPRODUCTO.     '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR EL SUBPRODUCTO.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           IF UGSI-VALORSOLICITUD = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR EL    '   TO UGSI-DESCRI1
+              MOVE 'VALOR A SOLICITAR.  '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR EL VALOR A SOLICITAR.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           IF UGSI-DIVISA-SOL = SPACES OR LOW-VALUES
+              MOVE CT-COP                   TO UGSI-DIVISA-SOL
+           END-IF
+      *
+           IF UGSI-NUMCUOTAS = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR EL    '   TO UGSI-DESCRI1
+              MOVE 'NUMERO DE CUOTAS.   '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR EL NUMERO DE CUOTAS.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           IF UGSI-FRECUENCIA = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR LA    '   TO UGSI-DESCRI1
+              MOVE 'FRECUENCIA.         '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR LA FRECUENCIA.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           IF UGSI-INGRESOS = SPACES OR LOW-VALUES
+              MOVE CT-10                    TO UGSI-CODRETO
+              MOVE 'DEBE INFORMAR LOS   '   TO UGSI-DESCRI1
+              MOVE 'INGRESOS.           '   TO UGSI-DESCRI2
+              MOVE 'DEBE INFORMAR LOS INGRESOS.'
+                                            TO WS-CONTENIDO-TOT(01:)
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 3000-FINAL
+           END-IF.
+      *
+      *================================================================*
+      *                    2200-PROCESO-SIMULACION                     *
+      * PARRAFO PARA TODO EL PROCESO DE LA SIMULACION.                 *
+      *================================================================*
+       2200-PROCESO-SIMULACION.
+      *
+           PERFORM 2300-PARAMETRIA-PUNTOS
+           PERFORM 2400-VALIDA-PRODUTO
+           PERFORM 2900-MOVER-SALIDA.
+      *
+      *================================================================*
+      *                    2300-PARAMETRIA-PUNTOS                      *
+      *================================================================*
+       2300-PARAMETRIA-PUNTOS.
+      *
+           MOVE '2300-PARAMETRIA-PUNTOS' TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           MOVE UGECPARA-01              TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           INITIALIZE UGECPARA-01
+      *
+           IF UGSI-BURO = SPACES OR LOW-VALUES
+             MOVE ZEROES                     TO UGSI-BURO
+           END-IF
+      *
+           MOVE ZEROES                       TO WS-PUNTOS-NOMINA
+                                                WS-PUNTOS-PRODUCTOS
+                                                WS-PUNTOS-BURO
+                                                WS-PUNTOS-DESCUENTO
+                                                WS-PUNTOS-INGRESOS
+           MOVE CT-N                         TO PARAE-TIPO-PRODUCTO
+           MOVE CT-S                         TO PARAE-IND-DOM-NOMINA
+           MOVE UGSI-SUBPRODUC               TO PARAE-COD-SUBPRO
+           MOVE UGSI-BURO                    TO PARAE-BURO
+           MOVE UGSI-INGRESOS                TO PARAE-INGRESOS
+      *COL01-I
+           MOVE UGSI-AUTHORIZEDBURO          TO PARAE-AUTHORIZEDBURO
+      *COL01-F
+      *
+           EXEC CICS
+               LINK PROGRAM(RUT-UG2CPARA)
+               COMMAREA(UGECPARA-01)
+           END-EXEC
+      *
+           IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+              MOVE CT-99                   TO UGSI-CODRETO
+              MOVE 'ERROR LINK'            TO UGSI-DESCRI1
+              MOVE 'UG2CPARA'              TO UGSI-DESCRI2
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           MOVE '2300-PARAMETRIA-PUNTOS'   TO WTRC-PARRAFO
+           MOVE 'PARAR-COD-RETORNO'        TO WTRC-DESCRIPCION
+           MOVE PARAR-COD-RETORNO          TO WTRC-VALOR-ALF
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           EVALUATE PARAR-COD-RETORNO
+              WHEN CT-00
+                 MOVE PARAS-TASA-DESNOMINA TO WS-PUNTOS-NOMINA
+                 MOVE PARAS-TASA-DESPORTAF TO WS-PUNTOS-PRODUCTOS
+                 MOVE PARAS-TASA-BURO      TO WS-PUNTOS-BURO
+                 MOVE PARAS-TASA-INGRESOS  TO WS-PUNTOS-INGRESOS
+      *
+                 IF WS-PUNTOS-BURO IS NOT NUMERIC
+                   MOVE ZEROES                  TO WS-PUNTOS-BURO
+                 END-IF
+              WHEN OTHER
+                MOVE '2300-PARAMETRIA-PUNTOS'   TO WTRC-PARRAFO
+                MOVE 'ERROR RUTINA UG2CPARA'    TO WTRC-DESCRIPCION
+                MOVE PARAR-COD-RETORNO          TO WTRC-VALOR-ALF
+                PERFORM 2990-ESCRIBE-COLA-TS
+           END-EVALUATE.
+      *
+      *================================================================*
+      *                    2400-VALIDA-PRODUTO                         *
+      * BUSCA LA TASA POLITICA VIGENTE DEL PRODUCTO Y SUBPRODUCTO DADO *
+      *================================================================*
+       2400-VALIDA-PRODUTO.
+      *
+           MOVE '2400-VALIDA-PRODUTO     ' TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           MOVE CT-01                    TO SITP-E-OPCION
+           MOVE CT-96                    TO SITP-E-PRODUC
+           MOVE UGSI-SUBPRODUC           TO SITP-E-SUBPRO
+           MOVE UGSI-TRAZA               TO SITP-E-TRAZA
+           MOVE UGSI-VALORSOLICITUD      TO SITP-E-MONTO
+           MOVE CT-20                    TO SITP-PLAZO(1:2)
+           MOVE UGSI-NUMCUOTAS(2:)       TO SITP-PLAZO(3:)
+      *
+           MOVE WS-PUNTOS-NOMINA         TO SITP-E-PUNTOS-NOM
+           MOVE WS-PUNTOS-PRODUCTOS      TO SITP-E-PUNTOS-PRO
+           MOVE WS-PUNTOS-BURO           TO SITP-E-PUNTOS-BURO
+           MOVE WS-PUNTOS-INGRESOS       TO SITP-E-PUNTOS-INGRESOS
+
+           EXEC CICS
+               LINK PROGRAM(RUT-UG2CSITP)
+               COMMAREA(UGWCSITP)
+           END-EXEC
+      *
+           IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+              MOVE CT-99                   TO UGSI-CODRETO
+              MOVE 'ERROR LINK'            TO UGSI-DESCRI1
+              MOVE 'UG2CSITP'              TO UGSI-DESCRI2
+              PERFORM 3000-FINAL
+           END-IF
+      *
+           MOVE '2200-TRAER-TASA-POLI' TO WTRC-PARRAFO
+           MOVE 'UGSI-CODRETO '        TO WTRC-DESCRIPCION
+           MOVE SITP-S-COD-RESPUESTA   TO WTRC-VALOR-ALF
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           EVALUATE SITP-S-COD-RESPUESTA
+              WHEN CT-00
+      *COL01-I
+                IF UGSI-BURO > ZEROES
+                  IF UGSI-BURO >= PARAS-BURO-MINIMO
+                    MOVE CT-SATISFACTORY      TO UGSI-S-SCORE
+                  ELSE
+                    MOVE CT-UNSATISFACTORY    TO UGSI-S-SCORE
+                  END-IF
+                ELSE
+                  MOVE CT-UNSATISFACTORY      TO UGSI-S-SCORE
+                END-IF
+      *
+                MOVE 'BURO MINIMO:         '  TO WS-CONTENIDO-TOT(1:20)
+                MOVE  PARAS-BURO-MINIMO       TO WS-CONTENIDO-TOT(21:)
+                PERFORM 2990-ESCRIBE-COLA-TS
+      *COL01-F
+                PERFORM 2320-CALCULO-CUOTAS
+      * COL03-I
+                IF UGSI-APLICATIVO = CTE-CYP
+                   PERFORM 9999-CALCULO-COMISION
+                END-IF
+      * COL03-F
+              WHEN CT-10
+                 MOVE CT-99         TO UGSI-CODRETO
+      * COL03-I
+                 IF UGSI-APLICATIVO = CTE-CYP
+                    MOVE SITP-S-DES-ERROR(1:20) TO UGSI-DESCRI1
+                    MOVE SITP-S-DES-ERROR(21:)  TO UGSI-DESCRI2
+                 END-IF
+      * COL03-F
+              WHEN '10'
+              WHEN '99'
+                 MOVE CT-99         TO UGSI-CODRETO
+                 MOVE UGSI-DESCRI1  TO UGSI-DESCRI1
+                 MOVE UGSI-DESCRI2  TO UGSI-DESCRI2
+              WHEN OTHER
+                 MOVE CT-99                  TO UGSI-CODRETO
+                 MOVE 'ERROR AL CONSULTAR'   TO UGSI-DESCRI1
+                 MOVE 'TASA POLITICA     '   TO UGSI-DESCRI2
+           END-EVALUATE.
+      *
+      *================================================================*
+      *                    2320-CALCULO-CUOTAS                         *
+      *================================================================*
+       2320-CALCULO-CUOTAS.
+      *
+           MOVE SPACES                         TO WS-FECHA-AMO
+      *
+           PERFORM 2321-DATOS-COMUNES
+      *
+           MOVE 1                              TO WS-IND
+      * CALCULO DE CUOTA CON TASA POLITICA
+           MOVE SITP-S-TASA-NOMINAL            TO COT-INT-NOMINAL
+           PERFORM 2311-LLAMAR-MODULO-CALC
+           MOVE COT-CUOTA                      TO WS-CUOTA-POL
+      * CALCULO DE CUOTA CON TASA NOMINA
+           IF SITP-S-TASA-NOMINAL-NOM = SITP-S-TASA-NOMINAL
+             MOVE WS-CUOTA-POL                 TO WS-CUOTA-NOM
+           ELSE
+             PERFORM 2321-DATOS-COMUNES
+             MOVE SITP-S-TASA-NOMINAL-NOM      TO COT-INT-NOMINAL
+             PERFORM 2311-LLAMAR-MODULO-CALC
+             MOVE COT-CUOTA                    TO WS-CUOTA-NOM
+           END-IF
+      * CALCULO DE CUOTA CON TASA PORTAFOLIO
+           IF SITP-S-TASA-NOMINAL-PRO = SITP-S-TASA-NOMINAL
+             MOVE WS-CUOTA-POL                 TO WS-CUOTA-PRO
+           ELSE
+             PERFORM 2321-DATOS-COMUNES
+             MOVE SITP-S-TASA-NOMINAL-PRO      TO COT-INT-NOMINAL
+             PERFORM 2311-LLAMAR-MODULO-CALC
+             MOVE COT-CUOTA                    TO WS-CUOTA-PRO
+           END-IF
+      * MUEVE EN LA TABLA DE SALIDA LOS DATOS DE LAS CUOTAS CALCULADAS
+           PERFORM 3 TIMES
+             EVALUATE WS-IND
+               WHEN 1
+                 MOVE CT-POLITICA         TO UGSI-S-ID         (WS-IND)
+                                             UGSI-ID           (WS-IND)
+                 MOVE WS-CUOTA-POL        TO UGSI-S-VALOR-CUOTA(WS-IND)
+      *COL02-I
+      *          MOVE SITP-S-TASA-NOMINAL  TO UGSI-PORCENTAJE  (WS-IND)
+                 MOVE SITP-S-TASA-POLITICA TO UGSI-PORCENTAJE  (WS-IND)
+      *COL02-F
+               WHEN 2
+                 MOVE CT-NOMINA           TO UGSI-S-ID         (WS-IND)
+                                             UGSI-ID           (WS-IND)
+                 MOVE WS-CUOTA-NOM        TO UGSI-S-VALOR-CUOTA(WS-IND)
+      *COL02-I
+      *          MOVE SITP-S-TASA-NOMINAL-NOM
+                 MOVE SITP-S-TASA-POLITIC-NOM
+      *COL02-F
+                                          TO UGSI-PORCENTAJE   (WS-IND)
+               WHEN 3
+                 MOVE CT-PORTAFOLIO       TO UGSI-S-ID         (WS-IND)
+                                             UGSI-ID           (WS-IND)
+                 MOVE WS-CUOTA-PRO        TO UGSI-S-VALOR-CUOTA(WS-IND)
+      *COL02-I
+      *          MOVE SITP-S-TASA-NOMINAL-PRO
+                 MOVE SITP-S-TASA-POLITIC-PRO
+      *COL02-F
+                                          TO UGSI-PORCENTAJE   (WS-IND)
+             END-EVALUATE
+      *
+             MOVE UGSI-SUBPRODUC          TO UGSI-S-SUBPROD   (WS-IND)
+             MOVE CT-COP                  TO UGSI-S-DIVISA    (WS-IND)
+             MOVE UGSI-NUMCUOTAS          TO UGSI-S-NUMCUOTAS (WS-IND)
+             MOVE UGSI-FRECUENCIA         TO UGSI-S-FRECUENCIA(WS-IND)
+      *COL01-I
+      *      MOVE UGSI-BURO               TO UGSI-S-BURO      (WS-IND)
+      *COL01-I
+      *
+             ADD 1                        TO WS-IND
+           END-PERFORM.
+      *
+      *================================================================*
+      *                    2321-DATOS-COMUNES                          *
+      *================================================================*
+       2321-DATOS-COMUNES.
+      *
+           INITIALIZE URECCOT
+      *
+           MOVE WS-FECHOY                    TO W-FECHA-DISPLAY
+           MOVE CT-N                         TO CUA-SIMULACION
+           MOVE SITP-ADS-PERCAP              TO WS-CODIGO-PERIODO
+           MOVE UGSI-VALORSOLICITUD          TO WS-MONTO
+           MOVE WS-MONTO                     TO COT-CAPITAL
+                                                COT-CAPITAL-INICIAL
+           MOVE ZEROS                        TO COT-INT-EFECTIVO
+           MOVE SITP-ADS-CODTIAMO            TO COT-TIP-CUOTA
+           MOVE ZERO                         TO COT-AJUSTE-ENTREGAS
+      *
+           EVALUATE WS-CODIGO
+              WHEN CT-3
+                 DIVIDE CT-1           BY WS-PERIODO
+                    GIVING COT-AMO-ANNO
+                    REMAINDER WS-RESTO
+                 END-DIVIDE
+              WHEN CT-2
+                 DIVIDE CT-12          BY WS-PERIODO
+                    GIVING COT-AMO-ANNO
+                    REMAINDER WS-RESTO
+                 END-DIVIDE
+                      MOVE COT-AMO-ANNO      TO WS-COT-AMO-ANNO
+                      IF COT-AMO-ANNO EQUAL  WS-COT-AMO-ANNO
+                         CONTINUE
+                      ELSE
+                         MOVE ZEROS            TO COT-AMO-ANNO
+                         MOVE WS-COT-AMO-ANNO  TO COT-AMO-ANNO
+                      END-IF
+              WHEN CT-1
+                 IF SITP-ADS-DIASCAL = CT-C OR CT-M
+                    DIVIDE CT-360-COMP3          BY WS-PERIODO
+                       GIVING COT-AMO-ANNO
+                       REMAINDER WS-RESTO
+                    END-DIVIDE
+                 ELSE
+                    DIVIDE CT-365-COMP3          BY WS-PERIODO
+                       GIVING COT-AMO-ANNO
+                       REMAINDER WS-RESTO
+                    END-DIVIDE
+                 END-IF
+           END-EVALUATE
+      *
+           MOVE UGSI-NUMCUOTAS(2:)            TO COT-TOT-AMORT-PEN
+           MOVE SPACES                        TO COT-ENTIOFI.
+           MOVE SPACES                        TO COT-CUENTA.
+           MOVE '1001'                        TO COT-PERCAPIT
+      *
+           IF WS-FECHA-AMO = SPACES OR LOW-VALUES
+             PERFORM 2311-PRIMERA-FECHA
+           END-IF
+      *
+           MOVE WS-FECHA-AMO                  TO COT-F-AMORTI
+           MOVE SITP-ADS-PERCAP               TO COT-PERCAP
+           MOVE SITP-ADS-TIPODIAS             TO COT-TIPODIAS
+           MOVE SITP-ADS-PERINT               TO COT-PERINT
+           MOVE SITP-ADS-DIASCAL              TO COT-DIASCAL
+
+           IF SITP-ADS-UGCDIPAG = 0
+              MOVE W-DIA-DIS                  TO SITP-ADS-UGCDIPAG
+           END-IF
+
+           MOVE SITP-ADS-UGCDIPAG             TO COT-UGCDIPAG
+           MOVE SITP-ADS-CODTIPRE             TO COT-CODIGO.
+      *
+      *================================================================*
+      *             2311-PRIMERA-FECHA                                 *
+      *    SE CALCULA LA FECHA DE PRIMERA AMORTIZACION.                *
+      *================================================================*
+       2311-PRIMERA-FECHA.
+      *
+           INITIALIZE URECDFP
+      *
+           MOVE W-DIA-DIS                     TO DFP-DIA
+      *
+           IF SITP-ADS-UGCDIPAG  > 0
+              MOVE  SITP-ADS-UGCDIPAG         TO WS-UGCDIPAG
+              MOVE  WS-UGCDIPAG               TO DFP-DIA
+           END-IF
+      *
+           MOVE W-FECHA-DISPLAY               TO DFP-FECHA-INICIAL
+           MOVE CT-1                          TO DFP-NUM-PERIODOS
+           MOVE SITP-ADS-TIPODIAS             TO DFP-TIPODIAS
+           MOVE DFP-FECHA-INICIAL             TO WS-FECHA-AMO-ANT
+      *
+           IF SITP-ADS-CARECAP       NOT = SPACES
+              MOVE SITP-ADS-CARECAP           TO DFP-PERCAP
+              PERFORM  241112-LLAMAR-RUTINA
+              MOVE DFP-FECHA-FINAL            TO WS-FECHA-SOLICITUD
+                                                 WS-FECOVALI
+              MOVE WS-FECHA-SOLICITUD         TO DFP-FECHA-INICIAL
+           END-IF.
+      *
+           MOVE SITP-ADS-PERCAP               TO DFP-PERCAP
+      *
+           PERFORM  241112-LLAMAR-RUTINA
+      *
+           MOVE DFP-FECHA-FINAL               TO WS-FECHA-AMO.
+      *
+      *================================================================*
+      *               241112-LLAMAR-RUTINA.                            *
+      *    SE LLAMA A LA RUTINA UR1CDFP QUE DESPLAZA FECHAS POR        *
+      *    PERIODICIDAD. EN CASO DE ERROR FINALIZA LA EJECUCION.       *
+      *================================================================*
+       241112-LLAMAR-RUTINA.
+      *
+           EXEC CICS LINK
+              PROGRAM (RUT-UR1CDFP0)
+              COMMAREA (URECDFP)
+           END-EXEC
+      *
+           IF DFP-CORESPUE NOT = CT-10
+              MOVE CT-UGE0517                 TO UGSI-CODRETO
+              MOVE RUT-UR1CDFP0               TO UGSI-DESCRI1
+              MOVE '30'                       TO UGSI-CODRETO
+              MOVE DFP-CORESPUE               TO UGSI-DESCRI2
+              PERFORM 3000-FINAL
+           END-IF.
+      *
+      *================================================================*
+      *             2311-LLAMAR-MODULO-CALC                            *
+      *   SE LLAMA A LA RUTINA DE CALCULO DE LA PRIMERA CUOTA          *
+      *================================================================*
+       2311-LLAMAR-MODULO-CALC.
+      *
+           EXEC CICS LINK
+              PROGRAM (RUT-UR1CCOT0)
+              COMMAREA (COT-NIVEL-01)
+           END-EXEC
+      *
+           EVALUATE COT-CODIGO
+              WHEN CT-01
+                 MOVE CT-UGE0331              TO UGSI-CODRETO
+                 PERFORM  3000-FINAL
+              WHEN CT-98
+                 PERFORM 21711-REBOSAMIENTO
+              WHEN CT-47
+                 MOVE CT-UGE0939              TO UGSI-CODRETO
+                 MOVE '30'                       TO UGSI-CODRETO
+                 MOVE 'ERROR TABLA      '     TO UGSI-DESCRI1
+                 MOVE 'CORPORATIVA 552'       TO UGSI-DESCRI2
+                 PERFORM  3000-FINAL
+              WHEN CT-48
+                 MOVE CT-UGE0939              TO UGSI-CODRETO
+                 MOVE 'ERROR TABLA      '     TO UGSI-DESCRI1
+                 MOVE 'CORPORATIVA 552'       TO UGSI-DESCRI2
+                 PERFORM  3000-FINAL
+              WHEN CT-99
+                 MOVE CT-UGE0298              TO UGSI-CODRETO
+                 PERFORM  3000-FINAL
+           END-EVALUATE.
+      *
+      *================================================================*
+      *                 21711-REBOSAMIENTO                             *
+      *   SE FINALIZA LA EJECUCION POR REBOSAMIENTO EN LOS CALCULOS.   *
+      *================================================================*
+       21711-REBOSAMIENTO.
+      *
+           MOVE CT-UGE0297                    TO UGSI-CODRETO
+           PERFORM  3000-FINAL.
+      *
+      *================================================================*
+      *                      2210-MUEVE-SALIDA                         *
+      *================================================================*
+       2900-MOVER-SALIDA.
+      *
+           MOVE '2900-MOVER-SALIDA  '    TO WS-CONTENIDO-TOT(01:)
+           PERFORM 2990-ESCRIBE-COLA-TS
+      *
+           MOVE SITP-S-TASA-POLITICA     TO WS-CI-TEAP-LQS
+      *
+           MOVE 'SITP-S-DATOS-SALIDA: '  TO WS-CONTENIDO-TOT(1:20)
+           MOVE  SITP-S-DATOS-SALIDA     TO WS-CONTENIDO-TOT(21:)
+           PERFORM 2990-ESCRIBE-COLA-TS.
+      *
+      *================================================================*
+      *                       2990-ESCRIBE-COLA-TS                     *
+      *       ESCRIBE COLA TS DE LOG PARA VALIDAR FUNCIONAMIENTO       *
+      *================================================================*
+       2990-ESCRIBE-COLA-TS.
+      *
+           IF UGSI-TRAZA   NOT = CT-P
+              MOVE LENGTH OF WS-CONTENIDO-TS    TO WS-LONG-TS
+
+              EXEC CICS WRITEQ TS
+                    QUEUE  (WS-NOMBRE-COLA-TS)
+                    FROM   (WS-CONTENIDO-TS)
+                    LENGTH (WS-LONG-TS)
+                    NOHANDLE
+              END-EXEC
+
+              MOVE SPACES                       TO WS-CONTENIDO-TS
+           END-IF.
+      *
+      *================================================================*
+      *                        3000-FINAL                              *
+      *================================================================*
+       3000-FINAL.
+      *
+           EXEC CICS
+                RETURN
+           END-EXEC.
+      *
+      * -------------------------------------------------------------- *
+      * COL03-I
+       9999-CALCULO-COMISION.
+           SET SW-ERREVAL-NO    TO TRUE
+           INITIALIZE           QGECCOM0-01 WS-CLAVE-COMI
+           MOVE CTE-1           TO RCO-UNIDADES RCO-CANTIDAD
+           MOVE CTE-S           TO RCO-MODO-CONSUL
+           MOVE CTE-96          TO RCO-PRODUCTO
+           MOVE CTE-UG          TO RCO-APLICCOM
+           MOVE UGSI-SUBPRODUC  TO RCO-SUBPRODU
+           MOVE CTE-UG2CUGSI    TO RCO-CAA-NETNAME
+           MOVE W-FECHA-DISPLAY TO RCO-CAA-FECHA-OPER2
+           MOVE UGSI-APLICATIVO TO RCO-DESCR-LIBRE
+           MOVE UGSI-VALORSOLICITUD TO RCO-IMPORTE
+           PERFORM 231-VALIDA-CLAVE-SERVICIO
+           MOVE WS-CLAVE-COMI   TO RCO-CLAVECOM
+           PERFORM 9999-BUSCA-NUMCLIEN
+           PERFORM 9999-OFICINA-GESTORA
+           EXEC CICS
+               LINK PROGRAM ('QG7CCOM0')
+               COMMAREA (QGECCOM0-01)
+               NOHANDLE
+           END-EXEC
+           EVALUATE RCO-RETORNO
+              WHEN CTE-COMI-OK
+                   PERFORM 9999-PASAINFO-COM
+              WHEN CTE-DTOS-IMCOMPLETOS
+                   MOVE CTE-MENSAJE2 TO UGSI-DESCRI2
+                   SET SW-ERREVAL-SI TO TRUE
+              WHEN CON-ERROR-IMPORTE-NEGAT
+                   MOVE CTE-MENSAJE3 TO UGSI-DESCRI2
+                   SET SW-ERREVAL-SI TO TRUE
+              WHEN CTE-NO-RELACION-PRODCOMI
+                   MOVE CTE-MENSAJE4 TO UGSI-DESCRI2
+                   SET SW-ERREVAL-SI TO TRUE
+              WHEN CTE-ERROR-IVA-BR7CRRF0
+                   MOVE CTE-MENSAJE5 TO UGSI-DESCRI2
+                   SET SW-ERREVAL-SI TO TRUE
+              WHEN OTHER
+                   MOVE RCO-RETORNO  TO UGSI-DESCRI2
+                   SET SW-ERREVAL-SI TO TRUE
+           END-EVALUATE
+           IF SW-ERREVAL-SI
+              MOVE RCO-RETORNO  TO UGSI-CODRETO
+              MOVE CTE-MENSAJE1 TO UGSI-DESCRI1
+              PERFORM 2990-ESCRIBE-COLA-TS
+              PERFORM 999999-ROLLBACK
+              PERFORM 3000-FINAL
+           END-IF.
+      * -------------------------------------------------------------- *
+       999999-ROLLBACK.
+
+           EXEC CICS
+                 SYNCPOINT ROLLBACK
+           END-EXEC
+           IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+              MOVE CTE-UGE0939  TO UGSI-CODRETO
+              MOVE 'ERROR EN ROLLBACK'    TO UGSI-DESCRI1
+              MOVE 'EIBRESP: '            TO UGSI-DESCRI2
+              PERFORM 999999-ROLLBACK
+              PERFORM 3000-FINAL
+           END-IF
+           SET   SW-SI-ROLLBACK           TO TRUE.
+
+      *----------------------------------------------------------------*
+      *                  231-VALIDA-CLAVE-SERVICIO                     *
+      *----------------------------------------------------------------*
+      *     SECCION CON LAS CLAVES DE SERVICIO POR TIPO DE SERVICIO    *
+      *----------------------------------------------------------------*
+       231-VALIDA-CLAVE-SERVICIO.
+           SET SW-ERREVAL-NO    TO TRUE
+           INITIALIZE           UGTCT37
+           MOVE CTE-0547        TO T37-SECCION
+           MOVE UGSI-IDCOMISION TO T37-ELEMENTO
+           EXEC SQL
+              SELECT RESTO
+              INTO   :T37-RESTO
+              FROM   UGDTT37
+              WHERE SECCION   = :T37-SECCION
+              AND   ELEMENTO  = :T37-ELEMENTO
+           END-EXEC
+           MOVE SQLCODE                     TO DB2-RETURN-CDE
+           IF DB2-OK
+              MOVE T37-RESTO(38:4)           TO WS-CLAVE-COMI
+           ELSE
+              SET SW-ERREVAL-SI TO TRUE
+              IF DB2-NOTFND
+                 MOVE CTE-MENSAJE7 TO UGSI-DESCRI2
+              ELSE
+                 MOVE CTE-MENSAJE8 TO UGSI-DESCRI2
+              END-IF
+           END-IF
+           IF SW-ERREVAL-SI
+              MOVE CT-10        TO UGSI-CODRETO
+              MOVE CTE-MENSAJE6 TO UGSI-DESCRI1
+              PERFORM 999999-ROLLBACK
+              PERFORM 3000-FINAL
+           END-IF.
+      * -------------------------------------------------------------- *
+       9999-PASAINFO-COM.
+           MOVE RCO-PORC-IVA      TO WS-PORC-IVA-ED
+           MOVE RCO-PORC-COM      TO WS-PORC-COM-ED
+           MOVE RCO-IMP-IVA-TEOR  TO WS-IMP-IVA-TEOR-ED
+           MOVE RCO-IMPORTE-TEORI TO WS-IMPORTE-TEORI-ED
+           MOVE RCO-IMPORTE-APLIC TO WS-IMPORTE-APLIC-ED
+           MOVE RCO-IMP-IVA-TEOR  TO UGSI-VR-IVACOM
+           MOVE RCO-IMPORTE-TEORI TO UGSI-VR-COMISION
+           MOVE CTE-IVA           TO UGSI-LABEL-IVA
+           MOVE CTE-COP        TO UGSI-DIVISA-COMISI UGSI-DIVISA-IVACOM.
+      * -------------------------------------------------------------- *
+      *                      9999-BUSCA-NUMCLIEN                       *
+      *  SE REALIZA EL LLAMADO A LA RUTINA PE9C1000 PARA TRAER EL      *
+      *                  NUMERO DE CLIENTE RELACIONADO                 *
+      ******************************************************************
+       9999-BUSCA-NUMCLIEN.
+           INITIALIZE           DATOS-BASICOS
+           MOVE CTE-2            TO DATOS-OPCION
+           MOVE UGSI-TIPO-DOCUME TO DATOS-CODIDENT
+           MOVE UGSI-NUME-IDENT  TO DATOS-CLAIDENT
+           CALL RUT-PE9C1000 USING DATOS-BASICOS
+           IF DATOS-COD-RETORNO = CTE-00
+              CONTINUE
+           ELSE
+              MOVE CT-10        TO UGSI-CODRETO
+              MOVE CTE-MENSAJ10 TO UGSI-DESCRI1
+              MOVE CTE-MENSAJE9 TO UGSI-DESCRI2
+             PERFORM  3000-FINAL
+           END-IF.
+      * -------------------------------------------------------------- *
+       9999-OFICINA-GESTORA.
+           INITIALIZE           PEWC5200-01
+           MOVE CTE-00          TO W520-PECRETOR
+           MOVE DATOS-NUMCLIEN  TO W520-NUMCLIEN
+           CALL CTE-PE9C5200    USING PEWC5200-01
+           IF W520-PECRETOR = CTE-00
+              IF W520-IDENENT  = SPACES
+                 MOVE CTE-0013   TO W520-IDENENT
+              END-IF
+              MOVE W520-CODIDENT TO RCO-TIPO-IDENT
+              MOVE W520-CLAIDENT TO RCO-NUME-IDENT
+              MOVE W520-DIGIDENT TO RCO-DIG-IDENT
+              MOVE W520-IDENENT TO RCO-CAA-ENTIDAD     RRF-ENTIDAD
+              MOVE W520-OFIALTA TO RCO-CAA-CENTRO-CONT RRF-SUCURSAL-OP
+           ELSE
+              MOVE  CT-10   TO UGSI-CODRETO
+              MOVE CTE-MENSAJ11 TO UGSI-DESCRI1
+              MOVE CTE-MENSAJE9 TO UGSI-DESCRI2
+              PERFORM  3000-FINAL
+           END-IF.
+      * COL03-F
+      * -------------------------------------------------------------- *

@@ -1,0 +1,418 @@
+﻿      *----------------------------------------------------------------*
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. UG2CPR37.
+       AUTHOR.     GRUPO NEBULLA.
+       DATE-WRITTEN. 2023.
+      *----------------------------------------------------------------*
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SOURCE-COMPUTER.
+           IBM-3090.
+       OBJECT-COMPUTER.
+           IBM-3090.
+      *----------------------------------------------------------------*
+      *        L O G    D E   M O D I F I C A C I O N E S              *00000700
+      *----------------------------------------------------------------*
+      *  AUTOR   FECHA          DESCRIPCION                            *00000900
+      * ------- -------- --------------------------------------------- *00001000
+      * C805996          RUTINA ENCARGADA DE LLAMAR PARAMETRIA DE PROD-*
+      * JIRA:            UCTOS, LA CUAL SE TOMA LA TABLA UGDTT37, ESTO *
+      * COLWSCRM-2351    SE REALIZA PARA DESPLEGAR PRODUCTOS EN MODULO *
+      *                  CONTACTABILIDAD.                              *
+      * ------- -------- --------------------------------------------- *00001000
+      * C805996 20230725 SE CREA OPCION '02' PARA DESPLEGAR PRODUCTOS  *
+      * JIRA:            LO CUALES SE TOMARAN DE LA SECCION 0096 Y DES *
+      * COLWSCRM-4265    PLEGGARA INFORMACION NECESARIA PARA FILTROS DE*
+      * SIRI04           PRODUCTOS EN AUG.                             *
+      *                  - SE COLOCA SET SI-ERROR, PARA CONTROLAR ERRO-*
+      *                  RES DE LA RUTINA.                             *
+      *----------------------------------------------------------------*
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      *----------------------------------------------------------------*
+       01 WS-VARIABLES-TRABAJO.
+          05 WS-I                          PIC 9(03).
+          05 WS-MIN-AUX                    PIC 9(02).
+          05 WS-ELEMENTO.
+             07 WS-TIP-CLI                 PIC X(02).
+             07 WS-TIP-PRO                 PIC X(03).
+             07 WS-COD-PRO                 PIC X(03).
+             07 WS-RES-CLA                 PIC X(14).
+          05 WS-RESTO                      PIC X(22).
+          05 WS-MIN-CED                    PIC X(22).
+          05 WS-CEDULA                     PIC X(15).
+          05 WS-TIPOCLIEN                  PIC X(17).
+          05 WS-OFICINA                    PIC X(04).
+          05 WS-PRODUCT1                   PIC X(105).
+          05 WS-PRODUCT2                   PIC X(86).
+          05 WS-SUBPROD                    PIC X(05).
+          05 WS-TIMESTAMP-VEH              PIC X(26).
+          05 WS-CONTADOR                   PIC S9(02) COMP-3.
+          05 WS-SECCION                    PIC X(04).
+       01 WS-ELEMT.
+          05 WS-TIPOPER                    PIC X(02).
+          05 WS-TIPPROD                    PIC X(03).
+          05 WS-PRODUCTO                   PIC X(03).
+          05 WS-SUBPRODUC                  PIC X(04).
+      ******************************************************************
+      *                          RETORNOS DB2                          *
+      ******************************************************************
+       01 WS-MASCARAS.
+          05 WS-MAS-DEPTO                  PIC ZZZZ9.
+          05 WS-MAS-CIUDAD                 PIC ZZZZZ9.
+          05 WS-MAS-OFICINA                PIC 9999.
+          05 WS-MAS-SQLCODE                PIC +999.
+          05 WS-MAS-MIN                    PIC 99.
+
+      ******************************************************************
+      *                          RETORNOS DB2                          *
+      ******************************************************************
+       01 DB2-RETURN                       PIC S9(9) COMP.
+          88 DB2-OK                                  VALUE +0.
+          88 DB2-NOTFND                              VALUE +100.
+          88 DB2-DUPREC                              VALUE -803.
+          88 DB2-DUPSEL                              VALUE -811.
+          88 DB2-305                                 VALUE -305.
+
+       01 WS-MASCARA                       PIC +ZZZZZZ999.
+
+      ******************************************************************
+      *                   A R E A  D E  S W I T C H                    *
+      ******************************************************************
+       01 WS-SWITCH.
+          05 SW-ENCONTRO                   PIC X(01) VALUE 'N'.
+             88 SW-ENCONTRO-SI                       VALUE 'S'.
+             88 SW-ENCONTRO-NO                       VALUE 'N'.
+
+          05 SW-CURSOR-FIN                 PIC X(01) VALUE 'N'.
+             88 SW-CURSOR-FIN-SI                     VALUE 'S'.
+             88 SW-CURSOR-FIN-NO                     VALUE 'N'.
+
+
+          05 SW-ERROR-STATUS               PIC 9(01) VALUE 0.
+             88 NO-ERROR                   VALUE ZEROS.
+             88 SI-ERROR                   VALUE 1.
+
+      *----------------------------------------------------------------*
+           EXEC SQL INCLUDE SQLCA   END-EXEC.
+           EXEC SQL INCLUDE UGGTT37 END-EXEC.
+           EXEC SQL INCLUDE UGTCT37 END-EXEC.
+      *----------------------------------------------------------------*
+          COPY QGECABC.
+          COPY UGWCT370.
+      *----------------------------------------------------------------*
+      *                  C U R S O R E S  D B 2                        *
+      *----------------------------------------------------------------*
+      * CURSOR PARA TRAER INFORMACION DE PRODUCTOS POR PARAMETRIA
+           EXEC SQL
+                DECLARE CURSOR-PARM CURSOR
+                    FOR SELECT
+                        ELEMENTO
+                       ,RESTO
+                FROM  UGDTT37
+                WHERE SECCION  = :T37-SECCION
+                AND   ELEMENTO LIKE :T37-ELEMENTO
+           END-EXEC.
+      *SIRI04-I
+      * CURSOR PARA TRAER INFORMACION DE PRODUCTOS 0096 PARAMETRIA
+           EXEC SQL
+                DECLARE CURSOR-PARA CURSOR
+                    FOR SELECT
+                        ELEMENTO
+                       ,RESTO
+                FROM  UGDTT37
+                WHERE SECCION  = :T37-SECCION
+           END-EXEC.
+      *SIRI04-F
+      *
+      *----------------------------------------------------------------*
+       LINKAGE SECTION.
+       01 DFHCOMMAREA.
+          COPY UGWCTGCP.
+      ******************************************************************
+      *                  PROCEDURE DIVISION                            *
+      ******************************************************************
+       PROCEDURE DIVISION.
+           PERFORM 100-INICIO
+           PERFORM 200-PROCESO
+           PERFORM 300-FINAL.
+
+      ******************************************************************
+      * SE VALIDA LOS CAMPOS INICIALES                                 *
+      ******************************************************************
+       100-INICIO.
+           EXEC CICS
+              IGNORE CONDITION ERROR
+           END-EXEC
+           INITIALIZE UGCP-SALIDA
+           IF UGCP-OPCION EQUAL SPACES OR LOW-VALUES
+              MOVE '20'                     TO UGCP-COD-RETORNO
+              MOVE '0000020'                TO UGCP-VAR1-MENSAJE
+              MOVE 'ERROR OPC NO INFORMADA' TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+              SET SI-ERROR                  TO TRUE
+      *SIRI04-F
+              PERFORM 300-FINAL
+           ELSE
+              IF UGCP-SECCION EQUAL SPACES OR LOW-VALUES
+                 MOVE '30'                  TO UGCP-COD-RETORNO
+                 MOVE '0000030'             TO UGCP-VAR1-MENSAJE
+                 MOVE 'ERROR SECCION NO INFORMADA'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                 SET SI-ERROR                  TO TRUE
+      *SIRI04-F
+                 PERFORM 300-FINAL
+              END-IF
+           END-IF.
+
+      ******************************************************************
+      * SE REALIZA LA OPCION ENVIADA                                   *
+      ******************************************************************
+       200-PROCESO.
+             MOVE '00'                      TO UGCP-COD-RETORNO
+             EVALUATE UGCP-OPCION
+                 WHEN '01'
+                      PERFORM 230-CURSOR-PARA-TIPOCLIENTE
+      *SIRI04-I
+                 WHEN '02'
+                      PERFORM 236-CURSOR-PARA-PARAMETRIA
+      *SIRI04-F
+                 WHEN OTHER
+                      MOVE '50'               TO UGCP-COD-RETORNO
+                      MOVE '0000050'          TO UGCP-VAR1-MENSAJE
+                      MOVE 'ERROR OPC MAL INFORMADA'
+                                              TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                      SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                      PERFORM 300-FINAL
+                 END-EVALUATE.
+
+      ******************************************************************
+      * SE CONSULTA UN REGISTRO EN LA TABLA UGDTT37                    *
+      ******************************************************************
+
+      ******************************************************************
+      * SE ACTUALIZA EL ULTIMO REGISTRO DE LA CUIDAD Y DEPTO POR OFICINA
+      ******************************************************************
+       230-CURSOR-PARA-TIPOCLIENTE.
+           PERFORM 231-ABRIR-CURSOR
+           PERFORM 232-FETCH-CURSOR UNTIL SW-CURSOR-FIN-SI
+           PERFORM 234-CLOSE-CURSOR.
+
+      ******************************************************************
+      * SE ABRE CURSOR PARA TRAER PRODUCTOS DE TABLA UGDTT37           *
+      ******************************************************************
+       231-ABRIR-CURSOR.
+           MOVE UGCP-SECCION                TO T37-SECCION
+           MOVE UGCP-TIPODECLI              TO WS-TIP-CLI
+           MOVE UGCP-TIPODEPRO              TO WS-TIP-PRO
+           MOVE UGCP-PRODUCTO               TO WS-COD-PRO
+           IF WS-COD-PRO = SPACES
+              MOVE ALL '%'                  TO WS-COD-PRO
+           END-IF
+           MOVE ALL '%'                     TO WS-RES-CLA
+
+           MOVE WS-ELEMENTO                 TO T37-ELEMENTO
+           EXEC SQL OPEN CURSOR-PARM END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+
+           EVALUATE SQLCODE                                             00530000
+               WHEN ZEROES
+                    MOVE '00'               TO UGCP-COD-RETORNO
+                    ADD 1                   TO WS-I
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, OPEN CURSOR-PARM'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    MOVE SQLCODE            TO UGCP-SQLCODE
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+
+      ******************************************************************
+      * SE ACTUALIZA EL CONTADOR PARA ESA CEDULA (SECUENCIA)           *
+      ******************************************************************
+       232-FETCH-CURSOR.
+           EXEC SQL
+                FETCH CURSOR-PARM INTO
+                      :T37-ELEMENTO
+                     ,:T37-RESTO
+           END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+
+           EVALUATE SQLCODE
+               WHEN ZEROS
+                    PERFORM 2321-CARGA-PAR
+                    SET SW-CURSOR-FIN-NO    TO TRUE
+               WHEN +100
+                    SET SW-CURSOR-FIN-SI    TO TRUE
+                    MOVE ZEROES             TO WS-I
+                    ADD 1                   TO WS-I
+               WHEN -305
+                    MOVE '80'               TO UGCP-COD-RETORNO
+                    MOVE '0000000'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'NO INFO UGDTT37 OK'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR                  TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, FECTH CURSOR-PARM'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR                  TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+      *SIRI04-I
+      ******************************************************************
+      * SE ACTUALIZA EL ULTIMO REGISTRO DE LA CUIDAD Y DEPTO POR OFICINA
+      ******************************************************************
+       236-CURSOR-PARA-PARAMETRIA.
+           PERFORM 237-ABRIR-CURSOR
+           PERFORM 238-FETCH-CURSOR UNTIL SW-CURSOR-FIN-SI
+           PERFORM 239-CLOSE-CURSOR.
+
+      ******************************************************************
+      * SE ABRE CURSOR PARA TRAER PRODUCTOS DE TABLA UGDTT37           *
+      ******************************************************************
+       237-ABRIR-CURSOR.
+           MOVE UGCP-SECCION                TO T37-SECCION
+
+           EXEC SQL OPEN CURSOR-PARA END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+
+           EVALUATE SQLCODE                                             00530000
+               WHEN ZEROES
+                    MOVE '00'               TO UGCP-COD-RETORNO
+                    ADD 1                   TO WS-I
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, OPEN CURSOR-PARA'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    MOVE SQLCODE            TO UGCP-SQLCODE
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+
+      ******************************************************************
+       238-FETCH-CURSOR.
+           EXEC SQL
+                FETCH CURSOR-PARA INTO
+                      :T37-ELEMENTO
+                     ,:T37-RESTO
+           END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+
+           EVALUATE SQLCODE
+               WHEN ZEROS
+                    PERFORM 2321-CARGA-PAR
+                    SET SW-CURSOR-FIN-NO    TO TRUE
+               WHEN +100
+                    SET SW-CURSOR-FIN-SI    TO TRUE
+                    MOVE ZEROES             TO WS-I
+                    ADD 1                   TO WS-I
+               WHEN -305
+                    MOVE '80'               TO UGCP-COD-RETORNO
+                    MOVE '0000000'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'NO INFORMA UGDTT37 OK'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, FECTH CURSOR-PARA'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+      *SIRI04-F
+      ******************************************************************
+      * SE CARGA TABLA DINAMICA CON TODOS LAS RESULTADOS DEL FECTH 232 *
+      ******************************************************************
+       2321-CARGA-PAR.
+           MOVE T37-ELEMENTO                TO UGCP-ELEMENTO(WS-I)
+           MOVE T37-RESTO(01:50)            TO UGCP-RESTO(WS-I)
+           ADD 1                            TO WS-I
+                                               UGCP-NUM-REG.
+
+      ******************************************************************
+      * SE ACTUALIZA EL CONTADOR PARA ESA CEDULA (SECUENCIA)           *
+      ******************************************************************
+       234-CLOSE-CURSOR.
+           EXEC SQL CLOSE CURSOR-PARM END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+           EVALUATE SQLCODE                                             00530000
+               WHEN ZEROS
+                    CONTINUE
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, CLOSE CURSOR-PARM'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+      *SIRI04-I
+      ******************************************************************
+       239-CLOSE-CURSOR.
+           EXEC SQL CLOSE CURSOR-PARA END-EXEC
+
+           MOVE SQLCODE                     TO DB2-RETURN
+
+           EVALUATE SQLCODE                                             00530000
+               WHEN ZEROS
+                    CONTINUE
+               WHEN OTHER                                               00530100
+                    MOVE '90'               TO UGCP-COD-RETORNO
+                    MOVE '0000090'          TO UGCP-VAR1-MENSAJE
+                    MOVE 'ERROR, CLOSE CURSOR-PARA'
+                                            TO UGCP-VAR2-MENSAJE
+      *SIRI04-I
+                    SET SI-ERROR            TO TRUE
+      *SIRI04-F
+                    PERFORM 300-FINAL
+           END-EVALUATE.
+      *SIRI04-F
+      *----------------------------------------------------------------*
+      *                      3000-FINAL-PROGRAMA                       *
+      *----------------------------------------------------------------*
+       300-FINAL.
+
+           IF NO-ERROR
+              MOVE '00'                 TO UGCP-COD-RETORNO
+              MOVE SPACES               TO UGCP-VAR1-MENSAJE
+              MOVE ZEROS                TO UGCP-SQLCODE
+           END-IF
+
+           EXEC CICS
+              RETURN
+           END-EXEC.

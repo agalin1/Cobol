@@ -1,0 +1,263 @@
+﻿      *-------------------------------*--------------------------------*
+      *  UG2CSMAE  RUTINA DE CONSULTA DE A LA TABLA UGDTMAE            *
+      *----------------------------------------------------------------*
+      *        I D E N T I F I C A T I O N      D I V I S I O N        *
+      *----------------------------------------------------------------*
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.    UG2CSMAE.
+       AUTHOR. VYG TS - EDDY BOGOTA CANGREJO
+       DATE-WRITTEN.  2017-05-09.
+       DATE-COMPILED.
+      *----------------------------------------------------------------*
+      *        L O G    D E   M O D I F I C A C I O N E S              *
+      *----------------------------------------------------------------*
+      *  AUTOR   FECHA          DESCRIPCION                            *
+      * ------- -------- --------------------------------------------- *
+      *----------------------------------------------------------------*
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+      *----------------------------------------------------------------*
+      *                   D A T A      D I V I S I O N                 *
+      *----------------------------------------------------------------*
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      ******************************************************************
+      *                       CONSTANTES                               *
+      ******************************************************************
+       01  PGM.
+           05 PGM-PROGRAMA              PIC X(08) VALUE 'UG2CSMAE'.
+       01  WS-RETORNO.
+           05 CON-RETORNO-OK            PIC X(02) VALUE '00'.
+           05 CON-RETORNO-SOK           PIC X(02) VALUE '10'.
+           05 CON-RETORNO-NOK           PIC X(02) VALUE '99'.
+       01  WS-ERROES.
+           05 WS-UGE0000                PIC X(08) VALUE 'UGE0000'.
+      *----------------------------------------------------------------*
+      *                 DEFINICION DE VARIABLES                        *
+      *----------------------------------------------------------------*
+       01 WS-VARIABLES.
+           05 WS-NOMBRE-COLA-TS           PIC X(08) VALUE SPACES.
+           05 WS-LONG-TS                  PIC S9(4) COMP VALUE ZEROES.
+           05 WS-CONTENIDO-TS.
+              10 WS-CONTENIDO-IND         PIC X(04) VALUE SPACES.
+              10 WS-CONTENIDO-TOT         PIC X(532) VALUE SPACES.
+           05 WS-TSCONTENT                PIC X(500) VALUE SPACES.
+      *----------------------------------------------------------------*
+      *                  DECLARACIONES DB2                             *
+      *----------------------------------------------------------------*
+           EXEC SQL
+                INCLUDE SQLCA
+           END-EXEC.
+      *----------------------------------------------------------------*
+      *                  ESTRUCTURA TABLA UGDTMAE                      *
+      *----------------------------------------------------------------*
+           EXEC SQL
+                INCLUDE UGGTMAE
+           END-EXEC.
+      *----------------------------------------------------------------*
+      * COPY DE ERRORES CICS
+      *----------------------------------------------------------------*
+           COPY QGECABC.
+      *----------------------------------------------------------------*
+      *                 AREA DE DECLARACION DE CURSORES                *
+      *----------------------------------------------------------------*
+      *----------------------------------------------------------------*
+      *                    AREA DE COPYS                               *
+      *----------------------------------------------------------------*
+           COPY UGTCMAE.
+      *----------------------------------------------------------------*
+      *                    LINKAGE SECTION                             *
+      *----------------------------------------------------------------*
+       LINKAGE SECTION.
+        01 DFHCOMMAREA.
+            COPY UGSCMAE.
+      *----------------------------------------------------------------*
+      *                      PROCEDURE DIVISION                        *
+      *----------------------------------------------------------------*
+       PROCEDURE DIVISION.
+           PERFORM  1000-INICIO-PROGRAMA
+           PERFORM  2000-PROCESO-PROGRAMA
+           PERFORM  3000-FINAL-PROGRAMA.
+      *----------------------------------------------------------------*
+      * 1000-INICIO-PROGRAMA
+      *----------------------------------------------------------------*
+       1000-INICIO-PROGRAMA.
+           EXEC CICS
+              IGNORE CONDITION ERROR
+           END-EXEC
+           PERFORM 102-BORRA-COLA-TS
+           MOVE 'UG2CSMAE'            TO WS-NOMBRE-COLA-TS
+           PERFORM 31-ESCRIBE-COLA-TS
+           MOVE '1000-INICIO'         TO WS-CONTENIDO-TOT(01:20)
+           PERFORM 31-ESCRIBE-COLA-TS
+           MOVE CON-RETORNO-OK        TO UGCCMAE-COD-RESPUESTA
+           MOVE SPACES                TO UGCCMAE-COD-ERROR
+           MOVE SPACES                TO UGCCMAE-VAR1-ERROR.
+       1000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 102-BORRA-COLA-TS                                              *
+      *----------------------------------------------------------------*
+       102-BORRA-COLA-TS.
+           IF UGCCMAE-TRAZA NOT = 'P'
+              MOVE  'UG2CSMAE'         TO WS-NOMBRE-COLA-TS
+              EXEC CICS
+                   DELETEQ TS
+                   QUEUE(WS-NOMBRE-COLA-TS)
+                   NOHANDLE
+              END-EXEC
+           END-IF.
+       102-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 2000-PROCESO-PROGRAMA                                          *
+      *----------------------------------------------------------------*
+       2000-PROCESO-PROGRAMA.
+           MOVE '2000-PROCESO-PROGRAMA' TO WS-CONTENIDO-TOT(01:)
+           PERFORM 31-ESCRIBE-COLA-TS
+           PERFORM 2100-VALIDA-ENTRADA
+           PERFORM 2200-RECUPERA-DATOS.
+       2000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 2100-VALIDA-ENTRADA                                            *
+      * - VALIDA LOS DATOS DE ENTRADA                                  *
+      *----------------------------------------------------------------*
+       2100-VALIDA-ENTRADA.
+           MOVE '2100-VALIDA-ENTRADA'  TO WS-CONTENIDO-TOT(01:)
+           PERFORM 31-ESCRIBE-COLA-TS
+           MOVE 'UGCCMAE-PROD-DESTINO' TO WS-CONTENIDO-TOT(01:20)
+           MOVE UGCCMAE-PROD-DESTINO   TO WS-CONTENIDO-TOT(21:)
+           PERFORM 31-ESCRIBE-COLA-TS
+           IF UGCCMAE-PROD-DESTINO EQUAL SPACES
+              MOVE CON-RETORNO-NOK         TO UGCCMAE-COD-RESPUESTA
+              MOVE WS-UGE0000              TO UGCCMAE-COD-ERROR
+              MOVE 'CUENTA VACIO'          TO UGCCMAE-VAR1-ERROR
+              PERFORM 3000-FINAL-PROGRAMA
+           END-IF.
+       2100-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 2200-RECUPERA-DATOS                                            *
+      * - RECUPERA EL LAS FACTURAS A PARTIR DEL CLIENTE                *
+      *----------------------------------------------------------------*
+       2200-RECUPERA-DATOS.
+            MOVE '2200-RECUPERA-DATOS'       TO WS-CONTENIDO-TOT(01:)
+            PERFORM 31-ESCRIBE-COLA-TS
+            MOVE UGCCMAE-PROD-DESTINO(1:8)   TO MAE-ENTIOFI
+            MOVE UGCCMAE-PROD-DESTINO(11:10) TO MAE-CUENTA
+            MOVE 'MAE-ENTIDAD'               TO WS-CONTENIDO-TOT(01:20)
+            MOVE  MAE-ENTIOFI                TO WS-CONTENIDO-TOT(21:)
+            PERFORM 31-ESCRIBE-COLA-TS
+            MOVE 'MAE-CUENTA'                TO WS-CONTENIDO-TOT(01:20)
+            MOVE  MAE-CUENTA                 TO WS-CONTENIDO-TOT(21:)
+            PERFORM 31-ESCRIBE-COLA-TS
+            EXEC SQL
+                 SELECT FECPRILIQ  ,
+                        FEPROLIQ   ,
+                        FEULIQ     ,
+                        IND_MARCA2 ,
+                        DIGICCC1   ,
+                        DIGICCC2   ,
+                        SITPRES    ,
+                        SALREAL    ,
+                        MONEDA     ,
+                        IMPCONCE   ,
+                        PRODUCTO   ,
+                        SUBPRO
+                 INTO  :MAE-FECPRILIQ  ,
+                       :MAE-FEPROLIQ   ,
+                       :MAE-FEULIQ     ,
+                       :MAE-IND-MARCA2 ,
+                       :MAE-DIGICCC1   ,
+                       :MAE-DIGICCC2   ,
+                       :MAE-SITPRES    ,
+                       :MAE-SALREAL    ,
+                       :MAE-MONEDA     ,
+                       :MAE-IMPCONCE   ,
+                       :MAE-PRODUCTO   ,
+                       :MAE-SUBPRO
+                 FROM UGDTMAE
+                 WHERE ENTIOFI = :MAE-ENTIOFI
+                 AND   CUENTA  = :MAE-CUENTA
+            END-EXEC
+            MOVE 'SQLCODE'               TO WS-CONTENIDO-TOT(01:20)
+            MOVE  SQLCODE                TO WS-CONTENIDO-TOT(21:)
+            PERFORM 31-ESCRIBE-COLA-TS
+            EVALUATE SQLCODE
+                 WHEN ZEROES
+                     MOVE MAE-FECPRILIQ      TO UGCCMAE-FEPRILIQ
+                     MOVE MAE-FEPROLIQ       TO UGCCMAE-FEPROLIQ
+                     MOVE MAE-FEULIQ         TO UGCCMAE-FEULIQ
+                     MOVE MAE-IND-MARCA2     TO UGCCMAE-IND-MARCA2
+                     MOVE MAE-DIGICCC1       TO UGCCMAE-DIGICCC1
+                     MOVE MAE-DIGICCC2       TO UGCCMAE-DIGICCC2
+                     MOVE MAE-SITPRES        TO UGCCMAE-SITPRES
+                     MOVE MAE-SALREAL        TO UGCCMAE-SALREAL
+                     MOVE MAE-MONEDA         TO UGCCMAE-MONEDA
+                     MOVE MAE-IMPCONCE       TO UGCCMAE-IMPCONCE
+                     MOVE MAE-PRODUCTO       TO UGCCMAE-PRODUCTO
+                     MOVE MAE-SUBPRO         TO UGCCMAE-SUBPRO
+                     MOVE CON-RETORNO-OK     TO UGCCMAE-COD-RESPUESTA
+                     MOVE SPACES             TO UGCCMAE-COD-ERROR
+                     MOVE SPACES             TO UGCCMAE-VAR1-ERROR
+                 WHEN 100
+                     MOVE '0001-01-01'       TO UGCCMAE-FEPRILIQ
+                     MOVE '0001-01-01'       TO UGCCMAE-FEPROLIQ
+                     MOVE '0001-01-01'       TO UGCCMAE-FEULIQ
+                     MOVE SPACES             TO UGCCMAE-IND-MARCA2
+                     MOVE SPACES             TO UGCCMAE-DIGICCC1
+                     MOVE SPACES             TO UGCCMAE-DIGICCC2
+                     MOVE SPACES             TO UGCCMAE-SITPRES
+                     MOVE ZEROES             TO UGCCMAE-SALREAL
+                     MOVE SPACES             TO UGCCMAE-MONEDA
+                     MOVE ZEROES             TO UGCCMAE-IMPCONCE
+                     MOVE SPACES             TO UGCCMAE-PRODUCTO
+                     MOVE SPACES             TO UGCCMAE-SUBPRO
+                     MOVE CON-RETORNO-SOK    TO UGCCMAE-COD-RESPUESTA
+                     MOVE WS-UGE0000         TO UGCCMAE-COD-ERROR
+                     MOVE 'NO EXISTEN DATOS' TO UGCCMAE-VAR1-ERROR
+                 WHEN OTHER
+                     MOVE CON-RETORNO-NOK    TO UGCCMAE-COD-RESPUESTA
+                     MOVE WS-UGE0000         TO UGCCMAE-COD-ERROR
+                     MOVE 'ERROR UGDTMAE'    TO UGCCMAE-VAR1-ERROR
+            END-EVALUATE.
+       2200-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 31-ESCRIBE-COLA-TS                                             *
+      * - ESCRIBE COLA TS DE LOG PARA VALIDAR FUNCIONAMIENTO           *
+      *----------------------------------------------------------------*
+       31-ESCRIBE-COLA-TS.
+            IF UGCCMAE-TRAZA NOT = 'P'
+               MOVE LENGTH OF WS-CONTENIDO-TS    TO WS-LONG-TS
+               EXEC CICS WRITEQ TS
+                    QUEUE  (WS-NOMBRE-COLA-TS)
+                    FROM   (WS-CONTENIDO-TS)
+                    LENGTH (WS-LONG-TS)
+                   NOHANDLE
+               END-EXEC
+            END-IF
+            MOVE SPACES                       TO WS-CONTENIDO-TS.
+       31-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 990-MOVER-ERRORES-CICS                                         *
+      *----------------------------------------------------------------*
+       990-MOVER-ERRORES-CICS.
+            INITIALIZE QGECABC
+            MOVE 'S'                        TO ABC-ABEND
+            MOVE 'UG2CSMAE'                 TO ABC-PROGRAMA
+            MOVE EIBFN                      TO ABC-EIBFN
+            MOVE EIBRSRCE                   TO ABC-EIBRSRCE
+            MOVE EIBRCODE                   TO ABC-EIBRCODE
+            MOVE EIBRESP                    TO ABC-EIBRESP1
+            MOVE EIBRESP2                   TO ABC-EIBRESP2
+            EXEC CICS
+                LINK PROGRAM ('QG1CABC')
+                COMMAREA (QGECABC)
+            END-EXEC.
+       990-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      * 3000-FINAL-PROGRAMA                                            *
+      *----------------------------------------------------------------*
+       3000-FINAL-PROGRAMA.
+            EXEC CICS
+                 RETURN
+            END-EXEC.
+       3000-EXIT. EXIT.

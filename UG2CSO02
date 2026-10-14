@@ -1,0 +1,571 @@
+﻿      ******************************************************************00000100
+      * UG2CSO02: RUTINA PARA MODIFICAR DATOS DE (UGGTDAT) SMART OFFERS*00000200
+      *     PROYECTO SMART OFFERS                                      *
+      *     COL472317S613658                                           *
+      *     GP15791.                                                   *
+      ******************************************************************00000400
+      *                     IDENTIFICATION DIVISION                    *00000500
+      ******************************************************************00000600
+
+       IDENTIFICATION DIVISION.                                         00000700
+                                                                        00000800
+       PROGRAM-ID.    UG2CSO02.                                         00000900
+       AUTHOR.        CE52384.                                          00001000
+       INSTALLATION.  BBVA.
+       DATE-WRITTEN.  07/11/2017.                                       00001100
+       DATE-COMPILED. 08/11/2017.                                       00001200
+
+      ******************************************************************00001300
+      *                                                                *00001400
+      *               UG2CSO02 - DESCRIPCION DEL MODULO                *00001500
+      *               ---------------------------------                *00001600
+      *                                                                *00001700
+      *  RUTINA PARA MODIFICAR DATOS DE LAS OFERTAS DE SMART OFFERS.   *00001800
+      *                                                                *
+      * CAMPOS DE CONTROL DE RETORNO                                   *00800000
+      *                                                                *00801000
+      *     RU2-CODRET       CODIGO DE RETORNO                         *00810000
+      *                         00. CORRECTO                           *00820000
+      *                         05. NO EXISTEN DATOS A INFORMAR        *00820000
+      *                         30. ERROR EN DATOS INGRESADOS          *00910000
+      *                         99. ERROR EN ACCESO DB2.               *
+      *     RU2-COMPERR        COMPONENTE DEL ERROR                    *00930000
+      *     RU2-SQLCODE        CODIGO SQL DEL ERROR                    *00940000
+      *                                                                *
+      ******************************************************************00002100
+      * -------------------------------------------------------------- *00002200
+      *        L O G    D E   M O D I F I C A C I O N E S              *00002300
+      * -------------------------------------------------------------- *00002400
+      *  AUTOR   FECHA          DESCRIPCION                            *00002500
+      * ------- --------   ------------------------------------------- *00002600
+      * C342598 14092019   AJUSTE CONSULTA PREVIA ACTUALIZACION DE ESTA-00002600
+      *                    DO, YA QUE NO ENCONTRABA PRODUCTOS CUANDO   *00002600
+      *                    SE SELECCIONABA UNA OFERTA DISTINTA A LA    *00002600
+      * @COL01             MAXIMA REGISTRADA EN UGDTDAT.COL472318S62269400002600
+      ******************************************************************00003020
+      * C342598 05112019   AJUSTE CONSULTA PARA QUE TOME ULTIMO REGISTRO00002600
+      * @COL02  GP15791    YA QUE MUESTRA ERROR POR REGISTRO DUPLICADO.*00002600
+      ******************************************************************00003020
+      * CE53297 05112020   AJUSTE PARA VALIDAR EL ESTADO DE ENTRADA    *00002600
+      *                    CUANDO SE TRATA DE FLUJO DE OFERTA DE       *00002600
+      *                    TARJETA DE CREDITO A UN CLIENTE ACTIVO      *00002600
+      * @COL03             FEATURE: CCSS-3811                          *00002600
+      *                    GP17493-CCSS-3800                           *
+      ******************************************************************00003020
+      * CE53297 24022021   AJUSTE PARA VALIDAR EL ESTADO DE ENTRADA    *00002600
+      *                    CUANDO SE TRATA DE FLUJO DE OFERTA DE       *00002600
+      *                    TARJETA DE CREDITO A UN CLIENTE ACTIVO SOI  *00002600
+      * @COL04             GP17493  CCSS-4813                          *00002600
+      ******************************************************************00003020
+      *----------------------------------------------------------------*00003100
+      *                  ENVIRONMENT  DIVISION                         *00003200
+      ******************************************************************00003300
+
+       ENVIRONMENT DIVISION.                                            00003400
+       CONFIGURATION SECTION.                                           00003800
+
+      *----------------------------------------------------------------*00003900
+      *                   D A T A      D I V I S I O N                 *00004000
+      *----------------------------------------------------------------*00004100
+       DATA DIVISION.                                                   00004200
+      *----------------------------------------------------------------*00004500
+      *                    WORKING-STORAGE SECTION                     *00004600
+      *----------------------------------------------------------------*00004700
+       WORKING-STORAGE SECTION.                                         00004400
+
+       01  LT-INICIO-DE-WS.                                             00004800
+           05  LT-INICIO-DE-WS          PIC X(41) VALUE                 00004900
+               '**** INICIO WORKING STORAGE UG2CSO02 ****'.             00005000
+           05 WS-NOMBRE-COLA-TS         PIC X(08) VALUE SPACES.
+           05 WS-LONG-TS                PIC S9(4) COMP.
+           05 WS-CONTENIDO-TS.
+              10 WS-CONTENIDO-IND       PIC X(04) VALUE SPACES.
+              10 WS-CONTENIDO-TOT       PIC X(100) VALUE SPACES.
+
+      *----------------------------------------------------------------*
+      *       DEFINICION DE VARIABLES DE SALIDA DE RESPUESTA           *
+      *----------------------------------------------------------------*
+       01 WS-COLA-DC1.
+      *
+          05 WS-LONG-DC1                PIC S9(4) COMP VALUE ZEROES.
+          05 WS-TS.
+             10 WS-PREFIJO-DC1          PIC X(04) VALUE SPACES.
+             10 WS-SUFIJO-DC1           PIC X(04) VALUE SPACES.
+          05 WS-CONTENIDO-DC1.
+             10 WS-NOMBRE-FORMATO       PIC X(08) VALUE SPACES.
+             10 WS-CONT-FORMATO         PIC X(2000) VALUE SPACES.
+      *
+      *VARIABLES PARA TRACE*
+      *
+          05 WS-TSLONG                  PIC S9(4) COMP VALUE +0.
+          05 WS-TSDATOS                 PIC X(1000) VALUE SPACES.
+          05 WS-TSNAME                  PIC X(16) VALUE SPACES.
+          05 WS-TSN-SES.
+             10 FILLER                  PIC X(05) VALUE 'QGSES'.
+             10 WS-TSN-SES-CNL-ASTA     PIC X(02) VALUE SPACES.
+             10 WS-TSN-SES-NSES         PIC X(05) VALUE SPACES.
+             10 FILLER                  PIC X(04) VALUE SPACES.
+          05 WS-CNL-AST                 PIC X(04) VALUE SPACES.
+      *----------------------------------------------------------------*00005100
+      *                  DECLARACION DE LAS TABLAS DB2                 *00005200
+      *----------------------------------------------------------------*00005300
+           EXEC SQL                                                     00005500
+                INCLUDE SQLCA                                           00005600
+           END-EXEC.                                                    00005700
+      *----------------------------------------------------------------*
+      *      TABLA DE CLIENTES PREAPROBADO POR CAMPA#A (UGDTPAB)       *
+      *----------------------------------------------------------------*
+           EXEC SQL
+                INCLUDE UGGTPAB
+           END-EXEC.
+
+           EXEC SQL
+                INCLUDE UGTCPAB
+           END-EXEC.
+      *----------------------------------------------------------------*00005800
+      *      TABLA DE CLIENTES EN SMART OFFERS (UGGTDAT)               *00005900
+      *----------------------------------------------------------------*00005900
+           EXEC SQL                                                     00006000
+                INCLUDE UGGTDAT                                         00006100
+           END-EXEC.                                                    00006200
+                                                                        00006300
+           EXEC SQL                                                     00006400
+                INCLUDE UGTCDAT                                         00006500
+           END-EXEC.                                                    00006600
+      ******************************************************************00008000
+      *                           VARIABLES                            *00008300
+      ******************************************************************00008400
+                                                                        00008500
+       01 SW-ERROR-STATUS      PIC 9(01)        VALUE 0.                00008500
+          88 NO-ERROR                           VALUE 0.                00008500
+          88 SI-ERROR                           VALUE 1.                00008500
+                                                                        00008500
+       01 DB2-RETURN-CDE       PIC S9(9) COMP.                          00009700
+          88 DB2-OK                             VALUE +0.               00009800
+          88 DB2-NOTFND                         VALUE +100.             00009900
+
+      ************************CONSTANTES********************************
+       01 CT-CONSTANTES.
+          03 CT-UG2CSO02       PIC  X(08)       VALUE 'UG2CSO02'.
+          03 CT-VENCIDO        PIC  X(10)       VALUE 'VENCIDO   '.
+          03 CT-OZ2COZF2       PIC  X(10)       VALUE 'OZ2COZF2  '.
+      *----------------------------------------------------------------*
+      * COPY DE COMUNICACION CON EL PROGRAMA ABC DEL CONTROL DE ERRORES*
+      *----------------------------------------------------------------*
+          COPY QGECABC.
+
+       01  LT-FINAL-DE-WS.                                              00010400
+           05  LT-FINAL-DE-WS               PIC X(41) VALUE             00010500
+               '***** FINAL WORKING STORAGE UG2CSO02 ****'.             00010600
+      *----------------------------------------------------------------*00010900
+      *                        LINKAGE SECTION                         *00010800
+      *----------------------------------------------------------------*00010900
+       LINKAGE SECTION.                                                 00011000
+       01 DFHCOMMAREA.
+           COPY UGCTSO02.                                               00011100
+      *----------------------------------------------------------------*00011300
+      *                PROCEDURE DIVISION                              *00011400
+      *----------------------------------------------------------------*00011500
+       PROCEDURE DIVISION.                                              00011600
+                                                                        00011700
+           PERFORM 1000I-INICIO-PROGRAMA                                00011800
+           PERFORM 2000I-PROCESO-PROGRAMA                               00011900
+           PERFORM 8000I-FINAL.
+                                                                        00012100
+      ******************************************************************00012200
+      *                    1000-INICIO-PROGRAMA                        *00012300
+      ******************************************************************00012400
+       1000I-INICIO-PROGRAMA.                                           00013200
+
+           INITIALIZE RU2-CODRET
+                      RU2-VAR1-ERROR
+                      RU2-VAR2-ERROR
+                      DB2-RETURN-CDE                                    00013300
+                      RU2-CONTROL.
+
+       1000F-INICIO-PROGRAMA. EXIT.                                     00013200
+      *----------------------------------------------------------------*00014000
+      *                  2000I-PROCESO-PROGRAMA                        *00014100
+      *----------------------------------------------------------------*00014400
+       2000I-PROCESO-PROGRAMA.                                          00014500
+
+           PERFORM 3000I-VALIDA-ENTRADA                                 00014700
+
+           IF   RU2-ESTADO EQUAL '85'                                   00016800
+                PERFORM 4070I-BUSCA-PDTO
+           ELSE
+                IF   RU2-ESTADO   =   '08'
+                     PERFORM 4000I-DISPONIBILIDAD                       00014700
+                ELSE
+                     PERFORM 4020I-ACTUALIZA-UGGTDAT                    00014700
+                END-IF
+           END-IF.
+
+       2000F-PROCESO-PROGRAMA. EXIT.                                    00014500
+      *----------------------------------------------------------------*00016400
+      *                  3000I-VALIDA-ENTRADA                          *00016500
+      *----------------------------------------------------------------*00016600
+       3000I-VALIDA-ENTRADA.                                            00016700
+                                                                        00016800
+           IF   RU2-CLIENTE  = SPACES OR LOW-VALUES                     00019100
+ COL02*         MOVE 'OZF2003'                  TO RU2-CODRET
+ COL02          MOVE 'OZE0000'                  TO RU2-CODRET
+                MOVE 'CLIENTE INVALIDO    '     TO RU2-VAR1-ERROR
+                MOVE '                    '     TO RU2-VAR2-ERROR
+                PERFORM 8000I-FINAL
+           END-IF                                                       00019600
+                                                                        00016800
+           IF  (RU2-COD-CAM-RIES  = SPACES OR LOW-VALUES) AND           00019100
+                RU2-ESTADO   NOT EQUAL '08'
+ COL02*         MOVE 'OZF2002'                  TO RU2-CODRET
+ COL02          MOVE 'OZE0000'                  TO RU2-CODRET
+                MOVE 'CODIGO DE CAMPA#A   '     TO RU2-VAR1-ERROR
+                MOVE '                    '     TO RU2-VAR2-ERROR
+                PERFORM 8000I-FINAL
+           END-IF                                                       00019600
+
+           IF  (RU2-IND-PDTO = SPACES OR LOW-VALUES)      AND           00019100
+                RU2-ESTADO   NOT EQUAL '08'
+ COL02*         MOVE 'OZF2004'                  TO RU2-CODRET
+ COL02          MOVE 'OZE0000'                  TO RU2-CODRET
+                MOVE 'INDICADOR DE PRODUCT'     TO RU2-VAR1-ERROR
+                MOVE 'O INVALIDO          '     TO RU2-VAR2-ERROR
+                PERFORM 8000I-FINAL
+           END-IF                                                       00019600
+
+           IF  (RU2-ESTADO   = SPACES OR LOW-VALUES) OR
+               (RU2-ESTADO NOT EQUAL '02' AND
+                RU2-ESTADO NOT EQUAL '03' AND
+                RU2-ESTADO NOT EQUAL '04' AND
+                RU2-ESTADO NOT EQUAL '08' AND
+                RU2-ESTADO NOT EQUAL '85')
+ COL02*         MOVE 'OZF2005'                  TO RU2-CODRET
+ COL02          MOVE 'OZE0000'                  TO RU2-CODRET
+                MOVE 'ESTADO INVALIDO     '     TO RU2-VAR1-ERROR
+                MOVE '                    '     TO RU2-VAR2-ERROR
+                PERFORM 8000I-FINAL
+           END-IF
+
+           IF  (RU2-IND-PDTO = SPACES OR LOW-VALUES)      AND           00019100
+                RU2-PRODUCTO = SPACES OR LOW-VALUES       AND           00019100
+                RU2-ESTADO   = '08'
+ COL02*         MOVE 'OZF2006'                  TO RU2-CODRET
+ COL02          MOVE 'OZE0000'                  TO RU2-CODRET
+                MOVE 'DEBE INFORMAR PDTO. '     TO RU2-VAR1-ERROR
+                MOVE 'PARA DISPONIBILIDAD '     TO RU2-VAR2-ERROR
+                PERFORM 8000I-FINAL
+           END-IF                                                       00019600
+      *@COL03-I
+           IF RU2-COD-CAM-RIES  = 'OFERTA_D0_AB'
+      *@COL04-I
+              OR RU2-COD-CAM-RIES  = 'OFERTA_D0_BS'
+      *@COL04-F
+              IF RU2-ESTADO   = '08'
+                 MOVE 'FC' TO  RU2-ESTADO
+              END-IF
+           END-IF
+           .
+      *@COL03-F
+       3000F-VALIDA-ENTRADA. EXIT.                                      00016700
+      *----------------------------------------------------------------*00016400
+      *        4000I-ACTUALIZA-UGGTDAT  DISPONIBILIDAD                 *00016500
+      *   REALIZA ACTUALIZACI├│N DE ESTADO Y DESCRIPCI├│N EN UGGTDAT.    *
+      *----------------------------------------------------------------*00016600
+       4000I-DISPONIBILIDAD.                                            00016700
+
+           EXEC SQL
+               SELECT  PAB_CODIGO_CAMP
+               INTO   :PAB-CODIGO-CAMP
+               FROM    UGDTPAB
+               WHERE   PAB_NUMCLIEN    = :RU2-CLIENTE
+                 AND   PAB_ESTADO_CAMP = 'VS'
+                 AND   PAB_CODIGO_PROD = :RU2-PRODUCTO
+                 AND   PAB_CANAL_ASIG  <> ' '
+                 AND   PAB_LIM_MINIMO  > 0
+                 AND   PAB_LIM_MAXIMO  > 0
+                 FETCH FIRST 1 ROWS ONLY
+           END-EXEC
+
+           MOVE SQLCODE                      TO DB2-RETURN-CDE
+
+           IF   DB2-OK
+                EXEC SQL
+                    SELECT DAT_COD_CAM,
+                           DAT_INDICADOR_PROD,
+                           DAT_COD_CAM_RIESGOS
+                    INTO  :DAT-COD-CAM,
+                          :DAT-INDICADOR-PROD,
+                          :DAT-COD-CAM-RIESGOS
+                    FROM UGDTDAT
+                    WHERE DAT_CLIENTE         = :RU2-CLIENTE
+                    AND   DAT_INDICADOR_PROD  = :RU2-IND-PDTO
+                    AND   DAT_COD_CAM_RIESGOS = :RU2-COD-CAM-RIES
+ COL02              ORDER BY DAT_PRODUCTO DESC
+ COL02              FETCH FIRST 1 ROWS ONLY
+                END-EXEC
+      *COL01-I
+      *             AND   DAT_PRODUCTO        = :RU2-PRODUCTO
+      *             AND   DAT_COD_CAM_RIESGOS = :RU2-COD-CAM-RIES
+      *         END-EXEC
+      *COL01-F
+
+                MOVE SQLCODE TO DB2-RETURN-CDE
+
+                IF   DB2-OK
+                     MOVE DAT-INDICADOR-PROD TO RU2-IND-PDTO
+                     PERFORM 4090I-ACTUALIZA
+                END-IF
+
+                IF   DB2-NOTFND
+                     EXEC SQL
+                          SELECT DAT_COD_CAM,
+                                 DAT_INDICADOR_PROD,
+                                 DAT_COD_CAM_RIESGOS
+                          INTO  :DAT-COD-CAM,
+                                :DAT-INDICADOR-PROD,
+                                :DAT-COD-CAM-RIESGOS
+                          FROM UGDTDAT
+                          WHERE DAT_CLIENTE         = :RU2-CLIENTE
+                          AND   DAT_INDICADOR_PROD  = :RU2-IND-PDTO
+                          AND   DAT_COD_CAM         = :RU2-COD-CAM-RIES
+ COL02                    ORDER BY DAT_PRODUCTO DESC
+ COL02                    FETCH FIRST 1 ROWS ONLY
+                     END-EXEC
+      *COL01-I
+      *                   AND   DAT_PRODUCTO        = :RU2-PRODUCTO
+      *                   AND   DAT_COD_CAM         = :RU2-COD-CAM-RIES
+      *              END-EXEC
+      *COL01-F
+                END-IF
+
+                MOVE SQLCODE TO DB2-RETURN-CDE
+
+                IF   DB2-OK
+                     MOVE DAT-COD-CAM-RIESGOS TO RU2-COD-CAM-RIES
+                     MOVE DAT-INDICADOR-PROD  TO RU2-IND-PDTO
+                     PERFORM 4090I-ACTUALIZA
+                END-IF
+           END-IF.
+
+       4000F-DISPONIBILIDAD.  EXIT.                                     00016700
+      *----------------------------------------------------------------*00016400
+      *                 4020I-ACTUALIZA-UGGTDAT                        *00016500
+      *   REALIZA ACTUALIZACI├│N DE ESTADO Y DESCRIPCI├│N EN UGGTDAT.    *
+      *   BUSQUEDA Y ACTUALIZACI├│N POR CODIGO CAMPA┬ªA DE SALE FORCE.   *
+      *----------------------------------------------------------------*00016600
+       4020I-ACTUALIZA-UGGTDAT.                                         00016700
+
+           EXEC SQL
+                SELECT DAT_PRODUCTO,
+                       DAT_COD_CAM,
+                       DAT_COD_CAM_RIESGOS
+                INTO  :DAT-PRODUCTO,
+                      :DAT-COD-CAM,
+                      :DAT-COD-CAM-RIESGOS
+                FROM UGDTDAT
+                WHERE DAT_CLIENTE         = :RU2-CLIENTE
+                AND   DAT_INDICADOR_PROD  = :RU2-IND-PDTO
+                AND   DAT_COD_CAM         = :RU2-COD-CAM-RIES
+ COL02          ORDER BY DAT_PRODUCTO DESC
+ COL02          FETCH FIRST 1 ROWS ONLY
+           END-EXEC
+
+           MOVE SQLCODE TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+                WHEN DB2-OK
+                     PERFORM 4090I-ACTUALIZA
+
+                WHEN DB2-NOTFND
+                     PERFORM 4050I-ACTUALIZA-UGGTDAT
+
+                WHEN OTHER
+ COL02*              MOVE 'OZF2007'              TO RU2-CODRET
+ COL02*              MOVE 'ERROR DB2 EN UGDTDAT' TO RU2-VAR1-ERROR
+ COL02               MOVE 'OZE0000'              TO RU2-CODRET
+ COL02               MOVE 'ERROR DB2 EN UGDTDAT1' TO RU2-VAR1-ERROR
+                     MOVE '                    ' TO RU2-VAR2-ERROR
+                     PERFORM 8000I-FINAL
+           END-EVALUATE.
+
+       4020F-ACTUALIZA-UGGTDAT. EXIT.                                   00016700
+      *----------------------------------------------------------------*
+      *                 4010I-ACTUALIZA-UGGTDAT                        *00016500
+      *   REALIZA ACTUALIZACI├│N DE ESTADO Y DESCRIPCI├│N EN UGGTDAT.    *
+      *   BUSQUEDA Y ACTUALIZACI├│N POR CODIGO CAMPA┬ªA DE RIESGOS(PAB). *
+      *----------------------------------------------------------------*00016600
+       4050I-ACTUALIZA-UGGTDAT.                                         00016700
+
+           EXEC SQL
+                SELECT DAT_PRODUCTO,
+                       DAT_COD_CAM,
+                       DAT_COD_CAM_RIESGOS
+                INTO  :DAT-PRODUCTO,
+                      :DAT-COD-CAM,
+                      :DAT-COD-CAM-RIESGOS
+                FROM UGDTDAT
+                WHERE DAT_CLIENTE         = :RU2-CLIENTE
+                AND   DAT_INDICADOR_PROD  = :RU2-IND-PDTO
+                AND   DAT_COD_CAM_RIESGOS = :RU2-COD-CAM-RIES
+ COL02          ORDER BY DAT_PRODUCTO DESC
+ COL02          FETCH FIRST 1 ROWS ONLY
+           END-EXEC
+
+           MOVE SQLCODE TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+                WHEN DB2-OK
+                     PERFORM 4090I-ACTUALIZA
+                WHEN DB2-NOTFND
+                     MOVE DAT-COD-CAM            TO RU2-COD-CAM-RIES
+                     PERFORM 4090I-ACTUALIZA
+                     PERFORM 8000I-FINAL
+                WHEN OTHER
+ COL02*              MOVE 'OZF2009'              TO RU2-CODRET
+ COL02*              MOVE 'ERROR DB2 EN UGDTDAT' TO RU2-VAR1-ERROR
+ COL02               MOVE 'OZE0000'              TO RU2-CODRET
+ COL02               MOVE 'ERROR DB2 EN UGDTDAT2' TO RU2-VAR1-ERROR
+                     MOVE '                    ' TO RU2-VAR2-ERROR
+                     PERFORM 8000I-FINAL
+           END-EVALUATE.
+
+       4050F-ACTUALIZA-UGGTDAT. EXIT.                                   00016700
+      *----------------------------------------------------------------*
+      *                 4070I-BUSCA-PDTO                               *00016500
+      *   DEVUELVE EL CODIGO DE PRODUCTO EXISTENTE EN UGDTDAT.         *
+      *   PRIMERO REALIZA BUSQUEDA POR CODIGO CAMPA┬ªA DE RIESGO.       *
+      *----------------------------------------------------------------*00016600
+       4070I-BUSCA-PDTO.
+
+           MOVE RU2-CLIENTE      TO DAT-CLIENTE
+           MOVE RU2-IND-PDTO     TO DAT-INDICADOR-PROD                  00019100
+           MOVE RU2-COD-CAM-RIES TO DAT-COD-CAM-RIESGOS
+
+           EXEC SQL
+                SELECT DAT_PRODUCTO
+                INTO  :DAT-PRODUCTO
+                FROM UGDTDAT
+                WHERE DAT_CLIENTE         = :DAT-CLIENTE
+                AND   DAT_INDICADOR_PROD  = :DAT-INDICADOR-PROD
+                AND   DAT_COD_CAM_RIESGOS = :DAT-COD-CAM-RIESGOS
+ COL02          ORDER BY DAT_PRODUCTO DESC
+ COL02          FETCH FIRST 1 ROWS ONLY
+           END-EXEC
+
+           MOVE SQLCODE TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+                WHEN DB2-OK
+                     MOVE  DAT-PRODUCTO        TO RU2-PRODUCTO
+                WHEN DB2-NOTFND
+                     PERFORM 4080I-BUSCA-PDTO
+                WHEN OTHER
+                     MOVE  SPACES              TO RU2-PRODUCTO
+           END-EVALUATE.
+
+       4070F-BUSCA-PDTO.  EXIT.
+      *----------------------------------------------------------------*
+      *                 4080I-BUSCA-PDTO                               *00016500
+      *   DEVUELVE EL CODIGO DE PRODUCTO EXISTENTE EN UGDTDAT.         *
+      *   SEGUNDO REALIZA BUSQUEDA POR CODIGO CAMPA┬ªA DE SALE FORCE.   *
+      *----------------------------------------------------------------*00016600
+       4080I-BUSCA-PDTO.
+
+           EXEC SQL
+                SELECT DAT_PRODUCTO
+                INTO  :DAT-PRODUCTO
+                FROM UGDTDAT
+                WHERE DAT_CLIENTE         = :RU2-CLIENTE
+                AND   DAT_INDICADOR_PROD  = :RU2-IND-PDTO
+                AND   DAT_COD_CAM         = :RU2-COD-CAM-RIES
+ COL02          ORDER BY DAT_PRODUCTO DESC
+ COL02          FETCH FIRST 1 ROWS ONLY
+           END-EXEC
+
+           MOVE SQLCODE TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+                WHEN DB2-OK
+                     MOVE  DAT-PRODUCTO        TO RU2-PRODUCTO
+                WHEN OTHER
+                     MOVE  SPACES              TO RU2-PRODUCTO
+           END-EVALUATE.
+
+       4080F-BUSCA-PDTO.  EXIT.
+      *----------------------------------------------------------------*
+      *    ACTUALIZA UGDTDAT
+      *----------------------------------------------------------------*
+       4090I-ACTUALIZA.
+
+           MOVE RU2-CLIENTE           TO DAT-CLIENTE
+           MOVE RU2-IND-PDTO          TO DAT-INDICADOR-PROD
+           MOVE RU2-COD-CAM-RIES      TO DAT-COD-CAM-RIESGOS
+           MOVE RU2-PRODUCTO          TO DAT-PRODUCTO
+      *@COL03-I
+           IF RU2-COD-CAM-RIES  = 'OFERTA_D0_AB'
+      *@COL04-I
+              OR RU2-COD-CAM-RIES  = 'OFERTA_D0_BS'
+      *@COL04-F
+              IF RU2-ESTADO   = 'FC'
+                 MOVE '08' TO  RU2-ESTADO
+              END-IF
+           END-IF
+      *@COL03-F
+           IF RU2-PRODUCTO = '60' OR '99'                               00291000
+              EXEC SQL
+                  UPDATE UGDTDAT
+                  SET  DAT_ESTADO         = :RU2-ESTADO       ,
+                       DAT_USERID_UMO     = :CT-OZ2COZF2      ,
+                       DAT_TIMESTAMP      =  CURRENT TIMESTAMP
+
+                  WHERE DAT_CLIENTE       = :DAT-CLIENTE                00291900
+                  AND   DAT_COD_CAM_RIESGOS = :DAT-COD-CAM-RIESGOS      00292100
+                  AND  (DAT_PRODUCTO  = '60' OR                         00292200
+                        DAT_PRODUCTO  = '99' )                          00292400
+              END-EXEC
+           ELSE                                                         00292700
+              EXEC SQL
+                  UPDATE UGDTDAT
+                  SET  DAT_ESTADO         = :RU2-ESTADO       ,
+                       DAT_USERID_UMO     = :CT-OZ2COZF2      ,
+                       DAT_TIMESTAMP      =  CURRENT TIMESTAMP
+                  WHERE DAT_CLIENTE       = :DAT-CLIENTE
+                  AND  DAT_INDICADOR_PROD = :DAT-INDICADOR-PROD
+                  AND DAT_COD_CAM_RIESGOS = :DAT-COD-CAM-RIESGOS
+              END-EXEC
+           END-IF
+
+           MOVE SQLCODE TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+                WHEN DB2-OK
+                     CONTINUE
+                WHEN DB2-NOTFND
+                     EXEC SQL
+                          UPDATE UGDTDAT
+                          SET  DAT_ESTADO         = :RU2-ESTADO       ,
+                               DAT_USERID_UMO     = :CT-OZ2COZF2      ,
+                               DAT_TIMESTAMP      =  CURRENT TIMESTAMP
+                          WHERE DAT_CLIENTE       = :DAT-CLIENTE
+                          AND  DAT_INDICADOR_PROD = :DAT-INDICADOR-PROD
+                          AND  DAT_COD_CAM        = :DAT-COD-CAM-RIESGOS
+                     END-EXEC
+                WHEN OTHER
+ COL02*              MOVE 'OZF2010'              TO RU2-CODRET
+ COL02*              MOVE 'ERROR DB2 EN UGDTDAT' TO RU2-VAR1-ERROR
+ COL02               MOVE 'OZE0000'              TO RU2-CODRET
+ COL02               MOVE 'ERROR DB2 EN UGDTDAT3' TO RU2-VAR1-ERROR
+                     MOVE '                    ' TO RU2-VAR2-ERROR
+                     PERFORM 8000I-FINAL
+           END-EVALUATE.
+
+       4090F-ACTUALIZA.   EXIT.
+      *----------------------------------------------------------------*
+      *      FINAL DEL PROGRAMA                                        *
+      *----------------------------------------------------------------*
+       8000I-FINAL.
+      *
+           GOBACK.
+
+       8000F-EXIT. EXIT.
+      *----------------------------------------------------------------*

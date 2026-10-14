@@ -1,0 +1,560 @@
+﻿      *  UG2CG055: CONSULTA IMPORTE EVALUA/RES  Y PREFORMALIZACION      00010002
+      *            PARA VARIACION DE PRODUCTO.                          00010002
+      ******************************************************************00020002
+      *                                                                *00030002
+      *        I D E N T I F I C A T I O N      D I V I S I O N        *00040002
+      *                                                                *00050002
+      ******************************************************************00060002
+       IDENTIFICATION DIVISION.                                         00070002
+       PROGRAM-ID.    UG2CG055.                                         00080002
+       AUTHOR.        ANGELA RIVERA GUZMAN.                             00090002
+       DATE-WRITTEN.  03/05/2007.                                       00100002
+       DATE-COMPILED.                                                   00110002
+                                                                        00120002
+      ******************************************************************00130002
+      *                                                                *00140002
+      *    A L T A M I R A   -   P R E S T A M O S                     *00150002
+      *                                                                *00360002
+      *                                                                *00370002
+      *----------------------------------------------------------------*
+      *            L O G   D E   M O D I F I C A C I O N E S           *
+      *----------------------------------------------------------------*
+      *AUTOR   FECHA          DESCRIPCION                              *
+      *------- --------       -----------------------------------------*
+      *@COL01 2006-10-03     SE MODIFICA PARA ENVIAR EL INDICADOR EN LA*
+      *       CE09787        EVALUACION RESOLUCION CUANDO EL CREDITO ES*
+      *                      REESTRUCTURADO.
+      *----------------------------------------------------------------*
+      *@COL02 2008-02-28     MODIFICACIONES PARA ENVIAR A LA PREFORMALI*
+      * JVG   CE12250        ZACION N DE CREDITO NORMAL, R DE REESTRUC *
+      *                      TURADO Y V DE VARIACION DE PRODUCTO EN TF
+      ******************************************************************00660002
+      *                                                                *00670002
+      *       E N V I R O N M E N T    D I V I S I O N                 *00680002
+      *                                                                *00690002
+      ******************************************************************00700002
+       ENVIRONMENT DIVISION.                                            00710002
+                                                                        00720002
+       CONFIGURATION SECTION.                                           00730002
+       SPECIAL-NAMES.                                                   00740002
+      ******************************************************************00800002
+      *                                                                *00810002
+      *                   D A T A      D I V I S I O N                 *00820002
+      *                                                                *00830002
+      ******************************************************************00840002
+       DATA DIVISION.                                                   00850002
+                                                                        00860002
+       WORKING-STORAGE SECTION.                                         00870002
+                                                                        00880002
+      ******************************************************************00890002
+      *                                                                *00900002
+      *       MARCA DE COMIENZO DE WORKING PARA EL EDF                 *00910002
+      *                                                                *00920002
+      ******************************************************************00930002
+                                                                        00940002
+       01  LT-INICIO-DE-WS.                                             00950002
+           05  LT-INICIO-DE-WS       PIC X(42) VALUE                    00960002
+               '*****INICIO WORKING STORAGE UG2CG055****'.              00970002
+                                                                        01600002
+       COPY QGEC0010.                                                   01610002
+       COPY UGNCS55.                                                    10310002
+                                                                        01620002
+      *                                                                 01630002
+      *        COPY CONTROL DE AUTORIZACIONES                           01640002
+      *                                                                 01650002
+                                                                        01660002
+                                                                        01680002
+      ************** FACULTADES ****************************************01690002
+      *                                                                 01710002
+      ************** COPY SQLCA ****************************************01730002
+      *                                                                *01740002
+           EXEC SQL                                                     01750002
+              INCLUDE SQLCA                                             01760002
+           END-EXEC.                                                    01770002
+      /                                                                 01780002
+      ****************** COPY PARA EL PROGRAMA DE ABEND ****************01790002
+      *                                                                 01800002
+       01 QGECABC-01.                                                   01810002
+          COPY QGECABC.                                                 01820002
+      /                                                                 01830002
+      ******************************************************************01840002
+      *                          SWITCHES                              *01860002
+      ******************************************************************01880002
+      *                                                                 01890002
+       01 SWITCHES-CORRECTO.                                            01900002
+          05  SW-ENCONTRAR             PIC 9.                           01910002
+             88  SW-NO-ENCONTRADO     VALUE 0.                          01920002
+             88  SW-ENCONTRADO        VALUE 1.                          01930002
+                                                                        01940002
+          05  SW-ESPECIAL              PIC 9   VALUE 0.                 01960002
+             88  SW-NO-ESPECIAL       VALUE 0.                          01970002
+             88  SW-SI-ESPECIAL       VALUE 1.                          01980002
+                                                                        01990002
+          05  SW-PROCESA-PRODUCTO      PIC 9   VALUE 0.                 02000002
+             88  SW-PROCESA-PROD      VALUE 1.                          02010002
+                                                                        02020002
+          05 SW-CUOTAS                   PIC X  VALUE 'M'.              02030002
+             88  SW-CUOTAS-MAS                  VALUE 'M'.              02040002
+             88  SW-CUOTAS-FIN                  VALUE 'F'.              02050002
+                                                                        02060002
+          05  WS-COEFICUA-ALF            PIC X(4).                      02070002
+          05  WS-COEFICUA-NUM REDEFINES WS-COEFICUA-ALF PIC 99V9(2).    02080002
+                                                                        02090002
+          05 SW-PRIMERO                  PIC X  VALUE 'S'.              02100002
+             88  SW-PRIMERO-SI                  VALUE 'S'.              02110002
+             88  SW-PRIMERO-NO                  VALUE 'N'.              02120002
+                                                                        02130002
+          05 LINEA-CUOTA01.                                             02140002
+             10  L-CUOTA01-MES1          PIC X(4).                      02150002
+             10  L-CUOTA01-CAN1          PIC ZZ.99B.                    02160002
+             10  L-CUOTA01-MES2          PIC X(4).                      02170002
+             10  L-CUOTA01-CAN2          PIC ZZ.99B.                    02180002
+                                                                        02190002
+          05 LINEA-CUOTA02.                                             02200002
+             10  L-CUOTA02-MES1          PIC X(4).                      02210002
+             10  L-CUOTA02-CAN1          PIC ZZ.99B.                    02220002
+             10  L-CUOTA02-MES2          PIC X(4).                      02230002
+             10  L-CUOTA02-CAN2          PIC ZZ.99B.                    02240002
+                                                                        02250002
+          05  SW-OPCION                PIC X.                           02280002
+             88  SW-OPCION-SELECCION  VALUE 'S'.                        02290002
+                                                                        02300002
+          05  SW-UNO                   PIC 9.                           02310002
+             88  SW-UNO-NO-ACTIVADO   VALUE 0.                          02320002
+             88  SW-UNO-ACTIVADO      VALUE 1.                          02330002
+                                                                        02340002
+          05  SW-DOS                   PIC 9.                           02350002
+             88  SW-DOS-NO-ACTIVADO   VALUE 0.                          02360002
+             88  SW-DOS-ACTIVADO      VALUE 1.                          02370002
+                                                                        02380002
+          05 CTE-TIPO-PRODUCTO      PIC X.                              02400002
+             88 PRODUCTO-AVAL       VALUE 'A'.                          02410002
+             88 PRODUCTO-LINEA      VALUE 'L'.                          02420002
+             88 PRODUCTO-PREAVAL    VALUE 'P'.                          02430002
+                                                                        02440002
+          05 CTE-TIPO-AVAL                  PIC X.                      02450002
+             88  CTE-INDIMAT-VALIDO         VALUES '0' '1' '2'.         02460002
+             88  CTE-AVAL-NORMAL            VALUE '0'.                  02470002
+             88  CTE-AVAL-HIJO              VALUE '2'.                  02480002
+             88  CTE-AVAL-MADRE             VALUE '1'.                  02490002
+                                                                        02500002
+          05 CTE-TIPO-RELACION              PIC X.                      02510002
+             88  CTE-RELACION-VALIDA        VALUES '2'.                 02520002
+             88  CTE-MADRE-HIJO             VALUE  '2'.                 02530002
+             05 ESCALONADO-SI               PIC X VALUE 'N'.
+      *                                                                 02550002
+      ***************************************************************** 02560002
+      *                                                               * 02570002
+      *      ESTA VARIABLE SE INCORPORA A LOS PROGRAMAS QUE LLAMAN  *   02580002
+      *      A DB2 PARA REALIZAR EL CHEQUEO DEL SQLCODE.              * 02590002
+      *                                                               * 02600002
+      ***************************************************************** 02610002
+       01  DB2-RETURN-CDE                  PIC S9(9) COMP.              02620002
+           88 DB2-OK                       VALUE +0.                    02630002
+           88 DB2-NOTFND                   VALUE +100.                  02640002
+           88 DB2-DUPREC                   VALUE -803.                  02650002
+      *******************************                                   03070002
+      *     TABLA  UGDTREL          *                                   03080002
+      *******************************                                   03090002
+      *                                                                 03100002
+           EXEC SQL                                                     03110002
+              INCLUDE UGGTREL                                           03120002
+           END-EXEC.                                                    03130002
+                                                                        03140002
+           EXEC SQL                                                     03150002
+              INCLUDE UGTCREL                                           03160002
+           END-EXEC.                                                    03170002
+                                                                        03180002
+      ******************************************************************04080002
+      *                                                                *04090002
+      *       WORKAS DE LA TABLA DE DB2: UGDTMAE                       *04100002
+      *                                                                *04110002
+      ******************************************************************04120002
+      *                                                                 04130002
+           EXEC SQL                                                     04140002
+               INCLUDE UGGTMAE                                          04150002
+           END-EXEC.                                                    04160002
+                                                                        04170002
+           EXEC SQL                                                     04180002
+               INCLUDE UGTCMAE                                          04190002
+           END-EXEC.                                                    04200002
+      *                                                                 04212022
+      *                                                                 04880002
+       01  WORKING-STORAGE-VARIABLES.                                   04890002
+                                                                        04900002
+           05  WS-INDIC-IMPRES         PIC X(1)   VALUE 'S'.            04910002
+           05  WS-TIPOCLI              PIC X(1)   VALUE 'N'.            04920002
+           05  WS-AUX-PLAZO            PIC X(4).                        04930002
+           05  WS-PLAZO-IND            PIC S9(4) COMP.                  04940002
+           05  WS-AUX-IMPORTE          PIC ZZZZZZZZZZZZ9.99.            04940002
+                                                                        04950002
+           05  WS-CCC.                                                  04960002
+               10  WS-CCC-ENTIOFI.                                      04970002
+                   15  WS-CCC-ENTIDAD   PIC X(4).                       04980002
+                   15  WS-CCC-CENTRO    PIC X(4).                       04990002
+               10  WS-CCC-DIGITO1       PIC X.                          05000002
+               10  WS-CCC-DIGITO2       PIC X.                          05010002
+               10  WS-CCC-CUENTA.                                       05020002
+                   15  WS-CCC-PRODUCTO  PIC X(2).                       05030002
+                   15  FILLER           PIC X(8) VALUE SPACES.          05040002
+               10  WS-CCC-CUENTA-ALF REDEFINES WS-CCC-CUENTA PIC X(10). 05050002
+          05  W-LONG-TS                    PIC S9(4) COMP VALUE +0.
+          05  W-TS.
+              10 W-DC                      PIC X(4) VALUE SPACES.
+              10 W-SUFIJO-TS               PIC X(4) VALUE SPACES.
+          05  W-CONTENIDO-TS.
+              10 W-NOMBRE-FORMATO          PIC X(8) VALUE SPACES.
+              10 W-CONT-FORMATO            PIC X(650) VALUE SPACES.
+
+
+       LINKAGE SECTION.
+      *
+       01  DFHCOMMAREA.
+      *                                                                 10210002
+           COPY QGECCAA.                                                10220002
+                                                                        10230002
+      ******************************************************************10250002
+      *                                                                *10260002
+      *       WORKA DE LA PANTALLA UGMRG55                             *10270002
+      *                                                                *10280002
+      ******************************************************************10290002
+      *                                                                 10300002
+       COPY UGNC055.                                                    10310002
+                                                                        10320002
+      ******************************************************************10340002
+      *                                                                *10350002
+      *           P R O C E D U R E   D I V I S I O N                  *10360002
+      *                                                                *10370002
+      ******************************************************************10380002
+       PROCEDURE DIVISION.                                              10390002
+                                                                        10400002
+      ******************************************************************10410002
+      *                                                                *10420002
+      *                      MAINLINE                                  *10430002
+      *                                                                *10440002
+      ******************************************************************10450002
+      *                                                                 10460002
+       MAINLINE.                                                        10470002
+      *                                                                 10480002
+           PERFORM  100000-INICIO-PROGRAMA                              10490002
+           PERFORM  200000-PROCESO-PROGRAMA                             10510002
+           PERFORM  300000-FINAL-PROGRAMA.                              10530002
+                                                                        10540002
+      ******************************************************************10580002
+      *                                                                *10590002
+      *                       100000-INICIO-PROGRAMA                   *10600002
+      *                                                                *10610002
+      *     REALIZA LAS FUNCIONES DE COMIENZO DE PROGRAMA:             *10620002
+      *                                                                *10630002
+      *         - GANAR DIRECCIONAMIENTO DE LA PANTALLA.               *10650002
+      *         - INICIALIZAR WORKAS.                                  *10660002
+      *                                                                *10680002
+      ******************************************************************10690002
+      *                                                                 10700002
+       100000-INICIO-PROGRAMA.                                          10710002
+      *                                                                 10720002
+                                                                        10730002
+           SET ADDRESS OF UGNC055       TO CAA-PTR-COPYIN               10740002
+           MOVE SPACES                  TO CAA-CODTRAN-SIG              10760002
+                                                                        10790002
+           INITIALIZE UGTCREL                                           10800002
+           INITIALIZE UGTCMAE                                           10840002
+           INITIALIZE WORKING-STORAGE-VARIABLES.                        11090002
+                                                                        11100002
+                                                                        11110002
+      ******************************************************************11130002
+      *                                                                *11140002
+      *             200000-PROCESO-PROGRAMA                            *11150002
+      *                                                                *11160002
+      *   REALIZA EL ACCESO A LA TABLA PARA RECUPERAR LA DESCRIPCION   *11170002
+      *   DEL PRODUCTO, Y PERMITE LA ELECCION ENTRE LOS DOS TIPOS DE   *11180002
+      *   DOCUMENTOS QUE PRODUCE ESTE PROGRAMA, UNO CON INFORMACION    *11190002
+      *   GENERAL SOBRE TODOS LOS SUBTIPOS, Y OTRO CON INFORMACION     *11200002
+      *   ACERCA DE UN SUBTIPO EN PARTICULAR                           *11210002
+      ******************************************************************11220002
+      *                                                                 11230002
+       200000-PROCESO-PROGRAMA.                                         11240002
+      *                                                                 11250002
+
+              MOVE G055-CCC          TO WS-CCC                          12810002
+              EVALUATE G055-OPCION
+                 WHEN '1'
+                    PERFORM 230000-CONSULTA-REL
+                    PERFORM 210000-EXISTE-PROPUESTA                     11960002
+                    MOVE    MAE-CAPSOLI           TO WS-AUX-IMPORTE
+                    MOVE    WS-AUX-IMPORTE        TO GS55-IMPORTE
+                    MOVE    'V'                   TO GS55-INDIVAR
+                    PERFORM 240000-ESCRIBIR-SALIDA
+                 WHEN '2'
+                    PERFORM 230000-CONSULTA-REL
+                    INITIALIZE UGTCMAE
+                    MOVE REL-ENTIOFI-REL          TO MAE-ENTIOFI
+                    MOVE REL-CUENTA-REL           TO MAE-CUENTA
+                    PERFORM 220000-ACCEDER-TABLA-UMAE                   12900002
+                    MOVE    MAE-SALREAL           TO WS-AUX-IMPORTE
+                    MOVE    WS-AUX-IMPORTE        TO GS55-IMPORTE
+      *COL02-I
+                    MOVE    'V'                   TO GS55-INDIVAR
+      *COL02-F
+                    PERFORM 240000-ESCRIBIR-SALIDA
+                 WHEN OTHER
+                    MOVE 'OPCION    '             TO CAA-VAR1-ERROR
+                    MOVE '"1" O "2"      '        TO CAA-VAR2-ERROR
+                    MOVE 'UGE0710'                TO CAA-COD-ERROR
+                    PERFORM 300000-FINAL-PROGRAMA
+              END-EVALUATE.
+      *                                                                 12320002
+                                                                        12670002
+      ******************************************************************12690002
+      *                     210000-EXISTE-PROPUESTA                    *12710002
+      *                                                                *12720002
+      *   SE COMPRUEBA LA EXISTENCIA DE LA PROPUESTA BUSCANDOLA EN LA  *12730002
+      *   TABLA UGDTMAE.                                               *12740002
+      ******************************************************************12770002
+      *                                                                 12780002
+       210000-EXISTE-PROPUESTA.                                         12790002
+      *                                                                 12800002
+              MOVE WS-CCC-ENTIOFI    TO MAE-ENTIOFI                     12820002
+              MOVE WS-CCC-CUENTA     TO MAE-CUENTA                      12830002
+      *                                                                 12840002
+              PERFORM 220000-ACCEDER-TABLA-UMAE                         12900002
+              IF DB2-OK
+                 CONTINUE
+              ELSE
+                 IF (DB2-NOTFND  AND  SQLWARN0 = SPACES)                13250002
+      *                                                                 13260002
+      *       NO EXISTE PROPUESTA.                                      13270002
+      *                                                                 13280002
+                   MOVE 'UGE0001'            TO CAA-COD-ERROR           13290002
+                   MOVE G055-CCC             TO CAA-VAR1-ERROR          13300002
+                   PERFORM  300000-FINAL-PROGRAMA                       13310002
+                 ELSE                                                   13320002
+                   PERFORM 999999-ABEND-DB2                             13330002
+                 END-IF                                                 13350002
+              END-IF.                                                   13360002
+      *                                                                 14830002
+       220000-ACCEDER-TABLA-UMAE.                                       14840002
+      *                                                                 14850002
+              EXEC SQL                                                  14860002
+                  SELECT  CAPSOLI,                                      14870002
+                          IMPCONCE,
+                          SALREAL                                       15160002
+                     INTO                                               15270002
+                          :MAE-CAPSOLI,                                 15660002
+                          :MAE-IMPCONCE,                                15670002
+                          :MAE-SALREAL                                  15670002
+                     FROM UGDTMAE                                       15770002
+                     WHERE                                              15780002
+                           ENTIOFI = :MAE-ENTIOFI       AND             15790002
+                           CUENTA  = :MAE-CUENTA                        15800002
+              END-EXEC.                                                 15810002
+                                                                        15820002
+              MOVE 'UGDTMAE'            TO CAA-VAR1-ERROR               15830002
+              MOVE SQLCODE              TO DB2-RETURN-CDE.              15840002
+                                                                        15850002
+      ******************************************************************24310002
+      *                       230000-CONSULTA-REL                      *24330002
+      *                                                                *24340002
+      *    SE OBTIENE EL PRESTAMO MATRIZ DE LA TABLA REL, Y A PARTIR   *24350002
+      *    DE ESTE, SE OBTIENE EL NOMBRE DEL PROMOTOR.                 *24360002
+      ******************************************************************24380002
+      *                                                                 24390002
+       230000-CONSULTA-REL.                                             24400002
+      *                                                                 24410002
+              MOVE WS-CCC-ENTIOFI    TO REL-ENTIOFI                     12820002
+              MOVE WS-CCC-CUENTA     TO REL-CUENTA                      12830002
+              EXEC SQL
+                SELECT
+                       ENTIOFI_REL,
+                       CUENTA_REL
+                INTO
+                      :REL-ENTIOFI-REL,
+                      :REL-CUENTA-REL
+                FROM UGDTREL
+                WHERE
+                      ENTIOFI = :REL-ENTIOFI  AND
+                      CUENTA  = :REL-CUENTA AND
+                      INDIMAT IN ('1','7','8')
+              END-EXEC.
+      *                                                                 24500002
+              MOVE SQLCODE           TO DB2-RETURN-CDE.                 24510002
+              IF NOT DB2-OK                                             24530002
+                 IF DB2-NOTFND AND SQLWARN0 EQUAL SPACES
+      *@COL01-I
+                    PERFORM 231000-BUSCAR-REESTRUCTURADO
+      *             MOVE 'N'               TO GS55-INDIVAR
+      *             PERFORM 240000-ESCRIBIR-SALIDA
+      *             PERFORM 300000-FINAL-PROGRAMA                       13310002
+      *@COL01-F
+                 ELSE                                                   24540002
+                    MOVE 'UGDTREL'         TO CAA-VAR1-ERROR            24550002
+                    PERFORM 999999-ABEND-DB2                            24560002
+                 END-IF
+              END-IF.                                                   24830002
+                                                                        25430002
+      *@COL01-I
+      ******************************************************************62500002
+      *                   231000-BUSCAR-REESTRUCTURADO                 *62520002
+      ******************************************************************62560002
+       231000-BUSCAR-REESTRUCTURADO.                                    25450002
+
+              MOVE WS-CCC-ENTIOFI    TO REL-ENTIOFI-REL                 12820002
+              MOVE WS-CCC-CUENTA     TO REL-CUENTA-REL                  12830002
+              EXEC SQL
+                SELECT
+                       ENTIOFI,
+                       CUENTA
+                INTO
+                      :REL-ENTIOFI,
+                      :REL-CUENTA
+                FROM UGDTREL
+                WHERE
+                      ENTIOFI_REL = :REL-ENTIOFI-REL  AND
+                      CUENTA_REL  = :REL-CUENTA-REL   AND
+                      INDIMAT = 'T'
+              END-EXEC.
+      *                                                                 24500002
+              MOVE SQLCODE           TO DB2-RETURN-CDE.                 24510002
+      *COL02-I
+              IF DB2-OK OR DB2-RETURN-CDE EQUAL -811
+                 MOVE 'R'               TO GS55-INDIVAR
+                 PERFORM 240000-ESCRIBIR-SALIDA
+                 PERFORM 300000-FINAL-PROGRAMA
+              END-IF
+      *COL02-F
+              IF NOT DB2-OK                                             24530002
+                 IF DB2-NOTFND AND SQLWARN0 EQUAL SPACES
+                    MOVE 'N'               TO GS55-INDIVAR
+                    PERFORM 240000-ESCRIBIR-SALIDA
+                    PERFORM 300000-FINAL-PROGRAMA                       13310002
+                 ELSE                                                   24540002
+                    MOVE 'UGDTREL'         TO CAA-VAR1-ERROR            24550002
+                    PERFORM 999999-ABEND-DB2                            24560002
+                 END-IF
+              END-IF.                                                   24830002
+      *@COL01-F
+      ******************************************************************62500002
+      *                                                                *62510002
+      *                 240000-ESCRIBIR-SALIDA                         *62520002
+      *                                                                *62530002
+      *                                                                *62550002
+      ******************************************************************62560002
+       240000-ESCRIBIR-SALIDA.
+                                                                        44170002
+              MOVE '+DC1'                      TO W-DC
+              MOVE LENGTH OF UGNCS55           TO W-LONG-TS
+              MOVE SPACES                      TO W-CONTENIDO-TS
+              MOVE 'UGRMS055'                  TO W-NOMBRE-FORMATO
+              MOVE UGNCS55                     TO W-CONT-FORMATO
+              MOVE 'P'                         TO CAA-IND-PANDOC(1)           00
+              MOVE '+DC1'                      TO CAA-DESTINO(1)              00
+              MOVE '1'                         TO CAA-NUM-DOCUM(1)            00
+              MOVE '00'                        TO CAA-PRILIN-DOCUM(1)         00
+                                                                              00
+              MOVE CAA-TERMINAL                TO W-SUFIJO-TS                 00
+              PERFORM 777777-WRITEQ.
+
+      ******************************************************************62500002
+      *                                                                *62510002
+      *                 300000-FINAL-PROGRAMA                          *62520002
+      *                                                                *62530002
+      *           DEVUELVE EL CONTROL AL SCP                           *62540002
+      *                                                                *62550002
+      ******************************************************************62560002
+      *                                                                 62570002
+       300000-FINAL-PROGRAMA.                                           62580002
+      *                                                                 62590002
+           PERFORM  DATOS-ANALITICA                                     62600002
+           EXEC CICS                                                    62610002
+             RETURN                                                     62620002
+           END-EXEC.                                                    62630002
+      *                                                                 62640002
+           EJECT                                                        62650002
+      ******************************************************************62660002
+      *                                                                *62670002
+      *                     DATOS-ANALITICA.                           *62680002
+      *                                                                *62690002
+      ******************************************************************62700002
+      *                                                                 62710002
+       DATOS-ANALITICA.                                                 62720002
+      *                                                                 62730002
+           MOVE MAE-ENOTIT(1:4)        TO CAA-ENTIDAD-ANA               62740002
+           MOVE MAE-ENOTIT(5:4)        TO CAA-CENTRO-ANA                62750002
+           MOVE G055-CCC(1:8)          TO CAA-PRODUCTO-ANA(1:8)         62760002
+           MOVE G055-CCC(9:1)          TO CAA-PRODUCTO-ANA(19:1)        62770002
+           MOVE G055-CCC(10:1)         TO CAA-PRODUCTO-ANA(20:1)        62780002
+           MOVE G055-CCC(11:10)        TO CAA-PRODUCTO-ANA(9:10)        62790002
+           MOVE ZERO                   TO CAA-IMPORTE-ANA               62810002
+           MOVE SPACES                 TO CAA-FINALID-ANA               62830002
+           MOVE SPACES                 TO CAA-GARANTIA-ANA              62840002
+           MOVE SPACES                 TO CAA-DATOS-APLIC               62860002
+                                                                        62870002
+           SET  CAA-88-CONTABLE-NO     TO TRUE.                         62880002
+           SET  CAA-88-TIOPER-CONSULTA TO TRUE.                         62890002
+                                                                        62900002
+      ******************************************************************
+      *               777777-WRITEQ.                                   *
+      *      ESCRITURA DE LA COLA TS +DC1XXXX (XXXX = EIBTRMID).       *
+      *      (SOLO EXISTE UNA COLA TS)                                 *
+      ******************************************************************
+       777777-WRITEQ.
+
+              ADD +8            TO W-LONG-TS
+              EXEC CICS
+                 WRITEQ TS QUEUE(W-TS)
+                 FROM(W-CONTENIDO-TS)
+                 LENGTH(W-LONG-TS)
+                 MAIN NOHANDLE
+              END-EXEC.
+
+              IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+                 PERFORM 999999-ABEND-CICS
+              END-IF.
+      ******************************************************************63640002
+      *                                                                *63650002
+      *                 999999-ABEND-DB2                               *63660002
+      *                                                                *63670002
+      *  SE ABENDA LA TAREA CUANDO SE PRODUCE UN ERROR DB2 NO DESEADO  *63680002
+      *                                                                *63690002
+      ******************************************************************63700002
+       999999-ABEND-DB2.                                                63710002
+                                                                        63720002
+           INITIALIZE            QGECABC                                63730002
+           MOVE 'S'              TO ABC-ABEND                           63740002
+           MOVE 'UG2CG055'       TO ABC-PROGRAMA                        63750002
+           MOVE CAA-VAR1-ERROR   TO ABC-OBJETO-ERROR                    63760002
+           MOVE SQLCODE          TO ABC-SQLCODE                         63770002
+           MOVE SQLERRM          TO ABC-SQLERRM                         63780002
+           MOVE CAA-VAR1-ERROR   TO ABC-OBJETO-ERROR                    63760002
+           MOVE CAA-VAR2-ERROR                TO ABC-REFERENCIA         63760002
+                                                                        63790002
+           EXEC CICS                                                    63800002
+              LINK PROGRAM ('QG1CABC')                                  63810002
+              COMMAREA (QGECABC)                                        63820002
+           END-EXEC.                                                    63830002
+                                                                        63840002
+      ******************************************************************63850002
+      *                                                                *63860002
+      *                 999999-ABEND-CICS                              *63870002
+      *                                                                *63880002
+      *    SE ABENDA LA TAREA CUANDO SE PRODUCE UN ERROR CICS NO       *63890002
+      *    DESEABLE                                                    *63900002
+      *                                                                *63910002
+      ******************************************************************63920002
+      *                                                                 63930002
+       999999-ABEND-CICS.                                               63940002
+                                                                        63950002
+           INITIALIZE            QGECABC                                63960002
+           MOVE 'S'              TO ABC-ABEND                           63970002
+           MOVE 'UG2CG055'       TO ABC-PROGRAMA                        63980002
+           MOVE EIBFN            TO ABC-EIBFN                           63990002
+           MOVE EIBRSRCE         TO ABC-EIBRSRCE                        64000002
+           MOVE EIBRCODE         TO ABC-EIBRCODE                        64010002
+           MOVE EIBRESP          TO ABC-EIBRESP1                        64020002
+           MOVE EIBRESP2         TO ABC-EIBRESP2                        64030002
+           MOVE CAA-VAR1-ERROR                TO ABC-REFERENCIA.        00946900
+                                                                        64040002
+           EXEC CICS                                                    64050002
+              LINK PROGRAM ('QG1CABC')                                  64060002
+              COMMAREA (QGECABC)                                        64070002
+           END-EXEC.                                                    64080002
