@@ -1,0 +1,2241 @@
+﻿      **UG2CG039: VERIFICA SI ES NECESARIO HACER SCORING CUANDO HAY    *
+      *           CAMBIO DE SUBPRO                                     *
+       IDENTIFICATION DIVISION.
+      **                                                               *
+      *****************************************************************
+      *DESC1=REALIZA EL VERIFICACION DE SI SE HACWS-DIA-PAGOCORING     *
+      *DESC2=DEPENDIENDO A LA VARIACION DE LA CUOTA O DEL CAMBIO DE    *
+      *DESC3=PLAZO                                                     *
+      ******************************************************************
+      * MODIFICADO POR DTS CONSULTING PARA PROYECTO DE RECLAMACIONES  **
+      * DE SEGUROS ABRIL DE 2009                                       *
+      * INCLUIR OPCION  SITPRES= 'B'   PARA BLOQUEO DE PRESTAMO        *
+      * DTS-I                                                          *
+      ******************************************************************
+      ******************************************************************
+      *
+       PROGRAM-ID.    UG2CG039.
+       AUTHOR.        MARITZA LICETH GUERRERO MILLAN
+       DATE-WRITTEN.  DICIEMBRE/2006
+       DATE-COMPILED.
+      *
+      ******************************************************************
+      *                                                                *
+      *  P R E S T A M O S                                             *
+      *                                                                *
+      *                                                                *
+      *  ESTE PROGRAMA PERMITE QUE ATRAVEZ DEL CREDITO NUEVO DE ENTRADA*
+      *  SE OBTIENE EL CREDITO ANTERIOR CUANDO SE REALIZA UN CAMBIO DE *
+      *  SUBPRODUCTO, TAN PRONTO SE TENGA ESTE DATO SE CALCULA LA      *
+      *  LA CUOTA DEL NUEVO CREDITO Y DEL ANTERIOR CREDITO, SI ES MAYOR*
+      *  LA CUOTA DEL NUEVO CREDITO SE REALIZA SCORING, IGUALMENTE SE  *
+      *  HACE CON EL PLAZO, SI ES MAYOR EL DEL NUEVO CREDITO TAMBIEN   *
+      *  SE REALIZA SCORING.                                           *
+      *                                                                *
+      ******************************************************************
+      ******************************************************************
+      *        L O G    D E   M O D I F I C A C I O N E S              *
+      ******************************************************************
+      *  AUTOR   FECHA          DESCRIPCION                            *
+      *----------------------------------------------------------------*
+      * CE21328 MAY/2011 SE AJUSTA PARA QUE CUANDO VALIDE EL CREDITO   *
+      * IMSG             ANTERIOR Y EL SUBPRODUCTO DE ESTE YA HALLA    *
+      * COL01            VENCIDO, ENVIE A LA RUTINA UR2CIEN0 LA FEFORMA*
+      *                  ESTE SUBPRODUCTO EN VEZ DE LA FECHA ACTUAL, YA*
+      *                  QUE EN ESTA RUTINA AL CONSULTAR LA UGDTADS, LA*
+      *                  FECOVALI QUEDABA FUERA DEL RANGO DE VALIDES   *
+      *                  RETORNANDO ERROR 95.                          *
+      *----------------------------------------------------------------*
+      * REFERENCIA : COL02                                             *
+      * REALIZO    : BBVA C808648                                      *
+      * REFERENCIA : COLWSMANTE-10807                                  *
+      * FECHA      : 21/05/2024                                        *
+      * DESCRIPCION: SE CAMBIA EL VALOR QUEMADO 240 MESES DEL PLAZO    *
+      *              MAXIMO PARA CRETIDOS HIPOTECARIOS POR PARAMETRIA  *
+      *              EN LA SECCION 0017 DE LA UGDTT37                  *
+      ******************************************************************
+      * REFERENCIA : COLXX                                             *
+      * REALIZO    : BBVA C808648                                      *
+      * FECHA      : 28/09/2026                                        *
+      * SDA        : XXX                                              *
+      * JIRA       : COLONEPRE1-XXXX                                  *
+      * DESCRIPCION: AJUSTE PARA DETERMINAR MEDIANTE UR9CMLI0 LA       *
+      *              METODOLOGIA DE LIQUIDACION APLICABLE Y PROPAGAR   *
+      *              DIASCAL A UR1CCOT0, CONSERVANDO LA LOGICA LEGACY  *
+      *              CUANDO LA NUEVA METODOLOGIA NO APLIQUE.           *
+      ******************************************************************
+      ******************************************************************
+      *       E N V I R O N M E N T    D I V I S I O N                 *
+      ******************************************************************
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+      ******************************************************************
+      *                   D A T A      D I V I S I O N                 *
+      ******************************************************************
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      *
+       01 WORKING-STORAGE-VARIABLES.
+          05  WS-CCC.
+              10  WS-CCC-ENTIOFI.
+                  15  WS-CCC-ENTIDAD       PIC X(4).
+                  15  WS-CCC-CENTRO        PIC X(4).
+              10  WS-CCC-DIGITO1           PIC X.
+              10  WS-CCC-DIGITO2           PIC X.
+              10  WS-CCC-CUENTA            PIC X(10).
+          05  WS-CCC-ANT.
+              10  WS-CCC-ENTIOFI-ANT.
+                  15  WS-CCC-ENTIDAD-ANT   PIC X(4).
+                  15  WS-CCC-CENTRO-ANT    PIC X(4).
+              10  WS-CCC-CUENTA-ANT        PIC X(10).
+      *
+          05  WS-MES-DDMMAAAA.
+              10  WS-DD-AAAA               PIC 9(2).
+              10  WS-MM-AAAA               PIC 9(2).
+              10  WS-AA-AAAA               PIC 9(4).
+          05  WS-FEAPERT                   PIC X(10).
+          05  WS-DATE-DB2.
+              10  WS-DATE-DB2-SIGLO        PIC 9(2).
+              10  WS-DATE-DB2-ANNO         PIC 9(2).
+              10  FILLER                   PIC X  VALUE '-'.
+              10  WS-DATE-DB2-MES          PIC 9(2).
+              10  FILLER                   PIC X  VALUE '-'.
+              10  WS-DATE-DB2-DIA          PIC 9(2).
+          05  WS-DIA-FORMALIZACION         PIC 9(2).
+          05  WS-MES-DD-MM-AA.
+              10  WS-MES-DD                PIC 9(2).
+              10  FILLER                   PIC X  VALUE '-'.
+              10  WS-MES-MM                PIC 9(2).
+              10  FILLER                   PIC X  VALUE '-'.
+              10  WS-MES-AA                PIC 9(2).
+          05  WS-DB2-FEVALOR               PIC X(10).
+          05  WS-PERCAP                    PIC X(3).
+          05  WS-FECOVALI                  PIC X(10).
+          05  WS-FEFIVALI                  PIC X(10).
+          05  WS-PERINT                    PIC X(03).
+          05  WS-CARECAP                   PIC X(04).
+          05  WS-CAREINT                   PIC X(03).
+          05  WS-CODTIAMO                  PIC X(01).
+          05  WS-PROGGEOM                  PIC S9(02)V9(3) COMP-3.
+          05  WS-PROGARIT                  PIC S9(07)      COMP-3.
+          05  WS-LININCUO                  PIC S9(03)      COMP-3.
+          05  WS-TIPODIAS                  PIC X(01).
+          05  WS-DIASCAL                   PIC X(01).
+          05  WS-UGYFARET                  PIC X(01).
+          05  WS-INDINANT                  PIC X(01).
+          05  WS-UGCDIPAG                  PIC S9(3) COMP-3.
+          05  WS-PERCAP-ANT                PIC X(3).
+          05  WS-IND-MARCA1                PIC X(01).
+          05  WS-DIAS-ANT                  PIC 9(6).
+          05  WS-DIAS-VIG                  PIC 9(6).
+          05  WS-DIAS-TOTAL                PIC 9(8).
+          05  WS-DIAS-MAXIMO               PIC 9(8).
+          05  WS-CUOTA-ANT                 PIC S9(13)V9(2) COMP-3.
+          05  WS-CUOTA-VIG                 PIC S9(13)V9(2) COMP-3.
+          05  WS-ENOTIT.
+              10  WS-ENTIT                 PIC X(4).
+              10  WS-CENTIT                PIC X(4).
+          05 WS-DATA-INI.
+              10 WS-FD-ANO                 PIC 9(4).
+              10 FILLER                    PIC X.
+              10 WS-FD-MES                 PIC 9(2).
+              10 FILLER                    PIC X.
+              10 WS-FD-DIA                 PIC 9(2).
+          05 WS-NUM-PERI                   PIC 9(5) VALUE 0.
+          05 WS-INTERES-NOMINAL            PIC S9(2)V9(3).
+          05  WS-INTERES                   PIC S9(2)V9(3).              00045500
+          05  WS-INTERES-EFECTIVO          PIC S9(2)V9(3).              00045700
+          05 WS-IMPCONCE                   PIC 9(13)V99.
+      *
+          05  WS-DIV-ENTRADA-1             PIC X(4).                    00039600
+          05  WS-DIV-ENTRADA-2             PIC X(3).                    00039700
+                                                                        00039800
+          05  WS-DIVIDENDO                 PIC S9(8) COMP-3.            00039900
+          05  WS-DIVISOR                   PIC S9(8) COMP-3.            00040000
+          05  WS-RESTO                     PIC S9(8) COMP-3.            00040100
+          05  WS-COCIENTE                  PIC S9(8) COMP-3.            00040200
+          05  WS-OTROS-GASTOS              PIC S9(13)V99 COMP-3.        00040300
+          05  WS-TOTAL-RECIBO              PIC S9(13)V99 COMP-3.        00040400
+                                                                        00040500
+          05  WS-SUB-ENTRADA-1             PIC X(4).                    00040600
+          05  WS-SUB-ENTRADA-2             PIC X(4).                    00040700
+          05  WS-SUBVENCION-CARENCIA       PIC X(1).                    00040800
+          05  WS-PERIODICIDAD              PIC X(3).                    00041000
+                                                                        00041100
+          05  WS-MINUENDO                  PIC S9(8) COMP-3.            00041200
+          05  WS-SUSTRAENDO                PIC S9(8) COMP-3.            00041300
+                                                                        00041400
+          05  WS-CODIGO-PERIODO.                                        00041500
+              10  WS-CODIGO                PIC 9.                       00041600
+              10  WS-PERIODO               PIC 99.                      00041700
+                                                                        00041800
+          05  WS-CODIGO-PERIODO-2.                                      00041900
+              10  WS-CODIGO-2              PIC 9.                       00042000
+              10  WS-PERIODO-2             PIC 999.                     00042100
+                                                                        00042200
+          05  WS-CODIGO-PERIODO-4.                                      00042300
+              10  WS-CODIGO-4              PIC 9.                       00042400
+              10  WS-PERIODO-4             PIC 999.                     00042500
+                                                                        00042600
+          05  WS-AMO-ANNO                  PIC 999.                     00042700
+          05  WS-CODIGO-PERIODO-3.                                      00042800
+              10  WS-CODIGO-3              PIC 9.                       00042900
+              10  WS-PERIODO-3             PIC 99.                      00043000
+          05  WS-MESES-TOT                 PIC S9(5) COMP-3.            00043100
+                                                                        00043200
+          05  WS-NUM-PERIODOS              PIC S9(5) COMP-3.            00043300
+          05  WS-PRICUOTA                  PIC S9(13)V99 COMP-3.
+          05  WS-INTERES-ACUM              PIC S9(13)V99 COMP-3.
+          05  WS-SALDO-VIVO                PIC S9(13)V99 COMP-3.
+          05  WS-DIAS                      PIC S9(5) COMP-3.            00051100
+          05  WS-DIAS-2                    PIC S9(5) COMP-3.            00051200
+          05  WS-CAPITAL-INICIAL           PIC S9(13)V99 COMP-3.
+          05  WS-FECHA-AMO                 PIC X(10).                   00058200
+          05  WS-FECHA-LIQ                 PIC X(10).                   00058300
+          05  WS-DIA-PAGO                  PIC 9(2).
+          05 WS-ADS-PERINT.
+              10 WS-PERINT-1               PIC 9(1).
+              10 WS-PERINT-2               PIC 9(2).
+          05  WS-RAZON                     PIC S9(7)V9(3) COMP-3.
+      *
+          05  W-LONG-TS                    PIC S9(4) COMP VALUE +0.
+          05  W-TS.
+              10 W-DC                      PIC X(4) VALUE SPACES.
+              10 W-SUFIJO-TS               PIC X(4) VALUE SPACES.
+          05  W-CONTENIDO-TS.
+              10 W-NOMBRE-FORMATO          PIC X(8) VALUE SPACES.
+              10 W-CONT-FORMATO            PIC X(650) VALUE SPACES.
+      *COL02-I
+          05  WS-PLAZO-MAX-MESES           PIC 9(3).
+          05  WS-PLAZO-MAX-ANOS            PIC 9(2).
+          05  WS-PLAZO-MAX-DIAS            PIC 9(9).
+      *COL02-F
+      *
+       01  WS-TABLAS-VALORES.                                           00053500
+           05  WS-TIPO-CUOTA               PIC X.                       00053600
+               88  WS-CUOTA-CAPITAL                                     00053700
+                     VALUE '2','4','6','8','0','A','C','X','D'.
+               88  WS-CUOTA-CAPITAL-INTERES                             00054300
+                     VALUE '1','3','5','7','9','B','R','P','I'.         00054600
+      *                                                                 00054700
+      ******************************************************************00055400
+      *       WORKA DE LA TABLA DE CONVERSION DE CODIGOS DE TIEMPO     *00055500
+      *       A DIAS                                                    00055600
+      ******************************************************************00055700
+       01  WS-CODIGOS-DIAS.                                             00055800
+           05  WS-DIAS-DIAS                 PIC 999 VALUE 1.            00055900
+           05  WS-DIAS-MES                  PIC 999 VALUE 30.           00056000
+           05  WS-DIAS-ANO                  PIC 999 VALUE 360.          00056100
+                                                                        00056200
+       01  WS-TABLA-CONVERSION-DIAS REDEFINES WS-CODIGOS-DIAS.          00056300
+           05  REGISTRO-DIAS OCCURS 3 TIMES                             00056400
+                        INDEXED BY DIASINDX.                            00056500
+               10  WS-CONVERSION-DIAS    PIC 999.                       00056600
+                                                                        00056700
+      ***********************TF O 3270 *********************************
+      *                  COPY PARA ACCESO A RUTINA QC2CSQ1
+      ******************************************************************
+       COPY DFHAID.
+       COPY QCECSQ1.
+      *
+      *************** COPY SQLCA ***************************************
+           EXEC SQL
+              INCLUDE SQLCA
+           END-EXEC.
+      *
+      ******************************************************************
+      *              COPY PARA EL PROGRAMA DE ABEND                    *
+      ******************************************************************
+       01 QGECABC-01.
+          COPY QGECABC.
+      *
+      ******************************************************************
+      *      COPY AREA ENLACE INTERFAZ ON-LINE TABLAS  GENERALES       *
+      ******************************************************************
+       01 TCWC0000-01.
+          COPY TCWC0000.
+      *
+       01 TCWC0400-01.
+          COPY TCWC0400.
+      *
+      ******************************************************************
+      *       WORKA DE LA RUTINA DE HABILITAR/DESHABILITAR COLAS       *
+      ******************************************************************
+       01  CSWC110-01.
+           COPY CSWC110.
+      *
+      ******************************************************************
+      *                          SWITCHES                              *
+      ******************************************************************
+      *
+       01  SWITCHES.
+          05 SW-CLI0                         PIC X(1)  VALUE 'N'.
+             88 SI-CLI0                                VALUE 'S'.
+             88 NO-CLI0                                VALUE 'N'.
+          05 SW-CRED-ANTERIOR                PIC X(1)  VALUE 'S'.
+             88 SI-CRED-ANT                            VALUE 'S'.
+             88 NO-CRED-ANT                            VALUE 'N'.
+      *
+          05 SW-T3270TF                      PIC X(1)  VALUE 'S'.
+             88 ES-TF                                  VALUE 'S'.
+             88 ES-T3270                               VALUE 'N'.
+      *COL01-I
+          05 SW-VALANT                       PIC X(1)  VALUE 'S'.
+             88 SI-VALANT                              VALUE 'S'.
+             88 NO-VALANT                              VALUE 'N'.
+      *COL01-F
+      *LJSM-I
+      * SWITCH NUEVA METODOLOGIA DE LIQUIDACION.
+          05 SW-MLI-APLICA                   PIC X(1)  VALUE 'N'.
+             88 SW-SI-MLI-APLICA                       VALUE 'S'.
+             88 SW-NO-MLI-APLICA                       VALUE 'N'.
+      *LJSM-J
+      *****************************************************************
+      *      ESTA VARIABLE SE INCORPORA A LOS PROGRAMAS QUE LLAMAN    *
+      *      A DB2 PARA REALIZAR EL CHEQUEO DEL SQLCODE.              *
+      *****************************************************************
+      *
+       01  DB2-RETURN-CDE                    PIC S9(9) COMP.
+           88 DB2-OK                                   VALUE +0.
+           88 DB2-NOTFND                               VALUE +100.
+           88 DB2-DUPREC                               VALUE -803.
+           88 DB2-305                                  VALUE -305.
+      *COL02-I
+           88 DB2-RECATR1                              VALUE -904.
+           88 DB2-RECATR2                              VALUE -911.
+      *COL02-F
+      *
+       01  DB2-NUM REDEFINES DB2-RETURN-CDE  PIC S9(9).
+       01  DB2-TEXT REDEFINES DB2-NUM        PIC X(10).
+      *
+      *****************************************************************
+      *                          WORKAS
+      *****************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTMAE
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCMAE
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTREL
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCREL
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTADE
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCADE
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTADS
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCADS
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTDRB
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCDRB
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTPRO
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCPRO
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTT37
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCT37
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGGTAHI
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCAHI
+           END-EXEC.
+      ******************************************************************
+      *       WORKA DE CAMPOS VARIABLES, AUXILIARES Y CONSTANTES.      *
+      ******************************************************************
+       01  WORKING-STORAGE-CONSTANTES.
+        05  W-TOT.
+            10 W-GTS-NOMBRE-COLA1          PIC X(4) VALUE '+TOT'.
+            10 W-GTS-TERMINAL1             PIC X(4).
+      *
+        05  WS-TIPO-PRESTAMO               PIC X.
+            88 PRESTAMO-NORMAL-O-PROMOTORES   VALUE '0', '3', '4'.
+            88 PRESTAMO-PROMOTORES            VALUE '3', '4'.
+            88 PRESTAMO-MARCO                 VALUE '1', '2', '8'.
+            88 PRESTAMO-MARCO-MADRE           VALUE '1', '8'.
+            88 PRESTAMO-MARE-REVOL            VALUE '8'.
+            88 PRESTAMO-MARCO-HIJO            VALUE '2'.
+      *
+      ******************************************************************
+      *       WORKA DE CAMPOS CONSTANTES Y LITERALES                   *
+      ******************************************************************
+       COPY UDWCCTE.
+      *
+      ******************************************************************
+      * COPY PARA MANEJAR LOS DATOS COMPARTIDOS                        *
+      ******************************************************************
+      *
+       COPY UBWCDIS.
+      *
+      ******************************************************************
+      *      AREA DE COMUNICACION CON EL MODULO UR8CDFP0               *
+      ******************************************************************
+       COPY URWCDF3.
+      *
+       COPY URWCRES.
+      *
+      ******************************************************************00065400
+      *       COPY DE LA RUTINA DE CALCULO DE CUOTAS *                  00065500
+      ******************************************************************00065600
+       01  COT-NIVEL-01.                                                00065700
+       COPY URWCCOT.                                                    00065800
+       COPY URWCCUA.                                                    00065900
+      ******************************************************************00066000
+      *                  COPY RUTINA CONVERSION TASAA                  *00066100
+      ******************************************************************
+       01 URWCCVT-AREA.                                                 00066200
+          COPY URWCCVT.                                                 00066300
+                                                                        00066400
+       01  URWCIEN-01.                                                  00066500
+       COPY URWCIEN.                                                    00066600
+      ******************************************************************00073600
+      *       COPY DE LA RUTINA DE OBTENCION  DEL TIPO DE INTERES*      00073800
+      ******************************************************************00074000
+       01  INT-NIVEL-01.                                                00074100
+       COPY URWCINT.                                                    00074200
+      ******************************************************************00069100
+      *       COPY DE LA RUTINA QUE TRAE DIFERENTES TIPOS DE FECHA      00069300
+      ******************************************************************00069500
+       COPY CSWCDAT.                                                    00069600
+                                                                        00069700
+      ******************************************************************00025500
+      *         COPIES DE COMUNICACION RUTINAS HERMES                  *00025600
+      ******************************************************************00025700
+      *                                                                 00025800
+       COPY HXWCSOL.                                                    00025900
+       COPY HXECRSP.                                                    00026000
+       COPY HXWCCSO.                                                    00026100
+       COPY HXWCCSC.                                                    00026200
+       COPY HXWCCCO.                                                    00026300
+       COPY HXWC011.                                                    00026400
+       COPY HXWC012.                                                    00026500
+       COPY HXWC014.                                                    00026600
+       COPY HXWC011B.                                                   00026700
+       COPY HXWC012B.                                                   00026800
+       COPY HXWC014B.                                                   00026900
+      *
+      ******************************************************************
+      *     COPY DE LA RUTINA PARA CALCULAR LA DIFERENCIA ENTRE DOS    *
+      *     FECHAS                                             *
+      ******************************************************************
+       COPY TCWC1750.
+      *
+      ******************************************************************
+      *           WORKA DE LA PANTALLA  DE SALIDA                      *
+      ******************************************************************
+       COPY UGNC0039.
+      ******************************************************************
+      *       L I N K A G E   S E C T I O N                            *
+      ******************************************************************
+       01 BBVA-LKED.
+          03 BBVA-QC2CSQ1  PIC X(8)  VALUE 'QC2CSQ1 '.
+          03 BBVA-UR8CDFP0 PIC X(8)  VALUE 'UR8CDFP0'.
+          03 BBVA-HX2C0053 PIC X(8)  VALUE 'HX2C0053'.
+      *LJSM-I
+          03 BBVA-UR9CMLI0 PIC X(8)  VALUE 'UR9CMLI0'.
+      *LJSM-J
+      *
+      *LJSM-I
+      * AREA DE COMUNICACION PARA DETERMINAR METODOLOGIA.
+       01  WS-URWCMLI.
+           COPY URWCMLI.
+      *LJSM-J
+      *
+       LINKAGE SECTION.
+      *
+       01  DFHCOMMAREA.
+      *
+      ******************************************************************
+      *           REGISTRO DE CONTROL DE LA SESION                     *
+      ******************************************************************
+          COPY QGECCAA.
+      ************** TF O 3270  ****************************************
+          COPY QGECSWAM.
+      ******************************************************************
+       01 QGECCUA-01.
+          COPY QGECCUA.
+      *
+      ******************************************************************
+      *           WORKA DE LA PANTALLA                                 *
+      ******************************************************************
+       COPY UGNC039.
+      ******************************************************************
+      *           P R O C E D U R E   D I V I S I O N                  *
+      ******************************************************************
+       PROCEDURE DIVISION.
+      *
+      ******************************************************************
+      *                     PROGRAMA PRINCIPAL                         *
+      ******************************************************************
+      *
+       000000-CONTROL.
+              PERFORM 100000-INICIO
+              PERFORM 200000-PROCESO
+              PERFORM 300000-FINAL
+              GOBACK.
+      *
+      ******************************************************************
+      *                  100000-INICIO                                 *
+      * ______________________________________________________________ *
+      *     REALIZA LAS FUNCIONES DE COMIENZO DE PROGRAMA:             *
+      *     - INICIALIZA LOS CAMPOS DE AVISOS, ERROR, ABEND Y SQLCODE  *
+      *       DEL REGISTRO CAA.                                        *
+      *     - DIRECCIONA EL AREA DE MEMORIA DONDE RESIDE LA PANTALLA.  *
+      *     - INICIALIZA LAS WORKAS DE TABLAS DE DB2.                  *
+      *     - INICIALIZA LAS VARIABLES DEL PROGRAMA.                   *
+      *     - INICIALIZA LOS CURSORES DEL MAPA.                        *
+      *                                                                *
+      ******************************************************************
+       100000-INICIO.
+      *
+              SET ADDRESS OF UGNC039              TO CAA-PTR-COPYIN
+              SET ADDRESS OF QGECCUA-01           TO CAA-PTR-CUA
+      *
+              MOVE SPACES                         TO CAA-CODTRAN-SIG
+      **************************************************************    ****
+      *    PARA CONTABILIDAD...BORRAR COLA-
+      **************************************************************    ****
+              MOVE EIBTRMID                       TO W-GTS-TERMINAL1
+      *
+              EXEC CICS
+                 DELETEQ TS
+                 QUEUE(W-TOT)
+                 NOHANDLE
+              END-EXEC.
+      *
+              INITIALIZE WORKING-STORAGE-VARIABLES
+                         UGTCREL
+                         UGTCADS
+                         UGTCADE
+                         UGNC0039
+                         COT-NIVEL-01
+                         URWCIEN
+                         CSWCDAT
+      *
+              INITIALIZE                          QGECABC
+              SET    NO-CRED-ANT                  TO TRUE
+
+              PERFORM 110000-VALIDAR-ENTRADA.
+      *
+      *****************************************************************
+      *                     110000-VALIDAR-ENTRADA                    *
+      *****************************************************************
+       110000-VALIDAR-ENTRADA.
+      *
+              IF G039-CCC EQUAL SPACES OR LOW-VALUES
+                 MOVE 'UGE0939'                   TO CAA-COD-ERROR
+                 MOVE 'NUMERO DE CREDITO'         TO CAA-VAR1-ERROR
+                 MOVE 'NO VALIDO'                 TO CAA-VAR2-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+      *
+              IF G039-FEAPERT EQUAL SPACES OR LOW-VALUES
+                 MOVE 'UGE0939'                   TO CAA-COD-ERROR
+                 MOVE 'FECHA DE APERTURA'         TO CAA-VAR1-ERROR
+                 MOVE 'NO VALIDA'                 TO CAA-VAR2-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+      *
+      ******************************************************************
+      *             200000-PROCESO                                     *
+      ******************************************************************
+       200000-PROCESO.
+      *
+              PERFORM COMPROBAR-CICS-3270-TF
+      *
+              IF ES-T3270
+                 MOVE 'UGE2075'                   TO CAA-COD-ERROR
+                 PERFORM 300000-FINAL
+              END-IF
+              PERFORM 210000-VALIDA-DIA-ACCESO
+      *
+              MOVE G039-FEAPERT                   TO WS-MES-DDMMAAAA
+              MOVE WS-MES-DDMMAAAA                TO WS-FEAPERT
+
+              MOVE G039-CCC                       TO WS-CCC
+
+              PERFORM 220000-LEER-UGDTREL
+
+      * LEE LA UGDTMAE CON EL CREDITO NUEVO  PARA VALIDAR EL SUBPRO
+              INITIALIZE                         UGTCMAE
+              MOVE WS-CCC-ENTIOFI                TO MAE-ENTIOFI
+              MOVE WS-CCC-CUENTA                 TO MAE-CUENTA
+              PERFORM 230000-VALIDAR-CUENTA
+      *
+              PERFORM 240000-LEER-UGDTPRO
+
+              IF PRO-INDCRSCO = 'S'
+      * PRIMERO SE VALIDA QUE EL CREDITO ANTERIOR
+                  INITIALIZE                         UGTCMAE
+                  MOVE WS-CCC-ENTIOFI-ANT            TO MAE-ENTIOFI
+                  MOVE WS-CCC-CUENTA-ANT             TO MAE-CUENTA
+                  PERFORM 230000-VALIDAR-CUENTA
+                  PERFORM 250000-DATOS-CRED-ANT
+                  PERFORM 241000-VALIDA-CUOTA
+      *
+      * VALIDO EL CREDITO NUEVO
+                  INITIALIZE                         UGTCMAE
+                  MOVE WS-CCC-ENTIOFI                TO MAE-ENTIOFI
+                  MOVE WS-CCC-CUENTA                 TO MAE-CUENTA
+                  PERFORM 230000-VALIDAR-CUENTA
+                  PERFORM 223000-EXISTE-CUENTA
+                  PERFORM 241000-VALIDA-CUOTA
+                  PERFORM 250000-SEGUIR-VALIDACIONES
+              ELSE
+                 MOVE 'N'                        TO S039-INDSCOR
+                                                    WS-IND-MARCA1
+              END-IF
+      *
+              PERFORM 260000-UPDATE-UGDTREL
+              PERFORM 270000-ESCRIBIR-SALIDA
+              MOVE 'UGA0123'                     TO CAA-COD-AVISO1
+              MOVE 'VALIDACION SE HIZO'          TO CAA-VAR1-AVISO1
+              MOVE 'EN FORMA CORRECTA'           TO CAA-VAR2-AVISO1.
+      *
+      ******************************************************************
+      *           210000-VALIDA-DIA-ACCESO                             *
+      *    VALIDA SI EL DIA ACTUAL ES HABIL O NO PARA REALIZAR LA      *
+      *    OPERACION DE CONTABILIZACION Y ALTA.  SI ES UN SABADO,      *
+      *    DOMINGO O FESTIVO, NO PERMITE REALIZAR EL PROCESO.          *
+      ******************************************************************
+      *
+       210000-VALIDA-DIA-ACCESO.
+      *
+              INITIALIZE TCWC0400-01
+              MOVE '1'                            TO W040-CDOPCIO
+              MOVE CAA-FECHA-OPER2(9:2)           TO W040-FHTRAT1(1:2)
+              MOVE '.'                            TO W040-FHTRAT1(3:1)
+              MOVE CAA-FECHA-OPER2(6:2)           TO W040-FHTRAT1(4:2)
+              MOVE '.'                            TO W040-FHTRAT1(6:1)
+              MOVE CAA-FECHA-OPER2(1:4)           TO W040-FHTRAT1(7:4)
+              MOVE '1'                            TO W040-TRSABADO
+              MOVE '0'                            TO W040-TRATFEST
+              MOVE CAA-ENTIDAD                    TO W040-CDEMPRES
+      *
+                 EXEC CICS LINK
+                    PROGRAM ('TC2C1200')
+                    COMMAREA (TCWC0400-01)
+                 END-EXEC.
+
+               IF W040-CDRETORN NOT = '00'
+                  MOVE 'UGE3631'                 TO CAA-COD-ERROR
+                  MOVE 'ERROR RUT.TC2C1200'      TO CAA-VAR1-ERROR
+                  MOVE 'COD ERROR: '             TO CAA-VAR2-ERROR(1:12)
+                  MOVE  W040-CDRETORN            TO CAA-VAR2-ERROR(13:)
+                  PERFORM 300000-FINAL
+               ELSE
+                   IF W040-TIPODIA = 'H'
+                      CONTINUE
+                   ELSE
+                      MOVE 'UGE0939'             TO CAA-COD-ERROR
+                      MOVE 'DIA NO HABIL PARA'   TO CAA-VAR1-ERROR
+                      MOVE 'ESTA OPERACION   '   TO CAA-VAR2-ERROR
+                      PERFORM 300000-FINAL
+                   END-IF
+               END-IF.
+      *
+      *****************************************************************
+      *                     230000-VALIDAR-CUENTA                      *
+      *    PERMITE EL ACCESO A LA TABLA DONDE SE ENCUENTRAN LOS        *
+      *    CONTRATOS DE PRESTAMO, UGDTMAE, PARA VER SI EXISTE DICHA    *
+      *    CUENTA, SI ESTA APROBADA PENDIENTE DE FORMALIZAR.           *
+      ******************************************************************
+       230000-VALIDAR-CUENTA.
+      *
+              PERFORM 231000-LEER-UGDTMAE
+              PERFORM 232000-LEER-TABLAS.
+      *
+      *****************************************************************
+      *                 220000-LEER-UGDTREL                           *
+      * SE LEE LA UGDTREL PARA TRAER EL DATO DEL CREDITO ANTERIOR     *
+      *****************************************************************
+       220000-LEER-UGDTREL.
+              MOVE WS-CCC-ENTIOFI                TO REL-ENTIOFI
+              MOVE WS-CCC-CUENTA                 TO REL-CUENTA
+      *
+              EXEC SQL
+                 SELECT
+                          ENTIOFI_REL, CUENTA_REL,
+                          INDIMAT
+                 INTO
+                         :REL-ENTIOFI-REL, :REL-CUENTA-REL,
+                         :REL-INDIMAT
+                 FROM UGDTREL
+                 WHERE ENTIOFI = :REL-ENTIOFI      AND
+                       CUENTA  = :REL-CUENTA
+              END-EXEC.
+      *
+              MOVE SQLCODE                       TO DB2-RETURN-CDE
+      *
+              IF DB2-OK
+                 IF REL-INDIMAT = '1' OR REL-INDIMAT = '7'
+                    OR REL-INDIMAT = '8'
+                      MOVE REL-ENTIOFI-REL        TO WS-CCC-ENTIOFI-ANT
+                      MOVE REL-CUENTA-REL         TO WS-CCC-CUENTA-ANT
+                 ELSE
+                    MOVE 'UGE0939'                TO CAA-COD-ERROR
+                    MOVE 'NO HAY REGISTRO EN '    TO CAA-VAR1-ERROR
+                    MOVE 'REL NO PERMITE CAMBIO ' TO CAA-VAR2-ERROR
+                     PERFORM 300000-FINAL
+              ELSE
+                 IF DB2-NOTFND AND SQLWARN0 = SPACES
+                    MOVE 'UGE0939'                TO CAA-COD-ERROR
+                    MOVE 'NO HAY REGISTRO EN '    TO CAA-VAR1-ERROR
+                    MOVE 'REL NO PERMITE CAMBIO ' TO CAA-VAR2-ERROR
+                    PERFORM 300000-FINAL
+                 ELSE
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR
+                    MOVE 'SELECT UGDTREL'        TO CAA-VAR1-ERROR
+                    MOVE 'COD ERROR: '           TO CAA-VAR2-ERROR(1:12)
+                    MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(13:)
+                    PERFORM 999999-ABEND-DB2
+                 END-IF
+              END-IF.
+      *
+      *****************************************************************
+      *                 231000-LEER-UGDTMAE                           *
+      * SE LEE LA UGDTMAE PARA TRAER LOS DATOS DEL NUEVO CREDITO      *
+      *****************************************************************
+       231000-LEER-UGDTMAE.
+      *
+              EXEC SQL SELECT
+                          ENOTIT    ,
+                          PRODUCTO  ,
+                          SUBPRO    ,
+                          CODIGAR   ,
+                          CODIDES   ,
+                          PLAZO     ,
+                          CLIENTE   ,
+                          IMPCONCE ,
+                          FESOLIC,
+                          FECAPROBA ,
+                          FECPRIAMO ,
+                          FECPRILIQ ,
+                          FEFINCAR  ,
+                          FEVENCIN  ,
+                          SITPRES   ,
+                          CAPSOLI   ,
+                          SALREAL   ,
+                          SITDEUOB  ,
+                          SITDEUSU  ,
+                          SUBSUJET  ,
+                          INDIMAT   ,
+                          INDLIQES  ,
+                          INDADMES  ,
+                          INDCUAMA  ,
+                          INDCAMBIO ,
+                          IND_MARCA4,
+                          FEULIQ    ,
+                          IND_MARCA2,
+                          IND_MARCA7,
+                          ACTIVIDAD,
+                          FEPROLIQ,
+                          FEPROAMO,
+                          UGYTRI   ,
+                          DIGICCC1,
+                          DIGICCC2,
+                          ENTIDAD_VIN,
+                          CENTRO_VIN,
+                          CUENTA_VIN,
+                          DIGICCC1_VIN,
+                          DIGICCC2_VIN,
+                          CUENTA_ABO,
+                          LIBRE_CAR2,
+                          INDPOL,
+                          UGNOFRES,
+                          UGNOFFOR,
+                          PORDISPO,
+                          SALTEOR,
+                          FEFORMA,
+                          UGYCGOCU  ,
+                          UGYTIINV ,
+                          UGYAOASC ,
+                          UGYTIMOR ,
+                          IMPDISPU ,
+                          FECSIT   ,
+                          UGCDIPAG,
+                          UGYEMPRE,
+                          TIMESTAMP,
+                          DEALER,
+                          MONEDA,
+                          NUMRECIB,
+                          LIBRE_CAR6,
+                          UGYEMCED
+                 INTO
+                     :MAE-ENOTIT    ,
+                     :MAE-PRODUCTO  ,
+                     :MAE-SUBPRO    ,
+                     :MAE-CODIGAR   ,
+                     :MAE-CODIDES   ,
+                     :MAE-PLAZO     ,
+                     :MAE-CLIENTE   ,
+                     :MAE-IMPCONCE  ,
+                     :MAE-FESOLIC  ,
+                     :MAE-FECAPROBA ,
+                     :MAE-FECPRIAMO ,
+                     :MAE-FECPRILIQ ,
+                     :MAE-FEFINCAR  ,
+                     :MAE-FEVENCIN  ,
+                     :MAE-SITPRES   ,
+                     :MAE-CAPSOLI   ,
+                     :MAE-SALREAL   ,
+                     :MAE-SITDEUOB  ,
+                     :MAE-SITDEUSU  ,
+                     :MAE-SUBSUJET  ,
+                     :MAE-INDIMAT   ,
+                     :MAE-INDLIQES  ,
+                     :MAE-INDADMES  ,
+                     :MAE-INDCUAMA  ,
+                     :MAE-INDCAMBIO ,
+                     :MAE-IND-MARCA4,
+                     :MAE-FEULIQ    ,
+                     :MAE-IND-MARCA2,
+                     :MAE-IND-MARCA7,
+                     :MAE-ACTIVIDAD,
+                     :MAE-FEPROLIQ,
+                     :MAE-FEPROAMO,
+                     :MAE-UGYTRI   ,
+                     :MAE-DIGICCC1,
+                     :MAE-DIGICCC2,
+                     :MAE-ENTIDAD-VIN,
+                     :MAE-CENTRO-VIN,
+                     :MAE-CUENTA-VIN,
+                     :MAE-DIGICCC1-VIN,
+                     :MAE-DIGICCC2-VIN,
+                     :MAE-CUENTA-ABO,
+                     :MAE-LIBRE-CAR2,
+                     :MAE-INDPOL,
+                     :MAE-UGNOFRES,
+                     :MAE-UGNOFFOR,
+                     :MAE-PORDISPO,
+                     :MAE-SALTEOR,
+                     :MAE-FEFORMA,
+                     :MAE-UGYCGOCU  ,
+                     :MAE-UGYTIINV ,
+                     :MAE-UGYAOASC ,
+                     :MAE-UGYTIMOR ,
+                     :MAE-IMPDISPU ,
+                     :MAE-FECSIT   ,
+                     :MAE-UGCDIPAG ,
+                     :MAE-UGYEMPRE,
+                     :MAE-TIMESTAMP,
+                     :MAE-DEALER,
+                     :MAE-MONEDA,
+                     :MAE-NUMRECIB,
+                     :MAE-LIBRE-CAR6,
+                     :MAE-UGYEMCED
+                 FROM UGDTMAE
+                 WHERE ENTIOFI = :MAE-ENTIOFI      AND
+                       CUENTA  = :MAE-CUENTA
+              END-EXEC.
+      *
+              MOVE SQLCODE                       TO DB2-RETURN-CDE
+      *
+              IF DB2-OK
+                 CONTINUE
+              ELSE
+                 IF DB2-NOTFND AND SQLWARN0 = SPACES
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR
+                    MOVE 'NO EXISTE NUEVA CTA '  TO CAA-VAR1-ERROR
+                    MOVE 'EN LA UGDTMAE       '  TO CAA-VAR2-ERROR
+                    PERFORM 300000-FINAL
+                 ELSE
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR
+                    MOVE 'ERROR SELECT UGDTMAE'  TO CAA-VAR1-ERROR
+                    MOVE 'COD ERROR: '           TO CAA-VAR2-ERROR(1:12)
+                    MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(13:)
+                    PERFORM 999999-ABEND-DB2
+                 END-IF
+              END-IF.
+      *
+      ******************************************************************
+      *                     250000-DATOS-CRED-ANT                      *
+      ******************************************************************
+       250000-DATOS-CRED-ANT.
+      *
+      * MANDO LOS DATOS QUE NECESITO DEL CREDITO ANTERIOR AL COPY
+      * COMPARTIDO UBWCDIS
+              MOVE MAE-FEULIQ                    TO DIS-FEULIQ
+              MOVE MAE-FEVENCIN                  TO DIS-FEVENCIN
+              MOVE MAE-UGCDIPAG                  TO DIS-UGCDIPAG
+              MOVE MAE-FEFINCAR                  TO DIS-FEFINCAR
+              MOVE MAE-FEPROLIQ                  TO DIS-FEPROLIQ
+              MOVE MAE-FECPRILIQ                 TO DIS-FECPRILIQ
+              MOVE MAE-FEFORMA                   TO DIS-FEFORMA
+              MOVE MAE-FECAPROBA                 TO DIS-FECAPROBA
+              MOVE MAE-PLAZO                     TO DIS-PLAZO
+              MOVE MAE-INDADMES                  TO DIS-INDADMES
+              MOVE MAE-PRODUCTO                  TO DIS-PRODUCTO           00037
+              MOVE MAE-SUBPRO                    TO DIS-SUBPRO.            00037
+      *
+      ******************************************************************
+      *                   223000-EXISTE-CUENTA                         *
+      *  - VALIDA QUE LA CUENTA ESTE EN SITUACION DE PROPUESTA         *
+      *    APROBADA PENDIENTE DE FORMALIZAR, QUE NO TENGA CUENTAS      *
+      *    RELACIONADAS, Y QUE LA OFICINA TITULAR DE LA CUENTA SEA     *
+      *    LA OFICINA DEL TERMINAL QUE PRETENDE FORMALIZAR, O SI NO,   *
+      *    ESTA ULTIMA TENGA NIVEL SUPERIOR A LA TITULAR.              *
+      *  - SI EL CUADRO MANUAL ESTA PENDIENTE DE MODIFICAR, ERROR.     *
+      *  - OBTIENE EL TITULAR MEDIANTE LA RUTINA DE CLIENTES.          *
+      *  - MUESTRA EN PANTALLA EL IMPORTE CONCEDIDO Y SUBSUJET         *
+      *  - SE CONSIDERARA COMO CORRECTO QUE EL PRESTAMO SEA MARCO,     *
+      *    (INDIMAT = 1,2,8).                                          *
+      ******************************************************************
+       223000-EXISTE-CUENTA.
+      *
+              IF MAE-SITPRES       = CTE-CON-0  OR
+                 MAE-SITPRES       = CTE-CON-2  OR
+                 MAE-SITPRES       = CTE-CON-3  OR
+                 MAE-SITPRES       = CTE-CON-4  OR
+                 MAE-SITPRES       = CTE-CON-5  OR
+      *DTS-I
+                 MAE-SITPRES       = 'B'        OR
+      *DTS-F
+                 MAE-SITPRES       = CTE-CON-6
+                 MOVE 'UGE1038'                  TO CAA-COD-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+
+              IF MAE-SITPRES      = CTE-CON-1
+                 MOVE 'UGE1040'                  TO CAA-COD-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+
+              IF MAE-SITPRES      = CTE-CON-9
+                 MOVE 'UGE1041'                  TO CAA-COD-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+
+              IF MAE-SITPRES      = CTE-CON-A
+                 MOVE 'UGE1042'                  TO CAA-COD-ERROR
+                 PERFORM 300000-FINAL
+              END-IF.
+
+      *****************************************************************
+      *                    232000-LEER-TABLAS                         *
+      * SE LEE LOS DATOS DE LA UGSTADE O UGDTADS PARA CONOCER EL
+      * PERIODO DE LIQUIDACION
+      *
+      *****************************************************************
+       232000-LEER-TABLAS.
+      *
+              INITIALIZE UGTCADE
+                         UGTCADS
+      *
+              IF MAE-INDADMES = 'S'
+                 MOVE MAE-ENTIOFI                   TO ADE-ENTIOFI         00035
+                 MOVE MAE-CUENTA                    TO ADE-CUENTA          00035
+                 PERFORM 232100-LEER-UGDTADE
+              ELSE
+                 MOVE MAE-PRODUCTO                  TO ADS-PRODUCTO        00037
+                 MOVE MAE-SUBPRO                    TO ADS-SUBPRO          00037
+                 MOVE MAE-FESOLIC                   TO ADS-FEFIVALI
+                                                       ADS-FECOVALI
+                 PERFORM 232200-LEER-UGDTADS
+              END-IF
+      *
+              MOVE WS-CODTIAMO                     TO WS-TIPO-CUOTA.
+      *
+      ******************************************************************
+      *                    232100-LEER-UGDTADE                         *
+      ******************************************************************
+       232100-LEER-UGDTADE.
+      *                                                                 00035590
+              EXEC SQL SELECT                                              00035
+                            FECOVALI,           FEFIVALI,                  00035
+                            PERCAP,             PERINT,                    00035
+                            CODTIAMO,           LININCUO,
+                            DIASCAL,            TIPODIAS,
+                            CARECAP,            PROGARIT,
+                            INDINANT,           CAREINT,
+                            PROGGEOM,           UGYFARET
+                      INTO                                                 00035
+                           :ADE-FECOVALI,      :ADE-FEFIVALI,              00035
+                           :ADE-PERCAP,        :ADE-PERINT,                00035
+                           :ADE-CODTIAMO,      :ADE-LININCUO,
+                           :ADE-DIASCAL,       :ADE-TIPODIAS,
+                           :ADE-CARECAP,       :ADE-PROGARIT,
+                           :ADE-INDINANT,      :ADE-CAREINT,
+                           :ADE-PROGGEOM,      :ADE-UGYFARET
+
+                 FROM UGDTADE                                              00036
+                 WHERE ENTIOFI   = :ADE-ENTIOFI      AND                   00036
+                       CUENTA    = :ADE-CUENTA                             00036
+              END-EXEC.                                                    00036
+      *                                                                 00036120
+              MOVE SQLCODE                       TO DB2-RETURN-CDE      00036130
+      *                                                                 00036140
+              IF DB2-OK AND SQLWARN0 = SPACES                           00036150
+                 IF SW-CRED-ANTERIOR = 'N'
+                    MOVE ADE-PERCAP              TO WS-PERCAP-ANT
+                 END-IF
+                 MOVE ADE-PERCAP              TO WS-PERCAP
+                 MOVE ADE-FECOVALI            TO WS-FECOVALI
+                 MOVE ADE-FEFIVALI            TO WS-FEFIVALI
+                 MOVE ADE-PERINT              TO WS-PERINT
+                 MOVE ADE-CARECAP             TO WS-CARECAP
+                 MOVE ADE-CAREINT             TO WS-CAREINT
+                 MOVE ADE-CODTIAMO            TO WS-CODTIAMO
+                 MOVE ADE-PROGGEOM            TO WS-PROGGEOM
+                 MOVE ADE-PROGARIT            TO WS-PROGARIT
+                 MOVE ADE-LININCUO            TO WS-LININCUO
+                 MOVE ADE-TIPODIAS            TO WS-TIPODIAS
+                 MOVE ADE-DIASCAL             TO WS-DIASCAL
+                 MOVE ADE-UGYFARET            TO WS-UGYFARET
+                 MOVE ADE-INDINANT            TO WS-INDINANT
+
+              ELSE                                                          0003
+                 IF DB2-NOTFND AND SQLWARN0 = SPACES                        0003
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR           0003
+                    MOVE 'NO HAY REGISTRO EN'    TO CAA-VAR1-ERROR          0003
+                    MOVE 'UGDTADE '              TO CAA-VAR2-ERROR          0003
+                    PERFORM 300000-FINAL                                    0003
+                 ELSE                                                       0003
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR           0003
+                    MOVE 'SELECT UGDTADE'        TO CAA-VAR1-ERROR          0003
+                    MOVE 'COD ERROR: '           TO CAA-VAR2-ERROR(1:12)    0003
+                    MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(13:)     0003
+                    PERFORM 999999-ABEND-DB2                                0003
+                 END-IF
+              END-IF.                                                       0003
+      *                                                                 00036770
+      ******************************************************************
+      *               232200-LEER-UGDTADS                              *
+      ******************************************************************
+       232200-LEER-UGDTADS.
+      *
+              EXEC SQL SELECT                                              00035
+                            FECOVALI,           FEFIVALI,                  00035
+                            PERCAP,             PERINT,                    00035
+                            CODTIAMO,           LININCUO,
+                            DIASCAL,            TIPODIAS,
+                            CARECAP,            PROGARIT,
+                            INDINANT,           CAREINT,
+                            PROGGEOM,           UGYFARET
+                      INTO                                                 00035
+                           :ADS-FECOVALI,      :ADS-FEFIVALI,              00035
+                           :ADS-PERCAP,        :ADS-PERINT,                00035
+                           :ADS-CODTIAMO,      :ADS-LININCUO,
+                           :ADS-DIASCAL,       :ADS-TIPODIAS,
+                           :ADS-CARECAP,       :ADS-PROGARIT,
+                           :ADS-INDINANT,      :ADS-CAREINT,
+                           :ADS-PROGGEOM,      :ADS-UGYFARET
+
+                 FROM UGDTADS                                              00037
+                 WHERE PRODUCTO  = :ADS-PRODUCTO     AND                   00037
+                       SUBPRO    = :ADS-SUBPRO       AND                   00037
+                       FECOVALI <= :ADS-FECOVALI     AND                   00037
+                       FEFIVALI >= :ADS-FEFIVALI                           00037
+              END-EXEC.                                                    00037
+      *                                                                 00037490
+              MOVE SQLCODE                       TO DB2-RETURN-CDE      00037500
+      *                                                                 00037510
+              IF DB2-OK AND SQLWARN0 = SPACES                              00037
+                 IF SW-CRED-ANTERIOR = 'N'
+                    MOVE ADS-PERCAP              TO WS-PERCAP-ANT
+                 END-IF
+                 MOVE ADS-PERCAP              TO WS-PERCAP
+                 MOVE ADS-FECOVALI            TO WS-FECOVALI
+                 MOVE ADS-FEFIVALI            TO WS-FEFIVALI
+                 MOVE ADS-PERINT              TO WS-PERINT
+                 MOVE ADS-CARECAP             TO WS-CARECAP
+                 MOVE ADS-CAREINT             TO WS-CAREINT
+                 MOVE ADS-CODTIAMO            TO WS-CODTIAMO
+                 MOVE ADS-PROGGEOM            TO WS-PROGGEOM
+                 MOVE ADS-PROGARIT            TO WS-PROGARIT
+                 MOVE ADS-LININCUO            TO WS-LININCUO
+                 MOVE ADS-TIPODIAS            TO WS-TIPODIAS
+                 MOVE ADS-DIASCAL             TO WS-DIASCAL
+                 MOVE ADS-UGYFARET            TO WS-UGYFARET
+                 MOVE ADS-INDINANT            TO WS-INDINANT
+              ELSE                                                         00038
+                 IF DB2-NOTFND AND SQLWARN0 = SPACES                       00038
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR          00038
+                    MOVE 'NO HAY REGISTRO EN'    TO CAA-VAR1-ERROR         00038
+                    MOVE 'EN LA TABLA ADS   '    TO CAA-VAR2-ERROR         00038
+                    PERFORM 300000-FINAL                                   00038
+                 ELSE                                                      00038
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR          00038
+                    MOVE 'SELECT UGDTADS'        TO CAA-VAR1-ERROR         00038
+                    MOVE 'COD ERROR: '           TO CAA-VAR2-ERROR(1:12)   00038
+                    MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(13:)    00038
+                    PERFORM 999999-ABEND-DB2                               00038
+                 END-IF                                                    00038
+              END-IF.                                                      00038
+      *                                                                 00038120
+      *                                                                 00036770
+      ******************************************************************
+      *               240000-LEER-UGDTPRO                              *
+      ******************************************************************
+       240000-LEER-UGDTPRO.
+      *
+              MOVE MAE-PRODUCTO                TO PRO-PRODUCTO
+              MOVE MAE-SUBPRO                  TO PRO-SUBPRO
+      *
+              EXEC SQL SELECT                                              00037
+                   PRODUCTO, SUBPRO, INDCRSCO                              00037
+                 INTO                                                      00037
+                   :PRO-PRODUCTO,                                          00037
+                   :PRO-SUBPRO,                                            00037
+                   :PRO-INDCRSCO                                           00037
+                 FROM UGDTPRO                                              00037
+                 WHERE PRODUCTO  = :PRO-PRODUCTO     AND                   00037
+                       SUBPRO    = :PRO-SUBPRO                             00037
+              END-EXEC.                                                    00037
+      *                                                                 00037490
+              MOVE SQLCODE                       TO DB2-RETURN-CDE      00037500
+      *                                                                 00037510
+              IF DB2-OK AND SQLWARN0 = SPACES                              00037
+                 CONTINUE
+              ELSE                                                         00038
+                 IF DB2-NOTFND AND SQLWARN0 = SPACES                       00038
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR          00038
+                    MOVE 'NO HAY REGISTRO EN'    TO CAA-VAR1-ERROR         00038
+                    MOVE 'EN LA TABLA UGDTPRO'   TO CAA-VAR2-ERROR         00038
+                    PERFORM 300000-FINAL                                   00038
+                 ELSE                                                      00038
+                    MOVE 'UGE0939'               TO CAA-COD-ERROR          00038
+                    MOVE 'SELECT UGDTPRO'        TO CAA-VAR1-ERROR         00038
+                    MOVE 'COD ERROR: '           TO CAA-VAR2-ERROR(1:12)   00038
+                    MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(13:)    00038
+                    PERFORM 999999-ABEND-DB2                               00038
+                 END-IF                                                    00038
+              END-IF.                                                      00038
+      ******************************************************************
+      *                      250000-SEGUIR-VALIDACIONES                *
+      ******************************************************************
+       250000-SEGUIR-VALIDACIONES.
+      *
+ DMLG         IF S039-INDSCOR = 'N'
+                 PERFORM 251000-VALIDA-PLAZO
+ DMLG         END-IF.
+      *
+      ******************************************************************
+      *                    241000-VALIDA-CUOTA                         *
+      ******************************************************************
+       241000-VALIDA-CUOTA.
+      *
+              IF SW-CRED-ANTERIOR = 'N'
+      *COL01-I
+                 SET SI-VALANT       TO  TRUE
+      *COL01-F
+                 PERFORM 241100-VALIDA-CUOTA-CRED-ANT
+                 SET SI-CRED-ANT              TO TRUE
+      *COL01-I
+                 SET NO-VALANT       TO  TRUE
+      *COL01-F
+              ELSE
+                 PERFORM 241200-VALIDA-CUOTA-CRED-NUE
+      *
+                 IF WS-CUOTA-VIG > WS-CUOTA-ANT
+                     MOVE 'S'                      TO S039-INDSCOR
+                                                      WS-IND-MARCA1
+                 ELSE
+                     MOVE 'N'                      TO S039-INDSCOR
+                                                      WS-IND-MARCA1
+                 END-IF
+              END-IF.
+      *
+      ******************************************************************
+      *               241100-VALIDA-CUOTA-CRED-ANT
+      ******************************************************************
+       241100-VALIDA-CUOTA-CRED-ANT.
+      *
+              PERFORM 241120-CALCULO-CUOTA-ANT
+              MOVE  WS-PRICUOTA                   TO WS-CUOTA-ANT.
+      *
+      ******************************************************************
+      *                      241120-CALCULO-CUOTA-ANT
+      ******************************************************************
+       241120-CALCULO-CUOTA-ANT.
+      *
+              PERFORM 241210-MUEVE-DATOS-UMAE
+              PERFORM 241220-OBTENER-INTERES
+              PERFORM 241230-CALCULAR-CUOTA.
+      *
+      ******************************************************************
+      *               241200-VALIDA-CUOTA-CRED-NUE
+      ******************************************************************
+       241200-VALIDA-CUOTA-CRED-NUE.
+      *
+              PERFORM 241210-MUEVE-DATOS-UMAE
+              PERFORM 241220-OBTENER-INTERES
+              PERFORM 241230-CALCULAR-CUOTA
+              MOVE  WS-PRICUOTA                   TO WS-CUOTA-VIG.
+      *
+      ******************************************************************
+      *                   241210-MUEVE-DATOS-UMAE                      *
+      ******************************************************************
+       241210-MUEVE-DATOS-UMAE.
+              MOVE CAA-FECHA-OPER2(3:2)    TO WS-DATE-DB2-ANNO
+              MOVE CAA-FECHA-OPER2(6:2)    TO WS-DATE-DB2-MES
+              MOVE CAA-FECHA-OPER2(9:2)    TO WS-DATE-DB2-DIA
+              IF WS-DATE-DB2-ANNO    > 50
+                 MOVE 19                   TO WS-DATE-DB2-SIGLO
+              ELSE
+                 MOVE 20                   TO WS-DATE-DB2-SIGLO
+              END-IF
+              MOVE WS-DATE-DB2             TO MAE-FESOLIC
+              IF  MAE-UGCDIPAG = 0
+                  MOVE WS-DATE-DB2(9:2)    TO MAE-UGCDIPAG
+              END-IF
+              MOVE WS-DATE-DB2-DIA         TO WS-DIA-FORMALIZACION.
+      *
+      ******************************************************************
+      *                   241220-OBTENER-INTERES                       *
+      ******************************************************************
+       241220-OBTENER-INTERES.
+      *
+           MOVE MAE-PRODUCTO                 TO IEN-PRODUCTO.           00174100
+           MOVE MAE-ENTIOFI                  TO IEN-ENTIOFI.            00174200
+           MOVE MAE-CUENTA                   TO IEN-CUENTA.             00174300
+           MOVE MAE-INDADMES                 TO IEN-INDADMES.           00174400
+           MOVE MAE-INDLIQES                 TO IEN-INDLIQES.           00174500
+           MOVE MAE-SUBPRO                   TO IEN-SUBPRO.             00174600
+           MOVE MAE-PLAZO                    TO IEN-PLAZO.              00174700
+           MOVE MAE-INDCUAMA                 TO IEN-INDCUAMA.           00174800
+           MOVE MAE-FESOLIC                  TO IEN-FEULIQ.             00174900
+           MOVE MAE-FEFINCAR                 TO IEN-FEFINCAR.           00175000
+           MOVE MAE-FEPROLIQ                 TO IEN-FEPROLIQ.           00175100
+      *COL01-I
+           IF CAA-FECHA-OPER2  >  WS-FEFIVALI
+              IF SI-VALANT
+                   MOVE WS-FECOVALI          TO IEN-FEFORMA
+              ELSE
+                   MOVE CAA-FECHA-OPER2      TO IEN-FEFORMA
+              END-IF
+           ELSE
+               MOVE CAA-FECHA-OPER2          TO IEN-FEFORMA
+           END-IF
+      *    MOVE CAA-FECHA-OPER2              TO IEN-FEFORMA
+      *COL01-F
+           MOVE CAA-FECHA-OPER2              TO IEN-FECHA-HOY           00175300
+                                                                        00175400
+           EXEC CICS                                                    00175500
+                LINK PROGRAM ('UR2CIEN0')                               00175600
+                COMMAREA (URWCIEN)                                      00175700
+           END-EXEC                                                     00175800
+      *                                                                 00175900
+           IF EIBRESP NOT EQUAL DFHRESP(NORMAL)                         00411300
+              MOVE 'LINK UR2CIEN0'           TO CAA-VAR1-ERROR          00411400
+              PERFORM 999999-ABEND-CICS                                 00411500
+           END-IF                                                       00411600
+           IF IEN-CORESPUE NOT = '00'                                   00176000
+              MOVE 'UGE0939'                 TO CAA-COD-ERROR
+              MOVE 'ERROR RUT.UR2CIEN0'      TO CAA-VAR1-ERROR          00176400
+              MOVE 'COD:'                    TO CAA-VAR2-ERROR(1:4)
+              MOVE IEN-CORESPUE              TO CAA-VAR2-ERROR(5:2)     00176100
+              MOVE IEN-TABLENAME             TO CAA-VAR2-ERROR(7:)      00176200
+              PERFORM 300000-FINAL                                      00176500
+           ELSE                                                         00176600
+              MOVE IEN-EFECTIVA              TO INT-TIPOAPLI            00176700
+              MOVE 'E'                       TO INT-TIPOTASA            00176800
+              MOVE IEN-PERINT                TO INT-PERINT              00176900
+              MOVE IEN-PERCAPIT              TO INT-PERCAPIT            00177000
+              MOVE IEN-DIASCAL               TO INT-DIASCAL             00177100
+              MOVE IEN-FEFIVALI              TO INT-FEFIVALI            00177200
+           END-IF                                                       00177300
+           MOVE IEN-NOMINAL                  TO WS-INTERES-NOMINAL.     00180900
+      *
+      ******************************************************************
+      *                   241230-CALCULAR-CUOTA.                       *
+      ******************************************************************
+       241230-CALCULAR-CUOTA.
+      *
+              MOVE MAE-IMPCONCE                   TO COT-CAPITAL        00183900
+              MOVE WS-INTERES-NOMINAL             TO COT-INT-NOMINAL    00184900
+              MOVE ZERO                           TO COT-INT-EFECTIVO   00185000
+                                                     COT-CUOTA
+              PERFORM  241231-FORM-DATOS-ENTR                           00185200
+              PERFORM  241232-RESTO-DATOS-1                             00185300
+                                                                        00185400
+              IF WS-TIPO-CUOTA = 'B'                                    00185500
+                 MOVE WS-IMPCONCE                 TO COT-CAPITAL-INICIAL00185600
+              END-IF                                                    00185700
+                                                                        00185800
+              PERFORM  241233-LLAMAR-MODULO-CALC                        00185900
+                                                                        00186000
+      * CALCULO DE LOS INTERESES CUANDO ADS-CODTIAMO = '2'              00186300
+      *                                                                 00186400
+              MOVE COT-CUOTA                     TO WS-PRICUOTA
+              IF WS-CODTIAMO = '2'                                      00186500
+              OR WS-CODTIAMO = 'K'                                      00186500
+              OR WS-CODTIAMO = 'M'                                      00186500
+                 MOVE ZEROS                       TO WS-INTERES-ACUM    00186600
+                                                     WS-PRICUOTA        00186700
+                 MOVE MAE-IMPCONCE                TO WS-SALDO-VIVO      00186800
+                 PERFORM 241234-CALCULO-PERINT                          00186900
+                 COMPUTE WS-INTERES-ACUM =                              00187000
+                 (WS-SALDO-VIVO * WS-DIAS * WS-INTERES-NOMINAL) /       00187100
+                                 (WS-DIAS-ANO * 100)                    00187200
+                 COMPUTE WS-PRICUOTA = COT-CUOTA + WS-INTERES-ACUM      00187300
+              END-IF                                                    00187400
+                                                                        00187500
+              MOVE MAE-IMPCONCE                   TO WS-SALDO-VIVO      00187600
+                                                     WS-CAPITAL-INICIAL.00187700
+      *
+      ******************************************************************00187800
+      *                       241234-CALCULO-PERINT
+      ******************************************************************
+       241234-CALCULO-PERINT.                                           00187900
+                                                                        00188000
+           MOVE ZEROS                             TO WS-ADS-PERINT      00188100
+                                                     WS-DIAS            00188200
+           MOVE WS-PERINT                         TO WS-ADS-PERINT      00188300
+                                                                        00188400
+           IF WS-PERINT-1 = 1                                           00188500
+              COMPUTE WS-DIAS = WS-PERINT-2 * 1                         00188600
+           ELSE                                                         00188700
+              IF WS-PERINT-1 = 2                                        00188800
+                 COMPUTE WS-DIAS = WS-PERINT-2 * 30                     00188900
+              ELSE                                                      00189000
+                 IF WS-PERINT-1 = 3                                     00189100
+                    COMPUTE WS-DIAS = WS-PERINT-2 * WS-DIAS-ANO         00189200
+                 END-IF                                                 00189300
+              END-IF                                                    00189400
+           END-IF.                                                      00189500
+      ***************************************************************** 00189600
+      *                   241231-FORM-DATOS-ENTR                      *
+      *****************************************************************
+       241231-FORM-DATOS-ENTR.                                          00189700
+                                                                        00189800
+              MOVE WS-CODTIAMO              TO COT-TIP-CUOTA               0018
+              MOVE ZERO                     TO COT-AJUSTE-ENTREGAS         0019
+              PERFORM 2412311-CALCULAR-PERIODOS                            0019
+              MOVE WS-PERCAP                TO WS-CODIGO-PERIODO           0019
+              MOVE ZERO TO WS-RESTO                                        0019
+                                                                           0019
+              EVALUATE WS-CODIGO                                        00
+                                                                        00
+                 WHEN  3                                                00
+                    DIVIDE 1               BY WS-PERIODO                00
+                       GIVING COT-AMO-ANNO                              00
+                       REMAINDER WS-RESTO                               00
+                       ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO      00
+                    END-DIVIDE                                          00
+                                                                        00
+                 WHEN  2                                                00
+                    DIVIDE 12              BY WS-PERIODO                00
+                      GIVING COT-AMO-ANNO                               00
+                      REMAINDER WS-RESTO                                00
+                      ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO       00
+                    END-DIVIDE                                          00
+                                                                        00
+                 WHEN  1                                                00
+                    IF WS-DIASCAL    = CTE-CON-COMERCIALES              00
+                                     OR CTE-CON-MIXTOS                  00
+                       DIVIDE CTE-CON-360-COMP3      BY WS-PERIODO      00
+                          GIVING COT-AMO-ANNO                           00
+                          REMAINDER WS-RESTO                            00
+                          ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO   00
+                       END-DIVIDE                                       00
+                    ELSE                                                00
+                       DIVIDE CTE-CON-365-COMP3      BY WS-PERIODO      00
+                          GIVING COT-AMO-ANNO                           00
+                          REMAINDER WS-RESTO                            00
+                          ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO   00
+                       END-DIVIDE                                       00
+                    END-IF                                              00
+              END-EVALUATE                                              00
+              IF WS-RESTO > ZERO                                        0019
+                 MOVE 'UGE0298'              TO CAA-COD-ERROR           0019
+                 PERFORM  300000-FINAL                                  0019
+              END-IF                                                    0019
+                                                                        0019
+              IF WS-CODTIAMO   = CTE-CON-5      OR                      0019
+                 WS-CODTIAMO   = CTE-CON-6      OR                      0019
+                 WS-CODTIAMO   = CTE-CON-9      OR                      0019
+                 WS-CODTIAMO   = CTE-CON-0                              0019
+                 MOVE WS-LININCUO           TO COT-AMO-PERIODO          0019
+                                               COT-AMO-RESTAN-PER       0019
+                 DIVIDE WS-NUM-PERIODOS BY WS-LININCUO                  0019
+                    GIVING COT-PER-VIGENCIA                             0019
+                    ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO         0019
+                 END-DIVIDE                                             0019
+              END-IF                                                    0019
+                                                                        00195400
+      *AMORTIZACION GEOMETRICA                                          00195500
+              IF WS-CODTIAMO   = 'D'                                        0019
+                 MOVE  MAE-PLAZO            TO   COT-PER-VIGENCIA           0019
+                 MOVE  WS-LININCUO          TO   COT-LININCUO               0019
+              END-IF                                                        0019
+                                                                        00196000
+      *AMORTIZACION GRADUAL                                             00196100
+            MOVE WS-RAZON                   TO COT-RAZON                      00
+            IF WS-TIPODIAS   = CTE-CON-1      OR                              00
+               WS-TIPODIAS   = CTE-CON-3                                      00
+               MOVE ZERO                    TO COT-DIAS-PRI-LIQ               00
+            END-IF                                                            00
+                                                                              00
+            MOVE WS-NUM-PERIODOS            TO COT-TOT-AMORT-PEN           00
+            PERFORM  2412312-LLAMA-CS1CDAT0                                00
+            MOVE SCO-FECPRIAMO              TO WS-FECHA-AMO                00
+            MOVE SCO-FECPRILIQ              TO WS-FECHA-LIQ                00
+            MOVE SCO-CUOTAS                 TO WS-NUM-PERIODOS.         98300
+                                                                        00198500
+      ******************************************************************00198600
+      *                  2412311-CALCULAR-PERIODOS
+      ******************************************************************
+       2412311-CALCULAR-PERIODOS.                                       00198700
+      *                                                                 00198800
+               MOVE WS-PERCAP                   TO WS-DIV-ENTRADA-2     00198900
+      *                                                                 00199000
+               IF WS-CARECAP NOT = SPACES                               00199100
+                  MOVE MAE-PLAZO                TO WS-SUB-ENTRADA-1     00199200
+                  MOVE WS-CARECAP               TO WS-SUB-ENTRADA-2     00199300
+                  PERFORM  24123111-SUSTRAER                            00199400
+                  PERFORM  24123112-DIVISIBILIDAD-2                     00199500
+               ELSE                                                     00199600
+                  MOVE MAE-PLAZO                TO WS-DIV-ENTRADA-1     00199700
+                  PERFORM  24123113-DIVISIBILIDAD                       00199800
+               END-IF                                                   00199900
+      *                                                                 00200000
+               MOVE WS-COCIENTE                 TO WS-NUM-PERIODOS      00200100
+      *                                                                 00200200
+               IF WS-RESTO NOT = ZERO                                   00200300
+                  MOVE 'UGE0226'                TO CAA-COD-ERROR        00200500
+                  PERFORM 300000-FINAL                                  00200600
+               END-IF.                                                  00200700
+      *                                                                 00200800
+      ******************************************************************00200900
+      *                     24123111-SUSTRAER                          *
+      ******************************************************************
+       24123111-SUSTRAER.                                               00201000
+      *                                                                 00201100
+                MOVE WS-SUB-ENTRADA-1           TO WS-CODIGO-PERIODO-4  00201300
+      *                                                                 00201400
+                MULTIPLY WS-PERIODO-4 BY WS-CONVERSION-DIAS(WS-CODIGO-4)00201500
+                   GIVING WS-MINUENDO                                   00201600
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00201700
+                END-MULTIPLY                                            00201800
+      *                                                                 00201900
+                MOVE WS-SUB-ENTRADA-2           TO WS-CODIGO-PERIODO-2  00202100
+      *                                                                 00202200
+                MULTIPLY WS-PERIODO-2 BY WS-CONVERSION-DIAS(WS-CODIGO-2)00202300
+                   GIVING WS-SUSTRAENDO                                 00202400
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00202500
+                END-MULTIPLY                                            00202600
+      *                                                                 00202700
+                IF WS-SUSTRAENDO >= WS-MINUENDO                         00202800
+                   MOVE 'UGE0235'               TO CAA-COD-ERROR        00202900
+                   MOVE 'ERROR EN SUSTRAER'     TO CAA-VAR1-ERROR       00203000
+                   PERFORM 300000-FINAL                                 00203100
+                END-IF                                                  00203200
+      *                                                                 00203300
+                SUBTRACT WS-SUSTRAENDO FROM WS-MINUENDO                 00203400
+                   GIVING WS-DIVIDENDO                                  00203500
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00203600
+                END-SUBTRACT.                                           00203700
+      *                                                                 00203800
+      ******************************************************************
+      *                   24123112-DIVISIBILIDAD-2
+      ******************************************************************
+       24123112-DIVISIBILIDAD-2.                                        00203900
+      *                                                                 00204000
+                MOVE WS-DIV-ENTRADA-2        TO WS-CODIGO-PERIODO       00204100
+                                                                        00204200
+                MULTIPLY WS-PERIODO BY WS-CONVERSION-DIAS(WS-CODIGO)    00204300
+                   GIVING WS-DIVISOR                                    00204400
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00204500
+                END-MULTIPLY                                            00204600
+                                                                        00204700
+                DIVIDE WS-DIVIDENDO BY WS-DIVISOR                       00204800
+                   GIVING WS-COCIENTE                                   00204900
+                   REMAINDER WS-RESTO                                   00205000
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00205100
+                END-DIVIDE.                                             00205200
+                                                                        00205300
+      ***************************************************************** 00205400
+      *                     24123113-DIVISIBILIDAD
+      ******************************************************************
+       24123113-DIVISIBILIDAD.                                          00205500
+      *                                                                 00205600
+                MOVE WS-DIV-ENTRADA-1  TO WS-CODIGO-PERIODO-4           00205700
+      *                                                                 00205800
+                MULTIPLY WS-PERIODO-4 BY WS-CONVERSION-DIAS(WS-CODIGO-4)00205900
+                   GIVING WS-DIVIDENDO                                  00206000
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00206100
+                END-MULTIPLY                                            00206200
+      *                                                                 00206300
+                MOVE WS-DIV-ENTRADA-2  TO WS-CODIGO-PERIODO             00206400
+      *                                                                 00206500
+                MULTIPLY WS-PERIODO BY WS-CONVERSION-DIAS(WS-CODIGO)    00206600
+                   GIVING WS-DIVISOR                                    00206700
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00206800
+                END-MULTIPLY                                            00206900
+      *                                                                 00207000
+                DIVIDE WS-DIVIDENDO BY WS-DIVISOR                       00207100
+                   GIVING WS-COCIENTE                                   00207200
+                   REMAINDER WS-RESTO                                   00207300
+                   ON SIZE ERROR  PERFORM  999991-REBOSAMIENTO          00207400
+                END-DIVIDE.                                             00207500
+      *****************************************************************
+      *                   2412312-LLAMA-CS1CDAT0
+      ******************************************************************
+       2412312-LLAMA-CS1CDAT0.                                          00223500
+      *                                                                 00223600
+               MOVE  WS-DATE-DB2              TO SCO-FEFORMA               00223
+               MOVE  WS-INDINANT              TO SCO-INDINANT              00223
+               IF WS-PERCAP NOT EQUAL SPACES AND '999'                     00223
+                  MOVE WS-PERCAP(1:1)         TO SCO-TIP-PERCAP            00224
+                  MOVE  ZERO                  TO SCO-NRO-PERCAP(1:1)       00224
+                  MOVE WS-PERCAP(2:2)         TO SCO-NRO-PERCAP(2:2)       00224
+               ELSE                                                        00224
+                  MOVE WS-PERCAP              TO SCO-PERCAP                00224
+               END-IF                                                      00224
+               IF WS-PERINT NOT EQUAL SPACES AND '999'                     00224
+                 MOVE  WS-PERINT(1:1)         TO SCO-TIP-PERINT            00224
+                 MOVE  ZERO                   TO SCO-NRO-PERINT(1:1)       00224
+                 MOVE  WS-PERINT(2:2)         TO SCO-NRO-PERINT(2:2)       00224
+               ELSE                                                        00225
+                 MOVE  WS-PERINT              TO SCO-PERINT                00225
+               END-IF                                                      00225
+               IF WS-CAREINT NOT EQUAL SPACES                              00225
+                  MOVE  WS-CAREINT(1:1)       TO SCO-TIP-CAREINT           00225
+                  MOVE  ZERO                  TO SCO-NRO-CAREINT(1:1)      00225
+                  MOVE  WS-CAREINT(2:2)       TO SCO-NRO-CAREINT(2:2)      00225
+               ELSE                                                        00225
+                  MOVE  WS-CAREINT            TO SCO-CAREINT               00225
+               END-IF                                                      00225
+               IF WS-CARECAP NOT EQUAL SPACES                              00226
+                   MOVE  WS-CARECAP(1:1)      TO SCO-TIP-CARECAP           00226
+                   MOVE  WS-CARECAP(2:3)      TO SCO-NRO-CARECAP           00226
+               ELSE                                                        00226
+                   MOVE  WS-CARECAP           TO SCO-CARECAP               00226
+               END-IF                                                      00226
+                                                                           00226
+               MOVE  MAE-PLAZO                TO SCO-PLAZO                 00226
+               MOVE MAE-UGCDIPAG              TO WS-DIA-PAGO               00226
+               MOVE WS-DIA-PAGO               TO SCO-UGCDIPAG              00226
+               IF  WS-TIPODIAS = '4'                                       00227
+                    MOVE  30                  TO SCO-FRACCIO               00227
+               ELSE                                                        00227
+                    MOVE  1                   TO SCO-FRACCIO               00227
+               END-IF                                                      00227
+               MOVE  WS-TIPODIAS              TO SCO-TIPODIAS              00227
+               MOVE  WS-CODTIAMO              TO SCO-FORMULA               00227
+               MOVE  MAE-PRODUCTO              TO SCO-PRODUCTO             00227
+               MOVE  WS-DIASCAL               TO SCO-DIASCAL               00227
+                                                                           00227
+                                                                           00228
+               EXEC CICS LINK                                              00228
+                 PROGRAM ('CS1CDAT0')                                      00228
+                 COMMAREA (CSWCDAT)                                        00228
+               END-EXEC.                                                   00228
+      *                                                                 00228900
+               IF EIBRESP NOT EQUAL DFHRESP(NORMAL)                     00411300
+                  MOVE 'LINK CS1CDAT0'        TO CAA-VAR1-ERROR         00411400
+                  PERFORM 999999-ABEND-CICS                             00411500
+               END-IF                                                   00411600
+               IF SCO-CDRETORN NOT = '00'                               00229000
+                  MOVE 'UGE0939'              TO CAA-COD-ERROR          00229200
+                  MOVE 'ERROR EN RUTINA'      TO CAA-VAR1-ERROR         00229100
+                  MOVE 'CS1CDAT0'             TO CAA-VAR2-ERROR         00229300
+                  PERFORM 300000-FINAL                                  00229400
+               END-IF.                                                  00229500
+      ******************************************************************00207700
+      *                   241233-LLAMAR-MODULO-CALC
+      ******************************************************************
+       241233-LLAMAR-MODULO-CALC.                                       00207800
+      *                                                                 00207900
+              MOVE 'N'                        TO CUA-SIMULACION.        00208000
+              EXEC CICS LINK                                            00208100
+                 PROGRAM ('UR1CCOT0')                                   00208200
+                 COMMAREA (COT-NIVEL-01)                                00208300
+              END-EXEC                                                  00208400
+                                                                        00208600
+              IF EIBRESP NOT EQUAL DFHRESP(NORMAL)                      00411300
+                  MOVE 'LINK UR1CCOT0'        TO CAA-VAR1-ERROR         00411400
+                  PERFORM 999999-ABEND-CICS                             00411500
+              END-IF                                                    00411600
+              EVALUATE COT-CODIGO                                       00208700
+                                                                        00208800
+                 WHEN '01'                                              00208900
+                    MOVE 'UGE0331'            TO CAA-COD-ERROR          00209100
+                    PERFORM 300000-FINAL                                00209200
+                                                                        00209300
+                 WHEN '98'                                              00209400
+                    PERFORM  999991-REBOSAMIENTO                        00209500
+                                                                        00209600
+                 WHEN '99'                                              00209700
+                    MOVE 'UGE0298'            TO CAA-COD-ERROR          00209900
+                    PERFORM  300000-FINAL                               00210000
+                                                                        00210100
+              END-EVALUATE.                                             00210200
+      ******************************************************************
+      *                      241232-RESTO-DATOS-1                      *
+      ******************************************************************
+       241232-RESTO-DATOS-1.                                            00217900
+      *                                                                 00218000
+              MOVE MAE-ENTIOFI                    TO COT-ENTIOFI           00218
+              MOVE MAE-CUENTA                     TO COT-CUENTA            00218
+              MOVE MAE-DIGICCC1                   TO COT-DIGITO1           00218
+              MOVE MAE-DIGICCC2                   TO COT-DIGITO2           00218
+                                                                           00218
+              MOVE INT-PERCAPIT                   TO COT-PERCAPIT          00218
+              MOVE WS-FECHA-AMO                   TO COT-F-AMORTI          00218
+              MOVE WS-PERCAP                      TO COT-PERCAP            00218
+              MOVE WS-TIPODIAS                    TO COT-TIPODIAS          00218
+              MOVE WS-PERINT                      TO COT-PERINT            00219
+              MOVE WS-DIASCAL                     TO COT-DIASCAL           00219
+              IF  MAE-UGCDIPAG = 0                                         00219
+                  MOVE WS-DATE-DB2(9:2)           TO MAE-UGCDIPAG          00219
+                                                     WS-UGCDIPAG           00219
+              END-IF                                                       00219
+              MOVE MAE-UGCDIPAG                   TO COT-UGCDIPAG          00219
+              PERFORM  2412322-BUSCA-TIPCAR
+      *LJSM-I
+              PERFORM 9000-VALIDAR-METODO-LIQ
+              IF SW-SI-MLI-APLICA
+                 MOVE MLI-DIASCAL              TO COT-DIASCAL
+              END-IF
+      *LJSM-J
+              IF MAE-FEFORMA NOT = '0001-01-01'
+                 MOVE 'N'                         TO COT-CALCULAR-A
+                 MOVE SCO-FECPRILIQ               TO COT-F-FORMA
+              ELSE
+                 MOVE 'S'                         TO COT-CALCULAR-A
+                 MOVE SCO-FECPRILIQ               TO COT-F-FORMA
+              END-IF
+              IF COT-TIPO-CAR = 'H'
+                 PERFORM 2412323-BUSCA-AHI                                 00221
+                 MOVE MAE-IMPCONCE                TO COT-CAPITAL-INICIALAL
+              ELSE
+                 MOVE ZEROS                       TO COT-FACTOR-A
+                                                     COT-PORC-FINAL
+              END-IF.
+      *
+      ******************************************************************00219700
+      *                   2412322-BUSCA-TIPCAR                          00219700
+      * SE BUSCA EL TIPO DE CARTERA PARA EL SUBPRODUCTO                *
+      ******************************************************************
+       2412322-BUSCA-TIPCAR.
+               INITIALIZE UGTCT37
+               MOVE '1901'                       TO T37-SECCION
+               MOVE MAE-SUBPRO                   TO T37-ELEMENTO
+               EXEC SQL
+                    SELECT RESTO
+                    INTO  :T37-RESTO
+                    FROM UGDTT37
+                    WHERE SECCION  = :T37-SECCION  AND
+                          ELEMENTO = :T37-ELEMENTO
+               END-EXEC
+
+               MOVE SQLCODE                      TO DB2-RETURN-CDE
+
+               IF DB2-OK
+                  MOVE T37-RESTO(1:1)            TO COT-TIPO-CAR
+               ELSE
+                  IF DB2-NOTFND
+                     MOVE 'UGE0939'              TO CAA-COD-ERROR
+                     MOVE 'NO EXISTE TIPO DE   ' TO CAA-VAR1-ERROR
+                     MOVE 'CARTERA UGDTT37 1901' TO CAA-VAR2-ERROR
+                     PERFORM 300000-FINAL
+                  ELSE
+                     MOVE 'UGE0939'              TO CAA-COD-ERROR
+                     MOVE 'ERROR EN SELECT'      TO CAA-VAR1-ERROR
+                     MOVE 'UGDTT37'              TO CAA-VAR2-ERROR(1:9)
+                     MOVE 'COD: '                TO CAA-VAR2-ERROR(10:4)
+                     MOVE SQLCODE                TO CAA-VAR2-ERROR(15:)
+                     PERFORM 300000-FINAL
+                  END-IF
+               END-IF.
+      ******************************************************************00219700
+      *                   2412323-BUSCA-AHI                             00219700
+      ******************************************************************00219700
+       2412323-BUSCA-AHI.
+               INITIALIZE UGTCAHI
+               MOVE MAE-ENTIOFI                  TO AHI-ENTIOFI
+               MOVE MAE-CUENTA                   TO AHI-CUENTA
+               EXEC SQL
+                    SELECT FACTOR_A,
+                           PORFINA_ACT
+                    INTO  :AHI-FACTOR-A,
+                          :AHI-PORFINA-ACT
+                    FROM UGDTAHI
+                    WHERE ENTIOFI  = :AHI-ENTIOFI  AND
+                          CUENTA   = :AHI-CUENTA
+               END-EXEC
+
+               MOVE SQLCODE                      TO DB2-RETURN-CDE
+
+               IF DB2-OK
+                  MOVE AHI-FACTOR-A              TO COT-FACTOR-A
+                  MOVE AHI-PORFINA-ACT           TO COT-PORC-FINAL
+               ELSE
+                  IF DB2-NOTFND
+                     MOVE 2                      TO AHI-FACTOR-A
+                     MOVE ZEROS                  TO AHI-PORFINA-ACT
+                  ELSE
+                     MOVE 'UGE0939'              TO CAA-COD-ERROR
+                     MOVE 'ERROR HACER SELECT'   TO CAA-VAR1-ERROR
+                     MOVE 'UGDTAHI'              TO CAA-VAR2-ERROR(1:8)
+                     MOVE 'COD: '                TO CAA-VAR2-ERROR(9:4)
+                     MOVE SQLCODE                TO CAA-VAR2-ERROR(13:)
+                     PERFORM 300000-FINAL
+                  END-IF
+               END-IF.
+      *
+      ******************************************************************
+      *                    251000-VALIDA-PLAZO                         *
+      * SE DETERMINA SI EL PLAZO ES SUPERIOR DEL NUEVO CREDITO CON     *
+      * RESPECTO AL ANTERIOR CREDITO, SI ES ASI SE REALIZA SCORING     *
+      ******************************************************************
+       251000-VALIDA-PLAZO.
+      *
+              MOVE DIS-PLAZO(2:3)                   TO WS-DIAS-ANT
+              MOVE MAE-PLAZO(2:3)                   TO WS-DIAS-VIG
+      *
+              IF DIS-FECPRILIQ < DIS-FEULIQ
+                 MOVE DIS-FECPRILIQ                 TO WS-DATA-INI
+                 MOVE 1                             TO WS-NUM-PERI
+                 PERFORM 251100-RUTINA-UR8CDFP0
+                        UNTIL WS-DATA-INI(1:7) =  DIS-FEULIQ(1:7)
+      *
+                 PERFORM 251200-CALCULAR-NUM-PERI
+      *
+                 IF DIS-PLAZO NOT EQUAL SPACES
+                     IF DIS-PLAZO(1:1) = '2'
+                        COMPUTE WS-DIAS-ANT = WS-DIAS-ANT * 30
+                     ELSE
+                        IF DIS-PLAZO(1:1) = '3'
+                           COMPUTE WS-DIAS-ANT = WS-DIAS-ANT * 360
+                        END-IF
+                     END-IF
+                 ELSE
+                     MOVE 'UGE0939'               TO CAA-COD-ERROR
+                     MOVE 'EL PLAZO DEL CREDITO'  TO CAA-VAR1-ERROR
+                     MOVE 'ANTERIOR ESTA VACIO '  TO CAA-VAR2-ERROR
+                     PERFORM 300000-FINAL
+                 END-IF
+              ELSE
+                 IF (DIS-FEULIQ  = DIS-FEFORMA)
+                    OR (DIS-FEULIQ > DIS-FEFORMA AND
+                        DIS-FEULIQ < DIS-FECPRILIQ)
+                    MOVE  ZEROS                   TO WS-DIAS-ANT
+                    MOVE  ZEROS                   TO WS-NUM-PERI
+      *
+                    PERFORM 251200-CALCULAR-NUM-PERI
+      *
+                 ELSE
+                    IF DIS-FEULIQ = DIS-FECPRILIQ
+                       MOVE DIS-FEFORMA           TO WS-DATA-INI
+                       MOVE ZEROS                 TO WS-NUM-PERI
+                       PERFORM 251100-RUTINA-UR8CDFP0
+                              UNTIL WS-DATA-INI(1:7) =  DIS-FEULIQ(1:7)
+      *
+                       PERFORM 251200-CALCULAR-NUM-PERI
+      *
+                       IF DIS-PLAZO NOT EQUAL SPACES
+                           IF DIS-PLAZO(1:1) = '2'
+                              COMPUTE WS-DIAS-ANT = WS-DIAS-ANT * 30
+                           ELSE
+                              IF DIS-PLAZO(1:1) = '3'
+                                 COMPUTE WS-DIAS-ANT = WS-DIAS-ANT * 360
+                              END-IF
+                           END-IF
+                       ELSE
+                          MOVE 'UGE0939'               TO CAA-COD-ERROR
+                          MOVE 'EL PLAZO DEL CREDITO'  TO CAA-VAR1-ERRORR
+                          MOVE 'ANTERIOR ESTA VACIO '  TO CAA-VAR2-ERRORR
+                          PERFORM 300000-FINAL
+                       END-IF
+                    ELSE
+                       MOVE 'UGE0939'               TO CAA-COD-ERROR
+                       MOVE 'ERROR EN FECHAS DEL '  TO CAA-VAR1-ERROR
+                       MOVE 'ANTERIOR CREDITO    '  TO CAA-VAR2-ERROR
+                       PERFORM 300000-FINAL
+                    END-IF
+                 END-IF
+              END-IF
+      *
+              IF MAE-PLAZO NOT EQUAL SPACES
+                  IF MAE-PLAZO(1:1) = '2'
+                     COMPUTE WS-DIAS-VIG = WS-DIAS-VIG * 30
+                  ELSE
+                     IF MAE-PLAZO(1:1) = '3'
+                        COMPUTE WS-DIAS-VIG = WS-DIAS-VIG * 360
+                     END-IF
+                  END-IF
+              ELSE
+                  MOVE 'UGE0939'               TO CAA-COD-ERROR
+                  MOVE 'EL PLAZO DEL CREDITO'  TO CAA-VAR1-ERROR
+                  MOVE 'NUEVO ESTA VACIO '     TO CAA-VAR2-ERROR
+                  PERFORM 300000-FINAL
+              END-IF
+      *
+              COMPUTE  WS-DIAS-TOTAL = WS-NUM-PERI + WS-DIAS-VIG
+      *
+              IF WS-DIAS-TOTAL > WS-DIAS-ANT
+                 MOVE 'S'                      TO S039-INDSCOR
+ DMLG                                             WS-IND-MARCA1
+              ELSE
+                 MOVE 'N'                      TO S039-INDSCOR
+ DMLG                                             WS-IND-MARCA1
+              END-IF
+      * EL PLAZO QUE SE DEJO COMO MESA ES DE MAXIMO 20 A┬ªOS, NO FUE
+      * SOLO PARA VERIFICAR QUE LA SUMA DEL PLAZO DEL PRIMER CREDITO MAS
+      * EL SEGUNDO NO SUPEREN LOS 20 A┬ªOS, SINO BASICAMENTE PARA QUE EL
+      * CLIENTE PUDIERA TOMAR UN PLAZO MAYOR Y COMO CONSECUENCIA DE ESTA
+      * AMPLIACION DE PLAZO SE ACTIVE EL SCORING.
+      * ----- COMENTARIO REALIZADO  POR EL DEPTO DE NEGOCIOS
+      *
+              COMPUTE WS-DIAS-MAXIMO = 20 * 360
+      *COL02-I
+      *CONSULTAMOS EL PLAZO MAXIMO PARA CREDITOS HIPOTECARIOS
+              MOVE SPACES                    TO T37-ELEMENTO
+                                                T37-SECCION
+              MOVE 'HPLAZO'                  TO T37-ELEMENTO
+              MOVE '0017'                    TO T37-SECCION
+              PERFORM 252000-BUSCAR-UGDTT37
+              IF T37-RESTO(1:3) EQUAL (SPACES OR LOW-VALUES)
+                 OR T37-RESTO(1:3) IS NOT NUMERIC
+                 MOVE 'UGE0939'              TO CAA-COD-ERROR
+                 MOVE 'PLAZO NO PARAMETIZA.' TO CAA-VAR1-ERROR
+                 MOVE 'EN UMTA SECCION 0017' TO CAA-VAR2-ERROR
+                 PERFORM 300000-FINAL
+              ELSE
+                 IF T37-RESTO(1:3) IS NUMERIC
+                    MOVE T37-RESTO(1:3)      TO WS-PLAZO-MAX-MESES
+                    DIVIDE WS-PLAZO-MAX-MESES BY 12
+                                           GIVING WS-PLAZO-MAX-ANOS
+                 END-IF
+              END-IF
+      *
+              IF WS-PLAZO-MAX-ANOS IS NUMERIC
+                 MULTIPLY WS-PLAZO-MAX-ANOS BY 360
+                                         GIVING WS-PLAZO-MAX-DIAS
+              ELSE
+                 MOVE ZEROS                 TO WS-PLAZO-MAX-DIAS
+              END-IF
+              IF WS-DIAS-TOTAL > WS-PLAZO-MAX-DIAS
+                MOVE 'UGE0939'              TO CAA-COD-ERROR
+                MOVE 'PLAZO SUPERA '        TO CAA-VAR1-ERROR(1:13)
+                MOVE WS-PLAZO-MAX-ANOS      TO CAA-VAR1-ERROR(14:2)
+                MOVE ' A#OS'                TO CAA-VAR1-ERROR(16:5)
+                MOVE 'DESDE SU INICIO    '  TO CAA-VAR2-ERROR
+                PERFORM 300000-FINAL
+              END-IF
+              .
+      *       IF WS-DIAS-TOTAL >  WS-DIAS-MAXIMO
+      *          MOVE 'UGE0939'                 TO CAA-COD-ERROR
+      *          MOVE 'PLAZO TOTAL SUPERIOR'    TO CAA-VAR1-ERROR
+      *          MOVE 'A 20 A┬ªOS  '             TO CAA-VAR2-ERROR(1:12)
+      *          PERFORM 300000-FINAL
+      *       END-IF.
+      *COL02-F
+
+      ******************************************************************
+      *                251100-RUTINA-UR8CDFP0                          *
+      ******************************************************************
+       251100-RUTINA-UR8CDFP0.
+
+               INITIALIZE URECRES URECDF3
+
+               IF DIS-UGCDIPAG > 0
+                  MOVE DIS-UGCDIPAG              TO DF3-DIA
+               ELSE
+                  MOVE DIS-FECPRILIQ(9:2)        TO DF3-DIA
+               END-IF
+               MOVE WS-DATA-INI                  TO DF3-FECHA-INICIAL
+               MOVE WS-PERCAP-ANT                TO DF3-PERCAP
+               MOVE  1                           TO DF3-NUM-PERIODOS
+               MOVE '1'                          TO DF3-TIPODIAS
+
+               CALL   BBVA-UR8CDFP0  USING  URECRES URECDF3
+      *
+               IF RES-CORESPUE = '10'
+                  MOVE DF3-FECHA-FINAL           TO WS-DATA-INI
+                  ADD 1                          TO WS-NUM-PERI
+               ELSE
+                  MOVE 'UGE0939'                 TO CAA-COD-ERROR
+                  MOVE 'ERROR RUT.UR8CDFP0'      TO CAA-VAR1-ERROR
+                  MOVE 'COD ERROR: '             TO CAA-VAR2-ERROR(1:12)
+                  MOVE  RES-CORESPUE             TO CAA-VAR2-ERROR(13:)
+                  PERFORM 300000-FINAL
+               END-IF.
+      *
+      ******************************************************************
+      *                     251200-CALCULAR-NUM-PERI
+      ******************************************************************
+       251200-CALCULAR-NUM-PERI.
+      *
+              IF WS-PERCAP-ANT(1:1) = 2
+                 COMPUTE WS-NUM-PERI = WS-NUM-PERI *30
+              ELSE
+                 IF WS-PERCAP-ANT(1:1) = 3
+                    COMPUTE WS-NUM-PERI = WS-NUM-PERI *360
+                 ELSE
+                    IF WS-PERCAP-ANT(1:1) = 1
+                       CONTINUE
+                    ELSE
+                       MOVE 'UGE0939'               TO CAA-COD-ERROR
+                       MOVE 'EL PERCAL DEL CREDITO' TO CAA-VAR1-ERROR
+                       MOVE 'ANTERIOR ES INVALIDO'  TO CAA-VAR2-ERROR
+                       PERFORM 300000-FINAL
+                    END-IF
+                 END-IF
+              END-IF.
+      ******************************************************************
+      *                  270000-ESCRIBIR-SALIDA                        *
+      ******************************************************************
+       270000-ESCRIBIR-SALIDA.
+      *
+              MOVE '+DC1'                      TO W-DC
+              MOVE LENGTH OF UGNC0039          TO W-LONG-TS
+              MOVE SPACES                      TO W-CONTENIDO-TS
+              MOVE 'UGRMS039'                  TO W-NOMBRE-FORMATO
+              MOVE UGNC0039                    TO W-CONT-FORMATO
+              MOVE 'P'                         TO CAA-IND-PANDOC(1)           00
+              MOVE '+DC1'                      TO CAA-DESTINO(1)              00
+              MOVE '1'                         TO CAA-NUM-DOCUM(1)            00
+              MOVE '00'                        TO CAA-PRILIN-DOCUM(1)         00
+                                                                              00
+              MOVE CAA-TERMINAL                TO W-SUFIJO-TS                 00
+              PERFORM 777777-WRITEQ.
+      *
+      ******************************************************************
+      *                  260000-UPDATE-UGDTREL                         *
+      ******************************************************************
+       260000-UPDATE-UGDTREL.
+              MOVE WS-CCC-ENTIOFI            TO REL-ENTIOFI
+              MOVE WS-CCC-CUENTA             TO REL-CUENTA
+              MOVE CAA-FECHA-OPER2           TO REL-FEALRELA
+              MOVE WS-IND-MARCA1             TO REL-IND-MARCA1
+              MOVE MAE-ENTIOFI(1:4)          TO REL-ENTIDAD-UMO
+              MOVE MAE-ENTIOFI(5:4)          TO REL-CENTRO-UMO
+              MOVE CAA-USERID                TO REL-USERID-UMO
+              MOVE 'UG2CG039'                TO REL-NETNAME-UMO
+              EXEC SQL
+                  UPDATE UGDTREL
+                  SET  ENTIOFI       =:REL-ENTIOFI,
+                       CUENTA        =:REL-CUENTA ,
+                       FEALRELA      =:REL-FEALRELA ,
+                       IND_MARCA1    =:REL-IND-MARCA1 ,
+                       ENTIDAD_UMO   =:REL-ENTIDAD-UMO,
+                       CENTRO_UMO    =:REL-CENTRO-UMO ,
+                       USERID_UMO    =:REL-USERID-UMO ,
+                       NETNAME_UMO   =:REL-NETNAME-UMO,
+                       TIMESTAMP     = CURRENT TIMESTAMP
+                WHERE  ENTIOFI       = :REL-ENTIOFI      AND
+                       CUENTA        = :REL-CUENTA
+                END-EXEC
+
+                MOVE SQLCODE                    TO DB2-RETURN-CDE
+
+                IF DB2-OK
+                   CONTINUE
+                ELSE
+                   MOVE 'UGE0939'               TO CAA-COD-ERROR
+                   MOVE 'ERROR A HACER INSERT ' TO CAA-VAR1-ERROR
+                   MOVE 'UGDTREL COD: '         TO CAA-VAR2-ERROR(1:14)
+                   MOVE DB2-RETURN-CDE          TO CAA-VAR2-ERROR(16:)
+                   PERFORM 999999-ABEND-DB2
+                END-IF.
+      ******************************************************************
+      *                       300000-FINAL                             *
+      *   DEVUELVE EL CONTROL AL SCP                                   *
+      ******************************************************************
+       300000-FINAL.
+      *
+              IF CAA-COD-ERROR NOT EQUAL SPACES AND LOW-VALUES
+                 MOVE '+TOT'                     TO W-DC
+                 MOVE CAA-TERMINAL               TO W-SUFIJO-TS
+                 PERFORM 241-BORRAR-TS
+                 MOVE '+DC2'                     TO W-DC
+                 MOVE CAA-TERMINAL               TO W-SUFIJO-TS
+                 PERFORM 241-BORRAR-TS
+                 MOVE '+QH1'                     TO W-DC
+                 MOVE CAA-TERMINAL               TO W-SUFIJO-TS
+                 PERFORM 241-BORRAR-TS
+                 MOVE '+QH2'                     TO W-DC
+                 MOVE CAA-TERMINAL               TO W-SUFIJO-TS
+                 PERFORM 241-BORRAR-TS
+              END-IF
+      *
+              PERFORM DATOS-ANALITICA
+      *
+              EXEC CICS
+                RETURN
+              END-EXEC.
+      *
+      ******************************************************************
+      *                     DATOS-ANALITICA.                           *
+      ******************************************************************
+       DATOS-ANALITICA.
+      *
+             MOVE MAE-ENOTIT                     TO WS-ENOTIT
+             MOVE WS-ENTIT                       TO CAA-ENTIDAD-ANA
+             MOVE WS-CENTIT                      TO CAA-CENTRO-ANA
+             MOVE MAE-CLIENTE                    TO CAA-CLIENTE-ANA
+             IF MAE-CAPSOLI  NOT NUMERIC
+                MOVE  0                          TO MAE-CAPSOLI
+             END-IF
+             MOVE MAE-CAPSOLI                    TO CAA-IMPORTE-ANA
+             MOVE MAE-SUBPRO                     TO CAA-SUBPROD-ANA
+             MOVE SPACES                         TO CAA-FINALID-ANA
+             MOVE SPACES                         TO CAA-GARANTIA-ANA
+             MOVE MAE-PRODUCTO                   TO CAA-SUB-CLASIF
+             MOVE SPACES                         TO CAA-DATOS-APLIC.
+      *
+      ******************************************************************
+      *                  COMPROBAR-CICS-3270-TF                        *
+      *   - SI ESTAN EJECUTANDO LA TRANSACCION EN CICS DE EXPLOTACION  *
+      *     Y EN 3270 NO LO PERMITIMOS. ENVIAMOS UN ERROR.             *
+      *                                                                *
+      *   - PARA COMPROBAR EL CICS EN EL QUE ESTAN TRABAJANDO ACCEDO   *
+      *     A LA TABLA SWA (CONTROL DE SESION) MEDIANTE EL MODULO      *
+      *     QC2CSQ1. EL PROPIO MODULO ABENDA CUANDO NO SE ENCUENTRE    *
+      *     NINGUN REGISTRO EN LA TABLA.                               *
+      ******************************************************************
+       COMPROBAR-CICS-3270-TF.
+      *
+           INITIALIZE                               QCECSQ1
+           MOVE 'SWA'                            TO SQ1-TABLA
+      *
+           CALL BBVA-QC2CSQ1
+                            USING DFHEIBLK DFHCOMMAREA QCECSQ1
+      *
+           EVALUATE TRUE
+              WHEN (SQ1-CODERR EQUAL SPACES)
+                 SET ADDRESS OF QGECSWAM         TO SQ1-PTR-TAB
+      *
+                 IF SWAM-88-ENTORNO-PROD  AND CAA-88-TIPO-TERM-3270
+                    SET ES-T3270                 TO TRUE
+                 END-IF
+              WHEN OTHER
+                 MOVE 'ERROR LINK QC2CSQ1'       TO CAA-VAR1-ERROR
+                 PERFORM 999999-ABEND-CICS
+           END-EVALUATE.
+      *
+      ******************************************************************
+      *                 999999-ABEND-DB2                               *
+      *  SE ABENDA LA TAREA CUANDO SE PRODUCE UN ERROR DB2 NO DESEADO  *
+      ******************************************************************
+       999999-ABEND-DB2.
+      *
+              MOVE '+TOT'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+DC2'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+QH1'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+QH2'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              INITIALIZE                            QGECABC
+              MOVE 'S'                           TO ABC-ABEND
+              MOVE 'UG2CG039'                    TO ABC-PROGRAMA
+              MOVE CAA-VAR1-ERROR                TO ABC-OBJETO-ERROR
+              MOVE CAA-VAR2-ERROR                TO ABC-REFERENCIA
+              MOVE SQLCODE                       TO ABC-SQLCODE
+              MOVE SQLERRM                       TO ABC-SQLERRM
+      *
+              EXEC CICS
+                 LINK PROGRAM ('QG1CABC')
+                 COMMAREA (QGECABC)
+              END-EXEC.
+      *
+      ******************************************************************
+      *                 999999-ABEND-CICS                              *
+      *    SE ABENDA LA TAREA CUANDO SE PRODUCE UN ERROR CICS NO       *
+      *    DESEABLE                                                    *
+      ******************************************************************
+       999999-ABEND-CICS.
+      *
+              MOVE '+TOT'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+DC2'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+QH1'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+              MOVE '+QH2'                        TO W-DC
+              MOVE CAA-TERMINAL                  TO W-SUFIJO-TS
+              PERFORM 241-BORRAR-TS
+      *
+              MOVE 'S'                           TO ABC-ABEND
+              MOVE 'UG2CG039'                    TO ABC-PROGRAMA
+              MOVE EIBFN                         TO ABC-EIBFN
+              MOVE EIBRSRCE                      TO ABC-EIBRSRCE
+              MOVE EIBRCODE                      TO ABC-EIBRCODE
+              MOVE EIBRESP                       TO ABC-EIBRESP1
+              MOVE EIBRESP2                      TO ABC-EIBRESP2
+              MOVE CAA-VAR1-ERROR                TO ABC-REFERENCIA
+      *
+              EXEC CICS
+                 LINK PROGRAM ('QG1CABC')
+                 COMMAREA (QGECABC)
+              END-EXEC.
+      *
+      ******************************************************************
+      *                   999991-REBOSAMIENTO
+      ******************************************************************
+       999991-REBOSAMIENTO.                                             00217200
+      *                                                                 00217300
+              MOVE 'UGE0297'                 TO CAA-COD-ERROR           00217400
+              MOVE 'ERROR EN OPERACIONES'    TO CAA-VAR1-ERROR          00217500
+              PERFORM  300000-FINAL.                                    00217600
+      *
+      ******************************************************************
+      *                 241-BORRAR-TS                                  *
+      *  - SE BORRA LA POSIBLE COLA TS +DC1XXXX QUE PUDIESE EXISTIR    *
+      ******************************************************************
+       241-BORRAR-TS.
+
+           EXEC CICS
+              DELETEQ TS
+              QUEUE(W-TS)
+              NOHANDLE
+           END-EXEC.
+
+           EVALUATE EIBRESP
+              WHEN (DFHRESP(NORMAL))
+                 CONTINUE
+              WHEN (DFHRESP(QIDERR))
+                 CONTINUE
+              WHEN OTHER
+                 MOVE 'BORRAR TS'                TO ABC-REFERENCIA
+                 PERFORM 999999-ABEND-CICS
+           END-EVALUATE.
+      ******************************************************************
+      *               777777-WRITEQ.                                   *
+      *      ESCRITURA DE LA COLA TS +DC1XXXX (XXXX = EIBTRMID).       *
+      *      (SOLO EXISTE UNA COLA TS)                                 *
+      ******************************************************************
+       777777-WRITEQ.
+
+              ADD +8            TO W-LONG-TS
+              EXEC CICS
+                 WRITEQ TS QUEUE(W-TS)
+                 FROM(W-CONTENIDO-TS)
+                 LENGTH(W-LONG-TS)
+                 MAIN NOHANDLE
+              END-EXEC.
+
+              IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+                 PERFORM 999999-ABEND-CICS
+              END-IF.
+      *
+      *COL02-I
+      ******************************************************************
+      *                    252000-BUSCAR-UGDTT37                       *
+      * BUSCA LA EXISTENCIA DE ELEMENTOS LA TABLA UGDTT37 Y OBTIENE    *
+      * DATOS                                                          *
+      ******************************************************************
+       252000-BUSCAR-UGDTT37.
+      *
+           EXEC SQL
+               SELECT
+                      SECCION ,
+                      ELEMENTO,
+                      RESTO
+                 INTO
+                      :T37-SECCION ,
+                      :T37-ELEMENTO,
+                      :T37-RESTO
+                  FROM UGDTT37
+                 WHERE SECCION    = :T37-SECCION
+                   AND ELEMENTO   = :T37-ELEMENTO
+           END-EXEC.
+      *
+           MOVE SQLCODE                    TO DB2-RETURN-CDE
+      *
+           IF DB2-OK
+              CONTINUE
+           ELSE
+              IF DB2-NOTFND
+                 MOVE SPACES               TO T37-RESTO
+              ELSE
+                 IF DB2-RECATR1 OR DB2-RECATR2
+                    MOVE 'UGE0939'              TO CAA-COD-ERROR
+                    MOVE 'RECURSO ATRAPADO '    TO CAA-VAR1-ERROR
+                    MOVE 'UGDTT37INTENTE LUEGO' TO CAA-VAR2-ERROR
+                    PERFORM 300000-FINAL
+                 ELSE
+                    MOVE 'UGDTT37'              TO CAA-VAR1-ERROR
+                    MOVE 'UGE0939'              TO CAA-COD-ERROR
+                    MOVE 'ERROR UGDTT37'        TO CAA-VAR1-ERROR
+                    MOVE 'SQLCODE '             TO CAA-VAR2-ERROR(1:8)
+                    MOVE DB2-RETURN-CDE         TO CAA-VAR2-ERROR(9:)
+                    PERFORM 300000-FINAL
+                 END-IF
+              END-IF
+           END-IF.
+      *
+      ******************************************************************
+      *LJSM-I
+      ******************************************************************
+      * DETERMINA LA METODOLOGIA DE LIQUIDACION APLICABLE.             *
+      * SI RETORNA 00, COT-DIASCAL TOMA LA LETRA PARAMETRIZADA.        *
+      * SI RETORNA 30, SE CONSERVA COMPLETAMENTE LA LOGICA LEGACY.     *
+      ******************************************************************
+       9000-VALIDAR-METODO-LIQ.
+
+           MOVE SPACES                      TO URWCMLI-REG
+           SET SW-NO-MLI-APLICA            TO TRUE
+
+           IF MAE-UGYEMCED = 'S'
+              MOVE 'L'                      TO MLI-TIPO-CARTERA
+           ELSE
+              MOVE MAE-IND-MARCA4           TO MLI-TIPO-CARTERA
+           END-IF
+
+           MOVE MAE-FESOLIC                 TO MLI-FEC-DESEMBOLSO
+           MOVE MAE-SUBPRO                  TO MLI-SUBPRODUCTO
+
+           CALL BBVA-UR9CMLI0 USING WS-URWCMLI
+
+           EVALUATE MLI-CODRETORNO
+              WHEN '00'
+                 SET SW-SI-MLI-APLICA       TO TRUE
+              WHEN '30'
+                 SET SW-NO-MLI-APLICA       TO TRUE
+              WHEN OTHER
+                 MOVE 'UGE0939'              TO CAA-COD-ERROR
+                 MOVE 'UR9CMLI0'             TO CAA-VAR1-ERROR
+                 MOVE MLI-CODRETORNO         TO CAA-VAR2-ERROR
+                 PERFORM 300000-FINAL
+           END-EVALUATE.
+      *LJSM-J

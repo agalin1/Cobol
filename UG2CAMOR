@@ -1,0 +1,3771 @@
+﻿      ******************************************************************
+      * UG2CAMOR RUTINA QUE REALIZA LA AMORTIZACION DE UN SUBPRODUCTO  *
+      *          PARA VIVIENDON LINE                                   *
+      ******************************************************************
+      *                                                                *
+      ******************************************************************
+      *        I D E N T I F I C A T I O N    D I V I S I O N          *
+      ******************************************************************
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. UG2CAMOR.
+       AUTHOR. NOVATEC SOLUTIONS - EZMR.
+       DATE-WRITTEN. ENERO DE 2017.
+      ******************************************************************
+      *                    LOG DE MODIFICACIONES                       *
+      ******************************************************************
+      *  USER    FECHA                DESCRIPCION DEL CAMBIO           *
+      * ******* ******** ********************************************* *
+      * COL01   23/09/19 GP16929 - GESI COL472319S006734               *
+      * TEAM             SE AGREGA IVA A CALCULO INCENDIO Y TERREMOTO. *
+      * SCRUM            SE AJUSTA PARA QUE NO CONSULTE TAE EN TABLA   *
+      * BLIZZARD         UGDTLQS SINO LA TAE PISO EN UGDTPRO Y SE      *
+      *                  INFORMA TOTAL SEGUROS VIDA Y TERREMETO        *
+      *                  DISCRMINADOS.                                 *
+      * ------- -------- --------------------------------------------- *
+      * COL02   29/10/19                                               *
+      * TEAM             SE AGREGA CAMPO PARA REALIZAR EL MOVIMIENTO   *
+      * SCRUM            DE EL VALOR DE LA OPCION DE COMPRA            *
+      * BLIZZARD                                                       *
+      * GP: 16929        GESI: GP-2-16929                              *
+      * ------- -------- --------------------------------------------- *
+      * COL03   26/12/19 SE MODIFICA PARA QUE PERMITA LA SIMULACION    *
+      * TEAM             HASTA 30 ANOS. PERMITE EL ENVIO DE LINEA Y    *
+      * SCRUM            SUBLINEA DE CREDITO PARA REALIZAR LA SIMULA   *
+      * BLIZZARD         CION.                                         *
+      * CE57197                                                        *
+      * GP: 16929        HISTORIA-USUARIO: CCSS-83                     *
+      * ------- -------- --------------------------------------------- *
+      * COL04   10/11/20   SE MODIFICA PARA REALIZAR LA SIMULACION CON *
+      * GP17677  CCSS-4474 LA PARAMETRIA DE CADA CONSTRUCTORA          *
+      * C808819  JOSEPH ROJAS
+      ******************************************************************
+      * COL05   23/03/21     SE AJUSTA PARA TRAER LA TASA TECHO PARA   *
+      * JOSEPH ROJAS IN-1483 SIMULAR CONSTRUCTORAS CORRECTAMENTE       *
+      ******************************************************************
+      * COL06   14/06/21   SE MODIFICA PARA REALIZAR LA SIMULACION CON *
+      * GP17850  CCSS-7463 LA PARAMETRIA DE VIVIENDA DIGITAL UNICAMENTE*
+      * C808819  JOSEPH ROJAS                                          *
+      ******************************************************************
+      * COL07   15/01/22   SE MODIFICA PARA REALIZAR LA SIMULACION DE  *
+      * COLWSPREST-597     LA OPCION DE COMPRA CORRECTAMENTE           *
+      * C808819  JOSEPH ROJAS                                          *
+      ******************************************************************
+      * COL08   26/12/23   SE AJUSTA PARA INCLUIR BUSQUEDA A LA TABLA  *
+      * C810908            UGDTLQS CON CODCONLI = 198 TASA PARA        *
+      * DCP                SIMULACION DE VIV.DIG                       *
+      * COLWPREST-15556 INTEGRACI├│N VIS - NO VIS                       *
+      ******************************************************************
+      * COL09   10-04-2024 SE AJUSTA PARA VALIDAR Y CALCULAR INTERESES *
+      * C810908            EN DIAS NATURALES.                          *
+      * DCP                COLWSPREST-25273 GTIA - INTEGRACI├│N SUBPRO  *
+      *                    DUCTOS VIS/NO VIS LEASING REMODELACI├│N      *
+      ******************************************************************
+      * COL10   15-04-2024 SE AJUSTA PARA INCLUIR PORTAFOLIO TASA      *
+      * C810908            BONIFICACION.                               *
+      * DCP                SOBRE TASA PONDERADA PARA 1ERA SIMULACION   *
+      *                    O SOBRE TASA PRICING PARA 2DA SIMULACION    *
+      * COLWSPREST-25919 OPEN MARKET VIVIENDA DIGITAL                  *
+      *                  IMPLEMENTACI├│N PORTAFOLIZACI├│N EN SIMULADOR   *
+      ******************************************************************
+      * COL11   13-06-2024 SE REEMPLAZA LA RUTINA UG9CTIR0 POR LA      *
+      * MATRIX - T033306   RUTINA UR2CTIR1. RUTINA QUE YA CALCULA EL   *
+      * COLONEPRE1-51      VALOR DE VTU                                *
+      ******************************************************************
+      * COL12   28-09-2026 SE AJUSTA PARA DETERMINAR MEDIANTE UR9CMLI0 *
+      * BBVA C808648       LA METODOLOGIA DE LIQUIDACION APLICABLE Y   *
+      * JIRA COLONEPRE1-XXXX PROPAGAR DIASCAL A UR1CCOT0, CONSERVANDO  *
+      * SDA XXX            LA LOGICA LEGACY CUANDO NO APLIQUE.         *
+      ******************************************************************
+      *                     ENVIRONMENT DIVISION                       *
+      ******************************************************************
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+      ******************************************************************
+      *                        DATA DIVISION                           *
+      ******************************************************************
+       DATA DIVISION.
+
+      ******************************************************************
+      *                  WORKING-STORAGE SECTION                       *
+      ******************************************************************
+       WORKING-STORAGE SECTION.
+      ******************************************************************
+      *                        COPY SQLCA                              *
+      ******************************************************************
+      *
+           EXEC SQL
+              INCLUDE SQLCA
+           END-EXEC.
+      *
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGDTT37                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTT37
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCT37
+           END-EXEC.
+      *
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGDTPRO                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTPRO
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCPRO
+           END-EXEC.
+      *
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGDTADS                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTADS
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCADS
+           END-EXEC.
+
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGDTLQS                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTLQS
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCLQS
+           END-EXEC.
+      *
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGDTAGR                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTAGR
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCAGR
+           END-EXEC.
+
+      *COL02-INI
+      ******************************************************************
+      *    WORKAS DE LA TABLA DE DB2: UGTCRFI                          *
+      ******************************************************************
+      *
+           EXEC SQL
+             INCLUDE UGGTRFI
+           END-EXEC.
+      *
+           EXEC SQL
+             INCLUDE UGTCRFI
+           END-EXEC.
+      *COL02-FIN
+      ******************************************************************
+      *   COPY DE LAS TABLAS Y PROCESOS DE CONVERSION DE UVR A PESOS   *
+      *   Y VICEVERSA.                                                 *
+      ******************************************************************
+       COPY URWCUVR.
+      *
+       01 URWCCVT-AREA.
+          COPY URWCCVT.
+      ******************************************************************
+      * COPY DE LA RUTINA DE DESPLAZAMIENTO DE FECHAS POR PERIODICIDAD *
+      ******************************************************************
+       01  DFP-NIVEL-01.
+       COPY URWCDFP.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA DE CALCULO DE CUOTAS                         *
+      ******************************************************************
+       01  COT-NIVEL-01.
+       COPY URWCCOT.
+      ******************************************************************
+      * COPY PARA EL CALCULO DE CUOTAS ESPECIALES MAY97                *
+      ******************************************************************
+       COPY URWCCUA.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA DE CALCULO DE INTERESES                      *
+      ******************************************************************
+       COPY URWCFIN.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA QUE TRAE DIFERENTES TIPOS DE FECHA           *
+      ******************************************************************
+       COPY URWCDAT.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA DE CALCULO DE DIFERENCIA DE FECHAS EN DIAS   *
+      * NATURALES                                                      *
+      ******************************************************************
+       01 TCWC0750-AREA.
+       COPY TCWC0750.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA DE CALCULO DE LA CUOTA SIGUIENTE             *
+      ******************************************************************
+       COPY UGWCCO2.
+      *
+      ******************************************************************
+      * COPY DE LA RUTINA QUE TRAE COEFICIENTES DE CUOTA               *
+      ******************************************************************
+       01  URECNPE-01.
+       COPY URWCNPE.
+      *
+      *----------------------------------------------------------------*
+      * COPY PARA LLAMAR LA RUTINA DE SEGUROS                          *
+      *----------------------------------------------------------------*
+       01 ICWC101.
+          COPY ICWC101.
+      *
+      ******************************************************************
+      *          RUTINA DE CALCULO DE LA TASA INTERNA DE RETORNO       *
+      ******************************************************************
+       COPY UGWCTIR0.
+      *
+      ******************************************************************
+      *       WORKA DE CAMPOS CONSTANTES Y LITERALES                   *
+      ******************************************************************
+      *
+      *    EXEC SQL
+      *        INCLUDE UEWCCTS
+      *    END-EXEC.
+           COPY UEWCCTE.
+      *
+      ******************************************************************
+      *       WORKA DE ATRIBUTOS DE LOS CAMPOS DE PANTALLA             *
+      ******************************************************************
+      *
+       COPY DFHBMSCA.
+      *
+      ******************************************************************
+      *             COPY DE LA COLA TS CNTRACE                         *
+      ******************************************************************
+       COPY CNWCTRC0.
+       01 WSV-LONGITUD-CNTRACE            PIC S9(4) COMP.
+      *COL11-I
+      *================================================================*
+      *    COPY DE RUT CALCULO DE TIR1
+      *================================================================*
+       01 UGWCTIR1-01.
+          COPY UGWCTIR1.
+      *COL11-F
+      *
+      ******************************************************************
+      *            WORKA DE CAMPOS VARIABLES Y AUXILIARES              *
+      ******************************************************************
+      *
+       01 WS-VARIABLES.
+          05 WS-TASATIR                         PIC 9(2)V9(5).
+          05 WS-TASA-REDOND                     PIC 9(2)V9(5).
+          05 WS-TASA-REDOND1                    PIC 9(2)V9(5).
+          05 WS-TASA-REDOND2                    PIC 9(2)V9(5).
+          05 WS-CALTIR                          PIC 9(2)V9(5).
+          05 WS-PORC-INCEN.
+            10 WS-PORC-ENT                      PIC 9(2).
+            10 WS-PORC-DEC                      PIC 9(5).
+          05 WS-PORCIND REDEFINES WS-PORC-INCEN PIC 9(2)V9(5).
+          05 WS-IND                             PIC 9(4).
+          05 WS-MES-COB                         PIC 9(4).
+          05 WS-PORC-VTU.
+            10 WS-VTU-ENT                      PIC 9(2).
+            10 WS-VTU-DEC                      PIC 9(5).
+          05 WS-PORCVTU REDEFINES WS-PORC-VTU PIC 9(2)V9(5).
+
+          05 WS-NUMERO-3                        PIC S9(4)V USAGE COMP-3.
+          05 WS-ANNO                            PIC S9(2)V USAGE COMP-3
+                                                           VALUE ZEROS.
+          05 WS-PERIODOS                        PIC 9(2).
+          05 WS-LIMITE                          PIC 9(2).
+          05 WS-SEG-INCEND                      PIC S9(13)V9(5) COMP-3.
+          05 WS-ACC-CAPINIR                     PIC S9(13)V9(5) COMP-3.
+          05 WS-ACC-INTINIR                     PIC S9(13)V9(5) COMP-3.
+          05 WS-ACC-PRISEGU                     PIC S9(13)V9(5) COMP-3.
+          05 WS-SALDO-INIC                      PIC S9(13)V9(5) COMP-3.
+
+          05 WS-INTERES-1                       PIC S9(13)V9(5) COMP-3.
+          05 WS-GASTOS-1X                       PIC S9(13)V9(5) COMP-3.
+          05 WS-CAPITAL-1                       PIC S9(13)V9(5) COMP-3.
+          05 WS-RECIBO-1                        PIC S9(13)V9(5) COMP-3.
+          05 WS-SUBVENCION-1                    PIC S9(13)V9(5) COMP-3.
+          05 WS-INT-LEASING                     PIC 9(13)V99.
+          05 WS-AJUSTE-DIAS                     PIC S9(5)      COMP-3.
+          05 WS-INTERES-AUX                     PIC S9(13)V9(5) COMP-3.
+          05 WS-INTERES-AJUSTE                  PIC S9(13)V9(5) COMP-3.
+          05 WS-INTERES-CUOTA                   PIC S9(13)V9(5) COMP-3.
+          05 WS-INTERES-TOTAL                   PIC S9(13)V9(5) COMP-3.
+          05 WS-TASA-EFECTIVA-F                 PIC S9(2)V9(5) COMP-3
+                                                               VALUE +0.
+          05 WS-TASA-NOMINAL-F                  PIC S9(2)V9(5) COMP-3
+                                                              VALUE +0.
+          05 WS-INTERES-ACUM                    PIC S9(13)V9(5) COMP-3.
+          05 WS-CAPITAL                         PIC S9(13)V9(5) COMP-3.
+          05 WS-INTERES                         PIC S9(2)V9(5).
+          05 WS-SALDO-VIVO                      PIC S9(13)V9(5) COMP-3.
+          05 WS-SALDO-1                         PIC S9(13)V9(5) COMP-3.
+          05 WS-SALDO-2                         PIC S9(13)V9(5) COMP-3.
+          05 WS-SALDO-3                         PIC S9(13)V9(5) COMP-3.
+          05 WS-COBERTURA                       PIC S9(13)V9(5) COMP-3.
+          05 WS-SALDO-COB                       PIC S9(13)V9(5) COMP-3.
+          05 WS-CONT-LIQ                        PIC S9(5) COMP-3.
+          05 WS-CONT-LIN                        PIC S9(5) COMP-3.
+          05 WS-DIAS                            PIC S9(5) COMP-3.
+          05 WS-CUOTA-ACTUAL                    PIC S9(13)V9(5) COMP-3.
+          05 WS-NUM-PERIODOS                    PIC S9(5) COMP-3.
+          05 WS-CONT-AMOC                       PIC S9(5) COMP-3.
+          05 WS-PLA                             PIC S9(5) COMP-3.
+          05 WS-CONT-AMOF                       PIC S9(5) COMP-3.
+          05 WS-COT-AMO-ANNO                    PIC  9(5).
+          05 WS-RESTO                           PIC S9(13) COMP-3.
+          05 WS-INTERES-NOMINAL                 PIC 9(2)V9(5).
+          05 WS-VLR-IMPORTE                     PIC 9(13)V99.
+          05 WS-VR-OPCOMP                       PIC 9(13)V99.
+          05 WS-VR-TOTLES                       PIC 9(13)V99.
+          05 WS-PORC-OP                         PIC 9(02)V99.
+          05 WS-GASTOS-1                        PIC S9(13)V9(5) COMP-3.
+          05 WS-RAZON                           PIC S9(7)V9(5) COMP-3.
+          05 WS-LIMINF                          PIC 9(02).
+          05 WS-LIMSUP                          PIC 9(02).
+          05 WS-PLAZO                           PIC 9(03).
+          05 WS-PLAZOX REDEFINES WS-PLAZO       PIC X(03).
+          05 WS-NUM-MESES                       PIC 9(04).
+          05 WS-CODIGO-PERIODO-4.
+             10  WS-CODIGO-4                    PIC 9(01).
+             10  WS-PERIODO-4                   PIC 9(03).
+
+          05 WS-CODIGO-PERIODO.
+             10  WS-CODIGO                      PIC 9.
+             10  WS-PERIODO                     PIC 99.
+
+
+          05 WS-TASA-NOMINAL                    PIC 9(03)V9(04).
+
+          05 WS-TAE                             PIC 9(03)V9(05).
+          05 WS-TAEX REDEFINES WS-TAE           PIC X(08).
+          05 W-TASA                             PIC 9(03)V9(04).
+          05 WS-TASX REDEFINES W-TASA           PIC X(07).
+          05 WS-TIPOINT                         PIC 9(03)V9(04).
+          05 WS-TIPOINTX REDEFINES WS-TIPOINT   PIC X(07).
+          05 WS-PORTES                          PIC S9(5)V9(5) COMP-3.
+          05 WS-GASADM                          PIC S9(5)V9(5) COMP-3.
+          05 WS-PRDO-GRCIA                      PIC 9(02).
+          05 WS-UGCDIPAG                        PIC 9(2)  VALUE 0.
+          05 WS-TIPO-CAR                        PIC X(01).
+          05 WS-TAI                             PIC 9(03)V9(05).
+          05 WS-TAEI REDEFINES WS-TAI           PIC X(08).
+
+          05 WS-INT-CAPITALIZABLES              PIC X(01).
+          05 WS-CARENCIA                        PIC X(4).
+          05 WS-SUBCOLH                         PIC X(04).
+          05 WS-DIASCAL                         PIC X(01).
+          05 WS-FECOVALI                        PIC X(10).
+          05 WS-FECHA-LIQ                       PIC X(10).
+          05 WS-FECHA-AMO-ANT                   PIC X(10).
+          05 WS-FECHA-LIQ-ANT                   PIC X(10).
+          05 WS-FECHA-AMO-4                     PIC X(10).
+          05 WS-FECHA-LIQ-4                     PIC X(10).
+          05 WS-FECHA-1                         PIC X(10).
+          05 WS-FECHA-2                         PIC X(10).
+          05 WS-FECHA-FINAL                     PIC X(10).
+          05 WS-FECHA-SOLICITUD                 PIC X(10).
+          05 WS-FECHA-AMO                       PIC X(10).
+          05 AUX-AAAA-MM-DD.
+            10  AUX-AAAA                        PIC 9(4).
+            10  FILLER                          PIC X  VALUE '-'.
+            10  AUX-MM                          PIC 9(2).
+            10  FILLER                          PIC X  VALUE '-'.
+            10  AUX-DD                          PIC 9(2).
+          05 WS-AUX-DD-MM-AAAA.
+            10  WS-AUX-DD                       PIC 9(2).
+            10  WS-AUX-MM                       PIC 9(2).
+            10  WS-AUX-AAAA                     PIC 9(4).
+
+
+
+          05 WS-DG-PLAZO.
+            10 WS-DG-ANIO                      PIC 9(01).
+            10 WS-DG-PLZO                      PIC 9(03).
+          05 WS-MASCARA-OPC                    PIC ZZZ,ZZZ,ZZZ,ZZ9.99.
+          05 CAA-COD-ERROR                     PIC X(07).
+          05 CAA-VAR1-ERROR                    PIC X(20).
+          05 CAA-VAR2-ERROR                    PIC X(20).
+          05 WS-DATE-DB2.
+            10  WS-DATE-DB2-ANNO               PIC 9(4).
+            10  FILLER                         PIC X(1) VALUE '-'.
+            10  WS-DATE-DB2-MES                PIC 9(2).
+            10  FILLER                         PIC X(1) VALUE '-'.
+            10  WS-DATE-DB2-DIA                PIC 9(2).
+      *COL01-I
+          05 WS-PORC-IVA.
+            10 WS-IVA-ENT                      PIC 9(2).
+            10 WS-IVA-DEC                      PIC 9(2).
+          05 WS-PORCIVA REDEFINES WS-PORC-IVA  PIC 9(2)V9(2).
+          05 WS-TAE-PISO                       PIC 9(03)V9(05).
+          05 WS-TAEPISX REDEFINES WS-TAE-PISO  PIC X(08).
+      *COL10-I
+          05 WS-SUB-TAE-PISO                   PIC 9(03)V9(05).
+      *COL10-F
+      *COL01-F
+      *COL04-INI
+          05 WS-TAE-TECHO                      PIC 9(02)V9(05).
+          05 WS-TASA-ALFA                      PIC X(7).
+          05 WS-TASA-CONST                     REDEFINES WS-TASA-ALFA.
+             10 WS-TASA-CONST2                 PIC 9(02)V9(05).
+      *COL04-FIN
+      *COL08-I
+          05 WS-SUBPRO                         PIC X(04).
+      *COL08-F
+      *COL10-I
+          05 WS-TASA                           PIC 9(02)V9(05).
+      *COL10-F
+      *
+      ******************************************************************
+      *           DEFINICION DE SWITCHES Y OTRAS VARIABLES             *
+      ******************************************************************
+      *
+       01 SW-SWITCHES.
+
+         05 SW-LINEA                       PIC 9     VALUE 0.
+           88 SW-PRIMERA-LINEA                       VALUE 1.
+
+         05 SW-SUB-COBERTURA               PIC X(1)  VALUE 'N'.
+           88 SW-SI-SUB-COB                          VALUE 'S'.
+           88 SW-NO-SUB-COB                          VALUE 'N'.
+      *
+         05 SW-SUBPRO-LEASING              PIC  X(01) VALUE 'N'.
+           88 SI-SUBPRO-LEASING                       VALUE 'S'.
+           88 NO-SUBPRO-LEASING                       VALUE 'N'.
+
+      *
+         05  SW-ENCONTRE                   PIC X(01) VALUE SPACES.
+           88 SI-ENCONTRE                            VALUE 'S'.
+           88 NO-ENCONTRE                            VALUE 'N'.
+      *
+      *LJSM-I
+      * SWITCH NUEVA METODOLOGIA DE LIQUIDACION.
+         05 SW-MLI-APLICA              PIC X(01) VALUE 'N'.
+           88 SW-SI-MLI-APLICA        VALUE 'S'.
+           88 SW-NO-MLI-APLICA        VALUE 'N'.
+      *LJSM-J
+      *
+         05  WS-TIPO-CUOTA                PIC X.
+           88  WS-CUOTA-CAPITAL                      VALUE '2', '4',
+                                                           '6', '8',
+                                                           '0', 'A',
+                                                           'T', 'W',
+                                                           'G', 'C',
+                                                           'K','M'.
+           88  WS-CUOTA-CAPITAL-INTERES              VALUE '1', '3',
+                                                           '5', '7',
+                                                           '9', 'B',
+                                                           'R', 'P',
+                                                           'D', 'E',
+                                                           'I', 'L'.
+
+       01 DB2-RETURN-CDE                    PIC S9(9) COMP.
+          88 DB2-OK                                   VALUE +0.
+          88 DB2-NOTFND                               VALUE +100.
+          88 DB2-DUPREC                               VALUE -803.
+          88 DB2-RECATR1                              VALUE -904.       07030100
+          88 DB2-RECATR2                              VALUE -911.       07030200
+      *
+      ******************************************************************
+      *                           CONSTANTES                           *
+      ******************************************************************
+      *
+       01 W-CONSTANTES.
+          05 CTE-DOCE                    PIC 9(2) VALUE 12.
+          05 CTE-DIEZ                    PIC 9(2) VALUE 10.
+          05 CTE-COB                     PIC 9(2) VALUE 84.
+          05 CTE-ALFA-1                  PIC X(1)   VALUE '1'.
+          05 CTE-ALFA-6                  PIC X(1)   VALUE '6'.
+          05 CTE-ALFA-7                  PIC X(1)   VALUE '7'.
+          05 CTE-ALFA-8                  PIC X(1)   VALUE '8'.
+          05 CTE-CON-ALFA-G              PIC X(1)   VALUE 'G'.
+          05 CTE-B                       PIC X(01) VALUE 'B'.
+          05 CTE-C                       PIC X(01) VALUE 'C'.
+          05 CTE-E                       PIC X(01) VALUE 'E'.
+          05 CTE-N                       PIC X(01) VALUE 'N'.
+          05 CTE-P                       PIC X(01) VALUE 'P'.
+          05 CTE-R                       PIC X(01) VALUE 'R'.
+          05 CTE-T                       PIC X(01) VALUE 'T'.
+          05 CTE-X                       PIC X(01) VALUE 'X'.
+          05 CTE-PRODUCTO                PIC X(02) VALUE '96'.
+          05 CTE-10                      PIC X(02) VALUE '10'.
+          05 CTE-50                      PIC X(02) VALUE '50'.
+          05 CTE-90                      PIC X(02) VALUE '90'.
+          05 CTE-99                      PIC X(02) VALUE '99'.
+          05 CTE-101                     PIC X(03) VALUE '101'.
+          05 CTE-402                     PIC X(03) VALUE '402'.
+          05 CTE-801                     PIC X(03) VALUE '801'.
+          05 CTE-0550                    PIC X(04) VALUE '0550'.
+          05 CTE-1021                    PIC X(04) VALUE '1021'.
+          05 CTE-1250                    PIC X(04) VALUE '1250'.
+          05 CTE-9649                    PIC X(04) VALUE '9649'.
+          05 CTE-UGE0000                 PIC X(07) VALUE 'UGE0000'.
+          05 CTE-UGE1141                 PIC X(07) VALUE 'UGE1141'.
+          05 CTE-UGE0218                 PIC X(07) VALUE 'UGE0218'.
+          05 CTE-UGE2140                 PIC X(07) VALUE 'UGE2140'.
+          05 CTE-UGE0146                 PIC X(07) VALUE 'UGE0146'.
+          05 CTE-UGE3424                 PIC X(07) VALUE 'UGE3424'.
+          05 CTE-UGE3838                 PIC X(07) VALUE 'UGE3838'.
+          05 CTE-UR8CDAT0                PIC X(08) VALUE 'UR8CDAT0'.
+          05 CTE-UR8CFIN0                PIC X(08) VALUE 'UR8CFIN0'.
+      *LJSM-I
+          05 CTE-UR9CMLI0                PIC X(08) VALUE 'UR9CMLI0'.
+      *LJSM-J
+          05 CTE-IC9C1001                PIC X(08) VALUE 'IC9C1001'.
+          05 CTE-IC9C1111                PIC X(08) VALUE 'IC9C1111'.
+      *COL11-I
+          05 BBVA-UR2CTIR1 PIC X(8) VALUE 'UR2CTIR1'.
+      *COL11-F
+      *COL01-I
+          05 CTE-0821                    PIC X(04) VALUE '0821'.
+          05 CTE-5099                    PIC X(04) VALUE '5099'.
+          05 CTE-VDGN4-3                 PIC X(07) VALUE 'VDGN4-3'.
+      *COL01-F
+
+      *COL02-INI
+          05 CTE-IVA                     PIC X(03) VALUE 'IVA'.
+      *COL02-FIN
+      *COL04-INI
+          05 CTE-H                       PIC X(1) VALUE 'H'.
+          05 CTE-L                       PIC X(1) VALUE 'L'.
+          05 CTE-7128                    PIC X(4) VALUE '7128'.
+      *COL04-FIN
+      *COL05-INI
+          05 CTE-FECH-FIN                PIC X(10) VALUE '9999-12-31'.
+          05 CTE-20                      PIC X(2)  VALUE '20'.
+      *COL05-FIN
+      *COL06-I
+          05 CTE-FEC-FIN-VID             PIC X(10) VALUE '2999-12-31'.
+          05 CTE-HIPO-VID                PIC X(06) VALUE '5821-T'.
+          05 CTE-COMC-VID                PIC X(06) VALUE '5886-T'.
+          05 CTE-REMO-VID                PIC X(06) VALUE '5691-T'.
+          05 CTE-LEAS-VID                PIC X(06) VALUE '5824-T'.
+          05 CTE-5821                    PIC X(04) VALUE '5821'.
+          05 CTE-5886                    PIC X(04) VALUE '5886'.
+          05 CTE-5691                    PIC X(04) VALUE '5691'.
+          05 CTE-5824                    PIC X(04) VALUE '5824'.
+      *COL06-F
+      *COL08-I
+          05 CTE-198                     PIC X(03) VALUE '198'.
+      *COL08-F
+
+
+
+      ******************************************************************
+      *LJSM-I
+      * AREA DE COMUNICACION PARA DETERMINAR METODOLOGIA.
+       01  WS-URWCMLI.
+           COPY URWCMLI.
+      *LJSM-J
+      ******************************************************************
+      *              MARCA DE FINAL DE WORKING PARA EL END             *
+      ******************************************************************
+      *
+       01  LT-FINAL-DE-WS.
+           05  LT-FINAL-DE-WS            PIC X(41) VALUE
+               '***** FINAL WORKING STORAGE UG2CAMOR ****'.
+      *
+      ******************************************************************
+      *                   L I N K A G E   S E C T I O N                *
+      ******************************************************************
+      *
+       LINKAGE SECTION.
+      *
+       01  DFHCOMMAREA.
+      *
+        COPY UGNCTABA.
+      ******************************************************************
+      *                                                                *
+      *               P R O C E D U R E   D I V I S I O N              *
+      *                                                                *
+      ******************************************************************
+      *
+       PROCEDURE DIVISION.
+      *
+           PERFORM 100-INICIO
+           PERFORM 200-PROCESO
+           PERFORM 300-FINAL.
+      *
+      ******************************************************************
+      *                                                                *
+      *                       100-INICIO                               *
+      ******************************************************************
+       100-INICIO.
+
+           INITIALIZE CNWCTRC0
+           MOVE UGNCTABA-CANAL              TO WTRC0-CANAL
+           MOVE UGNCTABA-FUNCION            TO WTRC0-FUNCION
+           MOVE UGNCTABA-TERMINAL           TO WTRC0-TERMINAL
+           MOVE UGNCTABA-FUNCION            TO WTRC0-TRANSACCION
+           MOVE UGNCTABA-FUNCION            TO WTRC0-PROGRAMA
+      *
+           MOVE '100-INICIO          '      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 100 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+            EXEC CICS
+              IGNORE CONDITION ERROR
+            END-EXEC
+
+            IF EIBRESP NOT EQUAL DFHRESP(NORMAL)
+              MOVE CTE-99             TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000        TO UGNCTABA-COD-ERROR
+              MOVE '1000-INICIO-PROG' TO UGNCTABA-VAR1-ERROR
+              MOVE 'IGNORE COND'      TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+            END-IF
+
+            PERFORM 110-INICIA-VARIABLES
+            PERFORM 120-VALIDA-ENTRADA
+            IF UGNCTABA-OPCION EQUAL CTE-T
+      *COL01-I
+              PERFORM 125-CNS-IVAVIG
+      *COL01-F
+              PERFORM 130-CNS-PORC-INCEN
+            END-IF
+      *
+            MOVE '100-INICIO          '      TO WTRC0-PARRAFO
+            MOVE 'TERMINA PERFORM 100 '      TO WTRC0-DESCRIPCION
+            MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                  110-INICIA-VARIABLES                          *
+      * SE INICIALIZAN VARIABLES DE TRABAJO                            *
+      ******************************************************************
+       110-INICIA-VARIABLES.
+      *
+           MOVE '110-INICIA-VARIABLES'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 11  '       TO WTRC0-DESCRIPCION
+           MOVE SPACES                       TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE    WS-VARIABLES
+                         SW-SWITCHES
+                         URWCCVT-AREA
+                         DFP-NIVEL-01
+                         COT-NIVEL-01
+                         URWCDAT
+                         TCWC0750-AREA
+                         URWCCUA
+                         URECNPE-01
+                         ICWC101
+                         UGNCTABA-RETORNO
+                         TIR-UGWCTIR0
+      *
+           MOVE 1                           TO SW-LINEA
+           MOVE 'N'                         TO CUA-SIMULACION
+           MOVE ZERO                        TO WS-LIMITE
+           MOVE '00'                        TO UGNCTABA-COD-RETURN
+      *
+           COMPUTE WS-MES-COB = (UGNCTABA-VIG-COB + UGNCTABA-AMP-COB)
+                                 * 12
+           MOVE '110-INICIA-VARIABLES'      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 11  '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                  120-VALIDA-ENTRADA                            *
+      * SE VALIDAN QUE LOS CAMPOS DE ENTRADAS SEAN INFORMADOS          *
+      ******************************************************************
+       120-VALIDA-ENTRADA.
+      *
+           MOVE '120-VALIDA-ENTRADA'      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 120'     TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           IF UGNCTABA-OPCION EQUAL SPACES OR LOW-VALUES
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-OPCION'      TO WTRC0-DESCRIPCION
+              MOVE 'NO INFORMADA'         TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'CAMPO OPCION'         TO UGNCTABA-VAR1-ERROR
+              MOVE 'NO INFORMADO'         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-OPCION NOT EQUAL CTE-T AND CTE-C
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-OPCION'      TO WTRC0-DESCRIPCION
+              MOVE 'NO VALIDO'            TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'CAMPO OPCION'         TO UGNCTABA-VAR1-ERROR
+              MOVE 'DEBER SER T, N.'      TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-OPCION EQUAL CTE-T
+            IF UGNCTABA-TIP-CTE EQUAL SPACES OR LOW-VALUES
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-TIP-CTE'     TO WTRC0-DESCRIPCION
+              MOVE 'NO INFORMADO'         TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'TIPO DE CLIENTE'      TO UGNCTABA-VAR1-ERROR
+              MOVE 'NO INFORMADO'         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+            END-IF
+           END-IF
+      *
+           IF UGNCTABA-SUBPRO  EQUAL SPACES OR LOW-VALUES
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-SUBPRO'       TO WTRC0-DESCRIPCION
+              MOVE 'NO INFORMADO'         TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'SUBPRODUCTO'          TO UGNCTABA-VAR1-ERROR
+              MOVE 'NO INFORMADO'         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-PLAZO IS NOT NUMERIC
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-PLAZO'       TO WTRC0-DESCRIPCION
+              MOVE 'NO VALIDO'            TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'PLAZO NO VALIDO'      TO UGNCTABA-VAR1-ERROR
+              MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-VRVIVIEN IS NOT NUMERIC
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-VRVIVIEN'    TO WTRC0-DESCRIPCION
+              MOVE 'NO VALIDO'            TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'VALOR VIVIENDA'       TO UGNCTABA-VAR1-ERROR
+              MOVE 'NO VALIDO'            TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-VRVIVIEN <= ZEROS
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-VRVIVIEN'    TO WTRC0-DESCRIPCION
+              MOVE 'MENOR QUE CERO'       TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'VALOR VIVIENDA'       TO UGNCTABA-VAR1-ERROR
+              MOVE 'DEBE SER MAYOR A 0'   TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-IMPFINAN IS NOT NUMERIC
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-IMPFINAN'    TO WTRC0-DESCRIPCION
+              MOVE 'NO VALIDO'            TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'PVE0004 IMPORTE '     TO UGNCTABA-VAR1-ERROR
+              MOVE 'SOLICITADO NO VALIDO' TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-IMPFINAN <= ZEROS
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-IMPFINAN'    TO WTRC0-DESCRIPCION
+              MOVE 'MENOR QUE CERO'       TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'IMPORTE SOLICITADO'   TO UGNCTABA-VAR1-ERROR
+              MOVE 'DEBE SER MAYOR A 0'   TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-FECOPERA EQUAL SPACES OR LOW-VALUES
+              MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+              MOVE 'UGNCTABA-FECOPERA'     TO WTRC0-DESCRIPCION
+              MOVE 'NO INFORMADA'         TO WTRC0-VALOR-ALF
+      *
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'FECHA DE OPERACION'   TO UGNCTABA-VAR1-ERROR
+              MOVE 'NO INFORMADA'         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+      *
+           IF UGNCTABA-OPCION NOT EQUAL CTE-C
+             IF UGNCTABA-FECNACI EQUAL SPACES OR LOW-VALUES
+                MOVE '120-VALIDA-ENTRADA'   TO WTRC0-PARRAFO
+                MOVE 'UGNCTABA-FECNACI'      TO WTRC0-DESCRIPCION
+                MOVE 'NO INFORMADA'         TO WTRC0-VALOR-ALF
+      *
+                MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                MOVE 'FECHA DE NACIMIENTO'  TO UGNCTABA-VAR1-ERROR
+                MOVE 'NO INFORMADA'         TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             END-IF
+           END-IF
+      *
+           MOVE '120-VALIDA-ENTRADA'      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 120'     TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *COL01-I
+      ******************************************************************
+      *                        125-CNS-IVAVIG                          *
+      *  CONSULTA EL PORCENTAJE DEL IVA VIGENTE PARA CALCULAR SEGURO   *
+      *  INCENDIO Y TERREMOTO                                          *
+      ******************************************************************
+       125-CNS-IVAVIG.
+      *COL02-INI
+      *    INITIALIZE UGTCT37
+           INITIALIZE UGTCRFI
+      *    MOVE CTE-0821                  TO T37-SECCION
+      *    MOVE CTE-VDGN4-3               TO T37-ELEMENTO
+           MOVE CTE-IVA                   TO RFI-UGIDXREF
+           MOVE UGNCTABA-FECOPERA         TO RFI-FECOVALI
+      *COL02-FIN
+      *COL02-INI
+           EXEC SQL
+               SELECT UGTIPINT
+               INTO :RFI-UGTIPINT
+               FROM UGDTRFI
+               WHERE UGIDXREF =  :RFI-UGIDXREF
+               AND   FECOVALI = (SELECT MAX(FECOVALI)
+                                 FROM UGDTRFI
+                                 WHERE UGIDXREF = :RFI-UGIDXREF
+                                 AND FECOVALI  <= :RFI-FECOVALI)
+           END-EXEC
+      *
+      *      EXEC SQL
+      *          SELECT RESTO
+      *            INTO :T37-RESTO
+      *            FROM UGDTT37
+      *           WHERE SECCION  = :T37-SECCION
+      *             AND ELEMENTO = :T37-ELEMENTO
+      *      END-EXEC
+      *COL02-FIN
+
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+      *COL02-INI
+      *         MOVE T37-RESTO(1:1)         TO WS-IVA-ENT
+      *         MOVE T37-RESTO(3:2)         TO WS-IVA-DEC
+                MOVE '1'                    TO WS-IVA-ENT
+                MOVE RFI-UGTIPINT           TO WS-IVA-DEC
+      *COL02-FIN
+
+             WHEN DB2-NOTFND
+                MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                MOVE 'NO EXISTE'            TO UGNCTABA-VAR1-ERROR
+      *COL02-INI
+      *         MOVE 'SECCION 0821'         TO UGNCTABA-VAR2-ERROR
+                MOVE 'REGISTRO EN TABLA'    TO UGNCTABA-VAR2-ERROR
+      *COL02-FIN
+                PERFORM 300-FINAL
+      *
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+               MOVE 'SECCION 9649.CGO:'    TO UGNCTABA-VAR2-ERROR(1:17)
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR(18:)
+               PERFORM 300-FINAL
+           END-EVALUATE.
+      *COL01-F
+      *
+      ******************************************************************
+      *                  130-CNS-PORC-INCEN                            *
+      * CONSULTA EL PORCENTAJE PARA EL CALCULO DEL SEGURO DE INCENDIO  *
+      * Y TERREMOTO                                                    *
+      ******************************************************************
+       130-CNS-PORC-INCEN.
+      *
+           MOVE '130-CNS-PORC-INCEN'     TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 130'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                   TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE UGTCT37
+
+           MOVE CTE-9649                     TO T37-SECCION
+           IF UGNCTABA-TIP-CTE = CTE-C
+             MOVE 'CLASICO'                  TO T37-ELEMENTO
+           ELSE
+             MOVE 'PREMIUM'                  TO T37-ELEMENTO
+           END-IF
+
+             EXEC SQL
+                 SELECT RESTO
+                   INTO :T37-RESTO
+                   FROM UGDTT37
+                  WHERE SECCION  = :T37-SECCION
+                    AND ELEMENTO = :T37-ELEMENTO
+             END-EXEC
+
+           MOVE SQLCODE                       TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+              MOVE T37-RESTO(1:2)         TO WS-PORC-ENT
+              MOVE T37-RESTO(4:5)         TO WS-PORC-DEC
+      *
+             WHEN DB2-NOTFND
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'NO EXISTE'            TO UGNCTABA-VAR1-ERROR
+              MOVE 'SECCION 9649'         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+      *
+              WHEN DB2-RECATR1
+              WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+               MOVE 'SECCION 9649.CGO:'    TO UGNCTABA-VAR2-ERROR(1:17)
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR(18:)
+               PERFORM 300-FINAL
+           END-EVALUATE
+           MOVE '130-CNS-PORC-INCEN'     TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 130'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                   TO WTRC0-VALOR-ALF.
+      *    PERFORM 998-ESCRIBIR-CNTRACE.
+      *
+      ******************************************************************
+      *                                                                *
+      *                       200-PROCESO                              *
+      ******************************************************************
+       200-PROCESO.
+      *
+           MOVE '200-PROCESO  '           TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2-  '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+      *COL08-I
+           MOVE UGNCTABA-SUBPRO           TO WS-SUBPRO
+      *COL08-F
+           PERFORM 210-VALIDAR-LEASING
+           PERFORM 215-VALIDA-COBERT
+      *
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > ZEROS
+               COMPUTE UGNCTABA-IMPFINAN =
+                                      UGNCTABA-IMPFINAN - WS-VR-OPCOMP
+           END-IF
+      *
+           PERFORM 220-VALIDAR-ENTRADA
+           PERFORM 230-CNS-UGDTLQS
+      *
+      *COL01-I
+      *COL03-INI
+      *    IF UGNCTABA-SUBPRO = CTE-5099 OR SI-SUBPRO-LEASING
+      *       MOVE WS-TAE-PISO            TO WS-TAE
+      *    END-IF
+      *COL01-FIN
+              MOVE WS-TAE-PISO            TO WS-TAE
+      *COL03-FIN
+           PERFORM 240-CALC-PRIM-CUOTA
+      *
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+              PERFORM 250-CALC-INT-LEASING
+           END-IF
+           PERFORM 260-RESTO-CALCULOS
+           IF UGNCTABA-OPCION = CTE-C
+             PERFORM 270-PROCESAR-LINEAS
+           ELSE
+             PERFORM 270-PROCESAR-LINEAS
+                UNTIL (WS-FECHA-FINAL = WS-FECHA-1 AND
+                       WS-FECHA-FINAL = WS-FECHA-2)
+      *COL11-I
+      **     CONTINUE
+      *COL11-F
+      *     IF SW-SI-SUB-COB
+      *       PERFORM 281-CALC-VTU-COBER
+      *     END-IF
+      *     IF SI-SUBPRO-LEASING AND SW-NO-SUB-COB
+      *      PERFORM 282-CALC-VTU-PORL
+      *     END-IF
+      *     IF NO-SUBPRO-LEASING AND SW-NO-SUB-COB
+      *      PERFORM 280-CALC-VTU-PORC
+      *     END-IF
+      *COL11-I
+            IF SW-SI-SUB-COB
+              PERFORM 281-CALC-VTU-COBER
+            END-IF
+            IF SI-SUBPRO-LEASING AND SW-NO-SUB-COB
+             PERFORM 282-CALC-VTU-PORL
+            END-IF
+            IF NO-SUBPRO-LEASING AND SW-NO-SUB-COB
+             PERFORM 280-CALC-VTU-PORC
+            END-IF
+      *COL11-F
+           END-IF
+      *
+           MOVE '200-PROCESO  '           TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2-  '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *    PERFORM 998-ESCRIBIR-CNTRACE.
+      *
+      ******************************************************************
+      *                     210-VALIDAR-LEASING                        *
+      * VALIDAR SI EL SUBPRODCUTO ESTA MARCADO - LEASING HABITACIONAL  *
+      ******************************************************************
+       210-VALIDAR-LEASING.
+      *
+           MOVE '210-VALIDAR-LEASING '    TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 210 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           SET NO-SUBPRO-LEASING          TO TRUE
+           INITIALIZE UGTCT37
+                      WS-VLR-IMPORTE
+                      WS-VR-OPCOMP
+                      WS-PORC-OP
+                      WS-LIMINF
+                      WS-LIMSUP
+
+      *COL07-I
+           EVALUATE UGNCTABA-SUBPRO
+           WHEN 'HIPO'
+              MOVE CTE-5821                  TO UGNCTABA-SUBPRO
+           WHEN 'LEAS'
+              MOVE CTE-5824                  TO UGNCTABA-SUBPRO
+           WHEN 'COMC'
+              MOVE CTE-5886                  TO UGNCTABA-SUBPRO
+           WHEN 'REMO'
+              MOVE CTE-5691                  TO UGNCTABA-SUBPRO
+           END-EVALUATE
+      *COL07-F
+           MOVE CTE-1250                     TO T37-SECCION
+           MOVE UGNCTABA-SUBPRO              TO T37-ELEMENTO(1:4)
+
+             EXEC SQL
+                 SELECT RESTO
+                   INTO :T37-RESTO
+                   FROM UGDTT37
+                  WHERE SECCION  = :T37-SECCION
+                    AND ELEMENTO = :T37-ELEMENTO
+             END-EXEC
+
+           MOVE SQLCODE                       TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+              MOVE T37-RESTO(8:2)             TO WS-LIMINF
+              MOVE T37-RESTO(11:2)            TO WS-LIMSUP
+      *
+              SET SI-SUBPRO-LEASING           TO TRUE
+              PERFORM 211-SUBPRO-COBLH
+             WHEN DB2-NOTFND
+               CONTINUE
+              WHEN DB2-RECATR1
+              WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+               MOVE 'SECCION 1250.CGO:'    TO UGNCTABA-VAR2-ERROR(1:17)
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR(18:)
+               PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '210-VALIDAR-LEASING '    TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 210 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *----------------------------------------------------------------*
+      *                         211-SUBPRO-COBLH                       *
+      *----------------------------------------------------------------*
+       211-SUBPRO-COBLH.
+      *
+           MOVE '211-SUBPRO-COBLH'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 211 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+
+           IF UGNCTABA-PORCOMP-ALF EQUAL LOW-VALUES OR SPACES
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'SUBP. LEASING HABIT.' TO UGNCTABA-VAR1-ERROR
+             MOVE 'REQUIERE OPC. COMPRA' TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           ELSE
+             MOVE UGNCTABA-IMPFINAN       TO WS-VLR-IMPORTE
+             MOVE UGNCTABA-PORCOMP        TO WS-PORC-OP
+      *
+             IF WS-PORC-OP > ZEROS
+
+               IF WS-PORC-OP < WS-LIMINF OR WS-PORC-OP > WS-LIMSUP
+                 MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+                 MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                 MOVE 'PORCENTAJE DE COMPRA' TO UGNCTABA-VAR1-ERROR
+                 MOVE 'FUERA DE RANGO'       TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+               ELSE
+                  COMPUTE WS-VR-OPCOMP = WS-VLR-IMPORTE *
+                                         (WS-PORC-OP / 100)
+               END-IF
+             ELSE
+               MOVE ZEROS                    TO WS-VR-OPCOMP
+             END-IF
+      *COL02-INI
+             MOVE WS-VR-OPCOMP            TO UGNCTABA-VALOCOMP
+      *COL02-FIN
+           END-IF
+      *
+           MOVE '211-SUBPRO-COBLH'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 211 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *----------------------------------------------------------------*
+      *                     215-VALIDA-COBERT                          *
+      *----------------------------------------------------------------*
+       215-VALIDA-COBERT.
+      *
+
+           INITIALIZE                       UGTCT37
+           MOVE CTE-0550                 TO T37-SECCION
+           MOVE UGNCTABA-SUBPRO          TO T37-ELEMENTO (1:4)
+           SET  SW-NO-SUB-COB            TO TRUE
+
+           EXEC SQL
+                SELECT RESTO
+                INTO :T37-RESTO
+                FROM UGDTT37
+                WHERE SECCION    = :T37-SECCION   AND
+                      ELEMENTO   = :T37-ELEMENTO
+           END-EXEC
+      *
+           MOVE SQLCODE                       TO  DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+               SET SW-SI-SUB-COB             TO TRUE
+             WHEN DB2-NOTFND
+               CONTINUE
+      *
+              WHEN DB2-RECATR1
+              WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+               MOVE 'SECCION 0550.CGO:'    TO UGNCTABA-VAR2-ERROR(1:17)
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR(18:)
+               PERFORM 300-FINAL
+           END-EVALUATE.
+      *
+
+      ******************************************************************
+      *                        220-VALIDAR-ENTRADA                     *
+      ******************************************************************
+       220-VALIDAR-ENTRADA.
+      *
+           MOVE '220-VALIDAR-ENTRADA'     TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 220 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+      *COL06-I
+      *COL08-I
+      *    IF UGNCTABA-SUBPRO NOT NUMERIC
+      *       PERFORM 221A-TRAE-SUBP
+      *       EVALUATE UGNCTABA-SUBPRO
+           IF WS-SUBPRO NOT NUMERIC
+              PERFORM 221A-TRAE-SUBP
+              EVALUATE WS-SUBPRO
+      *COL08-F
+              WHEN 'HIPO'
+                 MOVE CTE-5821        TO UGNCTABA-SUBPRO
+              WHEN 'LEAS'
+      *COL07-I
+                 MOVE CTE-5824        TO UGNCTABA-SUBPRO
+      *          MOVE CTE-5886        TO UGNCTABA-SUBPRO
+      *COL07-F
+              WHEN 'COMC'
+      *COL07-I
+                 MOVE CTE-5886        TO UGNCTABA-SUBPRO
+      *          MOVE CTE-5691        TO UGNCTABA-SUBPRO
+      *COL07-F
+              WHEN 'REMO'
+      *COL07-I
+                 MOVE CTE-5691        TO UGNCTABA-SUBPRO
+      *          MOVE CTE-5824        TO UGNCTABA-SUBPRO
+      *COL07-F
+      *COL08-I
+              END-EVALUATE
+      *COL08-F
+           ELSE
+      *COL08-I
+      *       PERFORM 221-CNS-UGDTPRO
+              IF UGNCTABA-USUARIO = 'UG7CVIDI'
+                 PERFORM 221A-TRAE-SUBP
+              ELSE
+                 PERFORM 221-CNS-UGDTPRO
+              END-IF
+      *COL08-F
+      *    PERFORM 221-CNS-UGDTPRO
+           END-IF
+      *COL06-F
+      *
+      *COL04-INI
+           IF UGNCTABA-IDCONS = SPACES OR LOW-VALUES
+              CONTINUE
+           ELSE
+      *COL05-INI
+              PERFORM 220A-TRAE-TECHO
+      *COL05-FIN
+              PERFORM 221A-TRAE-TASA-CONSTRUCTORA
+              PERFORM 221B-VALIDA-TASA-CONSTRUCTORA
+           END-IF
+      *COL04-FIN
+      *COL06-I
+           IF UGNCTABA-SUBPRO NOT NUMERIC
+              MOVE 'C'                    TO WS-DIASCAL
+           ELSE
+              PERFORM 222-CNS-UGDTADS
+      *    PERFORM 222-CNS-UGDTADS
+           END-IF
+      *COL06-F
+           PERFORM 223-PORTES-GASADM
+
+           IF PRO-INDISSU = CTE-R
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE2140            TO UGNCTABA-COD-ERROR
+             MOVE 'SIMULACION'           TO UGNCTABA-VAR1-ERROR
+             MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+
+           IF ADS-CODTIAMO  EQUAL CTE-X
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'SIM. NO VALIDA '      TO UGNCTABA-VAR1-ERROR
+             MOVE 'PARA CUADRO MAN'      TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+      *
+           IF ADS-CODTIAMO  EQUAL CTE-E
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'SIM. NO VALIDA '      TO UGNCTABA-VAR1-ERROR
+             MOVE 'AMORT ARITMETICA'     TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+
+      ******************************************************************
+      *    SI EL TIPODIAS ES DISTINTO DE 1, 2, 3 O 4                   *
+      *    NO SE REALIZA LA SIMULACION.                                *
+      ******************************************************************
+           IF ADS-TIPODIAS NOT =  (CTE-CON-1 AND  CTE-CON-2 AND
+                                   CTE-CON-3 AND CTE-CON-4)
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-CON-UGE0100        TO UGNCTABA-COD-ERROR
+             MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+             MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+      *
+           MOVE ADS-CODTIAMO               TO WS-TIPO-CUOTA
+           MOVE CTE-CON-FECHA-DEFECTO      TO WS-FECOVALI
+      *
+           IF ADS-PROGARIT  NOT = ZEROS
+              MOVE ADS-PROGARIT            TO WS-RAZON
+           ELSE
+              IF ADS-PROGGEOM NOT = ZEROS
+                 MOVE ADS-PROGGEOM         TO WS-RAZON
+              END-IF
+           END-IF
+      *
+           MOVE '220-VALIDAR-ENTRADA'     TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 220 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                        221-CNS-UGDTPRO                         *
+      ******************************************************************
+       221-CNS-UGDTPRO.
+      *
+           MOVE '221-CNS-UGDTPRO'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2211'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+
+           MOVE CTE-PRODUCTO              TO PRO-PRODUCTO
+           MOVE UGNCTABA-SUBPRO            TO PRO-SUBPRO
+      *
+           EXEC SQL
+              SELECT  TEXTORED,
+                      PLAZOMAX,
+                      PLAZOMIN,
+                      IMPMAXGE,
+                      FECOVALI,
+                      FEFIVALI,
+                      PORINMIN,
+                      PORINMAX,
+                      MONEDA,
+                      IMPMINGE,
+                      UGYSEASO,
+                      INDEALER,
+                      LIBRE_CAR1,
+                      IND_MARCA2,
+                      INDISSU,
+                      LIBRE_IMP1,
+                      LIBRE_IMP2
+                INTO :PRO-TEXTORED,
+                     :PRO-PLAZOMAX,
+                     :PRO-PLAZOMIN,
+                     :PRO-IMPMAXGE,
+                     :PRO-FECOVALI,
+                     :PRO-FEFIVALI,
+                     :PRO-PORINMIN,
+                     :PRO-PORINMAX,
+                     :PRO-MONEDA,
+                     :PRO-IMPMINGE,
+                     :PRO-UGYSEASO,
+                     :PRO-INDEALER,
+                     :PRO-LIBRE-CAR1,
+                     :PRO-IND-MARCA2,
+                     :PRO-INDISSU,
+                     :PRO-LIBRE-IMP1,
+                     :PRO-LIBRE-IMP2
+                 FROM UGDTPRO
+                WHERE SUBPRO   = :PRO-SUBPRO       AND
+                      PRODUCTO = :PRO-PRODUCTO
+           END-EXEC
+      *
+           MOVE '221-CNS-UGDTPRO '         TO WTRC0-PARRAFO
+           MOVE 'RETORNO SQLCODE'          TO WTRC0-DESCRIPCION
+           MOVE SQLCODE                    TO WTRC0-VALOR-ALF
+      *
+           MOVE SQLCODE                    TO DB2-RETURN-CDE
+           EVALUATE TRUE
+             WHEN DB2-OK
+      *COL01-I
+              MOVE PRO-PORINMIN            TO WS-TAE-PISO
+      *COL10-I
+      *SE MUEVE LA TASA PISO A NUEVA VARIABLE PARA VERIFICAR TASA
+      *CON BONIFICACI├ôN DE NOMINA
+              MOVE PRO-PORINMIN            TO WS-SUB-TAE-PISO
+      *COL10-F
+      *COL01-F
+      *COL04-INI
+      *COL05-INI
+      *       MOVE PRO-PORINMAX            TO WS-TAE-TECHO
+      *COL05-FIN
+      *          CONTINUE
+      *COL04-FIN
+      *
+             WHEN DB2-NOTFND
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'NO EXISTE'            TO UGNCTABA-VAR1-ERROR
+              MOVE 'SUBPRODUCTO '         TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+      *
+              WHEN DB2-RECATR1
+              WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTPRO'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTPRO' TO UGNCTABA-VAR1-ERROR
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+               PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '221-CNS-UGDTPRO'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2211'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *COL06-I
+       221A-TRAE-SUBP.
+
+      *COL10-I
+           PERFORM 221-CNS-UGDTPRO
+      *    PERFORM 220A-TRAE-TECHO
+           IF UGNCTABA-IND-PRICING EQUAL 'S'
+              MOVE UGNCTABA-TASA-PRICING    TO WS-TAE-TECHO
+              IF UGNCTABA-IND-PORTA EQUAL 'S'
+      *          TOMA LA TASA PRICING PARA RESTAR LOS PUNTOS X PORTAFO
+                 COMPUTE WS-TASA = WS-TAE-TECHO - UGNCTABA-PUNTOS-PORTA
+                 MOVE WS-TASA               TO WS-TAE-TECHO
+              END-IF
+           ELSE
+              PERFORM 220A-TRAE-TECHO
+              IF UGNCTABA-IND-PORTA EQUAL 'S'
+      *          TOMA LA TASA PONDERADA PARA RESTAR LOS PUNTOS X PORTAFO
+                 COMPUTE WS-TASA = WS-TAE-TECHO - UGNCTABA-PUNTOS-PORTA
+                 MOVE WS-TASA               TO WS-TAE-TECHO
+              END-IF
+           END-IF
+      *COL10-F
+      *         MOVE T37-RESTO             TO WS-TASA-ALFA
+      *    MOVE WS-TASA-CONST2              TO WS-TAE-PISO
+      *COL10-I
+      *SE REALIZA VALIDACION DE LA TASA BONIFICADA PARA QUE ESTA NO SEA
+      *MENOR A LA TASA PISO DEL SUBPRODUCTO
+           IF WS-TAE-TECHO < WS-SUB-TAE-PISO
+              MOVE WS-SUB-TAE-PISO          TO WS-TAE-PISO
+           ELSE
+              MOVE WS-TAE-TECHO             TO WS-TAE-PISO
+           END-IF
+      *    MOVE WS-TAE-TECHO                TO WS-TAE-PISO
+      *COL10-F
+           .
+      *COL06-F
+      *COL05-INI
+      ******************************************************************
+      * TRAE LA TASA POLITICA PARA VERIFICAR QUE LA TASA DE LA CONSTR. *
+      * SE ENCUENTRE DENTRO DEL PISO Y TECHO                           *
+      ******************************************************************
+       220A-TRAE-TECHO.
+
+      *COL06-I
+      *COL08-I
+      *    EVALUATE UGNCTABA-SUBPRO
+      *COL10-I
+      *    IF WS-SUBPRO NOT NUMERIC
+      *COL10-F
+           EVALUATE WS-SUBPRO
+      *COL08-F
+           WHEN 'HIPO'
+              MOVE CTE-HIPO-VID                TO LQS-SUBPRO
+              MOVE CTE-FEC-FIN-VID             TO LQS-FEFIVALI
+           WHEN 'COMC'
+              MOVE CTE-COMC-VID                TO LQS-SUBPRO
+              MOVE CTE-FEC-FIN-VID             TO LQS-FEFIVALI
+           WHEN 'REMO'
+              MOVE CTE-REMO-VID                TO LQS-SUBPRO
+              MOVE CTE-FEC-FIN-VID             TO LQS-FEFIVALI
+           WHEN 'LEAS'
+              MOVE CTE-LEAS-VID                TO LQS-SUBPRO
+              MOVE CTE-FEC-FIN-VID             TO LQS-FEFIVALI
+           WHEN OTHER
+              MOVE UGNCTABA-SUBPRO             TO LQS-SUBPRO
+              MOVE CTE-FECH-FIN                TO LQS-FEFIVALI
+           END-EVALUATE
+      *COL10-I
+      *COL06-F
+      *    MOVE CTE-PRODUCTO               TO LQS-PRODUCTO
+      *COL06-I
+      *    MOVE UGNCTABA-SUBPRO            TO LQS-SUBPRO
+      *COL06-I
+      *    MOVE CTE-101                    TO LQS-CODCONLI
+      *COL06-I
+      *    MOVE CTE-FECH-FIN               TO LQS-FEFIVALI
+      *COL06-I
+      *COL08-I
+      *       MOVE UGNCTABA-FECOPERA       TO LQS-FECOVALI
+      *    ELSE
+      *       SI EL SUBPRO ES NUMERICO SE BUSCA EL CODCONLI 199-TASA
+      *       PARA SIMULACION DE VIVIENDA DIGITAL
+      *       MOVE UGNCTABA-SUBPRO         TO LQS-SUBPRO
+      *       MOVE CTE-PRODUCTO            TO LQS-PRODUCTO
+      *       MOVE CTE-198                 TO LQS-CODCONLI
+      *       MOVE UGNCTABA-FECOPERA       TO LQS-FECOVALI
+      *    END-IF
+      *COL08-F
+
+      *    EXEC SQL
+      *        SELECT TIPOAPLI
+      *            INTO  :LQS-TIPOAPLI
+      *            FROM  UGDTLQS
+      *            WHERE PRODUCTO = :LQS-PRODUCTO       AND
+      *                  SUBPRO   = :LQS-SUBPRO         AND
+      *                  CODCONLI = :LQS-CODCONLI       AND
+      *COL08-I
+      *                  FEFIVALI = :LQS-FEFIVALI
+      *                  FECOVALI <= :LQS-FECOVALI      AND
+      *                  FEFIVALI >= :LQS-FECOVALI
+      *COL08-F
+      *    END-EXEC
+
+
+      *    BUSCA CODCONLI 198-TASA PARA SIMULACION DE VD (PONDERADA)
+           MOVE CTE-PRODUCTO               TO LQS-PRODUCTO
+           MOVE CTE-198                    TO LQS-CODCONLI
+           MOVE UGNCTABA-FECOPERA          TO LQS-FECOVALI
+           PERFORM 22451-CONSULTA-UGDTLQS
+      *COL10-F
+           EVALUATE SQLCODE
+             WHEN +0
+      *COL10-I
+      *SE VALIDA QUE LA TASA ESTANDAR NO SEA MENOR A LA TASA PISO
+                IF LQS-TIPOAPLI < WS-SUB-TAE-PISO
+                   MOVE WS-SUB-TAE-PISO    TO WS-TAE-TECHO
+                ELSE
+      *COL10-F
+                MOVE LQS-TIPOAPLI          TO WS-TAE-TECHO
+      *COL10-I
+                END-IF
+      *COL10-F
+             WHEN +100
+      *COL10-I
+      *         SI NO SE PARAMETRIZO EL CODCONLI-198 SE BUSCA EL 101
+                MOVE CTE-101               TO LQS-CODCONLI
+                PERFORM 22451-CONSULTA-UGDTLQS
+
+                EVALUATE SQLCODE
+                  WHEN +0
+                     MOVE LQS-TIPOAPLI     TO WS-TAE-TECHO
+                  WHEN +100
+                     MOVE CTE-10           TO UGNCTABA-COD-RETURN
+                     MOVE CTE-UGE0000      TO UGNCTABA-COD-ERROR
+                     MOVE 'NO EXISTE'      TO UGNCTABA-VAR1-ERROR
+                     MOVE 'SUBPRODUCTO '   TO UGNCTABA-VAR2-ERROR
+                     PERFORM 300-FINAL
+                  WHEN OTHER
+                     MOVE CTE-99                 TO UGNCTABA-COD-RETURN
+                     MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                     MOVE 'ERROR SELECT UGDTLQS' TO UGNCTABA-VAR1-ERROR
+                     MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+                     PERFORM 300-FINAL
+                END-EVALUATE
+      *         MOVE CTE-10                TO UGNCTABA-COD-RETURN
+      *         MOVE CTE-UGE0000           TO UGNCTABA-COD-ERROR
+      *         MOVE 'NO EXISTE'           TO UGNCTABA-VAR1-ERROR
+      *         MOVE 'SUBPRODUCTO '        TO UGNCTABA-VAR2-ERROR
+      *         PERFORM 300-FINAL
+      *COL10-F
+              WHEN -904
+              WHEN -911
+                MOVE CTE-20                TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000           TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '   TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTLQS'             TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+      *
+             WHEN OTHER
+               MOVE CTE-99                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'ERROR SELECT UGDTLQS' TO UGNCTABA-VAR1-ERROR
+               MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+               PERFORM 300-FINAL
+           END-EVALUATE.
+      *COL05-FIN
+      *COL04-INI
+      ******************************************************************
+      * SE TRAE LA PARAMETRIA PARA LA CALCULAR LA TASA CON EL INTERES  *
+      * ASIGNADO A CADA CONSTRUCTORA PARA VIVIENDA DIGITAL             *
+      ******************************************************************
+       221A-TRAE-TASA-CONSTRUCTORA.
+
+           MOVE SPACES                     TO T37-ELEMENTO
+
+           MOVE CTE-0821                   TO T37-SECCION
+           MOVE UGNCTABA-IDCONS            TO T37-ELEMENTO
+           EVALUATE PRO-SUBPRO
+             WHEN CTE-5099
+               MOVE CTE-H                  TO T37-ELEMENTO(5:1)
+             WHEN CTE-7128
+               MOVE CTE-L                  TO T37-ELEMENTO(5:1)
+             WHEN OTHER
+               MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+               MOVE 'SUBPRODUCTO'          TO UGNCTABA-VAR1-ERROR
+               MOVE 'N/A VIVI DIG'         TO UGNCTABA-VAR2-ERROR
+               PERFORM 300-FINAL
+           END-EVALUATE
+           EXEC SQL
+              SELECT  SECCION,
+                      ELEMENTO,
+                      RESTO
+                INTO :T37-SECCION,
+                     :T37-ELEMENTO,
+                     :T37-RESTO
+                 FROM UGDTT37
+                WHERE SECCION  = :T37-SECCION AND
+                      ELEMENTO = :T37-ELEMENTO
+           END-EXEC
+
+           EVALUATE SQLCODE
+             WHEN +0
+                MOVE T37-RESTO             TO WS-TASA-ALFA
+             WHEN +100
+                MOVE CTE-10                TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000           TO UGNCTABA-COD-ERROR
+                MOVE 'NO EXISTE'           TO UGNCTABA-VAR1-ERROR
+                MOVE 'CONSTRUCTORA'        TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+
+              WHEN -904
+              WHEN -911
+                MOVE CTE-10                TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000           TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '   TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'             TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+
+              WHEN OTHER
+                MOVE CTE-99                 TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+                MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+           END-EVALUATE.
+      ******************************************************************
+      * SE VERIFICA SI LA TASA DE LA PARAMETRIA SE ENCUENTRA DENTRO DEL*
+      * PISO Y TECHO DEL SUBPRODUCTO PARA ASI CALCULAR CON ESTA TASA   *
+      ******************************************************************
+       221B-VALIDA-TASA-CONSTRUCTORA.
+           IF (WS-TASA-CONST2 > WS-TAE-PISO) AND
+                            (WS-TAE-TECHO > WS-TASA-CONST2)
+              MOVE WS-TASA-CONST2 TO WS-TAE-PISO
+           END-IF.
+      *COL04-FIN
+      ******************************************************************
+      *                        222-CNS-UGDTADS                         *
+      ******************************************************************
+       222-CNS-UGDTADS.
+      *
+           MOVE '222-CNS-UGDTADS'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2212'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           MOVE CTE-PRODUCTO              TO ADS-PRODUCTO
+           MOVE UGNCTABA-SUBPRO           TO ADS-SUBPRO
+           MOVE UGNCTABA-FECOPERA         TO ADS-FECOVALI
+      *
+           EXEC SQL
+              SELECT PERCAP      , PERINT       , CODTIAMO,
+                     DIASCAL     , PROGARIT     , PROGGEOM,
+                     TIPODIAS    , INDSUBVE     , ENTSUB,
+                     CONSUB      , LININCUO     , CARECAP,
+                     CAREINT     , UGCDIPAG     , INDINVAR,
+                     CODTIPRE    , ISUMCOM      , INDINANT
+               INTO :ADS-PERCAP  , :ADS-PERINT  , :ADS-CODTIAMO,
+                    :ADS-DIASCAL , :ADS-PROGARIT, :ADS-PROGGEOM,
+                    :ADS-TIPODIAS, :ADS-INDSUBVE, :ADS-ENTSUB,
+                    :ADS-CONSUB  , :ADS-LININCUO, :ADS-CARECAP,
+                    :ADS-CAREINT , :ADS-UGCDIPAG, :ADS-INDINVAR,
+                    :ADS-CODTIPRE, :ADS-ISUMCON , :ADS-INDINANT
+                FROM UGDTADS
+               WHERE PRODUCTO = :ADS-PRODUCTO    AND
+                     SUBPRO   = :ADS-SUBPRO      AND
+                    FECOVALI <= :ADS-FECOVALI    AND
+                    FEFIVALI >= :ADS-FECOVALI
+           END-EXEC
+      *
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+      *
+           EVALUATE TRUE
+             WHEN DB2-OK
+              MOVE ADS-DIASCAL            TO WS-DIASCAL
+             WHEN DB2-NOTFND
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0146            TO UGNCTABA-COD-ERROR
+              MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+              MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+      *
+              WHEN DB2-RECATR1
+              WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTADS'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR SELECT UGDTADS' TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '222-CNS-UGDTADS'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2212'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *    PERFORM 998-ESCRIBIR-CNTRACE.
+      *
+      ******************************************************************
+      *                     223-PORTES-GASADM                          *
+      ******************************************************************
+       223-PORTES-GASADM.
+      *
+           MOVE '223-PORTES-GASADM'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           PERFORM 22131-CNS-PORTES
+           PERFORM 22132-CNS-GASADM
+      *
+           COMPUTE  WS-GASTOS-1  =  WS-PORTES + WS-GASADM
+      *
+           MOVE '223-PORTES-GASADM'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                     22131-CNS-PORTES                           *
+      * ACCESO A PORTES                                                *
+      ******************************************************************
+       22131-CNS-PORTES.
+      *
+           MOVE '22131-CNS-PORTES'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           MOVE CTE-402                       TO LQS-CODCONLI
+           MOVE CTE-PRODUCTO                  TO LQS-PRODUCTO
+           MOVE UGNCTABA-SUBPRO               TO LQS-SUBPRO
+      *
+           MOVE UGNCTABA-PLAZO                TO WS-PLAZO
+           MOVE UGNCTABA-FECOPERA             TO LQS-FECOVALI
+           MOVE LQS-PLAZO                     TO WS-CODIGO-PERIODO-4
+      *
+           MULTIPLY WS-PLAZO BY 12 GIVING WS-NUM-MESES
+           IF WS-NUM-MESES > 999
+              MOVE 999                  TO WS-PERIODO-4
+           ELSE
+              MOVE WS-NUM-MESES         TO WS-PERIODO-4
+           END-IF
+      *
+           MOVE 2                             TO WS-CODIGO-4
+           MOVE WS-CODIGO-PERIODO-4           TO LQS-PLAZO.
+      *
+           EXEC SQL
+               SELECT
+                 TIPOAPLI,
+                 IMPMINI,
+                 IMPMAXI
+               INTO
+                 :LQS-TIPOAPLI,
+                 :LQS-IMPMINI,
+                 :LQS-IMPMAXI
+               FROM UGDTLQS
+               WHERE PRODUCTO  = :LQS-PRODUCTO      AND
+                     SUBPRO    = :LQS-SUBPRO        AND
+                     CODCONLI  = :LQS-CODCONLI      AND
+                     FECOVALI <= :LQS-FECOVALI      AND
+                     FEFIVALI >= :LQS-FECOVALI      AND
+                     PLAZO     = (SELECT  MIN(PLAZO)
+                                    FROM  UGDTLQS
+                                   WHERE  PRODUCTO  = :LQS-PRODUCTO  AND
+                                          SUBPRO    = :LQS-SUBPRO    AND
+                                          CODCONLI  = :LQS-CODCONLI  AND
+                                          PLAZO    >= :LQS-PLAZO     AND
+                                          FECOVALI <= :LQS-FECOVALI  AND
+                                          FEFIVALI >= :LQS-FECOVALI)
+           END-EXEC
+      *
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+      *
+           EVALUATE TRUE
+             WHEN DB2-OK
+              MOVE LQS-IMPMINI            TO WS-PORTES
+             WHEN DB2-NOTFND
+                 MOVE ZERO                TO WS-PORTES
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTLQS'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR SELECT UGDTLQS' TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '22131-CNS-PORTES'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *
+      ******************************************************************
+      *                     22132-CNS-GASADM                           *
+      * ACCESO A GASTOS ADMINISTRATIVO                                 *
+      ******************************************************************
+       22132-CNS-GASADM.
+      *
+           MOVE '22131-CNS-GASADM'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           MOVE CTE-801                   TO LQS-CODCONLI
+      *
+           EXEC SQL
+             SELECT
+               TIPOAPLI,
+               IMPMINI,
+               IMPMAXI
+             INTO
+               :LQS-TIPOAPLI,
+               :LQS-IMPMINI,
+               :LQS-IMPMAXI
+             FROM UGDTLQS
+             WHERE PRODUCTO  = :LQS-PRODUCTO      AND
+                   SUBPRO    = :LQS-SUBPRO        AND
+                   CODCONLI  = :LQS-CODCONLI      AND
+                   FECOVALI <= :LQS-FECOVALI      AND
+                   FEFIVALI >= :LQS-FECOVALI      AND
+                   PLAZO     = (SELECT  MIN(PLAZO)
+                                  FROM  UGDTLQS
+                                 WHERE  PRODUCTO  = :LQS-PRODUCTO  AND
+                                        SUBPRO    = :LQS-SUBPRO    AND
+                                        CODCONLI  = :LQS-CODCONLI  AND
+                                        PLAZO    >= :LQS-PLAZO     AND
+                                        FECOVALI <= :LQS-FECOVALI  AND
+                                        FEFIVALI >= :LQS-FECOVALI)
+           END-EXEC
+      *
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+      *
+           EVALUATE TRUE
+             WHEN DB2-OK
+              MOVE LQS-IMPMINI            TO WS-GASADM
+             WHEN DB2-NOTFND
+              MOVE ZERO                   TO WS-GASADM
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTLQS'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR SELECT UGDTLQS' TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '223-PORTES-GASADM'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2213'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       224-VALIDAR-GRACIA                       *
+      * ACCEDE A LA TABLA UGDTT37 SECCION 1021, MANEJO DE GRACIA PARA  *
+      * CAPITAL E INTERESES                                            *
+      ******************************************************************
+       224-VALIDAR-GRACIA.
+      *
+           MOVE '224-VALIDAR-GRACIA'      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 222 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE UGTCT37
+           MOVE CTE-1021                    TO T37-SECCION
+           MOVE UGNCTABA-SUBPRO             TO T37-ELEMENTO
+      *
+           EXEC SQL
+                SELECT RESTO
+                INTO  :T37-RESTO
+                FROM UGDTT37
+                WHERE SECCION  = :T37-SECCION  AND
+                      ELEMENTO = :T37-ELEMENTO
+           END-EXEC
+
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+           EVALUATE TRUE
+           WHEN DB2-OK
+             MOVE T37-RESTO(3:2)          TO WS-PRDO-GRCIA
+             MOVE T37-RESTO(1:4)          TO WS-CARENCIA
+             MOVE T37-RESTO(5:1)          TO WS-INT-CAPITALIZABLES
+           WHEN DB2-NOTFND
+             MOVE ZEROS                   TO WS-PRDO-GRCIA
+             MOVE SPACES                  TO WS-INT-CAPITALIZABLES
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+           WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR SELECT UGDTT37' TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '224-VALIDAR-GRACIA'      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 222 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *
+      ******************************************************************
+      *                       230-CNS-UGDTLQS                          *
+      * ACCEDE A LA TABLA UGDTT37 SECCION 1021, MANEJO DE GRACIA PARA  *
+      * CAPITAL E INTERESES                                            *
+      ******************************************************************
+       230-CNS-UGDTLQS.
+      *
+           MOVE '230-CNS-UGDTLQS'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 230 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE CTE-101                   TO LQS-CODCONLI
+           MOVE CTE-PRODUCTO              TO LQS-PRODUCTO
+           MOVE UGNCTABA-SUBPRO           TO LQS-SUBPRO
+           MOVE UGNCTABA-FECOPERA         TO LQS-FECOVALI
+           MOVE WS-CODIGO-PERIODO-4       TO LQS-PLAZO
+      *
+           EXEC SQL
+              SELECT TIPOAPLI,
+                     IMPMINI,
+                     IMPMAXI,
+                     PERCAPIT,
+                     TIPOTASA
+             INTO   :LQS-TIPOAPLI,
+                    :LQS-IMPMINI,
+                    :LQS-IMPMAXI,
+                    :LQS-PERCAPIT,
+                    :LQS-TIPOTASA
+             FROM    UGDTLQS
+             WHERE   PRODUCTO  = :LQS-PRODUCTO      AND
+                     SUBPRO    = :LQS-SUBPRO        AND
+                     CODCONLI  = :LQS-CODCONLI      AND
+                     FECOVALI <= :LQS-FECOVALI      AND
+                     FEFIVALI >= :LQS-FECOVALI      AND
+                     PLAZO     =
+                         (SELECT MIN(PLAZO)
+                            FROM UGDTLQS
+                            WHERE PRODUCTO  = :LQS-PRODUCTO  AND
+                                  SUBPRO    = :LQS-SUBPRO    AND
+                                  CODCONLI  = :LQS-CODCONLI  AND
+                                  PLAZO    >= :LQS-PLAZO     AND
+                                  FECOVALI <= :LQS-FECOVALI  AND
+                                  FEFIVALI >= :LQS-FECOVALI )
+           END-EXEC
+      *
+           MOVE SQLCODE                   TO DB2-RETURN-CDE
+           EVALUATE TRUE
+             WHEN DB2-OK
+               IF LQS-TIPOTASA = 'E'
+                 MOVE LQS-TIPOAPLI        TO WS-TAE
+               ELSE
+                 CONTINUE
+                 MOVE LQS-TIPOAPLI        TO WS-TIPOINT
+               END-IF
+             WHEN DB2-NOTFND
+               MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE3838            TO UGNCTABA-COD-ERROR
+               MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+               MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTLQS'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR SELECT UGDTLQS' TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '230-CNS-UGDTLQS'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 230 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+
+      *
+      ******************************************************************
+      *                       240-CALC-PRIM-CUOTA                      *
+      * SE CALCULA LA PRIMERA CUOTA POR MEDIO DE LA RUTINA UR1CCOT     *
+      ******************************************************************
+       240-CALC-PRIM-CUOTA.
+      *
+           MOVE '240-CALC-PRIM-CUOTA'     TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 240 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           PERFORM 241-CAL-TASA-NOMINAL
+           PERFORM 242-TIPO-CARTERA
+           PERFORM 243-COMPL-DATOS1
+           PERFORM 244-COMPL-DATOS2
+           PERFORM 245-LLAMA-UR1CCOT
+
+           MOVE COT-INT-NOMINAL            TO WS-INTERES-NOMINAL
+           MOVE COT-CUOTA                  TO WS-CUOTA-ACTUAL
+
+      *
+           MOVE '240-CALC-PRIM-CUOTA'     TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 240 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       241-CAL-TASA-NOMINAL                     *
+      * LLAMADO RUTINA UR1CCVT0 PARA CONVERTIR LA TASA DE EFECTIVA A   *
+      * NOMINAL                                                        *
+      ******************************************************************
+       241-CAL-TASA-NOMINAL.
+      *
+           MOVE '214-CAL-TASA-NOMINAL'    TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 241 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           INITIALIZE URWCCVT
+
+           IF WS-TIPOINTX EQUAL SPACES OR LOW-VALUES OR ZEROS
+             MOVE CTE-CON-N               TO CVT-RESULTADO
+             MOVE WS-TAE                  TO CVT-TASA
+           ELSE
+             MOVE CTE-CON-E               TO CVT-RESULTADO
+             MOVE WS-TIPOINT              TO CVT-TASA
+           END-IF
+
+           IF ADS-CODTIPRE = SPACES OR LOW-VALUES
+             MOVE 'DTF'                   TO CVT-TIPO-TASA
+           ELSE
+              MOVE ADS-CODTIPRE            TO CVT-TIPO-TASA
+           END-IF
+
+           MOVE CTE-CON-S                  TO CVT-IND-CONV
+           MOVE ZERO                       TO CVT-PUNTOS
+           MOVE SPACE                      TO CVT-PERINT
+           MOVE 3                          TO WS-DG-ANIO
+           MOVE WS-PLAZOX                  TO WS-DG-PLZO
+           MOVE WS-DG-PLAZO                TO CVT-PLAZO
+
+              EXEC CICS LINK
+                   PROGRAM ('UR1CCVT0')
+                   COMMAREA (URWCCVT-AREA)
+              END-EXEC
+
+            EVALUATE CVT-COD-ERROR
+              WHEN ZEROS
+                IF WS-TIPOINTX EQUAL SPACES OR LOW-VALUES OR ZEROS
+
+                  MOVE CVT-NOMINAL         TO WS-TASA-NOMINAL
+                  MOVE CVT-NOMINAL         TO WS-TASA-NOMINAL-F
+                  MOVE WS-TAE              TO WS-TASA-EFECTIVA-F
+                  MOVE ZEROS               TO COT-INT-EFECTIVO
+                ELSE
+                  MOVE WS-TIPOINT          TO WS-TASA-NOMINAL
+                  MOVE WS-TIPOINT          TO WS-TASA-NOMINAL-F
+                  MOVE CVT-EFECTIVA        TO WS-TASA-EFECTIVA-F
+                  MOVE ZEROS               TO COT-INT-EFECTIVO
+                END-IF
+              WHEN  OTHER
+                MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                MOVE 'ERROR RUS UR1CCVT0'   TO UGNCTABA-VAR1-ERROR
+                MOVE CVT-COD-ERROR          TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+            END-EVALUATE
+      *
+           MOVE '214-CAL-TASA-NOMINAL'    TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 241 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *    PERFORM 998-ESCRIBIR-CNTRACE.
+      *
+      ******************************************************************
+      *                       242-TIPO-CARTERA                         *
+      * BUSCA EL TIPO DE CARTERA PARA EL SUBPROSUCTO                   *
+      ******************************************************************
+       242-TIPO-CARTERA.
+      *
+           MOVE '242-TIPO-CARTERA'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 242 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE UGTCT37
+           MOVE '1901'                      TO T37-SECCION
+           MOVE ADS-SUBPRO                  TO T37-ELEMENTO
+           EXEC SQL
+                SELECT RESTO
+                INTO  :T37-RESTO
+                FROM UGDTT37
+                WHERE SECCION  = :T37-SECCION  AND
+                      ELEMENTO = :T37-ELEMENTO
+           END-EXEC
+      *
+           MOVE SQLCODE                     TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+               MOVE T37-RESTO(1:1)        TO WS-TIPO-CAR
+             WHEN DB2-NOTFND
+              MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'NO EXISTE TIPO DE '   TO UGNCTABA-VAR1-ERROR
+              MOVE 'CARTERA UGDTT27 1901' TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTT37'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+             WHEN OTHER
+              MOVE CTE-90                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR UGDTT37 1901'   TO UGNCTABA-VAR1-ERROR
+              MOVE SQLCODE                TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-EVALUATE
+
+           MOVE '242-TIPO-CARTERA'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 242 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       243-COMPL-DATOS1                         *
+      *
+      ******************************************************************
+       243-COMPL-DATOS1.
+      *
+           MOVE '243-COMPL-DATOS1'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 243 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           MOVE UGNCTABA-IMPFINAN         TO COT-CAPITAL
+           MOVE WS-TASA-NOMINAL           TO COT-INT-NOMINAL
+           MOVE WS-TIPO-CAR               TO COT-TIPO-CAR
+           MOVE ADS-CODTIAMO              TO COT-TIP-CUOTA
+           MOVE ZERO                      TO COT-AJUSTE-ENTREGAS
+           MOVE ADS-PERCAP                TO WS-CODIGO-PERIODO
+           MOVE ZERO                      TO WS-RESTO
+
+           EVALUATE WS-CODIGO
+              WHEN CTE-CON-3
+                 DIVIDE CTE-CON-1         BY WS-PERIODO
+                    GIVING COT-AMO-ANNO REMAINDER WS-RESTO
+                 END-DIVIDE
+              WHEN CTE-CON-2
+                 DIVIDE CTE-CON-12     BY WS-PERIODO
+                    GIVING COT-AMO-ANNO
+                    REMAINDER WS-RESTO
+                 END-DIVIDE
+                 MOVE COT-AMO-ANNO        TO WS-COT-AMO-ANNO
+      *
+                 IF COT-AMO-ANNO EQUAL  WS-COT-AMO-ANNO
+                    CONTINUE
+                 ELSE
+                    MOVE ZEROS            TO COT-AMO-ANNO
+                    MOVE WS-COT-AMO-ANNO  TO COT-AMO-ANNO
+                 END-IF
+              WHEN CTE-CON-1
+                 IF ADS-DIASCAL = CTE-CON-COMERCIALES OR CTE-CON-MIXTOS
+                    DIVIDE CTE-CON-360-COMP3     BY WS-PERIODO
+                       GIVING COT-AMO-ANNO REMAINDER WS-RESTO
+                    END-DIVIDE
+                 ELSE
+                    DIVIDE CTE-CON-365-COMP3     BY WS-PERIODO
+                       GIVING COT-AMO-ANNO REMAINDER WS-RESTO
+                    END-DIVIDE
+                 END-IF
+           END-EVALUATE
+
+           IF WS-RESTO > ZERO
+             MOVE CTE-10                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-CON-UGE0298        TO UGNCTABA-COD-ERROR
+             MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+             MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+           MOVE WS-RAZON                      TO COT-RAZON
+           IF ADS-TIPODIAS   = CTE-CON-1      OR
+              ADS-TIPODIAS   = CTE-CON-3
+             PERFORM 2431-PRIMERA-AMORTIZ
+             MOVE ZERO                       TO COT-DIAS-PRI-LIQ
+           ELSE
+             IF ADS-TIPODIAS   = CTE-CON-2      OR
+                ADS-TIPODIAS   = CTE-CON-4
+               PERFORM 2431-PRIMERA-AMORTIZ
+               IF ADS-CARECAP       = SPACES
+                  PERFORM  2432-DIAS-PRI-LIQ
+               ELSE
+                  MOVE ZERO               TO COT-DIAS-PRI-LIQ
+               END-IF
+             END-IF
+           END-IF
+      *
+           MOVE WS-NUM-PERIODOS           TO COT-TOT-AMORT-PEN.
+      *
+           MOVE BCD-CUOTAS                TO COT-TOT-AMORT-PEN
+                                             WS-NUM-PERIODOS
+
+           MOVE '243-COMPL-DATOS1'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 243 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      *
+      ******************************************************************
+      *                      2431-PRIMERA-AMORTIZ                      *
+      * FECHA PRIMERA AMORTIZACION                                     *
+      ******************************************************************
+       2431-PRIMERA-AMORTIZ.
+      *
+           MOVE '2431-PRIMERA-AMORTIZ'    TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2431'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE UGNCTABA-FECOPERA(9:2)       TO DFP-DIA
+           IF ADS-UGCDIPAG  > 0
+              MOVE  ADS-UGCDIPAG              TO WS-UGCDIPAG
+              MOVE  WS-UGCDIPAG               TO DFP-DIA
+           END-IF
+
+           MOVE UGNCTABA-FECOPERA             TO DFP-FECHA-INICIAL
+                                                 WS-FECHA-SOLICITUD
+                                                 WS-FECHA-LIQ-ANT
+                                                 WS-FECHA-2
+
+           MOVE CTE-CON-1                     TO DFP-NUM-PERIODOS
+           MOVE ADS-TIPODIAS                  TO DFP-TIPODIAS
+
+           MOVE DFP-FECHA-INICIAL             TO WS-FECHA-AMO-ANT
+                                                 WS-FECHA-1
+
+           IF ADS-CARECAP NOT = SPACES
+              MOVE ADS-CARECAP                TO DFP-PERCAP
+              PERFORM  24311-LLAMAR-RUTINA
+              MOVE DFP-FECHA-FINAL            TO WS-FECHA-SOLICITUD
+                                                 WS-FECOVALI
+              MOVE WS-FECHA-SOLICITUD         TO DFP-FECHA-INICIAL
+           END-IF
+      *
+           MOVE ADS-PERCAP                    TO DFP-PERCAP
+
+           PERFORM  24311-LLAMAR-RUTINA
+           MOVE DFP-FECHA-FINAL               TO WS-FECHA-AMO
+           MOVE WS-FECHA-LIQ-ANT              TO DFP-FECHA-INICIAL
+      *
+           MOVE ADS-PERCAP                    TO DFP-PERCAP
+      *
+           PERFORM  24311-LLAMAR-RUTINA
+           MOVE DFP-FECHA-FINAL               TO WS-FECHA-LIQ
+      *
+           PERFORM  24312-LLAMA-UR8CDAT0
+           MOVE  BCD-FECPRIAMO                TO WS-FECHA-AMO
+           MOVE  BCD-FECPRILIQ                TO WS-FECHA-LIQ
+           MOVE  BCD-FEVENCIN                 TO WS-FECHA-FINAL
+
+           MOVE '2431-PRIMERA-AMORTIZ'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2431'        TO WTRC0-DESCRIPCION
+           MOVE SPACES                        TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                      2432-DIAS-PRI-LIQ                         *
+      *                                                                *
+      ******************************************************************
+       2432-DIAS-PRI-LIQ.
+      *
+           MOVE '2432-DIAS-PRI-LIQ'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2432'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE CTE-CON-3                 TO W075-CDOPCIO
+           MOVE CTE-CON-CO                TO W075-TPTRAT
+           MOVE ZERO                      TO W075-NUMDIAS
+      *
+           MOVE WS-FECHA-LIQ-ANT          TO AUX-AAAA-MM-DD
+           MOVE AUX-AAAA                  TO WS-AUX-AAAA
+           MOVE AUX-MM                    TO WS-AUX-MM
+           MOVE AUX-DD                    TO WS-AUX-DD
+           MOVE WS-AUX-DD-MM-AAAA         TO W075-FHGRE1
+      *
+           MOVE DFP-FECHA-FINAL           TO AUX-AAAA-MM-DD
+           MOVE AUX-AAAA                  TO WS-AUX-AAAA
+           MOVE AUX-MM                    TO WS-AUX-MM
+           MOVE AUX-DD                    TO WS-AUX-DD
+           MOVE WS-AUX-DD-MM-AAAA         TO W075-FHGRE2
+      *
+           EXEC CICS LINK
+              PROGRAM ('TC1C1220')
+              COMMAREA (TCWC0750-AREA)
+           END-EXEC
+      *
+      *
+           IF W075-CDRETORN NOT = CTE-CON-ALFA-00
+              MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+              MOVE CTE-UGE1141            TO UGNCTABA-COD-ERROR
+              MOVE 'TC1C1220'             TO UGNCTABA-VAR1-ERROR
+              MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+              PERFORM 300-FINAL
+           END-IF
+           MOVE W075-NUMDIAS              TO COT-DIAS-PRI-LIQ
+      *
+           MOVE '2432-DIAS-PRI-LIQ'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2432'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                     24311-LLAMAR-RUTINA                        *
+      * LLAMADO RUS UR1CDFP QUE DESPLAZA FECHAS POR PERIODICIDAD       *
+      ******************************************************************
+       24311-LLAMAR-RUTINA.
+      *
+           MOVE '2431-LLAMAR-RUTINA'      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2431'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           EXEC CICS LINK
+              PROGRAM ('UR1CDFP0')
+              COMMAREA (URECDFP)
+           END-EXEC
+      *
+      *
+           IF DFP-CORESPUE NOT = CTE-CON-10
+             MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'ERROR RUS UR1CDFP0'   TO UGNCTABA-VAR1-ERROR
+             MOVE DFP-CORESPUE           TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF
+      *
+           MOVE '24311-LLAMAR-RUTINA'     TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2431'    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *    PERFORM 998-ESCRIBIR-CNTRACE.
+      *
+
+      ******************************************************************
+      *                     24312-LLAMA-UR8CDAT0                       *
+      * LLAMADO RUS UR1CDFP QUE DESPLAZA FECHAS POR PERIODICIDAD       *
+      ******************************************************************
+       24312-LLAMA-UR8CDAT0.
+      *
+           MOVE '24312-LLAMA-UR8CDAT0'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 24312'       TO WTRC0-DESCRIPCION
+           MOVE SPACES                        TO WTRC0-VALOR-ALF
+      *
+           MOVE UGNCTABA-FECOPERA             TO BCD-FEFORMA
+           MOVE ADS-INDINANT                  TO BCD-INDINANT
+      *
+           IF ADS-PERCAP NOT EQUAL SPACES AND '999'
+              MOVE ADS-PERCAP(1:1)            TO BCD-TIP-PERCAP
+              MOVE  ZERO                      TO BCD-NRO-PERCAP(1:1)
+              MOVE ADS-PERCAP(2:2)            TO BCD-NRO-PERCAP(2:2)
+           ELSE
+              MOVE ADS-PERCAP                 TO BCD-PERCAP
+           END-IF
+      *
+           IF ADS-PERINT NOT EQUAL SPACES AND '999'
+              MOVE  ADS-PERINT(1:1)           TO BCD-TIP-PERINT
+              MOVE  ZERO                      TO BCD-NRO-PERINT(1:1)
+              MOVE  ADS-PERINT(2:2)           TO BCD-NRO-PERINT(2:2)
+           ELSE
+              MOVE  ADS-PERINT                TO BCD-PERINT
+           END-IF
+      *
+           IF ADS-CAREINT NOT EQUAL SPACES
+              MOVE ADS-CAREINT(1:1)           TO BCD-TIP-CAREINT
+              MOVE ZERO                       TO BCD-NRO-CAREINT(1:1)
+              MOVE ADS-CAREINT(2:2)           TO BCD-NRO-CAREINT(2:2)
+           ELSE
+              MOVE ADS-CAREINT                TO BCD-CAREINT
+           END-IF
+      *
+           IF ADS-CARECAP NOT EQUAL SPACES
+              MOVE  ADS-CARECAP(1:1)          TO BCD-TIP-CARECAP
+              MOVE  ADS-CARECAP(2:3)          TO BCD-NRO-CARECAP
+           ELSE
+              MOVE  ADS-CARECAP               TO BCD-CARECAP
+           END-IF
+      *
+           MOVE  WS-DG-PLAZO                  TO BCD-PLAZO
+      *
+           IF ADS-UGCDIPAG = 0
+      *
+              MOVE UGNCTABA-FECOPERA(9:2)     TO ADS-UGCDIPAG
+           END-IF
+      *
+           MOVE ADS-UGCDIPAG                  TO BCD-UGCDIPAG
+      *
+           IF ADS-TIPODIAS = '4'
+              MOVE  30                        TO BCD-FRACCIO
+           ELSE
+              MOVE  1                         TO BCD-FRACCIO
+           END-IF
+      *
+           MOVE ADS-TIPODIAS                  TO BCD-TIPODIAS
+           MOVE ADS-CODTIAMO                  TO BCD-FORMULA
+           MOVE ADS-PRODUCTO                  TO BCD-PRODUCTO
+           MOVE ADS-DIASCAL                   TO BCD-DIASCAL
+      *
+           CALL CTE-UR8CDAT0 USING URWCDAT
+      *
+           IF BCD-CDRETORN NOT = '00'
+             MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'ERROR RUS UR8CDAT0'   TO UGNCTABA-VAR1-ERROR
+             MOVE BCD-CDRETORN           TO UGNCTABA-VAR2-ERROR
+             PERFORM 300-FINAL
+           END-IF.
+      *
+           MOVE '24312-LLAMA-UR8CDAT0'    TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 24312'   TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       244-COMPL-DATOS2                         *
+      *
+      ******************************************************************
+       244-COMPL-DATOS2.
+      *
+           MOVE '244-COMPL-DATOS2'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 244 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           MOVE SPACES                        TO COT-ENTIOFI
+           MOVE SPACES                        TO COT-CUENTA
+      *
+           MOVE '1001'                        TO COT-PERCAPIT
+           MOVE WS-FECHA-AMO                  TO COT-F-AMORTI
+           MOVE ADS-PERCAP                    TO COT-PERCAP
+           MOVE ADS-TIPODIAS                  TO COT-TIPODIAS
+           MOVE ADS-PERINT                    TO COT-PERINT
+           MOVE ADS-DIASCAL                   TO COT-DIASCAL
+      *LJSM-I
+           PERFORM 9000-VALIDAR-METODO-LIQ
+           IF SW-SI-MLI-APLICA
+              MOVE MLI-DIASCAL                TO COT-DIASCAL
+           END-IF
+      *LJSM-J
+      *
+           IF ADS-UGCDIPAG = 0
+      *
+              MOVE UGNCTABA-FECOPERA(9:2)     TO ADS-UGCDIPAG
+           END-IF
+      *
+           MOVE ADS-UGCDIPAG                  TO COT-UGCDIPAG
+
+           MOVE 'S'                           TO COT-CALCULAR-A
+           MOVE ZEROS                         TO COT-FACTOR-A
+           MOVE WS-FECHA-AMO                  TO COT-F-FORMA
+
+           MOVE  ADS-CODTIPRE                 TO COT-CODIGO
+      *
+           MOVE '244-COMPL-DATOS2'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 244 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       245-LLAMA-UR1CCOT                        *
+      *                                                                *
+      ******************************************************************
+       245-LLAMA-UR1CCOT.
+      *
+           MOVE '245-LLAMA-UR1CCOT'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 245 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+
+           EXEC CICS LINK
+              PROGRAM ('UR1CCOT0')
+              COMMAREA (COT-NIVEL-01)
+           END-EXEC
+      *
+           EVALUATE COT-CODIGO
+              WHEN CTE-CON-01-A
+                 MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                 MOVE CTE-CON-UGE0331        TO UGNCTABA-COD-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+              WHEN CTE-CON-98
+                 MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                 MOVE CTE-CON-UGE0297        TO UGNCTABA-COD-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+              WHEN '47'
+              WHEN '48'
+                 MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                 MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                 MOVE 'ERROR TABLA      '    TO UGNCTABA-VAR1-ERROR
+                 MOVE 'CORPORATIVA 552'      TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+              WHEN CTE-CON-99
+                 MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                 MOVE CTE-CON-UGE0298        TO UGNCTABA-COD-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR1-ERROR
+                 MOVE SPACES                 TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+           END-EVALUATE
+      *
+           MOVE '245-LLAMA-UR1CCOT'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 245 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       250-CALC-INT-LEASING                     *
+      * CALCULA INETERES LEASING                                       *
+      ******************************************************************
+       250-CALC-INT-LEASING.
+      *
+           MOVE '250-CALC-INT-LEASING'    TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 250 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE URWCFIN
+      *
+           MOVE WS-TASA-NOMINAL           TO FIN-TIPINT
+           MOVE 'N'                       TO FIN-TIPOTASA
+           PERFORM 251-CALCULAR-DIAS
+      *
+           MOVE '1001'                    TO FIN-PERCAPIT
+           MOVE ADS-PERINT                TO FIN-PERINT
+           MOVE ADS-DIASCAL               TO FIN-DIASCAL
+           MOVE WS-VR-OPCOMP              TO FIN-CAPITAL
+           MOVE WS-DIAS                   TO FIN-PERIODO-NUM
+
+           IF WS-DIAS < 1000
+              MOVE CTE-ALFA-1                 TO FIN-PERIODO-TIP
+           ELSE
+              IF WS-DIAS > 999 AND < 2000
+                 MOVE CTE-ALFA-6              TO FIN-PERIODO-TIP
+              END-IF
+              IF WS-DIAS > 1999 AND < 3000
+                 MOVE CTE-ALFA-7              TO FIN-PERIODO-TIP
+              END-IF
+              IF WS-DIAS > 2999 AND < 4000
+                 MOVE CTE-ALFA-8            TO FIN-PERIODO-TIP
+              END-IF
+           END-IF
+
+           CALL CTE-UR8CFIN0 USING URWCFIN
+
+           EVALUATE FIN-CDRETORNO
+              WHEN '00'
+                COMPUTE WS-CUOTA-ACTUAL = WS-CUOTA-ACTUAL +
+                                          FIN-INTERES
+              WHEN OTHER
+                MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+                MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                MOVE 'ERROR RUS UR8CFIN0'   TO UGNCTABA-VAR1-ERROR
+                MOVE 'CGO: '                TO UGNCTABA-VAR2-ERROR(1:5)
+                MOVE FIN-CDRETORNO          TO UGNCTABA-VAR2-ERROR(6: )
+                PERFORM 300-FINAL
+           END-EVALUATE.
+      *
+           MOVE '250-CALC-INT-LEASING'    TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 250 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                       251-CALCULAR-DIAS                        *
+      * CALCULA INETERES LEASING                                       *
+      ******************************************************************
+       251-CALCULAR-DIAS.
+      *
+           MOVE '251-CALCULAR-DIAS'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 251 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE CTE-CON-3                 TO    W075-CDOPCIO.
+
+           IF ADS-DIASCAL    = CTE-CON-COMERCIALES
+                         OR    CTE-CON-PERDIDA
+              MOVE ZERO                   TO    W075-NUMDIAS
+              MOVE CTE-CON-CO             TO    W075-TPTRAT
+      *COL09-I
+           ELSE
+              IF ADS-DIASCAL = CTE-CON-NATURALES
+                 MOVE ZERO                TO    W075-NUMDIAS
+                 MOVE CTE-CON-NA          TO    W075-TPTRAT
+              END-IF
+           END-IF
+      *COL09-F
+              MOVE WS-FECHA-LIQ-ANT       TO    AUX-AAAA-MM-DD
+              MOVE AUX-AAAA               TO    WS-AUX-AAAA
+              MOVE AUX-MM                 TO    WS-AUX-MM
+              MOVE AUX-DD                 TO    WS-AUX-DD
+              MOVE WS-AUX-DD-MM-AAAA      TO    W075-FHGRE1
+      *
+              MOVE WS-FECHA-LIQ           TO    AUX-AAAA-MM-DD
+              MOVE AUX-AAAA               TO    WS-AUX-AAAA
+              MOVE AUX-MM                 TO    WS-AUX-MM
+              MOVE AUX-DD                 TO    WS-AUX-DD
+              MOVE WS-AUX-DD-MM-AAAA      TO    W075-FHGRE2
+      *
+              EXEC CICS LINK
+                  PROGRAM ('TC1C1220')
+                  COMMAREA (TCWC0750-AREA)
+              END-EXEC
+
+              IF W075-CDRETORN NOT = CTE-CON-ALFA-00
+                 MOVE CTE-50              TO UGNCTABA-COD-RETURN
+                 MOVE CTE-UGE1141         TO UGNCTABA-COD-ERROR
+                 MOVE 'TC1C1220'          TO UGNCTABA-VAR1-ERROR
+                 MOVE SPACES              TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+              END-IF
+              MOVE W075-NUMDIAS           TO WS-DIAS
+      *
+           MOVE '251-CALCULAR-DIAS'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 251 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+
+      ******************************************************************
+      *                       260-RESTO-CALCULOS                       *
+      * SE REALIZAN EL RETO DE CALCULOS PARA COMPLETAR LA AMORTIZACION *
+      ******************************************************************
+       260-RESTO-CALCULOS.
+      *
+           MOVE '260-RESTO-CALCULOS'      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 260 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE UGNCTABA-IMPFINAN         TO WS-SALDO-VIVO
+      *
+           IF ADS-TIPODIAS   NOT = CTE-CON-2
+             PERFORM  261-CALC-PRI-LIQ-AMO
+           END-IF
+
+           MOVE UGNCTABA-FECOPERA(9:2)      TO DFP-DIA
+           IF ADS-UGCDIPAG  > 0
+             MOVE  ADS-UGCDIPAG             TO WS-UGCDIPAG
+             MOVE  WS-UGCDIPAG              TO DFP-DIA
+           END-IF
+
+           MOVE UGNCTABA-FECOPERA           TO DFP-FECHA-INICIAL
+           MOVE WS-DG-PLAZO                 TO DFP-PERCAP
+           MOVE CTE-CON-1                   TO DFP-NUM-PERIODOS
+           MOVE ADS-TIPODIAS                TO DFP-TIPODIAS
+           PERFORM 24312-LLAMA-UR8CDAT0
+           MOVE   BCD-FEVENCIN              TO WS-FECHA-FINAL
+
+           MOVE ZERO                        TO WS-CONT-AMO
+                                               WS-CONT-LIQ
+                                               WS-CONT-LIN
+      *
+           MOVE '260-RESTO-CALCULOS'      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 260 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+
+      ******************************************************************
+      *                       261-CALC-PRI-LIQ-AMO                     *
+      * SE CALCULAN LAS FECHAS DE PRIMERA AMORTIZACION Y DE PRIMERA LI-*
+      * QUIDACION                                                      *
+      ******************************************************************
+       261-CALC-PRI-LIQ-AMO.
+      *
+           MOVE '261-CALC-PRI-LIQ-AMO'    TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 261 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF
+      *
+           MOVE UGNCTABA-FECOPERA(9:2)        TO DFP-DIA
+           IF ADS-UGCDIPAG  > 0
+              MOVE  ADS-UGCDIPAG             TO WS-UGCDIPAG
+              MOVE  WS-UGCDIPAG              TO DFP-DIA
+           END-IF
+
+           MOVE UGNCTABA-FECOPERA             TO DFP-FECHA-INICIAL
+           MOVE CTE-CON-1                     TO DFP-NUM-PERIODOS
+           MOVE ADS-TIPODIAS                  TO DFP-TIPODIAS
+           MOVE DFP-FECHA-INICIAL             TO WS-FECHA-LIQ-ANT
+                                                 WS-FECHA-AMO-ANT
+                                                 WS-FECHA-1
+                                                 WS-FECHA-2
+
+           IF ADS-CARECAP       NOT = SPACES
+              MOVE ADS-CARECAP               TO DFP-PERCAP
+              PERFORM  24311-LLAMAR-RUTINA
+              MOVE DFP-FECHA-FINAL           TO DFP-FECHA-INICIAL
+                                                WS-FECOVALI
+           END-IF
+      *
+           MOVE ADS-PERCAP                    TO DFP-PERCAP
+           PERFORM  24311-LLAMAR-RUTINA
+           MOVE DFP-FECHA-FINAL               TO WS-FECHA-AMO
+
+           MOVE WS-FECHA-LIQ-ANT              TO DFP-FECHA-INICIAL
+           MOVE ADS-PERCAP                    TO DFP-PERCAP
+           PERFORM 24311-LLAMAR-RUTINA
+           PERFORM 24312-LLAMA-UR8CDAT0
+           MOVE BCD-FECPRIAMO                 TO WS-FECHA-AMO
+           MOVE BCD-FECPRILIQ                 TO WS-FECHA-LIQ
+      *
+           MOVE '261-CALC-PRI-LIQ-AMO'    TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 261 '    TO WTRC0-DESCRIPCION
+           MOVE SPACES                    TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    270-PROCESAR-LINEAS                         *
+      ******************************************************************
+       270-PROCESAR-LINEAS.
+      *
+           MOVE '270-PROCESAR-LINEAS'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 270 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE WS-DG-PLAZO                 TO CO2-PLAZO
+           MOVE UGNCTABA-IMPFINAN           TO CO2-IMPCONC
+
+           MOVE WS-FECHA-AMO                TO WS-FECHA-1
+           MOVE WS-FECHA-LIQ                TO WS-FECHA-2
+
+           PERFORM 271-REALIZA-AMORTIZA
+           PERFORM 272-GRABA-SALIDA
+      *
+           MOVE '270-PROCESAR-LINEAS'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 270 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    271-REALIZA-AMORTIZA                        *
+      ******************************************************************
+       271-REALIZA-AMORTIZA.
+      *
+           MOVE '271-REALIZA-AMORTIZA'      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 271 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           ADD CTE-CON-1-COMP               TO WS-CONT-AMO
+           ADD CTE-CON-1-COMP               TO WS-CONT-LIN
+           ADD CTE-CON-1-COMP               TO WS-CONT-LIQ
+
+           IF SW-PRIMERA-LINEA
+              PERFORM 2711-PRIMERA-LINEA-AL
+           ELSE
+              PERFORM 2712-LINEAS-SIG-AL
+           END-IF
+
+           MOVE WS-SALDO-1              TO WS-SALDO-VIVO
+           MOVE WS-FECHA-AMO            TO WS-FECHA-AMO-ANT
+           MOVE WS-FECHA-LIQ            TO WS-FECHA-LIQ-ANT
+
+           MOVE WS-FECHA-1              TO DFP-FECHA-INICIAL
+           MOVE UGNCTABA-FECOPERA(9:2)  TO DFP-DIA
+      *
+           IF ADS-UGCDIPAG  > 0
+              MOVE  ADS-UGCDIPAG             TO WS-UGCDIPAG
+              MOVE  WS-UGCDIPAG              TO DFP-DIA
+           END-IF
+      *
+           MOVE ADS-PERCAP               TO DFP-PERCAP
+           MOVE CTE-CON-1                TO DFP-NUM-PERIODOS
+           MOVE ADS-TIPODIAS             TO DFP-TIPODIAS
+           PERFORM 24311-LLAMAR-RUTINA
+           MOVE DFP-FECHA-FINAL          TO WS-FECHA-AMO
+
+           MOVE WS-FECHA-2               TO DFP-FECHA-INICIAL
+           MOVE UGNCTABA-FECOPERA        TO DFP-DIA
+      *
+           IF ADS-UGCDIPAG  > 0
+              MOVE  ADS-UGCDIPAG         TO WS-UGCDIPAG
+              MOVE  WS-UGCDIPAG          TO DFP-DIA
+           END-IF
+      *
+           MOVE ADS-PERCAP               TO DFP-PERCAP
+      *
+           MOVE CTE-CON-1                TO DFP-NUM-PERIODOS
+           MOVE ADS-TIPODIAS             TO DFP-TIPODIAS
+           PERFORM 24311-LLAMAR-RUTINA
+           MOVE DFP-FECHA-FINAL          TO WS-FECHA-LIQ
+
+           MOVE ZERO                     TO WS-INTERES-ACUM
+      *
+           MOVE '271-REALIZA-AMORTIZA'      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 271 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    2711-PRIMERA-LINEA-AL                       *
+      ******************************************************************
+       2711-PRIMERA-LINEA-AL.
+      *
+           MOVE '2711-PRIMERA-LINEA-AL'     TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE ZERO                          TO SW-LINEA
+           MOVE WS-SALDO-VIVO                 TO WS-CAPITAL
+           MOVE WS-INTERES-NOMINAL            TO WS-INTERES
+           PERFORM 251-CALCULAR-DIAS
+           PERFORM 27111-CALC-INTERES
+           PERFORM 27112-ANAL-INDSUBVE
+      *
+           MOVE '2711-PRIMERA-LINEA-AL'     TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    27111-CALC-INTERES                          *
+      ******************************************************************
+       27111-CALC-INTERES.
+      *
+           MOVE '27111-CALC-INTERES  '      TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE URWCFIN
+           MOVE WS-TASA-NOMINAL     TO FIN-TIPINT
+           MOVE 'N'                 TO FIN-TIPOTASA
+
+           MOVE '1001'              TO FIN-PERCAPIT
+           MOVE ADS-PERINT          TO FIN-PERINT
+           MOVE ADS-DIASCAL         TO FIN-DIASCAL
+           MOVE WS-CAPITAL          TO FIN-CAPITAL
+
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+              COMPUTE FIN-CAPITAL = FIN-CAPITAL + WS-VR-OPCOMP
+           END-IF
+
+           MOVE WS-DIAS             TO FIN-PERIODO-NUM
+
+           IF WS-DIAS < 1000
+              MOVE CTE-ALFA-1           TO FIN-PERIODO-TIP
+           ELSE
+              IF WS-DIAS > 999 AND < 2000
+                 MOVE CTE-ALFA-6        TO FIN-PERIODO-TIP
+              END-IF
+              IF WS-DIAS > 1999 AND < 3000
+                 MOVE CTE-ALFA-7        TO FIN-PERIODO-TIP
+              END-IF
+              IF WS-DIAS > 2999 AND < 4000
+                 MOVE CTE-ALFA-8        TO FIN-PERIODO-TIP
+              END-IF
+           END-IF
+
+           MOVE WS-TIPO-CAR          TO FIN-TIPO-CARTERA
+           MOVE WS-TASA-EFECTIVA-F   TO FIN-TIPINT
+
+           MOVE ADS-CODTIPRE      TO FIN-CDRETORNO
+           MOVE ADS-CODTIAMO      TO FIN-MODULRES
+
+           CALL CTE-UR8CFIN0 USING URWCFIN
+
+           IF FIN-CDRETORNO NOT EQUAL '00'
+             MOVE CTE-50                 TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+             MOVE 'ERROR RUS UR8CFIN0'   TO UGNCTABA-VAR1-ERROR
+             MOVE 'CGO: '                TO UGNCTABA-VAR2-ERROR(1:5)
+             MOVE FIN-CDRETORNO          TO UGNCTABA-VAR2-ERROR(6: )
+             PERFORM 300-FINAL
+           END-IF
+      *
+           COMPUTE  WS-INTERES-AUX ROUNDED = FIN-INTERES
+
+           SUBTRACT WS-INTERES-AJUSTE FROM WS-INTERES-AUX
+              GIVING WS-INTERES-CUOTA END-SUBTRACT
+
+           MOVE WS-INTERES-AUX TO WS-INTERES-CUOTA
+
+           ADD WS-INTERES-AUX TO WS-INTERES-ACUM
+              GIVING WS-INTERES-TOTAL
+
+           MOVE ZERO TO WS-AJUSTE-DIAS.
+
+           IF SI-SUBPRO-LEASING
+              COMPUTE WS-INT-LEASING = WS-INTERES-CUOTA
+           END-IF
+
+           MOVE '27111-CALC-INTERES  '      TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      ******************************************************************
+      *                    27112-ANAL-INDSUBVE                         *
+      ******************************************************************
+       27112-ANAL-INDSUBVE.
+      *
+           MOVE '27112-ANAL-INDSUBVE'       TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           INITIALIZE WS-RECIBO-1
+           IF ADS-INDSUBVE   = CTE-CON-LI OR
+              ADS-INDSUBVE   = 'N'
+              MOVE ZERO                         TO WS-SUBVENCION-1
+              MOVE WS-INTERES-TOTAL             TO WS-INTERES-1
+
+              IF WS-CUOTA-CAPITAL
+                 MOVE WS-CUOTA-ACTUAL          TO WS-CAPITAL-1
+              ELSE
+                 SUBTRACT WS-INTERES-CUOTA FROM WS-CUOTA-ACTUAL
+                    GIVING WS-CAPITAL-1
+                 END-SUBTRACT
+              END-IF
+           END-IF
+
+           SUBTRACT WS-CAPITAL-1 FROM WS-SALDO-VIVO
+              GIVING WS-SALDO-1
+           END-SUBTRACT
+      *
+           ADD WS-CAPITAL-1 TO WS-INTERES-1
+              GIVING WS-RECIBO-1
+           END-ADD
+
+           IF  WS-PERIODOS >  WS-LIMITE
+               ADD WS-GASTOS-1X TO WS-RECIBO-1
+                   GIVING WS-RECIBO-1
+               END-ADD
+           ELSE
+               ADD WS-GASTOS-1 TO WS-RECIBO-1
+                   GIVING WS-RECIBO-1
+               END-ADD
+           END-IF
+      *
+           MOVE '27112-ANAL-INDSUBVE'       TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2711'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    2712-LINEAS-SIG-AL                          *
+      ******************************************************************
+       2712-LINEAS-SIG-AL.
+      *
+           MOVE '2712-LINEAS-SIG-AL'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE WS-SALDO-VIVO               TO WS-CAPITAL
+           MOVE WS-INTERES-NOMINAL          TO WS-INTERES
+           PERFORM 27121-CALC-DIAS-SIG
+           PERFORM 27111-CALC-INTERES
+
+           IF WS-NUM-PERIODOS = WS-CONT-AMO
+               PERFORM  27121-ANAL-SUB-ULT
+           ELSE
+               PERFORM  27122-CONTI-CUADRO
+           END-IF
+      *
+           MOVE '2712-LINEAS-SIG-AL'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                    27121-CALC-DIAS-SIG                         *
+      ******************************************************************
+       27121-CALC-DIAS-SIG.
+      *
+           MOVE '2712-LINEAS-SIG-AL'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           IF WS-FECHA-LIQ-ANT = WS-FECHA-AMO-ANT OR
+              WS-FECHA-LIQ-ANT > WS-FECHA-AMO-ANT
+             PERFORM 251-CALCULAR-DIAS
+           ELSE
+             MOVE CTE-CON-3              TO    W075-CDOPCIO
+             MOVE ZERO                   TO    W075-NUMDIAS
+             MOVE CTE-CON-CO             TO    W075-TPTRAT
+      *
+             MOVE WS-FECHA-AMO-ANT       TO    AUX-AAAA-MM-DD
+             MOVE AUX-AAAA               TO    WS-AUX-AAAA
+             MOVE AUX-MM                 TO    WS-AUX-MM
+             MOVE AUX-DD                 TO    WS-AUX-DD
+             MOVE WS-AUX-DD-MM-AAAA      TO    W075-FHGRE1
+      *
+             MOVE WS-FECHA-LIQ           TO    AUX-AAAA-MM-DD
+             MOVE AUX-AAAA               TO    WS-AUX-AAAA
+             MOVE AUX-MM                 TO    WS-AUX-MM
+             MOVE AUX-DD                 TO    WS-AUX-DD
+             MOVE WS-AUX-DD-MM-AAAA      TO    W075-FHGRE2
+
+             EXEC CICS LINK
+                 PROGRAM ('TC1C1220')
+                 COMMAREA (TCWC0750-AREA)
+             END-EXEC
+
+             IF W075-CDRETORN NOT = CTE-CON-ALFA-00
+               MOVE CTE-50              TO UGNCTABA-COD-RETURN
+               MOVE CTE-UGE1141         TO UGNCTABA-COD-ERROR
+               MOVE 'TC1C1220'          TO UGNCTABA-VAR1-ERROR
+               MOVE SPACES              TO UGNCTABA-VAR2-ERROR
+               PERFORM 300-FINAL
+             END-IF
+             MOVE W075-NUMDIAS           TO WS-DIAS
+      *
+           MOVE '2712-LINEAS-SIG-AL'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                      27121-ANAL-SUB-ULT                        *
+      ******************************************************************
+       27121-ANAL-SUB-ULT.
+      *
+           MOVE '27121-ANAL-SUB-ULT'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE ZERO                      TO WS-SUBVENCION-1
+           MOVE WS-SALDO-VIVO             TO WS-CAPITAL-1
+
+           MOVE WS-INTERES-TOTAL          TO WS-INTERES-1
+
+           ADD WS-CAPITAL-1 TO WS-INTERES-1
+             GIVING WS-RECIBO-1
+           END-ADD
+
+
+           MOVE '27121-ANAL-SUB-ULT'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                      27122-CONTI-CUADRO                        *
+      ******************************************************************
+       27122-CONTI-CUADRO.
+      *
+           MOVE '27122-CONTI-CUADRO'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+
+           PERFORM 271221-CALC-CUOTA
+
+           MOVE CO2-CUOTA TO WS-CUOTA-ACTUAL
+           PERFORM 27112-ANAL-INDSUBVE
+
+           MOVE '27122-CONTI-CUADRO'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+
+      ******************************************************************
+      *                      271221-CALC-CUOTA                         *
+      ******************************************************************
+       271221-CALC-CUOTA.
+      *
+           MOVE '271221-CALC-CUOTA'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE WS-FECHA-LIQ                TO WS-CO2-F-AMORTI
+           MOVE ADS-PERCAP                  TO WS-CO2-PERCAP
+           MOVE ADS-TIPODIAS                TO WS-CO2-TIPODIAS
+           MOVE ADS-UGCDIPAG                TO WS-CO2-UGCDIPAG
+           IF  WS-CO2-UGCDIPAG = ZERO
+             MOVE UGNCTABA-FECOPERA         TO WS-CO2-UGCDIPAG
+           END-IF
+      *
+           MOVE ADS-CODTIAMO                TO CO2-TIP-CUOTA
+           MOVE WS-CUOTA-ACTUAL             TO CO2-CUOTA
+           MOVE WS-SALDO-VIVO               TO CO2-SALDO
+           MOVE SPACES                      TO CO2-COD-ERROR
+                                               CO2-VAR1-ERROR
+           MOVE CTE-CON-360-COMP3           TO CO2-DIASCAL
+           MOVE WS-RAZON                    TO CO2-RAZON
+
+           IF WS-CONT-LIN > ADS-LININCUO
+               MOVE CTE-CON-1               TO CO2-SALTO-CUOTA
+               MOVE CTE-CON-1               TO WS-CONT-LIN
+           ELSE
+               MOVE ZERO                    TO CO2-SALTO-CUOTA
+           END-IF
+
+           PERFORM  RUTINA-CALC-CUOTA-SIGUIENTE
+           IF CO2-COD-ERROR NOT = SPACES
+             MOVE CTE-50              TO UGNCTABA-COD-RETURN
+             MOVE CTE-UGE0000         TO UGNCTABA-COD-ERROR
+             MOVE 'ERROR RUS UEWCCO2' TO UGNCTABA-VAR1-ERROR
+             MOVE 'CGO: '             TO UGNCTABA-VAR2-ERROR(1:5)
+             MOVE CO2-COD-ERROR       TO UGNCTABA-VAR2-ERROR(5: )
+             PERFORM 300-FINAL
+           END-IF.
+
+           MOVE '271221-CALC-CUOTA'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2712'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *             RUTINA PARA EL CALCULO DE LAS SIGUIENTES           *
+      *             CUOTAS                                             *
+      ******************************************************************
+           EXEC SQL
+                INCLUDE URWCCO2
+           END-EXEC.
+      ******************************************************************
+      *          123-RECALCULA-CUOTA-GRAD                              *
+      ******************************************************************
+       123-RECALCULA-CUOTA-GRAD.
+
+           EXEC SQL
+                SELECT POR_AMO
+                  INTO :AGR-POR-AMO
+                  FROM UGDTAGR
+                  WHERE PLAZO     = :WS-NUMERO-3   AND
+                        ANNO      = :WS-ANNO
+           END-EXEC
+
+           MOVE SQLCODE       TO DB2-RETURN-CDE
+
+           EVALUATE TRUE
+             WHEN DB2-OK
+               MOVE AGR-POR-AMO   TO WS-FACTOR
+             WHEN DB2-NOTFND
+                  MOVE CTE-10               TO CO2-COD-ERROR
+                  MOVE 'UGE0939'            TO CAA-COD-ERROR
+                  MOVE 'REG. NO EXISTE '    TO CAA-VAR1-ERROR
+                  MOVE 'TABLA UGDTAGR'      TO CAA-VAR2-ERROR
+                  PERFORM 3-FINAL-PROGRAMA
+             WHEN DB2-RECATR1
+             WHEN DB2-RECATR2
+                MOVE CTE-UGE0000          TO UGNCTABA-COD-ERROR
+                MOVE 'RECURSO ATRAPADO '  TO UGNCTABA-VAR1-ERROR
+                MOVE 'UGDTAGR'            TO UGNCTABA-VAR2-ERROR
+                PERFORM 300-FINAL
+              WHEN OTHER
+                  MOVE CTE-90               TO CO2-COD-ERROR
+                  MOVE 'UGE0939'            TO CAA-COD-ERROR
+                  MOVE 'ERROR SELECT'       TO CAA-VAR1-ERROR
+                  MOVE 'TABLA UGDTAGR'      TO CAA-VAR2-ERROR
+                  PERFORM 3-FINAL-PROGRAMA
+           END-EVALUATE.
+      *
+      ******************************************************************
+      *                    272-GRABA-SALIDA                            *
+      ******************************************************************
+       272-GRABA-SALIDA.
+      *
+           MOVE '272-GRABA-SALIDA'          TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 272 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           IF WS-FECHA-1 > WS-FECHA-2
+               MOVE WS-FECHA-LIQ-ANT        TO WS-DATE-DB2
+           ELSE
+               MOVE WS-FECHA-AMO-ANT        TO WS-DATE-DB2
+           END-IF
+      *
+           MOVE WS-TAE                      TO UGNCTABA-TAE
+           ADD  1 TO WS-IND UGNCTABA-PLAZOM
+           MOVE WS-CONT-AMO                 TO UGNCTABA-NUMCUO(WS-IND)
+           MOVE WS-INTERES-1                TO UGNCTABA-INTINIR(WS-IND)
+           ADD  WS-INTERES-1                TO UGNCTABA-VTUINT
+
+           IF WS-NUM-PERIODOS EQUAL WS-CONT-AMO
+               IF WS-NUM-PERIODOS GREATER 1
+                SUBTRACT WS-CAPITAL-1 FROM WS-SALDO-VIVO
+                     GIVING WS-SALDO-1
+                END-SUBTRACT
+               END-IF
+      * MMCR
+             IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+               ADD WS-SALDO-1 WS-VR-OPCOMP  TO UGNCTABA-SALDO(WS-IND)
+             ELSE
+               MOVE WS-SALDO-1              TO UGNCTABA-SALDO(WS-IND)
+             END-IF
+           ELSE
+             IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+               ADD WS-SALDO-1 WS-VR-OPCOMP  TO UGNCTABA-SALDO(WS-IND)
+             ELSE
+               MOVE WS-SALDO-1              TO UGNCTABA-SALDO(WS-IND)
+             END-IF
+           END-IF
+
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+              IF (WS-FECHA-FINAL = WS-FECHA-1 AND
+                  WS-FECHA-FINAL = WS-FECHA-2)
+                    COMPUTE WS-CAPITAL-1 = WS-CAPITAL-1 + WS-VR-OPCOMP
+              END-IF
+           END-IF
+
+           MOVE WS-CAPITAL-1            TO UGNCTABA-CAPINIR(WS-IND)
+           ADD  WS-CAPITAL-1            TO UGNCTABA-VTUCAP
+      *
+
+      *COL03-INI
+      *    IF SW-SI-SUB-COB AND WS-MES-COB > WS-IND
+      *        COMPUTE WS-SALDO-2   = WS-SALDO-1 + WS-CAPITAL-1
+      *        IF SI-SUBPRO-LEASING
+      *          COMPUTE WS-SALDO-3 = WS-SALDO-2 + WS-VR-OPCOMP
+      *          MOVE WS-SALDO-3        TO WS-SALDO-COB
+      *        ELSE
+      *          MOVE WS-SALDO-2        TO WS-SALDO-COB
+      *        END-IF
+      *        COMPUTE WS-COBERTURA =
+      *             (WS-SALDO-COB *
+      *             (((1 + (UGNCTABA-TASCOB / 100)) ** (1/12)) - 1))
+      *    ELSE
+      *      MOVE ZEROS                     TO WS-COBERTURA
+      *    END-IF
+      *COL03-FIN
+      *
+           MOVE WS-RECIBO-1                 TO UGNCTABA-CUOTSSG(WS-IND)
+           IF UGNCTABA-OPCION NOT EQUAL CTE-C
+             PERFORM 2721-PRIMA-SEGURO
+             MOVE W101-ICIPRTOT             TO UGNCTABA-SEGVIDA(WS-IND)
+             ADD  W101-ICIPRTOT             TO UGNCTABA-VTUSEG
+      *COL01-INI
+                                               UGNCTABA-VTU-SEGU-VIDA
+      *COL01-FIN
+             PERFORM 2722-SEGU-INCENDIO
+             MOVE WS-SEG-INCEND             TO UGNCTABA-SEGINYT(WS-IND)
+             ADD  WS-SEG-INCEND             TO UGNCTABA-VTUSEG
+      *
+      *COL01-INI
+                                               UGNCTABA-VTU-SEGU-INC
+      *COL01-FIN
+             ADD  W101-ICIPRTOT WS-SEG-INCEND TO WS-RECIBO-1
+             MOVE WS-RECIBO-1               TO UGNCTABA-CUOTCSG(WS-IND)
+      *
+      *COL03-INI
+      *      IF SW-NO-SUB-COB
+      *       INITIALIZE     UGNCTABA-VRCOBER(WS-IND)
+      *       COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+      *                                 WS-RECIBO-1 - WS-COBERTURA
+      *       MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR-ABONO(WS-IND)
+      *      ELSE
+      *       IF WS-IND <=    84
+      *         MOVE WS-COBERTURA            TO UGNCTABA-VRCOBER(WS-IND)
+      *         COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+      *                    WS-RECIBO-1 - UGNCTABA-VRCOBER(WS-IND)
+      *         MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR-ABONO(WS-IND)
+      *       ELSE
+      *         INITIALIZE   UGNCTABA-VRCOBER(WS-IND)   WS-COBERTURA
+      *         COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+      *                                 WS-RECIBO-1 - WS-COBERTURA
+      *         MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR-ABONO(WS-IND)
+      *       END-IF
+      *      END-IF
+      *    END-IF
+      *COL03-FIN
+      *
+      *COL11-I
+             IF SW-NO-SUB-COB
+              INITIALIZE     UGNCTABA-VRCOBER(WS-IND)
+              COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+                                        WS-RECIBO-1 - WS-COBERTURA
+INC           MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR1-TBL-CUOTA(WS-IND)
+             ELSE
+              IF WS-IND <=    84
+                MOVE WS-COBERTURA            TO UGNCTABA-VRCOBER(WS-IND)
+                COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+                           WS-RECIBO-1 - UGNCTABA-VRCOBER(WS-IND)
+INC             MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR1-TBL-CUOTA(WS-IND)
+              ELSE
+                INITIALIZE   UGNCTABA-VRCOBER(WS-IND)   WS-COBERTURA
+                COMPUTE UGNCTABA-CUOTCOB(WS-IND) =
+                                        WS-RECIBO-1 - WS-COBERTURA
+INC             MOVE UGNCTABA-CUOTCOB(WS-IND)  TO TIR1-TBL-CUOTA(WS-IND)
+              END-IF
+             END-IF
+           END-IF
+      *COL11-F
+      *
+           MOVE '272-GRABA-SALIDA'          TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 272 '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      ******************************************************************
+      *                      2721-PRIMA-SEGURO                         *
+      * CALCULO DE LA PRIMA DE SEGURO DE VIDA                          *
+      ******************************************************************
+       2721-PRIMA-SEGURO.
+      *
+           MOVE '2721-PRIMA-SEGURO'         TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2721'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+           INITIALIZE WS-SALDO-INIC
+      *
+           MOVE CTE-PRODUCTO            TO W101-PRODUCTO
+           MOVE UGNCTABA-SUBPRO         TO W101-SUBPRODUCTO
+           COMPUTE WS-SALDO-INIC = WS-SALDO-1 + WS-CAPITAL-1
+      *
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > 0
+             ADD WS-VR-OPCOMP           TO WS-SALDO-INIC
+           END-IF
+           MOVE WS-SALDO-INIC           TO W101-VALOR
+           MOVE WS-DATE-DB2             TO W101-ICFINIRE
+           MOVE UGNCTABA-FECNACI        TO W101-FECNACIMI
+           MOVE ' '                     TO W101-TIPO
+      *
+           CALL CTE-IC9C1001 USING ICWC101
+      *
+           EVALUATE W101-ICCRETOR
+           WHEN '00'
+                CONTINUE
+           WHEN '10'
+                MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+                MOVE 'ERROR DATOS ENTRADA'   TO UGNCTABA-VAR1-ERROR
+                MOVE W101-ICCRETOR           TO UGNCTABA-COD-RETURN
+                PERFORM  300-FINAL
+           WHEN '50'
+                MOVE 'UGA0123'              TO UGNCTABA-COD-ERROR
+                MOVE W101-ICCRETOR          TO UGNCTABA-COD-RETURN
+                MOVE 'SUBPRODUCTO:'         TO UGNCTABA-VAR1-ERROR(1:12)
+                MOVE UGNCTABA-SUBPRO        TO UGNCTABA-VAR1-ERROR(13:4)
+                MOVE 'SIN TARIFA:'          TO UGNCTABA-VAR2-ERROR(1:11)
+                MOVE W101-ICMERREF(1:4)     TO UGNCTABA-VAR2-ERROR(13:4)
+                PERFORM  300-FINAL
+           WHEN '60'
+                MOVE 'UGA0123'              TO UGNCTABA-COD-ERROR
+                MOVE W101-ICCRETOR          TO UGNCTABA-COD-RETURN
+                MOVE 'SIN TARIFA:'          TO UGNCTABA-VAR1-ERROR(1:11)
+                MOVE W101-ICMERREF(1:4)     TO UGNCTABA-VAR1-ERROR(12:4)
+                MOVE 'PARA ESTA EDAD:'      TO UGNCTABA-VAR1-ERROR(1:15)
+                MOVE W101-ICMERREF(6:3)     TO UGNCTABA-VAR1-ERROR(17:3)
+                PERFORM  300-FINAL
+           WHEN OTHER
+                MOVE 'UGE0939'              TO UGNCTABA-COD-ERROR
+                MOVE W101-ICCRETOR          TO UGNCTABA-COD-RETURN
+                MOVE 'ERROR EN RUTINA'      TO UGNCTABA-VAR1-ERROR
+                MOVE 'IC9C1001'             TO UGNCTABA-VAR1-ERROR (16:)
+                MOVE W101-ICLTANOM          TO UGNCTABA-VAR2-ERROR(1:9)
+                MOVE UGNCTABA-SUBPRO        TO UGNCTABA-VAR2-ERROR(10:)
+                PERFORM  300-FINAL
+                CONTINUE
+           END-EVALUATE.
+      *
+      ******************************************************************
+      *                     281-CALC-VTU-COBER                         *
+      * LLAMADO A RUTINA UG9CTIR0 - CALCULO DE TIR                     *
+      ******************************************************************
+       281-CALC-VTU-COBER.
+      *
+      *
+           MOVE '01'                        TO TIR-OPCION
+           MOVE UGNCTABA-IMPFINAN           TO TIR-VALDESM
+      *    MOVE WS-TAE                      TO TIR-TASAPOL
+      *
+
+           IF WS-CONT-AMO > CTE-COB
+            COMPUTE WS-PLA =(WS-CONT-AMO - CTE-COB)
+            COMPUTE WS-PLA =  WS-PLA /12
+            COMPUTE WS-CONT-AMOC = WS-CONT-AMO/12
+            COMPUTE WS-TAI =(((7 * UGNCTABA-TASCOB)+(WS-PLA * WS-TAE))
+                           / WS-CONT-AMOC)
+           MOVE WS-TAI                      TO TIR-TASAPOL
+           MOVE WS-CONT-AMO                 TO TIR-PLAZO
+
+           ELSE
+             COMPUTE WS-TAE = WS-TAE - UGNCTABA-TASCOB
+             MOVE WS-TAE                      TO TIR-TASAPOL
+             MOVE WS-CONT-AMO                 TO TIR-PLAZO
+           END-IF
+      *
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > ZEROS
+             INITIALIZE   TIR-VALDESM
+             COMPUTE WS-VR-TOTLES = UGNCTABA-IMPFINAN + WS-VR-OPCOMP
+             MOVE WS-VR-TOTLES                TO TIR-VALDESM
+           END-IF
+      *
+      *COL11-I
+           MOVE WS-VR-TOTLES                TO TIR1-IMPORTE-INICIAL
+           MOVE WS-CONT-AMO                 TO TIR1-PLAZO
+      *
+           EXEC CICS
+                LINK PROGRAM(BBVA-UR2CTIR1)
+                COMMAREA (UGWCTIR1)
+                NOHANDLE
+           END-EXEC
+      *
+           IF TIR1-COD-RETORNO = ZEROES
+              COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = TIR1-VTU-PORCENTUAL
+           ELSE
+              MOVE '30'                    TO UGNCTABA-COD-RETURN
+              MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR EN UR2CTIR1'     TO UGNCTABA-VAR1-ERROR
+              PERFORM 300-FINAL
+            END-IF
+      *COL11-F
+      *
+      **COL11-I
+      **
+      **   CALL 'UG9CTIR0'                  USING TIR-UGWCTIR0
+      **   IF TIR-RETORNO = '00'
+      *
+      **     DIVIDE TIR-TASATIR BY 100 GIVING WS-TASATIR
+      **     COMPUTE WS-TASA-REDOND ROUNDED =
+      **                         (( 1 + WS-TASATIR ) ** 12 ) - 1
+      **     MULTIPLY 100 BY WS-TASA-REDOND
+      **     COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = WS-TASA-REDOND
+      **   ELSE
+      **     MOVE CTE-50                  TO UGNCTABA-COD-RETURN
+      **     MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+      **     MOVE 'ERROR RUS UG9CTIR0'    TO UGNCTABA-VAR1-ERROR
+      **     MOVE 'CGO: '                 TO UGNCTABA-VAR2-ERROR(1:5)
+      **     MOVE TIR-RETORNO             TO UGNCTABA-VAR2-ERROR(6:)
+      **     PERFORM  300-FINAL
+      **   END-IF
+      *COL11-F
+      *
+           MOVE '281-CALC-VTU-PORC'         TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 281'       TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+      *
+      ******************************************************************
+      *                      2722-SEGU-INCENDIO                        *
+      * CALCULO DE LA PRIMA DE SEGURO DE INCENDIO Y TERREMOTO          *
+      ******************************************************************
+       2722-SEGU-INCENDIO.
+      *
+           MOVE '2722-SEGU-INCENDIO'        TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 2722'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+
+      *COL01-I
+      *    COMPUTE WS-SEG-INCEND =
+      *            ((UGNCTABA-VRVIVIEN * WS-PORCIND) / 1000)
+
+           COMPUTE WS-SEG-INCEND =
+                   ((UGNCTABA-VRVIVIEN * WS-PORCIND) / 10000) *
+                     (WS-PORCIVA)
+      *COL01-F
+      *
+           MOVE '2722-SEGU-INCENDIO'        TO WTRC0-PARRAFO
+           MOVE 'TERMINA PERFORM 2722'      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF.
+
+      ******************************************************************
+      *                      280-CALC-VTU-PORC.                        *
+      * LLAMADO A RUTINA UG9CTIR0 - CALCULO DE TIR                     *
+      ******************************************************************
+       280-CALC-VTU-PORC.
+      *
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+           MOVE '01'                        TO TIR-OPCION
+           MOVE UGNCTABA-IMPFINAN           TO TIR-VALDESM
+           MOVE WS-TAE                      TO TIR-TASAPOL
+           MOVE WS-CONT-AMO                 TO TIR-PLAZO
+
+      *    IF  WS-CONT-AMO > 144
+      *     COMPUTE TIR-VALDESM = TIR-VALDESM / 10
+      *     COMPUTE TIR-ABONO(WS-IND) = TIR-ABONO(WS-IND) / 10
+      *     MOVE 0000000000000144            TO TIR-PLAZO
+      *    END-IF
+      *
+      *
+      *COL11-I
+      **   CALL 'UG9CTIR0'                  USING TIR-UGWCTIR0
+      * LLAMADO A RUTINA UR2CTIR1 - CALCULO DE TIR                     *
+           MOVE UGNCTABA-IMPFINAN           TO TIR1-IMPORTE-INICIAL
+           MOVE WS-CONT-AMO                 TO TIR1-PLAZO
+      *
+           EXEC CICS
+                LINK PROGRAM(BBVA-UR2CTIR1)
+                COMMAREA (UGWCTIR1)
+                NOHANDLE
+           END-EXEC
+      *
+           IF TIR1-COD-RETORNO = ZEROES
+              COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = TIR1-VTU-PORCENTUAL
+           ELSE
+              MOVE '30'                    TO UGNCTABA-COD-RETURN
+              MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR EN UR2CTIR1'     TO UGNCTABA-VAR1-ERROR
+              PERFORM 300-FINAL
+            END-IF.
+      *
+      **   IF TIR-RETORNO = '00'
+      *
+      **     DIVIDE TIR-TASATIR BY 100 GIVING WS-TASATIR
+      **     COMPUTE WS-TASA-REDOND ROUNDED =
+      **                         (( 1 + WS-TASATIR ) ** 12 ) - 1
+      **     MULTIPLY 100 BY WS-TASA-REDOND
+      *COL11-F
+
+      *    IF  WS-CONT-AMO >  144
+      *       MOVE 00                     TO  WS-VTU-ENT
+      *       MOVE 18500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  168
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 89500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  180
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 88500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  192
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 87500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  204
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 08650                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  216
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 08650                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  228
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 85500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *
+      *    IF  WS-CONT-AMO = 240
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 85500                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+
+      *      IF  WS-CONT-AMO >  144
+      *        MOVE 00                     TO  WS-VTU-ENT
+      *        MOVE 18500                  TO  WS-VTU-DEC
+      *        COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND - WS-PORCVTU
+      *      END-IF
+      *
+      *COL11-I
+      **     COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = WS-TASA-REDOND
+      **   ELSE
+      **     MOVE CTE-50                  TO UGNCTABA-COD-RETURN
+      **     MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+      **     MOVE 'ERROR RUS UG9CTIR0'    TO UGNCTABA-VAR1-ERROR
+      **     MOVE 'CGO: '                 TO UGNCTABA-VAR2-ERROR(1:5)
+      **     MOVE TIR-RETORNO             TO UGNCTABA-VAR2-ERROR(6:)
+      **     PERFORM  300-FINAL
+      **   END-IF.
+      *COL11-F
+      *
+      *
+      ******************************************************************
+      *                      282-CALC-VTU-PORL                         *
+      * LLAMADO A RUTINA UG9CTIR0 - CALCULO DE TIR                     *
+      ******************************************************************
+       282-CALC-VTU-PORL.
+      *
+           MOVE '01'                        TO TIR-OPCION
+           MOVE UGNCTABA-IMPFINAN           TO TIR-VALDESM
+           MOVE WS-TAE                      TO TIR-TASAPOL
+           MOVE WS-CONT-AMO                 TO TIR-PLAZO
+
+      *    IF  WS-CONT-AMO > 144
+      *     COMPUTE TIR-VALDESM = TIR-VALDESM / 10
+      *     COMPUTE TIR-ABONO(WS-IND) = TIR-ABONO(WS-IND) / 10
+      *     MOVE 0000000000000144            TO TIR-PLAZO
+      *    END-IF
+
+           IF SI-SUBPRO-LEASING AND WS-VR-OPCOMP > ZEROS
+             INITIALIZE   TIR-VALDESM
+             COMPUTE WS-VR-TOTLES = UGNCTABA-IMPFINAN + WS-VR-OPCOMP
+             MOVE WS-VR-TOTLES                TO TIR-VALDESM
+      *COL11-I
+           ELSE
+             MOVE UGNCTABA-IMPFINAN        TO WS-VR-TOTLES
+      *COL11-F
+           END-IF
+      *
+      *COL11-I
+      **   CALL 'UG9CTIR0'                  USING TIR-UGWCTIR0
+      **   IF TIR-RETORNO = '00'
+      *
+      **     DIVIDE TIR-TASATIR BY 100 GIVING WS-TASATIR
+      **     COMPUTE WS-TASA-REDOND ROUNDED =
+      **                         (( 1 + WS-TASATIR ) ** 12 ) - 1
+      **     MULTIPLY 100 BY WS-TASA-REDOND
+      * LLAMADO A RUTINA UR2CTIR1 - CALCULO DE TIR                     *
+           MOVE WS-VR-TOTLES                TO TIR1-IMPORTE-INICIAL
+           MOVE WS-CONT-AMO                 TO TIR1-PLAZO
+      *
+           EXEC CICS
+                LINK PROGRAM(BBVA-UR2CTIR1)
+                COMMAREA (UGWCTIR1)
+                NOHANDLE
+           END-EXEC
+      *
+           IF TIR1-COD-RETORNO = ZEROES
+              COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = TIR1-VTU-PORCENTUAL
+           ELSE
+              MOVE '30'                    TO UGNCTABA-COD-RETURN
+              MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+              MOVE 'ERROR EN UR2CTIR1'     TO UGNCTABA-VAR1-ERROR
+              PERFORM 300-FINAL
+            END-IF.
+      *COL11-F
+      *
+
+
+      *    IF  WS-CONT-AMO >  156
+      *       MOVE 06                     TO  WS-VTU-ENT
+      *       MOVE 96300                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+
+      *    IF  WS-CONT-AMO =  168
+      *       MOVE 01                     TO  WS-VTU-ENT
+      *       MOVE 80000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  180
+      *       MOVE 02                     TO  WS-VTU-ENT
+      *       MOVE 35000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  192
+      *       MOVE 02                     TO  WS-VTU-ENT
+      *       MOVE 83000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  204
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 23000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  216
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 57000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *    IF  WS-CONT-AMO =  228
+      *       MOVE 03                     TO  WS-VTU-ENT
+      *       MOVE 87000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+      *
+      *
+      *    IF  WS-CONT-AMO = 240
+      *       MOVE 04                     TO  WS-VTU-ENT
+      *       MOVE 13000                  TO  WS-VTU-DEC
+      *      COMPUTE  WS-TASA-REDOND = WS-TASA-REDOND + WS-PORCVTU
+      *    END-IF
+
+      *COL11-I
+      **     COMPUTE UGNCTABA-VTU-PORCENT ROUNDED = WS-TASA-REDOND
+      **   ELSE
+      **     MOVE CTE-50                  TO UGNCTABA-COD-RETURN
+      **     MOVE 'UGE0939'               TO UGNCTABA-COD-ERROR
+      **     MOVE 'ERROR RUS UG9CTIR0'    TO UGNCTABA-VAR1-ERROR
+      **     MOVE 'CGO: '                 TO UGNCTABA-VAR2-ERROR(1:5)
+      **     MOVE TIR-RETORNO             TO UGNCTABA-VAR2-ERROR(6:)
+      **     PERFORM  300-FINAL
+      **   END-IF.
+      *COL11-F
+      *
+      *COL10-I
+      ******************************************************************
+      *                   22451-CONSULTA-UGDTLQS                       *
+      ******************************************************************
+       22451-CONSULTA-UGDTLQS.
+
+           EXEC SQL
+               SELECT TIPOAPLI
+                   INTO  :LQS-TIPOAPLI
+                   FROM  UGDTLQS
+                   WHERE PRODUCTO = :LQS-PRODUCTO       AND
+                         SUBPRO   = :LQS-SUBPRO         AND
+                         CODCONLI = :LQS-CODCONLI       AND
+                         FECOVALI <= :LQS-FECOVALI      AND
+                         FEFIVALI >= :LQS-FECOVALI
+           END-EXEC.
+      *COL10-F
+      *
+      ******************************************************************
+      *                      300-FINAL                                 *
+      ******************************************************************
+       300-FINAL.
+      *
+           MOVE '300-FINAL    '             TO WTRC0-PARRAFO
+           MOVE 'INGRESA PERFORM 3-  '      TO WTRC0-DESCRIPCION
+           MOVE SPACES                      TO WTRC0-VALOR-ALF
+      *
+           MOVE '300-FINAL    '             TO WTRC0-PARRAFO
+           MOVE 'UGNCTABA-COD-RETURN '      TO WTRC0-DESCRIPCION
+           MOVE UGNCTABA-COD-RETURN         TO WTRC0-VALOR-ALF
+      *
+           MOVE '300-FINAL    '             TO WTRC0-PARRAFO
+           MOVE 'UGNCTABA-COD-ERROR  '      TO WTRC0-DESCRIPCION
+           MOVE UGNCTABA-COD-ERROR          TO WTRC0-VALOR-ALF
+      *
+           MOVE '300-FINAL    '             TO WTRC0-PARRAFO
+           MOVE 'UGNCTABA-VAR1-ERROR '      TO WTRC0-DESCRIPCION
+           MOVE UGNCTABA-VAR1-ERROR         TO WTRC0-VALOR-ALF
+      *
+           MOVE '300-FINAL    '             TO WTRC0-PARRAFO
+           MOVE 'UGNCTABA-VAR2-ERROR '      TO WTRC0-DESCRIPCION
+           MOVE UGNCTABA-VAR2-ERROR         TO WTRC0-VALOR-ALF
+      *
+           EXEC CICS
+                RETURN
+           END-EXEC.
+      *
+      ******************************************************************
+      *                      3-FINAL-PROGRAMA                          *
+      * SE AGREGA ESTE PARRAFO POR LLAMADO DE RUTINA URWCCO2 - Y NO    *
+      * TERMINE ESTA RUTINA                                            *
+      ******************************************************************
+       3-FINAL-PROGRAMA.
+      *
+           CONTINUE.
+      *
+      ******************************************************************
+      *  COPY CONVERSION DE UVR A PESOS Y VICEVERSA                    *
+      ******************************************************************
+           EXEC SQL
+                INCLUDE URCPYUVR
+           END-EXEC.
+      *
+      *LJSM-I
+      ******************************************************************
+      * DETERMINA LA METODOLOGIA DE LIQUIDACION APLICABLE.             *
+      * SI RETORNA 00, COT-DIASCAL TOMA LA LETRA PARAMETRIZADA.        *
+      * SI RETORNA 30, SE CONSERVA COMPLETAMENTE LA LOGICA LEGACY.     *
+      * NOTA: NO HAY MAE DE CUENTA EN ESTA RUTINA (SIMULACION POR      *
+      * SUBPRODUCTO); SE USA WS-FECHA-SOLICITUD COMO FECHA FUNCIONAL.  *
+      ******************************************************************
+       9000-VALIDAR-METODO-LIQ.
+
+           MOVE SPACES                      TO URWCMLI-REG
+           SET SW-NO-MLI-APLICA            TO TRUE
+
+           MOVE WS-TIPO-CAR                 TO MLI-TIPO-CARTERA
+           MOVE WS-FECHA-SOLICITUD          TO MLI-FEC-DESEMBOLSO
+           MOVE ADS-SUBPRO                  TO MLI-SUBPRODUCTO
+
+           CALL CTE-UR9CMLI0 USING WS-URWCMLI
+
+           EVALUATE MLI-CODRETORNO
+              WHEN '00'
+                 SET SW-SI-MLI-APLICA       TO TRUE
+              WHEN '30'
+                 SET SW-NO-MLI-APLICA       TO TRUE
+              WHEN OTHER
+                 MOVE CTE-UGE0000            TO UGNCTABA-COD-ERROR
+                 MOVE 'UR9CMLI0'             TO UGNCTABA-VAR1-ERROR
+                 MOVE MLI-CODRETORNO         TO UGNCTABA-VAR2-ERROR
+                 PERFORM 300-FINAL
+           END-EVALUATE.
+      *LJSM-J
+      *

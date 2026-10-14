@@ -1,0 +1,526 @@
+﻿      *-------------------------------*--------------------------------*
+      *  UG2CALOG  REALIZA LA ANULACION DE LA FORMALIZACION DE UN      *
+      *            DESEMBOLSO                                          *
+      *----------------------------------------------------------------*
+      *        I D E N T I F I C A T I O N      D I V I S I O N        *
+      *----------------------------------------------------------------*
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.    UG2CALOG.
+       AUTHOR.        GRUPO CMC COLOMBIA - JUAN G TRIVI#O MORALES
+       DATE-WRITTEN.  2017-02-10.
+       DATE-COMPILED.
+      *----------------------------------------------------------------*
+      *        L O G    D E   M O D I F I C A C I O N E S              *
+      *----------------------------------------------------------------*
+      *  AUTOR   FECHA          DESCRIPCION                            *
+      * ------- -------- --------------------------------------------- *
+      *----------------------------------------------------------------*
+      *----------------------------------------------------------------*
+      *                   ENVIRONMENT DIVISION                         *
+      *----------------------------------------------------------------*
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SOURCE-COMPUTER.
+           IBM-3090.
+       OBJECT-COMPUTER.
+           IBM-3090.
+      ******************************************************************
+      *                      DATA DIVISION                             *
+      ******************************************************************
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      ******************************************************************
+      *                       CONSTANTES                               *
+      ******************************************************************
+       01  PGM.
+           05 PGM-PROGRAMA             PIC X(08) VALUE 'UG2CALOG'.
+           05 RUT-IC2CUGEB             PIC X(08) VALUE 'IC2CUGEB'.
+           05 RUT-HX2CUGEB             PIC X(08) VALUE 'HX2CUGEB'.
+           05 RUT-PE2CUGEB             PIC X(08) VALUE 'PE2CUGEB'.
+           05 RUT-UG2C9999             PIC X(08) VALUE 'UG2C9999'.
+           05 RUT-UG2CAGAR             PIC X(08) VALUE 'UG2CAGAR'.
+      *----------------------------------------------------------------*
+      *                  DEFINICION DE VARIABLES                       *
+      *----------------------------------------------------------------*
+       01 WS-VARIABLES.
+           05 HX-E-CICS                PIC X.
+           05 HX-NUM-CONTRA            PIC X(20).
+           05 HX-NUM-SOLI              PIC X(10).
+           05 HX-NUM-OPER              PIC X(12).
+           05 HX-TIP-DOCU              PIC X(01).
+           05 HX-NUM-DOCU              PIC X(15).
+           05 WS-NOMBRE-COLA-TS        PIC X(08)  VALUE SPACES.
+           05 WS-LONG-TS               PIC S9(4)  COMP VALUE ZEROES.
+           05 WS-CONTENIDO-TS.
+              10 WS-CONTENIDO-IND      PIC X(04)  VALUE SPACES.
+              10 WS-CONTENIDO-TOT      PIC X(532) VALUE SPACES.
+       01 WS-DB2.
+          05 WS-DB2-RETURN.
+             10 WS-DB2-SQL             PIC S9(9) COMP.
+             10 WS-DB2-OK              PIC S9(9) COMP   VALUE +0.
+             10 WS-DB2-NOTFND          PIC S9(9) COMP   VALUE +100.
+             10 WS-DB2-NULL            PIC S9(9) COMP   VALUE -305.
+             10 WS-DB2-DUPREC          PIC S9(9) COMP   VALUE -811.
+      *----------------------------------------------------------------*
+      *                       SWITCHES                                 *
+      *----------------------------------------------------------------*
+       01 SW-SWITCHES.
+          05 SW-ESCRIBE-TS             PIC X(01) VALUE 'N'.
+          88 W-SI-FIN-CUR                        VALUE 'S'.
+          88 W-NO-FIN-CUR                        VALUE 'N'.
+      *----------------------------------------------------------------*
+      *                    DECLARACIONES DB2                           *
+      *----------------------------------------------------------------*
+           EXEC SQL
+                INCLUDE SQLCA
+           END-EXEC.
+
+           EXEC SQL
+             INCLUDE UGGTLOG
+           END-EXEC.
+
+           EXEC SQL
+             INCLUDE UGTCLOG
+           END-EXEC.
+      *----------------------------------------------------------------*
+      *               AREA DE DECLARACION DE CURSORES                  *
+      *----------------------------------------------------------------*
+            EXEC SQL
+               DECLARE CUR-LOG CURSOR  FOR
+               SELECT LOG_CARANT,
+                      LOG_CARNUE,
+                      LOG_CODIGO,
+                      LOG_IMPANT,
+                      LOG_COLUMNA,
+                      LOG_IMPANT
+                FROM UGDTLOG
+                WHERE LOG_ENTIOFI  = :LOG-ENTIOFI
+                AND   LOG_CUENTA   = :LOG-CUENTA
+                AND   LOG_FECMOV   = :LOG-FECMOV
+                AND   LOG_CODIGO   = 'EKIP'
+                AND   LOG_CARNUE IN ('ARS','ARG','ARC','ARP','VPG')
+            END-EXEC.
+      *----------------------------------------------------------------*
+      *               AREA DE COPIES
+      *----------------------------------------------------------------*
+      * COPY DE COMUNICACION DEL PROGRAMA IC2CUGEB
+          COPY ICWCUGEB.
+
+      * COPY DE COMUNICACION DEL PROGRAMA PE2CUGEB
+          COPY PEWCUGEB.
+
+      * COPY DE COMUNICACION DEL PROGRAMA UG2C9999
+          COPY UGWC001.
+
+      * COPY DE COMUNICACION DEL PROGRAMA HX2CUGEB
+          COPY HXWCUGEB.
+
+      * COPY DE COMUNICACION DEL PROGRAMA UG2CAGAR
+          COPY UGWCAGAR.
+      *----------------------------------------------------------------*
+      *                       AREA DE COPYS                            *
+      *----------------------------------------------------------------*
+       LINKAGE SECTION.
+       01  DFHCOMMAREA.
+           COPY UGWCALOG.
+      *----------------------------------------------------------------*
+      *                     PROCEDURE DIVISION                         *
+      *----------------------------------------------------------------*
+       PROCEDURE DIVISION.
+           PERFORM 10000-INICIO    THRU 10000-EXIT
+           PERFORM 20000-PROCESO   THRU 20000-EXIT
+           PERFORM 30000-FINAL     THRU 30000-EXIT.
+      *----------------------------------------------------------------*
+      *                       10000-INICIO                             *
+      *----------------------------------------------------------------*
+       10000-INICIO.
+           EXEC CICS
+              IGNORE CONDITION ERROR
+           END-EXEC
+           IF EIBRESP = DFHRESP(NORMAL)
+              CONTINUE
+           ELSE
+              MOVE 'ERROR EN EL CICS '        TO WS-CONTENIDO-TOT(01:20)
+              MOVE EIBRESP                    TO WS-CONTENIDO-TOT(21:)
+              PERFORM 31000-ESCRIBE-COLA-TS
+              PERFORM 30000-FINAL             THRU 30000-EXIT
+           END-IF
+           MOVE '00'                          TO ALOG-COD-RESPUESTA
+           MOVE SPACES                        TO ALOG-COD-ERROR
+           MOVE SPACES                        TO ALOG-VAR1-ERROR
+           MOVE SPACES                        TO ALOG-VAR2-ERROR
+           MOVE 'UG2CALOG'                    TO WS-NOMBRE-COLA-TS
+           PERFORM 11000-BORRA-COLA-TS
+           MOVE '1-INICIO-PROGRAMA'           TO WS-CONTENIDO-TOT(01:20)
+           PERFORM 31000-ESCRIBE-COLA-TS.
+       10000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                     1100-BORRA-COLA-TS                         *
+      *----------------------------------------------------------------*
+       11000-BORRA-COLA-TS.
+           IF ALOG-TRAZA NOT = 'P'
+              EXEC CICS
+                   DELETEQ TS
+                   QUEUE(WS-NOMBRE-COLA-TS)
+                   NOHANDLE
+              END-EXEC
+           END-IF.
+       11000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                       20000-PROCESO                            *
+      *----------------------------------------------------------------*
+       20000-PROCESO.
+           MOVE '20000-PROCESO'               TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           PERFORM 21000-VALIDA-ENTRADA
+           PERFORM 20120-ABRIR-CURS-LOG
+           PERFORM 20160-LEER-CURSO-LOG       UNTIL W-SI-FIN-CUR
+           PERFORM 20180-CERRAR-CUR-LOG.
+       20000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *     PROCESO ENCARGADO DE ABRIR EL CURSOR                       *
+      *----------------------------------------------------------------*
+       20120-ABRIR-CURS-LOG.
+           MOVE '20120-ABRIR-CURS-LOG'        TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           MOVE ALOG-CONTRATO(1:8)            TO LOG-ENTIOFI
+           MOVE ALOG-CONTRATO(9:10)           TO LOG-CUENTA
+           MOVE ALOG-FECMOV                   TO LOG-FECMOV
+           EXEC SQL
+                OPEN CUR-LOG
+           END-EXEC.
+           EVALUATE SQLCODE
+           WHEN ZEROES
+              SET W-NO-FIN-CUR                TO TRUE
+           WHEN OTHER
+              MOVE '40'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'ERROR OPEN UGDTLOG  '     TO ALOG-VAR1-ERROR
+              PERFORM 30000-FINAL
+           END-EVALUATE.
+       20120-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *     PROCESO QUE CIERRA EL CURSOR                               *
+      *----------------------------------------------------------------*
+       20180-CERRAR-CUR-LOG.
+           MOVE '20180-CERRAR-CUR-LOG'        TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           EXEC SQL
+                CLOSE CUR-LOG
+           END-EXEC.
+           EVALUATE SQLCODE
+           WHEN ZEROES
+              CONTINUE
+           WHEN OTHER
+              MOVE '30'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'ERROR CERRAR UGDTLOG'     TO ALOG-VAR1-ERROR
+              PERFORM 30000-FINAL
+           END-EVALUATE.
+       20180-EXIT. EXIT.
+      *-----------------------------------------------------------------
+      *     PROCESO QUE LEE EL CURSOR
+      *-----------------------------------------------------------------
+       20160-LEER-CURSO-LOG.
+           MOVE '20160-LEER-CURSO-LOG'        TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           EXEC SQL
+                FETCH CUR-LOG
+                 INTO :LOG-CARANT ,
+                      :LOG-CARNUE ,
+                      :LOG-CODIGO ,
+                      :LOG-IMPANT ,
+                      :LOG-COLUMNA,
+                      :LOG-IMPANT
+           END-EXEC.
+           EVALUATE SQLCODE
+           WHEN ZEROES
+                PERFORM 55555-EVALUAR-CODIGO
+           WHEN 100
+                SET W-SI-FIN-CUR              TO TRUE
+           WHEN OTHER
+              MOVE '20'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'ERROR LEER UGDTLOG  '     TO ALOG-VAR1-ERROR
+              PERFORM 30000-FINAL
+           END-EVALUATE.
+       20160-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 21000-VALIDA-DATOS-BASICOS                     *
+      *----------------------------------------------------------------*
+       21000-VALIDA-ENTRADA.
+           MOVE '21000-VALIDA-ENTRADA'        TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           IF ALOG-CONTRATO EQUAL SPACES OR LOW-VALUES
+              MOVE '10'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'CAMPO ENTIDAD'            TO ALOG-VAR1-ERROR
+              MOVE 'NO INFORMADO'             TO ALOG-VAR2-ERROR
+              PERFORM 30000-FINAL             THRU 30000-EXIT
+           END-IF
+           IF ALOG-FECMOV EQUAL SPACES OR LOW-VALUES
+              MOVE '10'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'CAMPO OFICINA'            TO ALOG-VAR1-ERROR
+              MOVE 'NO INFORMADA'             TO ALOG-VAR2-ERROR
+              PERFORM 30000-FINAL             THRU 30000-EXIT
+           END-IF
+           IF ALOG-TRAZA EQUAL SPACES OR LOW-VALUES
+              MOVE '10'                       TO ALOG-COD-RESPUESTA
+              MOVE 'UGE0001'                  TO ALOG-COD-ERROR
+              MOVE 'CONTRATO EKIP'            TO ALOG-VAR1-ERROR
+              MOVE 'NO INFORMADO'             TO ALOG-VAR2-ERROR
+              PERFORM 30000-FINAL             THRU 30000-EXIT
+           END-IF.
+       21000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                  23200-ACTUALIZA-UGDTLOG                       *
+      *----------------------------------------------------------------*
+       23200-ACTUALIZA-UGDTLOG.
+           MOVE '23200-ACTUALIZA-UGDTLOG'     TO WS-CONTENIDO-TOT
+           PERFORM 31000-ESCRIBE-COLA-TS
+           MOVE ALOG-CONTRATO(1:8)            TO LOG-ENTIOFI
+           MOVE ALOG-CONTRATO(9:)             TO LOG-CUENTA
+           MOVE ALOG-FECMOV                   TO LOG-FECMOV
+           EXEC SQL
+                UPDATE UGDTLOG
+                   SET LOG_CODIGO   = 'AEKI'
+                 WHERE LOG_ENTIOFI  = :LOG-ENTIOFI
+                 AND   LOG_CUENTA   = :LOG-CUENTA
+                 AND   LOG_FECMOV   = :LOG-FECMOV
+                 AND   LOG_CODIGO   = 'EKIP'
+                 AND   LOG_CARNUE   = :LOG-CARNUE
+                 AND   LOG_CARANT   = :LOG-CARANT
+           END-EXEC
+           EVALUATE SQLCODE
+              WHEN ZEROES
+              WHEN 100
+                 CONTINUE
+              WHEN OTHER
+                 MOVE '10'                    TO ALOG-COD-RESPUESTA
+                 MOVE 'ERROR UPDATE UGLOG'    TO ALOG-COD-ERROR
+                 MOVE 'SQLCODE '              TO ALOG-VAR1-ERROR
+                 MOVE WS-DB2-SQL              TO ALOG-VAR2-ERROR
+                 PERFORM 99999-ROLLBACK       THRU 99999-EXIT
+                 PERFORM 30000-FINAL          THRU 30000-EXIT
+           END-EVALUATE.
+       23200-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                        99999-ROLLBACK                          *
+      *----------------------------------------------------------------*
+       99999-ROLLBACK.
+             EXEC SQL
+                  ROLLBACK
+             END-EXEC.
+       99999-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                         30000-FINAL                            *
+      *----------------------------------------------------------------*
+       30000-FINAL.
+             EXEC CICS
+                  RETURN
+             END-EXEC.
+       30000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                    3100-ESCRIBIR-COLA-TS                       *
+      *----------------------------------------------------------------*
+       31000-ESCRIBE-COLA-TS.
+           IF ALOG-TRAZA NOT = 'P'
+              MOVE LENGTH OF WS-CONTENIDO-TS  TO WS-LONG-TS
+               EXEC CICS WRITEQ TS
+                    QUEUE  (WS-NOMBRE-COLA-TS)
+                    FROM   (WS-CONTENIDO-TS)
+                    LENGTH (WS-LONG-TS)
+                    NOHANDLE
+               END-EXEC
+              MOVE SPACES                     TO WS-CONTENIDO-TS
+           END-IF.
+       31000-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 55555-EVALUAR-CODIGO                           *
+      *----------------------------------------------------------------*
+       55555-EVALUAR-CODIGO.
+           EVALUATE LOG-CARNUE
+           WHEN 'ARS'
+                PERFORM 11111-LLAMA-IC2CUGEB
+                PERFORM 22222-LLAMA-PE2CUGEB
+                PERFORM 23200-ACTUALIZA-UGDTLOG
+           WHEN 'ARG'
+                PERFORM 44444-LLAMA-UG2C9999
+                PERFORM 22222-LLAMA-PE2CUGEB
+                PERFORM 23200-ACTUALIZA-UGDTLOG
+           WHEN 'ARC'
+                PERFORM 33333-LLAMA-HX2CUGEB
+                PERFORM 23200-ACTUALIZA-UGDTLOG
+           WHEN 'ARP'
+                PERFORM 22222-LLAMA-PE2CUGEB
+                PERFORM 23200-ACTUALIZA-UGDTLOG
+           WHEN 'VPG'
+                PERFORM 66666-LLAMA-UG2CAGAR
+                PERFORM 23200-ACTUALIZA-UGDTLOG
+           WHEN OTHER
+                CONTINUE
+           END-EVALUATE.
+       55555-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 22222-LLAMA-PE2CUGEB                           *
+      *----------------------------------------------------------------*
+       22222-LLAMA-PE2CUGEB.
+           MOVE '99999-LLAMA-PE2CUGEB'        TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           INITIALIZE PEWCUGEB
+           MOVE LOG-CARANT(1:8)               TO PE-E-CONTEKIP(1:8)
+           MOVE LOG-CARANT(11:10)             TO PE-E-CONTEKIP(9:)
+           MOVE ALOG-TRAZA                    TO PE-E-TRAZA
+           EXEC CICS
+              LINK PROGRAM (RUT-PE2CUGEB)
+              COMMAREA     (PEWCUGEB)
+              NOHANDLE
+           END-EXEC
+           MOVE 'PE-S-COD-RESPUESTA'          TO WS-CONTENIDO-TOT(1:20)
+           MOVE PE-S-COD-RESPUESTA            TO WS-CONTENIDO-TOT(21:)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           EVALUATE PE-S-COD-RESPUESTA
+              WHEN '00'
+                   CONTINUE
+              WHEN OTHER
+                   MOVE '21'                  TO ALOG-COD-RESPUESTA
+                   MOVE 'UGE0000'             TO ALOG-COD-ERROR
+                   MOVE PE-S-VAR1-ERROR       TO ALOG-VAR1-ERROR
+                   MOVE PE-S-VAR2-ERROR       TO ALOG-VAR2-ERROR
+                   PERFORM 99999-ROLLBACK
+                   PERFORM 30000-FINAL
+           END-EVALUATE.
+       22222-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 11111-LLAMA-IC2CUGEB                           *
+      *----------------------------------------------------------------*
+       11111-LLAMA-IC2CUGEB.
+           MOVE '99999-LLAMA-IC2CUGEB'        TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           INITIALIZE ICWCUGEB
+           MOVE ALOG-TRAZA                    TO IC-E-TRAZA
+           MOVE LOG-CARANT(1:4)               TO IC-E-ENTIDAD-S
+           MOVE LOG-CARANT(5:4)               TO IC-E-OFICINA-S
+           MOVE LOG-CARANT(11:10)             TO IC-E-CUENTA-S
+           MOVE LOG-ENTIOFI(1:4)              TO IC-E-ENTIDAD
+           MOVE LOG-ENTIOFI(5:4)              TO IC-E-OFICINA
+           MOVE LOG-CUENTA                    TO IC-E-CUENTA
+           EXEC CICS
+              LINK PROGRAM (RUT-IC2CUGEB)
+              COMMAREA     (ICWCUGEB)
+              NOHANDLE
+           END-EXEC
+           MOVE 'IC-S-COD-RESPUESTA'          TO WS-CONTENIDO-TOT(1:20)
+           MOVE IC-S-COD-RESPUESTA            TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           EVALUATE IC-S-COD-RESPUESTA
+              WHEN '00'
+                   CONTINUE
+              WHEN OTHER
+                   MOVE '22'                  TO ALOG-COD-RESPUESTA
+                   MOVE 'UGE0000'             TO ALOG-COD-ERROR
+                   MOVE IC-S-VAR1-ERROR       TO ALOG-VAR1-ERROR
+                   MOVE IC-S-VAR2-ERROR       TO ALOG-VAR2-ERROR
+                   PERFORM 99999-ROLLBACK
+                   PERFORM 30000-FINAL
+           END-EVALUATE.
+       11111-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 44444-LLAMA-UG2C9999                           *
+      *----------------------------------------------------------------*
+       44444-LLAMA-UG2C9999.
+           MOVE '99999-LLAMA-UG2C9999'        TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           INITIALIZE UGWC001
+           MOVE ALOG-TRAZA                    TO UG-E-TRAZA
+           MOVE LOG-CARANT(1:8)               TO UG-E-CONTEKIP(1:8)
+           MOVE LOG-CARANT(11:10)             TO UG-E-CONTEKIP(9:)
+           MOVE LOG-ENTIOFI                   TO UG-E-CONTRATO(1:8)
+           MOVE LOG-CUENTA                    TO UG-E-CONTRATO(9:)
+           EXEC CICS
+              LINK PROGRAM (RUT-UG2C9999)
+              COMMAREA     (UGWC001)
+              NOHANDLE
+           END-EXEC
+           MOVE 'UG-S-COD-RESPUESTA'          TO WS-CONTENIDO-TOT(1:20)
+           MOVE UG-S-COD-RESPUESTA            TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           EVALUATE UG-S-COD-RESPUESTA
+              WHEN '00'
+                   CONTINUE
+              WHEN OTHER
+                   MOVE '23'                  TO ALOG-COD-RESPUESTA
+                   MOVE 'UGE0000'             TO ALOG-COD-ERROR
+                   MOVE UG-S-VAR1-ERROR       TO ALOG-VAR1-ERROR
+                   MOVE UG-S-VAR2-ERROR       TO ALOG-VAR2-ERROR
+                   PERFORM 99999-ROLLBACK
+                   PERFORM 30000-FINAL
+           END-EVALUATE.
+       44444-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 33333-LLAMA-HX2CUGEB                           *
+      *----------------------------------------------------------------*
+       33333-LLAMA-HX2CUGEB.
+           MOVE '99999-LLAMA-HX2CUGEB'        TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           INITIALIZE HXWCUGEB
+           MOVE ALOG-TRAZA                    TO HXUGEB-TRAZA
+           MOVE LOG-CARANT(1:4)               TO HXUGEB-CA-ENT
+           MOVE LOG-CARANT(5:4)               TO HXUGEB-CA-OFI
+           MOVE LOG-CARANT(11:10)             TO HXUGEB-CA-CNT
+           EXEC CICS
+              LINK PROGRAM (RUT-HX2CUGEB)
+              COMMAREA     (HXWCUGEB)
+              NOHANDLE
+           END-EXEC
+           MOVE 'HXUGEB-COD-RESPUESTA'        TO WS-CONTENIDO-TOT(1:20)
+           MOVE HXUGEB-COD-RESPUESTA          TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+
+           EVALUATE HXUGEB-COD-RESPUESTA
+              WHEN '00'
+                   CONTINUE
+              WHEN OTHER
+                   MOVE '24'                  TO ALOG-COD-RESPUESTA
+                   MOVE 'UGE0000'             TO ALOG-COD-ERROR
+                   MOVE HXUGEB-VAR1-ERROR     TO ALOG-VAR1-ERROR
+                   MOVE HXUGEB-VAR2-ERROR     TO ALOG-VAR2-ERROR
+                   PERFORM 99999-ROLLBACK
+                   PERFORM 30000-FINAL
+           END-EVALUATE.
+       33333-EXIT. EXIT.
+      *----------------------------------------------------------------*
+      *                 66666-LLAMA-UG2CAGAR                           *
+      *----------------------------------------------------------------*
+       66666-LLAMA-UG2CAGAR.
+           MOVE '66666-LLAMA-UG2CAGAR'        TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+           INITIALIZE UGWCAGAR
+           MOVE ALOG-TRAZA                    TO AGAR-TRAZA
+           MOVE LOG-CARANT(1:8)               TO AGAR-ENTIOFI
+           MOVE LOG-CARANT(11:10)             TO AGAR-CUENTA
+           MOVE LOG-ENTIOFI                   TO AGAR-CON-EKIP(1:8)
+           MOVE LOG-CUENTA                    TO AGAR-CON-EKIP(9:)
+           MOVE LOG-IMPANT                    TO AGAR-VALOR
+           EXEC CICS
+              LINK PROGRAM (RUT-UG2CAGAR)
+              COMMAREA     (UGWCAGAR)
+              NOHANDLE
+           END-EXEC
+           MOVE 'AGAR-COD-RESPUESTA'          TO WS-CONTENIDO-TOT(1:20)
+           MOVE AGAR-COD-RESPUESTA            TO WS-CONTENIDO-TOT(1:20)
+           PERFORM 31000-ESCRIBE-COLA-TS
+
+           EVALUATE AGAR-COD-RESPUESTA
+              WHEN '00'
+                   CONTINUE
+              WHEN OTHER
+                   MOVE '25'                  TO AGAR-COD-RESPUESTA
+                   MOVE 'UGE0000'             TO AGAR-COD-ERROR
+                   MOVE HXUGEB-VAR1-ERROR     TO AGAR-VAR1-ERROR
+                   MOVE HXUGEB-VAR2-ERROR     TO AGAR-VAR2-ERROR
+                   PERFORM 99999-ROLLBACK
+                   PERFORM 30000-FINAL
+           END-EVALUATE.
+       66666-EXIT. EXIT.
