@@ -1,0 +1,30 @@
+Actúa como un Arquitecto de Software Senior especializado en Mainframe (COBOL, CICS, DB2) y Core Bancario. 
+
+He adjuntado a esta conversación el historial completo del análisis y las sesiones previas (conversacion.md) junto con la documentación técnica del proyecto "Liquidación de Intereses 365/360 - Consumo, Vehículo y Libranza" (diseños técnicos, historias de usuario e inventario de componentes).
+
+Tu objetivo es realizar una EVALUACIÓN TÉCNICA Y FUNCIONAL RIGUROSA de todo el material proporcionado para validar la viabilidad, identificar brechas (gaps) y estructurar el plan de ejecución del equipo de desarrollo.
+
+Por favor, procesa todos los documentos y entregame una evaluación organizada en los siguientes 5 bloques:
+
+1. DIAGNÓSTICO DEL ALCANCE Y LA ARQUITECTURA
+   - Analiza el principio de diseño centralizado basado en la rutina orquestadora UR9CMLI0 y la tabla UGDTT37.
+   - Evalúa la estrategia de vigencia basada en FESOLIC y la lógica de convivencia legacy (retorno 00 vs retorno 30).
+   - Valida el impacto en las rutinas de cuota (UR1CCOT0, UR8CCUO0, UR8CCOT0) y el cálculo por factor/período.
+
+2. MATRIZ DE COMPONENTES Y ÁRBOL DE DEPENDENCIAS
+   - Clasifica los componentes del proyecto por capas (Capa Base/Parametría, Capa de Decisión/Orquestador, Capa Consumidores Principales y Capa Financiera Base).
+   - Confirma el papel de los 6 programas consumidores principales vs. las ~100 rutinas secundarias (como UR8CFIN0).
+
+3. IDENTIFICACIÓN DE RIESGOS Y ALERTAS CRÍTICAS (GAPS)
+   - Evalúa los riesgos operativos detectados en la sesión (ej. limitaciones de acceso a terminales NACAR, estrategia de pases a QA sin pruebas exhaustivas en desarrollo, posible colisión con proyectos recientes como "día desembolso").
+   - Analiza el impacto de los pagos en efectivo vs. cheques (días de canje) y los casos especiales en cancelación anticipada.
+
+4. ESTRATEGIA DE SEGMENTACIÓN Y MVP
+   - Analiza la viabilidad de la salida en fases por producto: Fase 1 (Consumo - MVP), Fase 2 (Vehículo) y Fase 3 (Libranza).
+   - Define qué transacciones de entrada (Online/CICS y Malla Batch JCL) deben priorizarse para certificar el MVP.
+
+5. HOJA DE RUTA Y PLAN DE ACCIÓN PARA EL EQUIPO DE DESARROLLO
+   - Propon un paso a paso detallado de ejecución ("de adentro hacia afuera") para los desarrolladores.
+   - Incluye una lista de preguntas técnicas o vacíos de información que el equipo debe resolver con los Líderes del Banco o Product Owners antes de iniciar la codificación.
+
+Estructura tu respuesta en un formato claro, profesional, directo y técnico (puedes usar listas, tablas y bloques de código cuando sea necesario).
