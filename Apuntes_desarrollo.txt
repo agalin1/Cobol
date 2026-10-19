@@ -38,3 +38,47 @@ cuales ya existen en la parametria de asignacion de subproducto (UMTA secciones:
 cuales ya existen en la parametria de Pricing  
     y cuales hacen falta 
     y cuales se pueden reusar.
+--------------------------------------------
+Primero un conteo rápido para saber si tienen datos y cuántos (recuerda poner el owner DTUG. al inicio, porque sin eso te vuelve a salir el SQLCODE=-204 que tuviste antes):
+
+SELECT SECCION, COUNT(*) AS CANTIDAD
+  FROM DTUG.UGDTT37
+ WHERE SECCION IN ('0117','1314')
+ GROUP BY SECCION;
+
+Si la 1314 tiene registros, mira el detalle (ajusta el FETCH FIRST si esperas más de 100):
+
+SELECT SECCION, ELEMENTO, RESTO
+  FROM DTUG.UGDTT37
+ WHERE SECCION = '1314'
+ ORDER BY ELEMENTO
+ FETCH FIRST 100 ROWS ONLY;
+
+Y de paso, vuelve a correr la de 0117 para confirmar que sigue siendo solo el registro de MADIAUTOS (por si cambió algo desde la última vez):
+
+SELECT SECCION, ELEMENTO, RESTO
+  FROM DTUG.UGDTT37
+ WHERE SECCION = '0117'
+ ORDER BY ELEMENTO;
+
+Qué mirar en el resultado: fíjate en qué trae el campo ELEMENTO (¿es un código de subproducto? ¿un NIT? ¿un nombre de concesionario?) y qué trae RESTO (¿es un código de grupo? ¿una descripción?). Eso te va a decir de una si esta sección ya resuelve algo parecido a lo que estamos proponiendo con 9968/9969/9970, o si es algo totalmente distinto.
+
+Cómo mirar la transacción UMTA en CICS
+
+Dos formas, ambas de solo lectura (no ejecutan nada, no modifican nada):
+
+1. La más rápida — CEMT INQUIRE:
+En una pantalla de CICS (región de desarrollo/calidad), escribe:
+CEMT INQUIRE TRANSACTION(UMTA)
+Esto te muestra la definición de la transacción: si está habilitada, y lo más importante, a qué programa está asociada (campo PROGRAM). Con ese nombre de programa ya puedes ir a buscar el fuente en IDz (seguramente en
+COBP.ALTAMIRA.BSRC0, igual que los demás).
+
+2. Si tienes acceso al CSD (definiciones de recursos) — CEDA DISPLAY:
+CEDA DISPLAY TRANSACTION(UMTA) GROUP(*)
+Esto te da más detalle (TWASIZE, el grupo al que pertenece, etc.) y también te confirma el PROGRAM. Si(*) o pregúntale al administrador de CICS cuál es el grupo donde vive esa transacción.
+
+3. Una vez tengas el nombre del programa:
+Puedes correr el mismo tipo de búsqueda que hicimos antes con UG7CCNRA/UR7CCRAR — descargarlo desde IDz y revisar directamente el código: qué tablas usa (EXEC SQL INCLUDE), qué SECCION de T37 consulta, y si tiene alguna lógica de NIT →
+grupo ya construida. Así sabrías de una si el "servicio nuevo" que mencionó el líder ya existe parcialde tener que construirlo desde cero en UG7CCNRA.
+
+¿Quieres que, en cuanto tengas los resultados de la consulta y el nombre del programa de UMTA, los trantra lo que ya tenemos diseñado?
