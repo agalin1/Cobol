@@ -1,0 +1,40 @@
+
+
+   FRONT
+      1. NACAR        francisco   Cuanto cale el vehiculo y cuanto trajo el cliente de enganche
+      2. VehiculoWeb  maria camila buitrago - arlen jose chinchia
+      3. CAP          julian
+      4. APIs         cristian sneider
+      
+fase 2
+   seminuevos   <= 4 años  (2023) nuevo, usado y semunuevo 
+   compra instantanea  
+             LTV      
+             Garantias 
+   renovacion automática 
+   
+cuales son las variables finales que nos piden (pricing y fase2)
+  ver si hay variables que son implicitas  (tipo de combustible: gasolina / hibrido) elect-
+      1 grupo comision concesionarios (grupos 1 al 4 segun alianza)
+            APIs  CAP VehiculoWeb  NACAR
+             x 
+          un servicion nuevo que segun el nit o nombre traiga un valor que represente el grupo
+      2 canal de venta 
+            APIs  CAP VehiculoWeb  NACAR
+             
+cuales ya se capturan en todos los front 
+   y que se hace con ellas 
+   y si se guardan en tablas 
+   y cuales no existen, si no se estan capturando, que hay que hacer para que se capturen   
+
+
+cuales son los servicios 
+    si modificamos algo, a cuales canales afectamos
+
+
+cuales ya existen en la parametria de asignacion de subproducto (UMTA secciones: 1314 y 0117)
+    cuales hacen falta y cuales se pueden meter en esa base de datos de oracle o si se pueden reutilizar
+    que consecuencias hay de meterle mas campos a esta matriz, o si se pueden reutilizar unos que ya estan 
+cuales ya existen en la parametria de Pricing  
+    y cuales hacen falta 
+    y cuales se pueden reusar.
