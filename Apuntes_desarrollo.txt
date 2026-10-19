@@ -1,5 +1,26 @@
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    FRONT
       1. NACAR        francisco   Cuanto cale el vehiculo y cuanto trajo el cliente de enganche
       2. VehiculoWeb  maria camila buitrago - arlen jose chinchia
@@ -82,3 +103,9 @@ Puedes correr el mismo tipo de búsqueda que hicimos antes con UG7CCNRA/UR7CCRAR
 grupo ya construida. Así sabrías de una si el "servicio nuevo" que mencionó el líder ya existe parcialde tener que construirlo desde cero en UG7CCNRA.
 
 ¿Quieres que, en cuanto tengas los resultados de la consulta y el nombre del programa de UMTA, los trantra lo que ya tenemos diseñado?
+
+
+
+
+
+aprovechando que estás revisando la tabla UGDTT37, ¿me podrías apoyar confirmando cómo validaríamos allí estas variables independientes (especialmente Concesionario/Convenio, Seminuevo / modelo ≤ 4 años, Compra Instantánea y Prenda) y cómo se da su recepción?
