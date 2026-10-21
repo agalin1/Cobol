@@ -1,26 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    FRONT
       1. NACAR        francisco   Cuanto cale el vehiculo y cuanto trajo el cliente de enganche
       2. VehiculoWeb  maria camila buitrago - arlen jose chinchia
@@ -105,7 +82,49 @@ grupo ya construida. Así sabrías de una si el "servicio nuevo" que mencionó e
 ¿Quieres que, en cuanto tengas los resultados de la consulta y el nombre del programa de UMTA, los trantra lo que ya tenemos diseñado?
 
 
-
-
-
 aprovechando que estás revisando la tabla UGDTT37, ¿me podrías apoyar confirmando cómo validaríamos allí estas variables independientes (especialmente Concesionario/Convenio, Seminuevo / modelo ≤ 4 años, Compra Instantánea y Prenda) y cómo se da su recepción?
+
+
+De una, viejo Andrés, en la tarde lo revisamos
+
+
+Quiero transmitirte bien cuál es mi intención con todo esto. Me han dado muy buenas referencias de tu trabajo y del equipo, y tengo plena confianza en ustedes.
+
+
+Para mí, HOST es una pieza fundamental de esta iniciativa, porque CAP, NACAR y los demás canales van a depender de su integración con HOST para implementar correctamente el nuevo Pricing.
+
+Por eso me interesa mucho que tengamos una visión clara del End to End de la solución: qué información necesita HOST, cómo la recibe de los canales, cómo la procesa y cómo se integra todo el flujo.
+Sé que no vamos a tener un diseño perfecto al 100 % desde el inicio y que seguramente aparecerán ajustes durante el desarrollo. 🤜🤛
+
+
+Perfecto, Andrés, entonces manejamos los dos puntos por separado.
+
+
+1. Archivo TANTIA: inicialmente necesitamos confirmar cómo van a llegar las cinco variables de Pricing en el archivo, incluyendo su estructura, posiciones, formatos y valores. Me comentaste que hablaste con JAIME ALEXANDER NIETO GOMEZ.
+
+
+2. Matriz RAR: este punto lo puedes revisar de una vez con Óscar para entender cómo se construyen las condiciones y combinaciones que determinan las tasas.
+Con ambos insumos podemos revisar el diseño HOST inicial, identificar los ajustes necesarios y cerrar una versión alineada con la necesidad funcional.
+
+Al contrastar la necesidad funcional con la versión inicial del diseño HOST, identificamos algunos puntos que sería importante revisar contigo para confirmar si están cubiertos o si requieren ajustes en el diseño:
+
+
+1. Marca y concesionario: la necesidad contempla información de marca, NIT y nombre del concesionario, mientras que la interfaz HOST propuesta incorpora origen, NIT y combustible. Necesitamos validar cómo queda atendida toda la información funcional y qué parte corresponde a HOST o a los canales.
+
+
+2. Garantía: la necesidad contempla cuatro tipos de garantía y menciona su selección en los canales. El diseño propone identificarla por subproducto. Necesitamos confirmar que ese mecanismo cubra todos los escenarios funcionales.
+
+
+3. Scoring y reprocesos: necesitamos revisar cómo se relacionan las rutinas HOST propuestas con el proceso funcional de evaluación, cálculo de tasa y reproceso ante cambios de condiciones.
+
+
+4. Grupo de comisión: validar que la clasificación y el tratamiento técnico propuestos cubran los distintos orígenes de venta y grupos de concesionarios contemplados en el requerimiento.
+
+
+5. Combustible, LTV y nuevo/usado: confirmar que la solución propuesta permite procesar correctamente estas variables en todos los escenarios requeridos.
+
+
+La idea es que nos ayudes a revisar estos puntos contra la necesidad funcional y actualizar el diseño HOST únicamente donde se identifiquen brechas o se necesite mayor detalle.
+
+
+Con ello buscamos contar con una versión de diseño que podamos utilizar como referencia para definir las integraciones y cerrar las estimaciones con CAP, NACAR, WEB y APIs.
