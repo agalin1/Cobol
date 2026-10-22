@@ -1,0 +1,655 @@
+SDA 56742 - PRICING VEHICULO: HALLAZGOS, PREGUNTAS PENDIENTES Y ACLARACIONES
+=================================================================================
+Documento de trabajo - NO reemplaza ni modifica el Documento de Diseño Tecnico
+HOST oficial (SDA56742_Diseno_Tecnico_HOST_Pricing_Vehiculo.docx). Se deja aparte
+mientras continua la evaluacion con el lider y con negocio/funcionales.
+
+Fecha de consolidacion: 2026-10-22
+Autor: Equipo HOST (Andres)
+
+
+INDICE
+------
+1. Hallazgos sobre UMTA y las secciones UGDTT37 0117 / 1314
+2. Los tres programas HOST de Pricing (UG7CCNRA, UR7CCRAR, UR7CCTPR)
+3. Tabla consolidada: variables del modelo (23) vs. secciones T37 que necesitan
+4. Hallazgos de los materiales adicionales (imagenes + mensaje del lider)
+5. Preguntas pendientes para el lider
+6. Preguntas para Negocio / Funcionales (discovery)
+7. Aclaraciones conceptuales de referencia
+8. Simulacion de parametrizacion en UMTA (ejemplo 9968 / 9969 / 9970)
+9. Pendientes abiertos / siguientes pasos
+
+
+1. HALLAZGOS SOBRE UMTA Y LAS SECCIONES UGDTT37 0117 / 1314
+=================================================================================
+
+1.1 UGDTT37 (la tabla) vs UMTA (la transaccion) - no son lo mismo
+---------------------------------------------------------------------
+
+UGDTT37 es una sola tabla fisica en DB2 (SECCION CHAR(4) | ELEMENTO CHAR(22) |
+RESTO CHAR(250)) donde conviven decenas de parametrias de negocio independientes
+entre si, cada una identificada por su SECCION (9040 subproductos vehiculo, 9967
+lineas habilitadas, 1901 tipo de cartera, 0028 tasa variable, 9931 compra de
+cartera, y ahora 0117 y 1314).
+
+UMTA es una TRANSACCION/PROGRAMA (UM2CTAM0 + mapset UMMTAM), NO una parametria
+de negocio - es la herramienta ADMINISTRATIVA del indice de secciones.
+
+CONFIRMADO EN CODIGO (UM2CTAM0): todas las sentencias SQL del programa apuntan,
+sin excepcion, a SECCION = '0001':
+
+      EXEC SQL INCLUDE UGTCT37 END-EXEC.
+      DECLARE CURSOR-T37 CURSOR FOR
+         SELECT ELEMENTO, RESTO FROM UGDTT37
+          WHERE SECCION = '0001' AND ELEMENTO >= :WRK-ELEMENTO
+
+La seccion '0001' es el catalogo maestro: cada fila dice "la seccion XXXX existe
+y significa tal cosa" (ELEMENTO = codigo de 4 digitos en posicion 19-22, RESTO =
+descripcion). UMTA es, ademas, DB2/HOST - NO Oracle (usa el mismo copy UGTCT37
+de siempre).
+
+CONCLUSION: UMTA es donde se REGISTRA un numero de seccion nuevo (responde el
+pendiente "numeros de seccion T37 disponibles"). UMTA NO mantiene el contenido
+de 0117 ni 1314 - eso lo hace otra herramienta/proceso aun no identificado
+(hipotesis: la transaccion "UNTA" del glosario del documento tecnico, SIN
+VERIFICAR EN CODIGO TODAVIA).
+
+1.2 Seccion 0117 - Parametros de simulacion web de vehiculo / moto
+---------------------------------------------------------------------
+
+Grupo                        | Elementos                               | Que maneja
+--------------------------------------------------------------------------------------
+Scoring                      | BURO, BURO AGENDA, BURO PREDICTOR,      | Umbrales del motor
+                              | SCOREIC, SCOREICEC, SCOREICTV, etc.     | de score / buro
+Elegibilidad                 | EDAD MIN=21, EDAD MAX=74, PLAZO USADOS  | Reglas basicas de
+                              | =10, TIEMPO MINIMO=12, MONTO MINIMO     | quien puede aplicar
+Control operativo            | APAGADO=NO, DIAS_DE_BAJA=030, VIGENCIA  | Interruptor canal,
+                              | =90                                      | vigencia simulacion
+Catalogo de aliados          | ALIADOVH001 = MADIAUTOS (+URL)          | Unico aliado hoy
+Subproductos base por tipo   | SUBPRO=3968 (vehiculo), SUBPRO_HN/HU=   | Punto de entrada por
+                              | 4115 (hibrido), SUBPRO_MN/MU=4083 (moto)| tipo de bien
+Matriz de decision por flags | VEHICULO0001..0029, MOTO0001..0016      | Dado un set de
+                              | (4 banderas S/N + numericos + termina   | condiciones, devuelve
+                              | en codigo de subproducto)               | el subproducto exacto
+
+EN UNA FRASE: 0117 decide QUE SUBPRODUCTO ofrecer en la simulacion web de
+vehiculo/moto, mas parametros de score y elegibilidad alrededor.
+
+1.3 Seccion 1314 - Reglas de asignacion de subproducto por perfil (multi-linea)
+---------------------------------------------------------------------------------
+
+Formato: SUBPRODUCTO | ATRIBUTO | TIPO_DATO | OPERADOR | VALOR (500 filas, posible
+corte, igual que otras consultas del proyecto). Se reparte por prefijo de ELEMENTO:
+
+Prefijo | # filas | Linea de negocio              | Atributos
+-----------------------------------------------------------------------------------
+VD      | 351     | Vivienda (NO es vehiculo)      | PLEDGEAMOUNT, AMORTIZATION
+        |         |                                | (UVRCC/PESOS), LOCATION,
+        |         |                                | ISFAMILY, ISFINANCEDBBVA,
+        |         |                                | ISLEASING, LINEFLOW
+VE      | 134     | VEHICULO                       | PLEDGESTATUS (NEW/USED),
+        |         |                                | INCOMESAMOUNT (rango SMMLV),
+        |         |                                | BUREAUVALUE (rango), LINEFLOW
+        |         |                                | (VEVN/VEVU), CUSTOMERTYPE
+GR      | 9       | Garantias / comercial          | GUARANTEETYPE=601, APPLYFGA
+PC      | 6       | Preaprobados                   | GUARANTEETYPE=601, APPLYFGA
+
+Ejemplo real de regla de vehiculo (subproducto 4081):
+      4081 | PLEDGESTATUS   = NEW
+      4081 | INCOMESAMOUNT  entre 2 y 4.99 SMMLV
+      4081 | BUREAUVALUE    entre 658-715
+      4081 | LINEFLOW       = VEVN
+      4081 | CUSTOMERTYPE   > 3 / < 3
+
+DIFERENCIA DE FONDO: 0117 decide por banderas fijas (S/N); 1314 decide por
+rangos/comparaciones con nombre de atributo - motor mas expresivo, mismo patron
+"abierto, sin valores quemados" que pide el lider para el ajuste 2.
+
+HALLAZGO RELEVANTE (pendiente P3 del documento tecnico, "Prenda FGA"): el
+atributo APPLYFGA (0/1) confirma que el concepto SI existe en HOST, como
+bandera aparte, no como codigo de UGDTGAR.
+
+
+2. LOS TRES PROGRAMAS HOST DE PRICING
+=================================================================================
+
+      Canal externo                      Canal externo
+      Web / BBVA.net / APX               NACAR / NAPS / CAP
+           |  LINK                              |  LINK
+           v                                    v
+      UR7CCRAR                            UR7CCTPR
+      (simulacion, no persiste nada)      (alta, SI persiste)
+           |                                    |
+           +--------------- CALL ---------------+
+                            v
+                       UG7CCNRA
+               (motor de tasa, solo lectura)
+                            v
+                        UGDTNRA
+
+2.1 UG7CCNRA - el motor de tasa (el unico que toca UGDTNRA)
+  Objetivo: dado el perfil ya armado del cliente/credito, determinar la letra de
+  cada variable, construir la CLAVE_ID de 23 posiciones, buscar el cluster y
+  devolver la tasa. Tambien control de piso/politica/usura (opcion 'V').
+  Tablas: SOLO UGDTNRA. Lectura exclusivamente.
+  Quien lo llama: UR7CCRAR y UR7CCTPR - ningun otro programa en la libreria.
+  Bug critico confirmado en codigo (lineas 1384-1385): clave de 17 posiciones +
+  relleno fijo '000000' en 18-23. Aqui van los parrafos nuevos 2280A/B/C y
+  2380/2390.
+
+2.2 UR7CCRAR - simulacion Web/APX/ASO (no persiste nada)
+  Objetivo: calcular el descuento de tasa para simulacion, sin comprometer nada.
+  Tablas: UGDTT37 (1901, 9040, 1250/1254, 0028, 9931, 1054/1056/1733/...).
+  Verificado en codigo: UGRAR-SUBPROD (copy UGWCRAR) es CAMPO DE ENTRADA, se usa
+  15+ veces, nunca se calcula ahi.
+  Quien lo llama: externo (LINK). A quien llama: UG7CCNRA.
+
+2.3 UR7CCTPR - alta NACAR/CAP (SI persiste)
+  Objetivo: calcular el descuento que se aplica de verdad al formalizar, y dejar
+  registro.
+  Tablas (lectura): UGDTMAE, UGDTRAR, UGDTRVE, + mismas secciones T37 que UR7CCRAR.
+  Tablas (escritura): UPDATE UGDTRAR/UGDTRVE, INSERT UGDTLOG.
+  Quien lo llama: externo (LINK). A quien llama: UG7CCNRA.
+  CTPR-SUBPRO (copy URWCTPR) tambien es campo de ENTRADA, mismo patron.
+
+2.4 Relacion con 0117/1314 - verificado en codigo
+  grep de '0117' y '1314' en los 6 .cbl descargados -> CERO coincidencias.
+  grep de subproductos conocidos (3968, 4081, 4082, 4083, 4093, 4115) en
+  UR7CCRAR.cbl -> CERO coincidencias (no hay lista fija de subproductos).
+  CONCLUSION: el subproducto llega YA DECIDIDO en la commarea (UGRAR-SUBPROD /
+  CTPR-SUBPRO), no se calcula en HOST. La capa que usa 0117/1314 vive ANTES de
+  estos 3 programas, probablemente en Front/Web (ver seccion 4.6 - hallazgo
+  "Matriz de Perfilado Sub Producto").
+
+  Impacto segun profundidad del cambio en 0117/1314:
+   - Ajuste de umbrales de una regla existente -> NO toca estos 3 programas.
+   - Subproducto nuevo de una linea ya existente -> NO en codigo, SI en
+     parametria (basta registrarlo en T37 9040/1901/9931/0028).
+   - Linea de producto completamente nueva -> SI tocaria codigo (logica
+     condicional explicita por linea V/VV/VC/VK/H/N/Z/L).
+
+  Independencia respecto al proyecto: nuestras 5 variables viajan directo en la
+  commarea (bloque V1) y NO dependen de que subproducto eligio 0117/1314. Los
+  cambios en esa capa no afectan nuestro desarrollo, salvo que se decida derivar
+  alguna variable (prenda/combustible) a partir del subproducto elegido ahi.
+
+
+3. TABLA CONSOLIDADA - VARIABLES DEL MODELO (23) VS SECCIONES T37
+=================================================================================
+
+3.1 Por programa, que secciones de UGDTT37 usa
+---------------------------------------------------------------------
+
+Programa      | Secciones que consulta                           | Para que
+--------------------------------------------------------------------------------
+UR7CCRAR      | 1901, 9040, 1250/1254, 0028, 9931, 1054/1056/     | Clasificar la
+              | 1733/1737/1701/5011/9101/0542/9639                | linea de producto
+UR7CCTPR      | Las mismas que UR7CCRAR                           | Igual
+UG4CRAR1      | 9965, 9966                                         | Validan colectivo
+              |                                                    | / destino libranza
+UG4CRAR2      | Ninguna                                            | -
+UG7CCNRA      | Hoy: ninguna. Propuesto: 9968, 9969, 9970         | Grupo/prenda/comb.
+UG2CUNRA      | Ninguna (solo UGDTNRA)                            | -
+
+3.2 Por variable - necesita seccion o no
+---------------------------------------------------------------------
+
+La MAYORIA de las 23 variables NO necesitan seccion - el valor llega directo del
+dato real del cliente/credito (01 Buro, 02 Dom.nomina, 03 Sit.laboral, 04
+Ingresos, 05 Monto financ., 06 Plazo, 07 Edad, 08 Segmento, 10 Grupo riesgo,
+11 Estado vehiculo, 12 %Financiacion/LTV, 13 Gama, 14 Tipo de uso, 15 Cliente
+VIP, 18/20/22/23 comercial).
+
+Las que SI necesitan (o pueden necesitar) seccion:
+
+Variable                              | Seccion          | Quien la usa       | Nota
+--------------------------------------------------------------------------------------
+09 Indicador colectivo -> Grupo       | 9969 (NIT->grupo)| UG7CCNRA (propuesto)| Uso original
+comision (propuesto)                  |                  |                    | (Consumo/Vivienda)
+                                       |                  |                    | NO necesita seccion
+16 Colectivo libranza                 | 9965             | UG4CRAR1           | Valida existencia
+17 Destino libranza                   | 9966             | UG4CRAR1           | Valida existencia
+19 Tipo persona comer -> Combustible  | 9970 (opcional,  | UG7CCNRA (propuesto)| Uso original
+(propuesto)                           | respaldo)        |                    | (comercial PJ/PN) NO
+                                       |                  |                    | necesita seccion
+21 Rango rating comer -> Prenda       | 9968             | UG7CCNRA (propuesto)| Depende de como se
+(propuesto)                           |                  |                    | resuelva el ajuste 1
+                                       |                  |                    | (canal vs subproducto)
+
+PATRON: ninguna variable ORIGINAL del modelo necesitaba seccion cuando se creo -
+todas llegaban directo. Las unicas que hoy la necesitan son precisamente las
+que estamos REUTILIZANDO para vehiculo (09, 19, 21), porque el dato que llega
+no es directamente el valor que la variable espera.
+
+De las 5 variables nuevas del proyecto:
+  - Grupo de comision (09): SI necesita seccion (9969)
+  - Prenda (21): SI necesita seccion, condicionado al ajuste 1 (9968)
+  - Combustible (19): Opcional, solo como respaldo (9970)
+  - LTV (12): NO necesita seccion
+  - Nuevo/Usado (11): NO necesita seccion
+
+Si avanza el ajuste 2 del lider (nada quemado en codigo, validar contra
+parametria): se sumarian 1-2 secciones catalogo MAS (distintas de 9968/9969/
+9970, que son de derivacion, no de validacion de existencia de codigo).
+
+
+4. HALLAZGOS DE LOS MATERIALES ADICIONALES (IMAGENES + MENSAJE DEL LIDER)
+=================================================================================
+
+Fuente: carpeta sdapricing\imagenes del documento - 13 imagenes, 1 CSV, 1 txt
+("preguntas del lider.txt").
+
+4.1 Mensaje del lider - resumen
+---------------------------------------------------------------------
+
+Contactos nombrados: Jaime Alexander Nieto Gomez (estructura archivo Tantia),
+Oscar (Matriz RAR - condiciones/combinaciones de tasa).
+
+5 brechas que pide revisar contra la necesidad funcional:
+  1. Marca y concesionario: necesidad pide marca+NIT+nombre concesionario;
+     nuestra interfaz propone origen+NIT+combustible.
+  2. Garantia: necesidad contempla 4 tipos seleccionados en canales; diseno
+     propone identificar por subproducto. Confirmar que cubre todos los casos.
+  3. Scoring y reprocesos: como se relacionan las rutinas HOST con el proceso
+     de evaluacion/calculo de tasa/reproceso ante cambio de condiciones.
+  4. Grupo de comision: validar que cubra los distintos origenes de venta y
+     grupos de concesionarios.
+  5. Combustible, LTV y nuevo/usado: confirmar que procesan correctamente en
+     todos los escenarios.
+
+4.2 Lista de Noes (alcance oficial) - responde la pregunta 3 del lider
+---------------------------------------------------------------------
+
+DENTRO DEL ALCANCE: incorporar las 5 variables (Grupo Pago Comision
+Concesionarios/marca -se unifica con Paga Comision CSF/Mercado Directo-, Prenda/
+Sin Prenda, Tipo Combustible, LTV, Nuevo/Usado), incorporarlas en la estructura
+de campos ruta TANTIA, y el modelo de "Umbrales": no se deja ningun umbral
+abierto - si cambia una condicion que afecta el balance de caja y este queda
+negativo, la aprobacion no se mantiene.
+
+FUERA DE ALCANCE:
+  1. Capacidad de pago en cambios de condiciones (si no es suficiente tras un
+     cambio, la operacion no avanza; si es suficiente, continua).
+  2. Ejecucion del pricing y reprocesos: "el pricing se ejecuta en el momento
+     del scoring. Si una variable cambia, se debe realizar un reproceso del
+     credito... no es una novedad, sino el funcionamiento estandar que se
+     mantendra." -> RESPONDE DIRECTO la pregunta 3 del lider.
+  3. No se requiere nueva contabilidad.
+
+SIN DECIDIR: Fase II (Pre Aprobados), Fase III (RVD - Repositorio Ventas
+Digitales).
+
+4.3 Detalle funcional de las 5 variables (por canal)
+---------------------------------------------------------------------
+
+Variable                  | Opciones                        | Estado por canal
+--------------------------------------------------------------------------------
+1. Grupo pago comision /  | Grupo 1,2,3,4, Grupo 5 (red/     | Marca no esta en
+   Canal origen venta     | leads/csf directo), Grupo 6      | front CAP ni Web.
+   (se unifica con 2)     | (compra cartera)                 | Hay que generar
+                           |                                  | campos nuevos de
+                           |                                  | concesionario en
+                           |                                  | Web y CAP
+2. Prenda / Sin Prenda    | 1 Prenda, 2 Prenda FGA, 3 Sin    | "RETO GIGANTE":
+                           | Prenda, 4 Otra                   | WEB no pregunta
+                           |                                  | garantia (la
+                           |                                  | clasifica por
+                           |                                  | ingresos); NACAR
+                           |                                  | identifica SOLO
+                           |                                  | por subproducto
+                           |                                  | (305=prenda nuevo,
+                           |                                  | 306=prenda usado,
+                           |                                  | 398=sin prenda)
+3. Tipo Combustible        | Gasolina, Hibrido y Electrico,  | Ok en CAP y WEB,
+                           | Otros                            | falta espacio en
+                           |                                  | NACAR
+4. LTV                     | <=70%, >70%                      | Ok parcial CAP/WEB,
+                           |                                  | falta validar NACAR
+5. Nuevo / Usado           | Nuevo, Usado                     | Ok en CAP y WEB
+                           |                                  | (diligencia el
+                           |                                  | cliente), falta
+                           |                                  | validar NACAR, se
+                           |                                  | identifica tambien
+                           |                                  | por subproducto
+
+4.4 CONTRADICCIONES ENCONTRADAS - llevar al lider, no resolver por cuenta propia
+---------------------------------------------------------------------------------
+
+(A) PRENDA: COMBO BOX vs IDENTIFICACION POR SUBPRODUCTO
+  El chat previo con el lider ("Sin titulo 2") pedia que el canal mandara la
+  prenda directo por Combo Box (igual que combustible). Pero la tabla funcional
+  y la pantalla de CAP muestran que HOY se identifica por subproducto (305/306/
+  398), no por un campo propio. CONTRADICCION REAL - no resolver nosotros, hay
+  que preguntarla.
+
+(B) VARIABLE 09 vs VARIABLE 16 para "PAGA COMISION"
+  pantalla "host de la transaccion" circula la variable 09 (INDICADOR
+  COLECTIVO) para Paga Comision. pantalla "2 del host" circula la variable 16
+  (COLECTIVO LIBRANZA) para el MISMO concepto. Dos benchmarks proponen
+  variables distintas. Nuestro documento tecnico usa la 09. Hay que confirmar
+  cual quedo vigente.
+
+(C) DOS RUTAS TANTIA DISTINTAS
+  El documento tecnico trabaja con ARCHIVO_CARGUE_MODRAR (Tantia -> HOST, carga
+  de clusters/tasas). La imagen "estructura del archivo" y el CSV muestran
+  INFORME_VEHICULO2_WEB (HOST/Web -> Tantia, informe operativo). Son flujos
+  OPUESTOS que comparten plataforma y nombre "Tantia" pero no son el mismo
+  archivo. Hay que confirmar cual de las dos rutas es la que se debe ampliar
+  con las 5 variables - la evidencia (contacto con Jaime Alexander, la imagen
+  de estructura) apunta a que podria ser la segunda, no la que ya documentamos.
+
+4.5 Confirmaciones limpias (sin contradiccion)
+---------------------------------------------------------------------
+
+  - Combustible = variable 19 (confirmado, pantalla "4 host"). Contactos: CAP
+    Lida Cabanzo, WEB Camilo Cabra / Cristian Francisco Fernandez. Dato nuevo:
+    "Gas" se clasifica como Combustion Fosil (igual que Gasolina), no aparte.
+  - LTV = variable 12 (confirmado, pantalla "5 del host"). Contactos: Wendy
+    Riano, Angela Hernandez - pendiente confirmar formato decimal/entero
+    (nuestro riesgo R2).
+  - Nuevo/Usado = variable 11 (confirmado, pantalla "6 del host"). Pendiente:
+    confirmar con Angela si existen subproductos diferenciados N/U.
+  - Variable 17 (Destino Libranza) para "Destino Adquisicion/Compra de
+    Cartera": propuesta marcada EXPLICITAMENTE como "NO VA" (rechazada) en el
+    material - no se construye, coherente con que nuestro diseno ya resuelve
+    compra de cartera por producto VC/VK = grupo 6 directo.
+  - Ninguna captura de HOST prueba una variable para Prenda (21) - es la unica
+    de las 5 sin "benchmark" visual probado en la pantalla UNRA.
+
+4.6 Hallazgo nuevo - posible respuesta a "quien consume 0117/1314"
+---------------------------------------------------------------------
+
+Imagen "pantalla web 2.png" muestra 4 cajas: "LOANS PROFILE", "Open Market",
+"API'S Scoring Declarativo", "Matriz de Perfilado Sub Producto". Este ultimo
+nombre encaja con el motor que decide el subproducto antes de llegar a HOST.
+Por los nombres (APIs, Open Market) parece vivir en capa digital/microservicios,
+no en COBOL/CICS - explicaria por que nunca aparecio en COBP.ALTAMIRA.BSRC0.
+PENDIENTE DE CONFIRMAR, no verificado en codigo.
+
+4.7 Correccion a un hallazgo anterior - dato de "Modelo" (ano del vehiculo)
+---------------------------------------------------------------------
+
+Se habia concluido que "no existe ningun campo con el ano del vehiculo en
+ningun canal". CORRECCION: el prototipo "simulacion web1.png" muestra un campo
+"Modelo: 2019" en la simulacion Web. El dato SI se captura en Web, solo que NO
+llega a HOST hoy (ningun copy de commarea lo tiene). Relevante para la variable
+"Seminuevo" (fuera de alcance actual, ver seccion 6, pregunta 16).
+
+
+5. PREGUNTAS PENDIENTES PARA EL LIDER
+=================================================================================
+
+#  | Tema                                  | Pregunta
+----------------------------------------------------------------------------------
+1  | Prenda: combo box o por subproducto   | ¿La prenda la va a capturar el canal
+   |                                       | con un campo propio (como combustible),
+   |                                       | o se sigue identificando por el
+   |                                       | subproducto que elige el asesor?
+2  | Variable 09 vs 16                     | Vimos dos benchmarks proponiendo
+   |                                       | variables distintas para "Paga
+   |                                       | Comision" - ¿cual quedo vigente?
+3  | Ruta Tantia                           | ¿Las 5 variables van en el archivo de
+   |                                       | clusters que ya documentamos, o en la
+   |                                       | ruta del informe operativo que vimos
+   |                                       | en la estructura compartida?
+4  | Marca y Nombre del Concesionario      | ¿Necesitan llegar hasta HOST, o se
+   |                                       | quedan en Front/reporteria?
+5  | Convenio vs Concesionario             | ¿Cada concesionario define su grupo
+   |                                       | directamente, o varios concesionarios
+   |                                       | pueden compartir un "convenio" que
+   |                                       | define el grupo?
+6  | Garantia - cobertura de 4 tipos       | Con solo 3 codigos mapeados hoy en
+   |                                       | NACAR (305,306,398), ¿como se
+   |                                       | identifica "Otra"? ¿Y "Prenda FGA",
+   |                                       | que no existe en UGDTGAR?
+7  | Seminuevo - ¿dentro de alcance?       | La Lista de Noes no lo incluye;
+   |                                       | ¿confirmamos que queda fuera?
+8  | Compra instantanea - ¿dentro alcance? | ¿Confirmamos que queda fuera, igual
+   |                                       | que Seminuevos?
+9  | Formato LTV                           | ¿Fraccion (0.70) o entero (70)?
+   |                                       | Necesitamos ejemplo exacto.
+10 | Subproductos N/U diferenciados        | ¿Existen ya, o hay que crear campo
+   |                                       | de captura nuevo?
+11 | Canal origen + Grupo: ¿un campo o dos?| ¿El canal manda el grupo ya resuelto,
+   |                                       | o manda origen+NIT y HOST calcula?
+12 | Scoring y reprocesos - confirmar      | Entendimos que el reproceso ya es
+   | lectura                               | mecanismo estandar sin desarrollo
+   |                                       | nuevo - ¿confirmamos?
+13 | Prenda sin benchmark probado          | Ninguna captura de UNRA prueba la
+   |                                       | variable 21 - ¿sigue siendo la
+   |                                       | definitiva?
+14 | "Matriz y tabla dinamica" (taxonomia) | ¿Es la herramienta que usa
+   |                                       | Rentabilidad para armar el archivo de
+   |                                       | clusters, o es algo adicional que
+   |                                       | esperan que HOST construya?
+
+
+6. PREGUNTAS PARA NEGOCIO / FUNCIONALES (DISCOVERY)
+=================================================================================
+
+#  | Tema              | Pregunta                                  | Por que la preguntamos
+------------------------------------------------------------------------------------------
+1  | Grupo comision     | ¿Cual es la definicion de negocio de cada | Solo tenemos el numero
+   |                    | uno de los 6 grupos?                     | y 2 casos puntuales
+2  | Grupo comision     | ¿Un NIT puede cambiar de grupo en el      | Define si es consulta
+   |                    | tiempo? ¿Con que frecuencia?              | estatica o necesita
+   |                    |                                           | mantenimiento recurrente
+3  | Grupo comision     | Si varios concesionarios comparten un     | Cambia la estructura:
+   |                    | convenio, ¿el convenio define el grupo    | 1 nivel o 2 niveles
+   |                    | para todos, o cada NIT tiene el suyo?     |
+4  | Grupo comision     | ¿Que grupo le corresponde a un NIT no     | Ya propusimos elemento
+   |                    | parametrizado, y quien lo autoriza?       | DEFAULT, falta confirmar
+5  | Grupo comision     | ¿La marca influye en el grupo, o depende  | Necesidad funcional
+   |                    | solo del concesionario/convenio?          | menciona "marca" aparte
+6  | Prenda / Garantia  | ¿Definicion exacta de "Prenda FGA"?       | No existe codigo en
+   |                    |                                           | UGDTGAR
+7  | Prenda / Garantia  | ¿Que codigo corresponde a "Otra"?         | Solo 3 codigos mapeados
+   |                    |                                           | hoy (305,306,398)
+8  | Prenda / Garantia  | Si el subproducto no tiene garantia, ¿que | No hay regla de "no
+   |                    | valor de prenda asume el sistema?         | encontrado" definida
+9  | Prenda / Garantia  | ¿La prenda la selecciona el cliente/       | Contradiccion real
+   |                    | asesor, o se infiere del subproducto?     | encontrada (ver 4.4-A)
+10 | Combustible        | ¿"Gas" es "Gasolina" o categoria aparte?  | Duda explicita en
+   |                    |                                           | anotacion de pantalla
+11 | Combustible        | Si el canal no tiene el campo habilitado, | NACAR hoy no lo tiene
+   |                    | ¿que valor por defecto asume el sistema?  |
+12 | LTV                | ¿Fraccion (0.70) o entero (70)? Ejemplo   | Riesgo R2 - error
+   |                    | real.                                     | silencioso si se
+   |                    |                                           | equivoca el formato
+13 | LTV                | ¿Los rangos <=70%/>70% son definitivos?   | Si cambian pronto,
+   |                    |                                           | conviene parametrizar
+14 | Nuevo/Usado        | ¿Quien determina N/U - lo selecciona el   | Si es por ano, abre la
+   |                    | cliente, o se calcula por ano/km?         | puerta a Seminuevo
+15 | Nuevo/Usado        | ¿Existen subproductos diferenciados       | Pendiente explicito de
+   |                    | unicamente por N/U?                       | la pantalla de HOST
+16 | Alcance            | ¿Seminuevo y Compra Instantanea quedan    | Ninguna esta en la
+   |                    | fuera de esta fase, o en algun escenario  | Lista de Noes oficial
+   |                    | si afectan la tasa?                       | pero aparecen en apuntes
+17 | Marca/Concesionario| ¿Que uso le da negocio a la Marca en el   | Si no afecta tasa, no
+   |                    | calculo de la tasa, o es solo informativa?| necesita llegar a HOST
+18 | Marca/Concesionario| ¿Existe ya un maestro de Nombre de        | Evita duplicar esfuerzo
+   |                    | Concesionario, o hay que crearlo?         |
+19 | Gobierno de datos  | ¿Quien mantiene NIT->Grupo dia a dia, y   | Sin dueno, la tabla se
+   |                    | con que frecuencia cambia?                | desactualiza
+20 | Gobierno de datos  | ¿Cuanto debe tardar, desde que se firma   | Define si se necesita
+   |                    | un convenio nuevo, hasta que el NIT quede | carga urgente o ciclo
+   |                    | operando con su grupo correcto?           | normal
+21 | Reprocesos         | De las 5 variables nuevas, ¿hay algun     | Lista de Noes dice que
+   |                    | caso donde un cambio NO dispare el        | es sin excepcion, pero
+   |                    | reproceso estandar?                       | no se probo explicito
+
+
+7. ACLARACIONES CONCEPTUALES DE REFERENCIA
+=================================================================================
+
+7.1 Concesionario / NIT / Convenio - analogia
+---------------------------------------------------------------------
+
+El concesionario es el negocio que vende los vehiculos; el NIT es su numero de
+identificacion. El grupo de comision NO se calcula con una formula - es una
+decision de negocio (que tanto le paga BBVA de comision), por eso necesita una
+TABLA (lista "NIT -> grupo"), no codigo.
+
+Analogia de descuentos corporativos de gimnasio:
+  SIN convenio (1 nivel): cada empresa negocia su propio descuento directo.
+    Tabla: "Empresa A -> 20%, Empresa B -> 15%".
+  CON convenio (2 niveles): la empresa pertenece a una caja de compensacion que
+    ya negocio el descuento para todas las afiliadas.
+    Tabla 1: "Empresa A -> Comfama". Tabla 2: "Comfama -> 20%".
+
+La duda real (pregunta 5 para el lider en la seccion 5) es si en nuestro caso
+existen "convenios" que agrupan varios concesionarios bajo un mismo acuerdo, o
+si cada NIT negocia su propio grupo independientemente.
+
+7.2 ¿Se crean clusters nuevos como tarea de desarrollo? - NO
+---------------------------------------------------------------------
+
+Crear un cluster (decidir una combinacion + su tasa) es un proceso de negocio
+que YA EXISTE y corre automaticamente: Rentabilidad manda su archivo diario por
+Tantia -> malla batch (PUGDRAR1-4) -> UG4CRAR1/UG4CRAR2 inserta el cluster en
+UGDTNRA. Nuestro proyecto NO construye ese mecanismo, lo EXTIENDE: arregla el
+bug para que los clusters que ya usen las posiciones 09/19/21 (vehiculo) se
+carguen y se encuentren correctamente. El dia que Rentabilidad mande el
+archivo con esas variables, los clusters se crean solos por el proceso de
+siempre - no hay tarea de "definir clusters" en nuestro desarrollo.
+
+7.3 "Matriz y tabla dinamica" (de la imagen taxonomia.png) - interpretacion
+---------------------------------------------------------------------
+
+La taxonomia menciona: "Se requiere crear una matriz y tabla dinamica para el
+manejo de las 5 nuevas variables - Modelo RAR" (categoria "Habilitadores de
+Historia"). Interpretacion: muy probablemente es lenguaje de negocio para
+describir una herramienta DEL LADO DE RENTABILIDAD (tipo Excel/BI con tabla
+dinamica) para armar y visualizar las combinaciones antes de generar el
+archivo de Tantia - NO algo que HOST deba construir, ya que UGDTNRA ya cumple
+ese rol (ver seccion 7.2). PENDIENTE CONFIRMAR CON EL LIDER (pregunta 14 de
+la seccion 5) si es esto o si esperan algo adicional de HOST.
+
+Riesgo de fondo a senalar en esa conversacion: con 6 grupos x 4 prendas x 3
+combustibles x 2 LTV x 2 nuevo/usado ya son 288 combinaciones posibles solo
+con las 5 variables nuevas (antes de cruzar con buro/ingresos/plazo). No todas
+tendran cluster definido - las que no, caen silenciosamente en tasa politica.
+
+7.4 Como se construye la CLAVE_ID - resumen paso a paso
+---------------------------------------------------------------------
+
+LADO BATCH (cuando se crea el cluster):
+  1. Rentabilidad manda el archivo completo: 1 fila = 1 cluster con los
+     valores reales de las 23 variables + la tasa.
+  2. UGRAR390 descompone la fila por variable (formato de 38 bytes).
+  3. UG4CRAR1 cataloga cada opcion: suma 1 a un consecutivo (se reinicia por
+     variable), usa ese numero como indice en la tabla fija WTL-LETRAS
+     ('A','B','C'...) y graba la fila "menu" en UGDTNRA (reg 01-23: valor real
+     + letra). Si es la primera opcion, tambien graba el registro 99 (variable
+     activa para esa linea).
+  4. UG4CRAR2 recibe el archivo original (valores reales) y, por cada variable
+     activa, busca en el "menu" de UG4CRAR1 la letra exacta (SEARCH ALL).
+  5. Coloca cada letra en su posicion (posicion N = variable N). Si la
+     variable no esta activa, la posicion queda en '0'.
+  6. Concatena las 23 posiciones -> esa es la CLAVE_ID del cluster.
+  7. Inserta el registro 90 (CLAVE_ID + nombre cluster + tasa).
+
+LADO ONLINE (cuando llega un cliente real): UG7CCNRA repite la misma
+traduccion valor->letra pero con los datos reales del cliente (no del
+archivo), arma su propia clave de 23 posiciones y la compara contra las ya
+guardadas en el paso 7. Si coinciden exactamente, encuentra la tasa.
+
+Ejemplo trabajado (buro opcion 2, situacion laboral opcion 1, ingresos opcion
+3, grupo comision 2, vehiculo nuevo, LTV <=70%, combustible hibrido, con
+prenda):
+  Posicion :  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+  Variable : BU DN SL IN MO PL ED SG GC GR EV LT GA TU VP CL DL VE CO RA PR GC MO
+  Valor    :  B 0 A C 0 0 0 0 B  0  A  A  0  0  0  0  0  0  B  0  A  0  0
+  CLAVE_ID : B0AC0000B0AA000000B0A00
+
+
+8. SIMULACION DE PARAMETRIZACION EN UMTA (ejemplo 9968 / 9969 / 9970)
+=================================================================================
+
+8.1 Pantalla UMTA simulada, despues de dar de alta las 3 secciones
+---------------------------------------------------------------------
+
+                    PRESTAMOS EMPLEADOS                QC22  DD/MM/AA
+                  MANTENIMIENTO CATALOGO SECCIONES      UMTA  HH:MM:SS
+
+ OPC   SEC.    DESCRIPCION
+ ---   ----    ----------------------------------------------------
+  _    9040    SUBPRODUCTOS DE VEHICULO
+  _    9931    SUBPRODUCTOS COMPRA DE CARTERA
+  _    9967    LINEAS HABILITADAS MODELO RAR
+  _    9965    CATALOGO COLECTIVO LIBRANZA
+  _    9966    CATALOGO DESTINO LIBRANZA
+  _    9968    PRENDA POR SUBPRODUCTO VEHICULO              <- nueva
+  _    9969    NIT CONCESIONARIO A GRUPO COMISION VEHICULO  <- nueva
+  _    9970    COMBUSTIBLE POR SUBPRODUCTO (RESPALDO)       <- nueva
+
+ OPC: A-Alta  B-Baja  C-Consulta  M-Modificar
+
+Por detras, esto es literalmente la seccion '0001' de UGDTT37:
+  SECCION   ELEMENTO (22 pos.)                    RESTO
+  0001      0000000000000000009968                PRENDA POR SUBPRODUCTO VEHICULO
+  0001      0000000000000000009969                NIT CONCESIONARIO A GRUPO COMISION VEHICULO
+  0001      0000000000000000009970                COMBUSTIBLE POR SUBPRODUCTO (RESPALDO)
+
+8.2 Contenido simulado de cada seccion (carga posterior, fuera de UMTA)
+---------------------------------------------------------------------
+
+9968 - Prenda por subproducto (subproductos reales usados como ejemplo: 3195
+"VEHNVOCPCOMB90%TRA12CCF" trae "CP"=con prenda; 3280
+"VEHNVONPHIBR/ELEC100%TRA12CCFASA" trae "NP"=sin prenda):
+
+  SECCION   ELEMENTO (subproducto)     RESTO: (1:1) prenda + descripcion
+  9968      3195                        1PRENDA AUTO NUEVO
+  9968      3280                        3SIN PRENDA AUTO NUEVO HIBRIDO
+  9968      4086                        2PRENDA FGA AUTO USADO
+  9968      4115                        4OTRA GARANTIA HIBRIDO
+
+9969 - NIT concesionario a grupo:
+
+  SECCION   ELEMENTO (NIT, 10 digitos)  RESTO: (1:2) grupo + (3:60) nombre
+  9969      0900123456                   02CONCESIONARIO XYZ SAS
+  9969      0901654321                   01CONCESIONARIO ABC LTDA
+  9969      DEFAULT                      04
+
+9970 - Combustible por subproducto (respaldo, solo si el canal no lo manda):
+
+  SECCION   ELEMENTO (subproducto)      RESTO: (1:1) combustible + descripcion
+  9970      3195                         1GASOLINA
+  9970      3280                         2HIBRIDO/ELECTRICO
+  9970      4115                         2HIBRIDO/ELECTRICO
+  9970      4083                         1GASOLINA
+
+8.3 Nota importante
+---------------------------------------------------------------------
+
+UMTA solo hace el paso "permiso de existencia" (seccion 8.1, una sola vez). La
+carga del contenido real (seccion 8.2, los NITs/subproductos reales) se hace
+con OTRA herramienta - aun no identificada en codigo (ver pendiente 9.1).
+
+
+9. PENDIENTES ABIERTOS / SIGUIENTES PASOS
+=================================================================================
+
+9.1 No identificado en codigo: la transaccion/programa que carga el CONTENIDO
+    real de una seccion de UGDTT37 (mas alla del catalogo maestro que
+    administra UMTA). Hipotesis sin verificar: "UNTA" (glosario del documento
+    tecnico).
+
+9.2 No identificado en codigo: el programa/servicio que REALMENTE LEE y APLICA
+    las reglas de 0117 y 1314 para decidir el subproducto final antes de que
+    la operacion llegue a UR7CCRAR/UR7CCTPR. Hipotesis sin verificar: "Matriz
+    de Perfilado Sub Producto" (ver seccion 4.6), posible componente digital/
+    microservicios fuera de COBP.ALTAMIRA.BSRC0.
+
+9.3 Confirmar con Front (Web Vehiculo: maria camila buitrago / arlen jose
+    chinchia; CAP: Lida Cabanzo; APIs: cristian sneider) quien arma el
+    subproducto antes de llamar a UR7CCRAR/UR7CCTPR.
+
+9.4 Llevar al lider las 14 preguntas de la seccion 5, priorizando las 3
+    contradicciones (4.4: prenda combo/subproducto, variable 09/16, doble
+    ruta Tantia) por ser las que mas pueden cambiar el diseno si se resuelven
+    distinto a lo asumido hoy.
+
+9.5 Agendar sesion de discovery con Negocio/Funcionales usando las 21
+    preguntas de la seccion 6.
