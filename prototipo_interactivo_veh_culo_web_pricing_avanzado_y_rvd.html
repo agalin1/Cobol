@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BBVA Colombia - Simulador de Crédito de Vehículo</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuente Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F4F6F8;
+      color: #121212;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Estilo exacto de los campos grises con borde inferior de BBVA (Imagen de Vivienda) */
+    .bbva-field {
+      min-width: 0;
+      box-sizing: border-box;
+      background-color: #F4F4F4;
+      border-bottom: 1px solid #666666;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .bbva-field:hover {
+      background-color: #ECECEC;
+    }
+    .bbva-field:focus-within {
+      background-color: #EDEDED;
+      border-bottom: 2px solid #072146;
+    }
+    .bbva-field-error {
+      background-color: #FFF5F6 !important;
+      border-bottom: 2px solid #DA3851 !important;
+    }
+    .bbva-control {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      background: transparent;
+      color: #121212;
+      font: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5rem;
+      outline: none;
+    }
+    .bbva-control::placeholder { color: #64748b; opacity: 1; }
+    .bbva-control:focus-visible { outline: none; }
+    /* Evita que los selectores largos rompan las columnas del formulario. */
+    select.bbva-control {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Animación sutil para transiciones de pasos y despliegues */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-step {
+      animation: fadeSlide 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- ====================================================================
+       CABECERA MINIMALISTA BBVA
+       ==================================================================== -->
+  <header class="bg-[#072146] text-white">
+    <div class="max-w-[680px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="font-extrabold text-xl tracking-wider">BBVA</span>
+        <span class="h-4 w-[1px] bg-white/30"></span>
+        <span class="text-sm font-normal text-slate-200">Simulador de Crédito de Vehículo</span>
+      </div>
+      <span class="text-[11px] text-blue-200 bg-white/10 px-2.5 py-1 rounded">
+        Prototipo Funcional UX
+      </span>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       CONTENEDOR CENTRAL DEL WIZARD (MAX-WIDTH 680PX - SIN RUIDO VISUAL)
+       ==================================================================== -->
+  <main class="w-full max-w-[680px] mx-auto px-4 sm:px-6 py-8 flex-1">
+
+    <!-- Heurística #1: Visibilidad del estado del sistema (Stepper limpio de 3 pasos) -->
+    <nav aria-label="Progreso de la simulación" class="mb-6">
+      <div class="flex items-center justify-between gap-1">
+        <button type="button" onclick="goToStep(1)" class="flex items-center gap-2 text-left group focus:outline-none">
+          <span id="stepCircle1" class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition">1</span>
+          <div><span class="block text-[11px] uppercase tracking-wider text-slate-500 font-medium">Paso 1</span><span id="stepLabel1" class="text-xs sm:text-sm font-semibold text-[#072146]">Vehículo</span></div>
+        </button>
+        <div id="stepLine1" class="flex-1 h-[2px] bg-slate-300 mx-1 sm:mx-2 transition"></div>
+        <button type="button" onclick="goToStep(2)" class="flex items-center gap-2 text-left group focus:outline-none">
+          <span id="stepCircle2" class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition">2</span>
+          <div><span class="block text-[11px] uppercase tracking-wider text-slate-500 font-medium">Paso 2</span><span id="stepLabel2" class="text-xs sm:text-sm font-medium text-slate-500">Origen</span></div>
+        </button>
+        <div id="stepLine2" class="flex-1 h-[2px] bg-slate-300 mx-1 sm:mx-2 transition"></div>
+        <button type="button" onclick="goToStep(3)" class="flex items-center gap-2 text-left group focus:outline-none">
+          <span id="stepCircle3" class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition">3</span>
+          <div><span class="block text-[11px] uppercase tracking-wider text-slate-500 font-medium">Paso 3</span><span id="stepLabel3" class="text-xs sm:text-sm font-medium text-slate-500">Garantía</span></div>
+        </button>
+        <div id="stepLine3" class="flex-1 h-[2px] bg-slate-300 mx-1 sm:mx-2 transition"></div>
+        <button type="button" onclick="goToStep(4)" class="flex items-center gap-2 text-left group focus:outline-none">
+          <span id="stepCircle4" class="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition">4</span>
+          <div><span class="block text-[11px] uppercase tracking-wider text-slate-500 font-medium">Paso 4</span><span id="stepLabel4" class="text-xs sm:text-sm font-medium text-slate-500">Oferta</span></div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- TARJETA BLANCA PRINCIPAL -->
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200/90 overflow-hidden">
+
+      <!-- ================================================================
+           PASO 1: DATOS DEL VEHÍCULO Y ORIGEN (HOMÓLOGO VIVIENDA)
+           ================================================================ -->
+      <section id="stepView1" class="p-6 sm:p-8 space-y-7 animate-step">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-[#072146]">
+            Datos del vehículo
+          </h1>
+          <p class="text-sm text-slate-600 mt-1">
+            Completa los datos básicos del vehículo para simular una oferta personalizada.
+          </p>
+        </div>
+
+        <!-- Grid 2 columnas: Campos limpios estilo BBVA -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <!-- Estado del vehículo -->
+          <div class="bbva-field px-4 pt-2 pb-2.5">
+            <label for="selectEstado" class="block text-xs text-slate-500">
+              Estado del vehículo
+            </label>
+            <select
+              id="selectEstado"
+              onchange="recalculateAll()"
+              class="bbva-control mt-0.5 cursor-pointer"
+            >
+              <option value="Nuevo">Nuevo</option>
+              <option value="Usado">Usado</option>
+            </select>
+          </div>
+
+          <!-- Tipo de combustión -->
+          <div class="bbva-field px-4 pt-2 pb-2.5">
+            <label for="selectCombustion" class="block text-xs text-slate-500">
+              Tipo de combustión
+            </label>
+            <select
+              id="selectCombustion"
+              onchange="recalculateAll()"
+              class="bbva-control mt-0.5 cursor-pointer"
+            >
+              <option value="Gasolina / Diésel">Gasolina / Diésel</option>
+              <option value="Híbrido">Híbrido</option>
+              <option value="Eléctrico">Eléctrico</option>
+            </select>
+          </div>
+
+          <!-- Valor comercial del vehículo -->
+          <div>
+            <div class="bbva-field px-4 pt-2 pb-2.5">
+              <label for="inputValorVehiculo" class="block text-xs text-slate-500">
+                Valor comercial del vehículo
+              </label>
+              <input
+                type="text"
+                id="inputValorVehiculo"
+                value="$ 85.000.000"
+                oninput="handleCurrencyInput(this, 'valorVehiculo')"
+                class="bbva-control mt-0.5"
+              />
+            </div>
+          </div>
+
+          <!-- Valor a financiar + Píldora limpia de LTV -->
+          <div>
+            <div class="bbva-field px-4 pt-2 pb-2.5">
+              <label for="inputValorFinanciar" class="block text-xs text-slate-500">
+                Valor a financiar
+              </label>
+              <input
+                type="text"
+                id="inputValorFinanciar"
+                value="$ 55.000.000"
+                oninput="handleCurrencyInput(this, 'valorFinanciar')"
+                class="bbva-control mt-0.5"
+              />
+            </div>
+            <!-- Indicador sutil de LTV -->
+            <div class="mt-1.5 flex items-center justify-between text-xs text-slate-600 px-1">
+              <span>Financiación (LTV): <strong id="ltvPercentageText" class="text-[#072146]">64.7%</strong></span>
+              <span id="ltvCategoryPill" class="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                LTV &le; 70%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-slate-200" />
+
+        <div class="pt-1">
+          <label for="checkAcompanamiento" class="flex items-start gap-3 cursor-pointer select-none">
+            <input type="checkbox" id="checkAcompanamiento" onchange="handleAccompanimentChange(this.checked)" class="w-5 h-5 mt-0.5 accent-[#1973B8] rounded cursor-pointer shrink-0" />
+            <span class="text-sm sm:text-base text-[#121212]">Me está acompañando un asesor o vendedor de un concesionario.</span>
+          </label>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button type="button" onclick="goToStep(2)" class="bg-[#1973B8] hover:bg-[#072146] text-white font-semibold text-sm px-7 py-3 rounded transition">Continuar</button>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PASO 2: ORIGEN SEGÚN LA RESPUESTA DE ACOMPAÑAMIENTO
+           ================================================================ -->
+      <section id="stepView2" class="hidden p-6 sm:p-8 space-y-7 animate-step">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-[#072146]">Datos del origen de la solicitud</h1>
+          <p id="resumenAcompanamiento" class="text-sm text-slate-600 mt-1">Completa solo los datos que correspondan según tu respuesta anterior.</p>
+        </div>
+        <!-- Caso A: dealer -->
+        <div id="boxConcesionarioFields" class="space-y-4 pt-1 animate-step">
+            <div class="bbva-field px-4 pt-2 pb-2.5">
+              <label for="inputBuscarConcesionario" class="block text-xs text-slate-500">Concesionario / Dealer</label>
+              <input type="search" id="inputBuscarConcesionario" list="dealerOptions" oninput="filterDealers()" onchange="filterDealers()" placeholder="Busca y selecciona un concesionario" autocomplete="off" class="bbva-control mt-0.5" />
+              <datalist id="dealerOptions"></datalist>
+              <select id="selectConcesionario" class="hidden" aria-hidden="true" tabindex="-1"></select>
+            </div>
+          </div>
+        <div id="boxMercadoDirecto" class="hidden space-y-2 animate-step">
+          <!-- Caso B: mercado directo web. No exponer etiquetas internas de lead, grupo o comisión en la captura. -->
+            <div class="bbva-field px-4 pt-2 pb-2.5">
+              <label for="inputCodigoReferido" class="block text-xs text-slate-500">Código de referido (opcional)</label>
+              <input type="text" id="inputCodigoReferido" oninput="recalculateAll()" placeholder="Si tienes un código de referido, ingrésalo" class="bbva-control mt-0.5" />
+          </div>
+        </div>
+        <!-- Nota técnica colapsable -->
+        <details class="group bg-slate-50 border border-slate-200 rounded text-xs text-slate-600">
+          <summary class="px-4 py-2.5 font-medium text-[#072146] cursor-pointer flex items-center justify-between select-none">
+            <span>Ver qué ocurre por detrás (nota para la mesa técnica)</span>
+            <span class="text-slate-400 group-open:rotate-180 transition-transform">&#9662;</span>
+          </summary>
+          <div class="px-4 pb-3 pt-1 border-t border-slate-200/80 space-y-1.5 leading-relaxed">
+            <p><strong>Regla funcional para desarrollo — Canal: Vehículo Web / Autogestión</strong></p>
+            <p>1. El checkbox del paso 1 determina el origen: marcado equivale a <strong>Concesionario / Dealer</strong>; desmarcado equivale a <strong>Mercado Directo (Autogestión)</strong>. No incluir Compra de Cartera en este canal.</p>
+            <p>2. Si el canal es <strong>Concesionario / Dealer</strong>, mostrar un único selector con búsqueda por nombre/razón social. El NIT asociado al registro seleccionado se utiliza internamente para consultar la parametría HOST y resolver el grupo 1–4; marca de comisión = SÍ.</p>
+            <p>3. Si el canal es <strong>Mercado Directo (Autogestión)</strong>, ocultar los campos de dealer y asesor. No mostrar en la pantalla de captura ni en mensajes de cara al cliente etiquetas como “Lead / cliente autogestionado”, “Grupo 5” ni la marca de comisión. Internamente enviar/resolver Grupo 5 y marca de comisión = NO; estos valores pueden mantenerse en la trazabilidad técnica del paso 4 para revisión del equipo. El código de referido, si se conserva, es opcional y no modifica la clasificación.</p>
+            <p>4. Los orígenes asistidos Red de Oficinas, CSF y Lead asistido pertenecen a CAP/NÁCAR y no se implementan en esta pantalla web. Los nombres y grupos del selector son ilustrativos hasta conectar con la parametría real.</p>
+          </div>
+        </details>
+
+
+        <div class="pt-2 flex items-center justify-between">
+          <button type="button" onclick="goToStep(1)" class="text-sm font-semibold text-[#1973B8] hover:text-[#072146] px-3 py-2 transition">&larr; Volver al vehículo</button>
+          <button type="button" onclick="goToStep(3)" class="bg-[#1973B8] hover:bg-[#072146] text-white font-semibold text-sm px-7 py-3 rounded transition">Continuar</button>
+        </div>
+      </section>
+
+
+      <!-- ================================================================
+           PASO 2: GARANTÍA (PRENDA VS SIN PRENDA) Y PERFIL BÁSICO
+           ================================================================ -->
+      <section id="stepView3" class="hidden p-6 sm:p-8 space-y-7 animate-step">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-[#072146]">
+            Tipo de garantía y perfil del cliente
+          </h1>
+          <p class="text-sm text-slate-600 mt-1">
+            Definición de la segunda variable para el motor de Pricing (Prenda vs. Sin prenda).
+          </p>
+        </div>
+
+        <!-- Selector limpio entre las 2 alternativas que deben decidir en la reunión -->
+        <!-- La regla de negocio determina si la garantia se asigna o puede elegirse -->
+        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+          <p class="text-sm text-slate-700">La seleccion de prenda depende de los ingresos mensuales del cliente y del umbral de 5 SMMLV.</p>
+        </div>
+
+        <!-- Datos de perfil básico -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <div class="bbva-field px-4 pt-2 pb-2.5">
+              <label for="inputIngresos" class="block text-xs text-slate-500">Ingresos mensuales principales</label>
+              <input type="text" id="inputIngresos" value="$ 9.000.000" oninput="handleCurrencyInput(this, 'ingresos')" class="bbva-control mt-0.5" />
+            </div>
+            <p id="textUmbralPrenda" class="text-xs text-slate-600 mt-1 px-1">Umbral de referencia: 5 SMMLV.</p>
+          </div>
+          <div class="bbva-field px-4 pt-2 pb-2.5">
+            <label for="selectActividad" class="block text-xs text-slate-500">Situación laboral</label>
+            <select id="selectActividad" onchange="recalculateAll()" class="bbva-control mt-0.5 cursor-pointer">
+              <option value="Empleado">Empleado</option>
+              <option value="Pensionado">Pensionado</option>
+              <option value="Independiente">Independiente</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Vista de la Opción A (Automática por ingresos/LTV) -->
+        <div id="viewGarantiaAuto" class="border border-slate-200 rounded-lg p-4 bg-[#F9FAFB] space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase">Garantía asignada por regla de negocio</span>
+            <span id="badgeAutoGarantia" class="text-xs font-bold text-[#072146] bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded">
+              Con Prenda (Garantía 305)
+            </span>
+          </div>
+          <p id="textAutoGarantiaReason" class="text-xs text-slate-600 leading-relaxed">
+            Cuando los ingresos son inferiores a 5 SMMLV, el sistema asigna la garantia y el cliente no puede modificarla.
+          </p>
+        </div>
+
+        <!-- Vista de la Opción B (Selección explícita en el formulario) -->
+        <div id="viewGarantiaManual" class="hidden space-y-3 animate-step">
+          <label class="block text-sm font-bold text-[#121212]">
+            Seleccione el tipo de garantía del crédito
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <!-- Tarjeta Radio: Con Prenda -->
+            <label
+              id="cardRadioConPrenda"
+              onclick="selectManualGarantia('CON_PRENDA')"
+              class="border rounded-lg p-4 cursor-pointer transition flex items-start gap-3"
+            >
+              <input
+                type="radio"
+                name="radioGarantia"
+                id="radioConPrenda"
+                checked
+                class="mt-1 accent-[#1973B8]"
+              />
+              <div>
+                <span class="block text-sm font-bold text-[#072146]">Con prenda sobre el vehículo</span>
+                <span id="subLabelConPrenda" class="block text-xs text-slate-600 mt-0.5">
+                  Tasa preferencial &bull; Garantía 305 (Nuevo)
+                </span>
+              </div>
+            </label>
+
+            <!-- Tarjeta Radio: Sin Prenda -->
+            <label
+              id="cardRadioSinPrenda"
+              onclick="selectManualGarantia('SIN_PRENDA')"
+              class="border rounded-lg p-4 cursor-pointer transition flex items-start gap-3"
+            >
+              <input
+                type="radio"
+                name="radioGarantia"
+                id="radioSinPrenda"
+                class="mt-1 accent-[#1973B8]"
+              />
+              <div>
+                <span class="block text-sm font-bold text-[#072146]">Sin prenda</span>
+                <span class="block text-xs text-slate-600 mt-0.5">
+                  Libertad de prenda &bull; Garantía 398 Informativa
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Navegación Paso 3 (garantía y perfil) -->
+        <div class="pt-2 flex items-center justify-between">
+          <button
+            type="button"
+            onclick="goToStep(2)"
+            class="text-sm font-semibold text-[#1973B8] hover:text-[#072146] px-3 py-2 transition"
+          >
+            &larr; Volver al origen
+          </button>
+          <button
+            type="button"
+            onclick="goToStep(4)"
+            class="bg-[#1973B8] hover:bg-[#072146] text-white font-semibold text-sm px-7 py-3 rounded transition"
+          >
+            Simular oferta (Punto B)
+          </button>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PASO 3: OFERTA Y RESUMEN EJECUTIVO DEL CONSUMO DE PARAMETRÍA
+           ================================================================ -->
+      <section id="stepView4" class="hidden p-6 sm:p-8 space-y-7 animate-step">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-[#072146]">
+              Oferta simulada y trazabilidad de variables
+            </h1>
+            <p class="text-sm text-slate-600 mt-1">
+              Resultado calculado tras resolver el Grupo de Comisión y el Tipo de Garantía.
+            </p>
+          </div>
+          <span class="text-xs font-semibold text-[#028484] bg-teal-50 border border-teal-200 px-3 py-1 rounded">
+            Punto B ejecutado
+          </span>
+        </div>
+
+        <!-- Tarjetas limpias de Tasa Fija y Tasa Variable -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="border border-slate-200 rounded-lg p-4 bg-[#F4F8FB]">
+            <span class="text-xs font-semibold text-slate-500 uppercase">Oferta Tasa Fija</span>
+            <div class="text-2xl font-bold text-[#072146] mt-1" id="resTasaFija">14.85% E.A.</div>
+            <p class="text-xs text-slate-600 mt-1">
+              Cuota estimada (60 meses): <strong id="resCuotaFija" class="text-[#121212]">$ 1.280.000</strong>
+            </p>
+          </div>
+
+          <div class="border border-slate-200 rounded-lg p-4 bg-white">
+            <span class="text-xs font-semibold text-slate-500 uppercase">Oferta Tasa Variable (IBR)</span>
+            <div class="text-2xl font-bold text-[#1973B8] mt-1" id="resTasaVariable">14.00% E.A.</div>
+            <p class="text-xs text-slate-600 mt-1">
+              Modalidad indexada calculada por Motor de Pricing
+            </p>
+          </div>
+        </div>
+
+        <!-- Explicación ejecutiva de los 2 momentos de consumo de la parametría -->
+        <div class="border border-slate-200 rounded-lg overflow-hidden">
+          <div class="bg-[#072146] text-white px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">
+            ¿En qué punto del flujo se consume la parametría?
+          </div>
+          <div class="divide-y divide-slate-200 text-xs sm:text-sm">
+            <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <strong class="text-[#072146] block">Punto A: Selección de origen y concesionario (Paso 2)</strong>
+                <span id="resExplicacionPuntoA" class="text-slate-600 text-xs">
+                  Se consulta parametría al seleccionar Concesionario / Dealer.
+                </span>
+              </div>
+              <span id="badgeEstadoPuntoA" class="text-xs font-semibold px-2.5 py-1 rounded shrink-0 self-start sm:self-center">
+                Parametría
+              </span>
+            </div>
+
+            <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50/60">
+              <div>
+                <strong class="text-[#072146] block">Punto B: Resolución del Grupo para Motor Pricing (Pre-Oferta)</strong>
+                <span id="resExplicacionPuntoB" class="text-slate-600 text-xs">
+                  Antes de presentar la oferta, Backend cruza el concesionario seleccionado con la tabla HOST y envía el Grupo al motor de Pricing y a RVD.
+                </span>
+              </div>
+              <span id="badgeGrupoFinal" class="text-xs font-bold bg-[#072146] text-white px-3 py-1 rounded shrink-0 self-start sm:self-center">
+                Grupo 1
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla limpia de las variables que viajan a Pricing, RVD y NÁCAR -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">
+            Variables capturadas para Pricing Avanzado, RVD y NÁCAR
+          </h3>
+          <div class="border border-slate-200 rounded-lg overflow-hidden">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">1. Grupo pago de comisión</td>
+                  <td id="tableGrupoComision" class="py-2.5 px-4 font-semibold text-[#072146]">Grupo 1 (Concesionario)</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">2. Tipo de garantía (Subproducto)</td>
+                  <td id="tableTipoGarantia" class="py-2.5 px-4 font-semibold text-[#072146]">Con prenda (Garantía 305)</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">3. Origen y datos del asesor</td>
+                  <td id="tableDatosOrigen" class="py-2.5 px-4 text-slate-800">Concesionario seleccionado o Mercado Directo autogestionado</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">4. Vehículo y combustión</td>
+                  <td id="tableVehiculoCombustion" class="py-2.5 px-4 text-slate-800">Nuevo &bull; Gasolina / Diésel</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">5. Relación LTV</td>
+                  <td id="tableLtv" class="py-2.5 px-4 text-slate-800">64.7% (LTV &le; 70%)</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 text-slate-500 font-medium">6. Perfil e ingresos</td>
+                  <td id="tablePerfil" class="py-2.5 px-4 text-slate-800">Empleado &bull; $ 9.000.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Botón para volver a editar -->
+        <div class="pt-2 flex items-center justify-between">
+          <button
+            type="button"
+            onclick="goToStep(3)"
+            class="border border-[#1973B8] text-[#1973B8] hover:bg-blue-50 font-semibold text-sm px-5 py-2.5 rounded transition"
+          >
+            &larr; Volver a garantía y perfil
+          </button>
+          <span class="text-xs text-slate-500">
+            Datos listos para enviar a Ruta Tantia &rarr; Bonita &rarr; NÁCAR
+          </span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Pie de página discreto -->
+  <footer class="max-w-[680px] mx-auto w-full px-4 sm:px-6 py-4 text-center text-xs text-slate-400">
+    BBVA Colombia &bull; Flujo de referencia Vehículo Web (SDATOOL 56742)
+  </footer>
+
+  <!-- ====================================================================
+       LÓGICA DEL WIZARD Y REGLAS DE NEGOCIO
+       ==================================================================== -->
+  <script>
+    // Catálogo ilustrativo de dealers; marcas, NIT demo y grupos deben venir de parametría real HOST.
+    const DEALERS = [
+      { id: 'REN_01', nombre: 'Casa Toro Automotriz', nit: 'NIT DEMO 001', marca: 'Renault', grupo: 'Grupo 1', spread: 1.20 },
+      { id: 'REN_02', nombre: 'Sanautos', nit: 'NIT DEMO 002', marca: 'Renault', grupo: 'Grupo 2', spread: 0.90 },
+      { id: 'MAZ_01', nombre: 'Madiautos / Los Coches', nit: 'NIT DEMO 003', marca: 'Mazda', grupo: 'Grupo 1', spread: 1.20 },
+      { id: 'MAZ_02', nombre: 'Kyoto Motors', nit: 'NIT DEMO 004', marca: 'Mazda', grupo: 'Grupo 2', spread: 0.90 },
+      { id: 'TOY_01', nombre: 'Distoyota', nit: 'NIT DEMO 005', marca: 'Toyota', grupo: 'Grupo 2', spread: 0.90 },
+      { id: 'TOY_02', nombre: 'Automotores Toyota Colombia', nit: 'NIT DEMO 006', marca: 'Toyota', grupo: 'Grupo 3', spread: 0.60 },
+      { id: 'CHE_01', nombre: 'Autonal', nit: 'NIT DEMO 007', marca: 'Chevrolet', grupo: 'Grupo 2', spread: 0.90 },
+      { id: 'CHE_02', nombre: 'Continautos', nit: 'NIT DEMO 008', marca: 'Chevrolet', grupo: 'Grupo 3', spread: 0.60 },
+      { id: 'KIA_01', nombre: 'Metrokia', nit: 'NIT DEMO 009', marca: 'Kia', grupo: 'Grupo 3', spread: 0.60 },
+      { id: 'BYD_01', nombre: 'Motorysa Eléctricos', nit: 'NIT DEMO 010', marca: 'BYD', grupo: 'Grupo 4', spread: 0.30 }
+    ];
+
+    // Referencia para el prototipo: SMMLV 2026 = $1.750.905; actualizar cuando cambie el valor legal.
+    const SMMLV = 1750905;
+    const UMBRAL_PRENDA = 5 * SMMLV;
+
+    // Estado central
+    const appState = {
+      currentStep: 1,
+      valorVehiculo: 85000000,
+      valorFinanciar: 55000000,
+      ingresos: 9000000,
+      canal: 'MERCADO_DIRECTO', // CONCESIONARIO | MERCADO_DIRECTO; se deriva de la pregunta de acompañamiento
+      acompanamiento: false, // true = Concesionario / Dealer; false = Mercado Directo
+      manualGarantia: 'CON_PRENDA' // CON_PRENDA | SIN_PRENDA
+    };
+
+    // Formateo de moneda COP
+    function formatCurrencyCOP(num) {
+      return '$ ' + new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(num || 0);
+    }
+
+    function handleCurrencyInput(inputEl, key) {
+      const rawDigits = inputEl.value.replace(/[^\d]/g, '');
+      const numericVal = parseInt(rawDigits || '0', 10);
+      appState[key] = numericVal;
+      inputEl.value = formatCurrencyCOP(numericVal);
+      recalculateAll();
+    }
+
+    // Navegación entre los cuatro pasos del wizard.
+    function goToStep(stepNumber) {
+      if (appState.currentStep === 2 && stepNumber > 2 && appState.canal === 'CONCESIONARIO') {
+        const selectedDealerId = document.getElementById('selectConcesionario').value;
+        if (!DEALERS.some(d => d.id === selectedDealerId)) {
+          const dealerInput = document.getElementById('inputBuscarConcesionario');
+          dealerInput.setCustomValidity('Selecciona un concesionario de la lista.');
+          dealerInput.reportValidity();
+          dealerInput.focus();
+          return;
+        }
+      }
+
+      appState.currentStep = stepNumber;
+      [1, 2, 3, 4].forEach(i => {
+        const view = document.getElementById(`stepView${i}`);
+        view.classList.toggle('hidden', i !== stepNumber);
+        const circle = document.getElementById(`stepCircle${i}`);
+        const label = document.getElementById(`stepLabel${i}`);
+        if (i === stepNumber) {
+          circle.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center bg-[#072146] text-white shadow-sm';
+          circle.textContent = i;
+          label.className = 'text-xs sm:text-sm font-bold text-[#072146]';
+        } else if (i < stepNumber) {
+          circle.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center bg-[#028484] text-white';
+          circle.innerHTML = '&#10003;';
+          label.className = 'text-xs sm:text-sm font-medium text-[#028484]';
+        } else {
+          circle.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center bg-slate-200 text-slate-600';
+          circle.textContent = i;
+          label.className = 'text-xs sm:text-sm font-medium text-slate-500';
+        }
+      });
+      [1, 2, 3].forEach(i => {
+        const line = document.getElementById(`stepLine${i}`);
+        line.className = stepNumber > i
+          ? 'flex-1 h-[2px] bg-[#028484] mx-1 sm:mx-2 transition'
+          : 'flex-1 h-[2px] bg-slate-300 mx-1 sm:mx-2 transition';
+      });
+      recalculateAll();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleAccompanimentChange(isAccompanied) {
+      appState.acompanamiento = Boolean(isAccompanied);
+      appState.canal = appState.acompanamiento ? 'CONCESIONARIO' : 'MERCADO_DIRECTO';
+      updateChannelFields();
+      const summary = document.getElementById('resumenAcompanamiento');
+      summary.textContent = appState.acompanamiento
+        ? 'Selecciona el concesionario con el que estás gestionando la compra.'
+        : 'No necesitas ingresar datos adicionales de origen.';
+      recalculateAll();
+    }
+
+    function updateChannelFields() {
+      const esConcesionario = appState.canal === 'CONCESIONARIO';
+      document.getElementById('boxConcesionarioFields').classList.toggle('hidden', !esConcesionario);
+      document.getElementById('boxMercadoDirecto').classList.toggle('hidden', esConcesionario);
+    }
+
+    function updateDealerOptions() {
+      const dataList = document.getElementById('dealerOptions');
+      dataList.innerHTML = DEALERS.map(d => `<option value="${d.nombre}"></option>`).join('');
+      const hiddenSelect = document.getElementById('selectConcesionario');
+      hiddenSelect.innerHTML = DEALERS.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('');
+      filterDealers();
+    }
+
+    function filterDealers() {
+      const input = document.getElementById('inputBuscarConcesionario');
+      const typed = input.value.trim().toLocaleLowerCase('es-CO');
+      const hiddenSelect = document.getElementById('selectConcesionario');
+      const dealer = DEALERS.find(d => d.nombre.toLocaleLowerCase('es-CO') === typed);
+      hiddenSelect.value = dealer ? dealer.id : '';
+      input.setCustomValidity(typed && !dealer ? 'Selecciona un concesionario de las sugerencias.' : '');
+      recalculateAll();
+    }
+
+    function selectManualGarantia(tipo) {
+      if (appState.ingresos < UMBRAL_PRENDA) return;
+      appState.manualGarantia = tipo;
+      document.getElementById('radioConPrenda').checked = tipo === 'CON_PRENDA';
+      document.getElementById('radioSinPrenda').checked = tipo === 'SIN_PRENDA';
+      recalculateAll();
+    }
+
+    // Cálculo general de LTV, Grupo de Comisión, Garantía y Oferta
+    function recalculateAll() {
+      const estadoVehiculo = document.getElementById('selectEstado').value;
+      const combustion = document.getElementById('selectCombustion').value;
+      const actividad = document.getElementById('selectActividad').value;
+
+      // 1. LTV
+      const ltv = appState.valorVehiculo > 0
+        ? Math.round((appState.valorFinanciar / appState.valorVehiculo) * 1000) / 10
+        : 0;
+      const ltvMenorIgual70 = ltv <= 70;
+      const ltvRangoTexto = ltvMenorIgual70 ? 'LTV <= 70%' : 'LTV > 70%';
+
+      document.getElementById('ltvPercentageText').textContent = `${ltv}%`;
+      const pill = document.getElementById('ltvCategoryPill');
+      pill.textContent = ltvRangoTexto;
+      pill.className = ltvMenorIgual70
+        ? 'text-[11px] font-semibold px-2 py-0.5 rounded bg-teal-50 text-[#028484] border border-teal-200'
+        : 'text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200';
+
+      // 2. Resolución de Garantía (305 Nuevo, 306 Usado, 398 Sin prenda)
+      // 2. Regla de garantia: desde 5 SMMLV el cliente puede elegir; por debajo decide el sistema.
+      const puedeElegirPrenda = appState.ingresos >= UMBRAL_PRENDA;
+      const codPrendaReal = estadoVehiculo === 'Nuevo' ? '305' : '306';
+      document.getElementById('subLabelConPrenda').textContent =
+        `Tasa preferencial - Garantia ${codPrendaReal} (${estadoVehiculo})`;
+
+      let esConPrenda;
+      if (puedeElegirPrenda) {
+        esConPrenda = appState.manualGarantia === 'CON_PRENDA';
+        document.getElementById('viewGarantiaAuto').classList.add('hidden');
+        document.getElementById('viewGarantiaManual').classList.remove('hidden');
+        document.getElementById('textUmbralPrenda').textContent =
+          `Ingresos iguales o superiores a 5 SMMLV (${formatCurrencyCOP(UMBRAL_PRENDA)}): el cliente puede elegir con prenda o sin prenda.`;
+      } else {
+        // En el mockup se conserva la regla automatica actual: bajo el umbral, asigna con prenda.
+        esConPrenda = true;
+        document.getElementById('viewGarantiaAuto').classList.remove('hidden');
+        document.getElementById('viewGarantiaManual').classList.add('hidden');
+        document.getElementById('badgeAutoGarantia').textContent = `Con prenda (Garantia ${codPrendaReal})`;
+        document.getElementById('textAutoGarantiaReason').textContent =
+          `Los ingresos son inferiores a 5 SMMLV (${formatCurrencyCOP(UMBRAL_PRENDA)}). El sistema asigna automaticamente Con prenda (garantia ${codPrendaReal}); el cliente no puede modificar esta decision.`;
+        document.getElementById('textUmbralPrenda').textContent =
+          `Ingresos inferiores a 5 SMMLV (${formatCurrencyCOP(UMBRAL_PRENDA)}): el sistema define la garantia y el cliente no puede cambiarla.`;
+      }
+
+      // Estilo de tarjetas radio en la seleccion manual.
+      document.getElementById('cardRadioConPrenda').className = esConPrenda
+        ? 'border-2 border-[#1973B8] bg-blue-50/30 rounded-lg p-4 cursor-pointer transition flex items-start gap-3'
+        : 'border border-slate-200 bg-white rounded-lg p-4 cursor-pointer transition flex items-start gap-3';
+      document.getElementById('cardRadioSinPrenda').className = !esConPrenda
+        ? 'border-2 border-[#1973B8] bg-blue-50/30 rounded-lg p-4 cursor-pointer transition flex items-start gap-3'
+        : 'border border-slate-200 bg-white rounded-lg p-4 cursor-pointer transition flex items-start gap-3';
+
+      const textoGarantiaFinal = esConPrenda
+        ? `Con prenda (Garantía ${codPrendaReal} - ${estadoVehiculo})`
+        : 'Sin prenda (Garantía 398 Informativa)';
+
+      // 3. Resolución del Grupo de Pago de Comisión para Vehículo Web / Autogestión.
+      let grupoFinal = 'Grupo 5';
+      let spreadGrupo = 0;
+      let resumenOrigen = 'Mercado Directo (Autogestión)';
+      let puntoAConsumido = false;
+      let pagaComisionDealer = false;
+
+      if (appState.canal === 'CONCESIONARIO') {
+        const concId = document.getElementById('selectConcesionario').value;
+        const dealer = DEALERS.find(d => d.id === concId);
+        if (dealer) {
+          puntoAConsumido = true;
+          pagaComisionDealer = true;
+          grupoFinal = dealer.grupo;
+          spreadGrupo = dealer.spread;
+          resumenOrigen = dealer.nombre;
+        } else {
+          grupoFinal = 'Pendiente';
+          document.getElementById('inputBuscarConcesionario').setCustomValidity('Selecciona un concesionario de las sugerencias.');
+        }
+      } else {
+        const codigoReferido = document.getElementById('inputCodigoReferido').value.trim();
+        resumenOrigen = `Mercado Directo (Autogestión)${codigoReferido ? ` · Código de referido: ${codigoReferido}` : ''}`;
+      }
+
+      // 4. Simulación sencilla de Tasa Fija y Variable
+      let tasaFija = 13.80 + spreadGrupo + (esConPrenda ? 0 : 0.95) + (ltvMenorIgual70 ? -0.25 : 0.45);
+      if (combustion === 'Eléctrico') tasaFija -= 0.60;
+      if (combustion === 'Híbrido') tasaFija -= 0.35;
+      tasaFija = Math.round(tasaFija * 100) / 100;
+      const tasaVariable = Math.round((tasaFija - 0.85) * 100) / 100;
+
+      const tasaMV = Math.pow(1 + tasaFija / 100, 1 / 12) - 1;
+      const cuota = appState.valorFinanciar > 0
+        ? Math.round((appState.valorFinanciar * (tasaMV * Math.pow(1 + tasaMV, 60))) / (Math.pow(1 + tasaMV, 60) - 1))
+        : 0;
+
+      // 5. Actualizar Paso 3 (Resumen Ejecutivo)
+      document.getElementById('resTasaFija').textContent = `${tasaFija.toFixed(2)}% E.A.`;
+      document.getElementById('resTasaVariable').textContent = `${tasaVariable.toFixed(2)}% E.A.`;
+      document.getElementById('resCuotaFija').textContent = formatCurrencyCOP(cuota);
+
+      const badgePuntoA = document.getElementById('badgeEstadoPuntoA');
+      const expPuntoA = document.getElementById('resExplicacionPuntoA');
+      if (puntoAConsumido) {
+        badgePuntoA.textContent = 'Catálogo consumido';
+        badgePuntoA.className = 'text-xs font-semibold px-2.5 py-1 rounded bg-teal-50 text-[#028484] border border-teal-200 shrink-0 self-start sm:self-center';
+        expPuntoA.textContent = 'Se usa un único selector con búsqueda por nombre del concesionario. El NIT asociado se consulta internamente para resolver el grupo en la parametría HOST.';
+      } else {
+        badgePuntoA.textContent = 'No requerido';
+        badgePuntoA.className = 'text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-600 shrink-0 self-start sm:self-center';
+        expPuntoA.textContent = 'Mercado Directo en Vehículo Web: no se consulta el catálogo de concesionarios ni se solicitan datos del asesor.';
+      }
+
+      document.getElementById('badgeGrupoFinal').textContent = grupoFinal;
+      document.getElementById('resExplicacionPuntoB').textContent = appState.canal === 'CONCESIONARIO'
+        ? (puntoAConsumido ? `Regla esperada: el backend consulta la tabla paramétrica HOST a partir del NIT y determina ${grupoFinal}. Marca de comisión al dealer: SÍ.` : 'Selecciona un concesionario antes de continuar para poder determinar el grupo de comisión.')
+        : 'Regla esperada: el backend asigna automáticamente Grupo 5 (Mercado Directo). Marca de comisión al dealer: NO.';
+
+      document.getElementById('tableGrupoComision').textContent = puntoAConsumido
+        ? `${grupoFinal} (Comisión al dealer: SÍ)`
+        : (appState.canal === 'CONCESIONARIO' ? 'Pendiente de selección de concesionario' : 'Grupo 5 (Comisión al dealer: NO)');
+      document.getElementById('tableTipoGarantia').textContent = textoGarantiaFinal;
+      document.getElementById('tableDatosOrigen').textContent = resumenOrigen;
+      document.getElementById('tableVehiculoCombustion').textContent = `${estadoVehiculo} • ${combustion}`;
+      document.getElementById('tableLtv').textContent = `${ltv}% (${ltvRangoTexto})`;
+      document.getElementById('tablePerfil').textContent = `${actividad} • ${formatCurrencyCOP(appState.ingresos)}`;
+    }
+
+    // Inicializar al abrir
+    window.onload = function () {
+      updateChannelFields();
+      updateDealerOptions();
+      goToStep(1);
+    };
+  </script>
+</body>
+</html>
