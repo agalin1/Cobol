@@ -1,0 +1,455 @@
+(ANDRES JAVIER GALINDO VARGAS) que esa parametría host debería (ANDRES JAVIER GALINDO VARGAS) ir, o sea, eso que muestras es ya el simulador
+0:08
+(ANDRES JAVIER GALINDO VARGAS) como tal, o sea, lo que uno puede - (JAIR STIVEN RODRIGUEZ VARGAS) Sí, esto es un (ANDRES JAVIER GALINDO VARGAS) escoger. - (JAIR STIVEN RODRIGUEZ VARGAS) ejemplo que nosotros estamos armando porque el simulador real es
+0:16
+(ANDRES JAVIER GALINDO VARGAS) Sí. Ah, okay. Eso es un ejemplo que colocaste esa - (JAIR STIVEN RODRIGUEZ VARGAS) este que está acá, (ANDRES JAVIER GALINDO VARGAS) lista como desplegable para mirarla ahí. - (JAIR STIVEN RODRIGUEZ VARGAS) este un mocapsi, aunque es que aquí
+0:24
+(ANDRES JAVIER GALINDO VARGAS) Ya, - (JAIR STIVEN RODRIGUEZ VARGAS) me llegaron los datos vacíos, pero la gracia es que aquí en el concesionario (JAIR STIVEN RODRIGUEZ VARGAS) te salga, por ejemplo, no sé, Jorge Cortés eh yo no sé
+0:32
+(ANDRES JAVIER GALINDO VARGAS) ya. - (JAIR STIVEN RODRIGUEZ VARGAS) quién te salgan como todos los concesionarios y que el usuario lo seleccione y (JAIR STIVEN RODRIGUEZ VARGAS) nosotros mandamos, por decirlo así, el ID por debajo para que tú lo
+0:40
+(ANDRES JAVIER GALINDO VARGAS) Vale, digamos - (JAIR STIVEN RODRIGUEZ VARGAS) relaciones allá en la (ANDRES JAVIER GALINDO VARGAS) que yo lo vería, si no estoy mal, digamos, tendría
+0:48
+(ANDRES JAVIER GALINDO VARGAS) que el ir a viajar a la - (JAIR STIVEN RODRIGUEZ VARGAS) parametría. (ANDRES JAVIER GALINDO VARGAS) tabla umta, ¿cierto?, de host, que esa es
+0:56
+(ANDRES JAVIER GALINDO VARGAS) la como que la tabla pues principal de parametría de todo lo que tiene que ver ahí (ANDRES JAVIER GALINDO VARGAS) con vehículo web. imaginaría que la mejor manera que
+1:04
+(ANDRES JAVIER GALINDO VARGAS) deberíamos, digamos, de manejarlo sería como crearle una nueva (ANDRES JAVIER GALINDO VARGAS) sección de parámetros identificando pues
+1:12
+(ANDRES JAVIER GALINDO VARGAS) todos los grupos que deberíamos de alguna manera (ANDRES JAVIER GALINDO VARGAS) poner en en esa sección de trabajo. Lo único
+1:20
+(ANDRES JAVIER GALINDO VARGAS) que tendríamos que hacer, bueno, lo único sino lo que tendríamos que hacer (ANDRES JAVIER GALINDO VARGAS) es definir qué día como en cada grupo y y crearle
+1:28
+(ANDRES JAVIER GALINDO VARGAS) esas parametrías en la tabla y buscar que el digamos en ese (ANDRES JAVIER GALINDO VARGAS) pedacito de la del combox vaya directamente
+1:36
+(ANDRES JAVIER GALINDO VARGAS) pues a consultar la tabla. No sé, ahí sí pues (ANDRES JAVIER GALINDO VARGAS) tocaría preguntarle un poquito ahí al al viejo Óscar o o Rubén,
+1:44
+(ANDRES JAVIER GALINDO VARGAS) de pronto con Ósca también que son compañeros ahí como del bosque creo que (ANDRES JAVIER GALINDO VARGAS) han manejado estos temas. Si directamente cuando viene, digamos, de next
+1:52
+(ANDRES JAVIER GALINDO VARGAS) llen a a host consulta es un un six (ANDRES JAVIER GALINDO VARGAS) o puede ir directamente a a traerlo de la tabla,
+2:00
+(ANDRES JAVIER GALINDO VARGAS) pero diría que tendría que ser algo de ese (JAIR STIVEN RODRIGUEZ VARGAS) Sí, es que yo, ¿cómo lo veo? Mira, por ejemplo, aquí en la
+2:08
+(ANDRES JAVIER GALINDO VARGAS) estilo. - (JAIR STIVEN RODRIGUEZ VARGAS) primera variable, que es la que yo les estoy comentando, dicen que los (ANDRES JAVIER GALINDO VARGAS) Sí. - (JAIR STIVEN RODRIGUEZ VARGAS) frontales deben poder identificar y la posibilidad de
+2:16
+(JAIR STIVEN RODRIGUEZ VARGAS) escoger si es un concesionario o si es una compra directa, que es lo que yo (JAIR STIVEN RODRIGUEZ VARGAS) les estoy mencionando acá. Digamos que va a haber un selector donde yo pueda
+2:24
+(JAIR STIVEN RODRIGUEZ VARGAS) seleccionar si es concesionario o es una venta directa. Pero si yo (JAIR STIVEN RODRIGUEZ VARGAS) selecciono concesionario, yo me imagino que nosotros, que era lo que le estaba diciendo a
+2:32
+(JAIR STIVEN RODRIGUEZ VARGAS) Dani, Dani tiene que crear un servicio que consulte todos los (JAIR STIVEN RODRIGUEZ VARGAS) concesionarios. que que están como activos para que la persona pueda
+2:40
+(JAIR STIVEN RODRIGUEZ VARGAS) seleccionar el concesionario. En este caso, aquí debería poder seleccionar el (JAIR STIVEN RODRIGUEZ VARGAS) concesionario, no sé, Jorge Cortés, pero eso lo deberías
+2:48
+(JAIR STIVEN RODRIGUEZ VARGAS) devolver desde host, ¿no? O eso, ¿cómo se devuelve, (JAIR STIVEN RODRIGUEZ VARGAS) Dani? ¿Cómo vienen esos
+2:56
+(ANDRES JAVIER GALINDO VARGAS) Es que yo no sé Si a la - (JAIR STIVEN RODRIGUEZ VARGAS) datos? (ANDRES JAVIER GALINDO VARGAS) fecha hubiera necesita, bueno, no sé si a la fecha
+3:04
+(ANDRES JAVIER GALINDO VARGAS) necesitaría ir hasta host o en o en Oracle. Entiendo yo que (ANDRES JAVIER GALINDO VARGAS) también en Oracle a veces hay una tablita con toda la información de las
+3:12
+(ANDRES JAVIER GALINDO VARGAS) parametrías, pero no sé ahí cómo lo pudiéramos (DANNY ALEXIS ROJAS MARMOLEJO) Eh, yo puedo validar eso. Yo tengo acceso a
+3:20
+(ANDRES JAVIER GALINDO VARGAS) validar. - (JAIR STIVEN RODRIGUEZ VARGAS) Puedes acceder en este - (DANNY ALEXIS ROJAS MARMOLEJO) esa base de (JAIR STIVEN RODRIGUEZ VARGAS) momento, Dani, y como que cerramos - (DANNY ALEXIS ROJAS MARMOLEJO) datos. Dame un momento, un momento que este PC
+3:28
+(ANDRES JAVIER GALINDO VARGAS) Aunque esa base de - (DANNY ALEXIS ROJAS MARMOLEJO) es nuevo y no sé si tengo el por (ANDRES JAVIER GALINDO VARGAS) datos, no sé, digamos, cómo se
+3:36
+(ANDRES JAVIER GALINDO VARGAS) se alimenta de alguna forma, si es una réplica de la de las - (DANNY ALEXIS ROJAS MARMOLEJO) acá. Bash. Creo (ANDRES JAVIER GALINDO VARGAS) tablas, - (DANNY ALEXIS ROJAS MARMOLEJO) que esos elementos por un bash, si no estoy
+3:44
+(ANDRES JAVIER GALINDO VARGAS) porque si se alimenta por un bash, digamos, el desarrollo ahí - (DANNY ALEXIS ROJAS MARMOLEJO) mal. (ANDRES JAVIER GALINDO VARGAS) en XGEN, digamos, el APX que está haciendo ahí, iría esa tabla
+3:52
+(ANDRES JAVIER GALINDO VARGAS) Pero la parametría la tendríamos que hacer aquí en (ANDRES JAVIER GALINDO VARGAS) host porque si se es una copia de la tabla - (DANNY ALEXIS ROJAS MARMOLEJO) Sí, inclusive inclusive inclusive la
+4:00
+(DANNY ALEXIS ROJAS MARMOLEJO) parametría eh hay que hacerla en (DANNY ALEXIS ROJAS MARMOLEJO) ambiente en ambiente productivo. Cuando ya se tiene definida se pasa ambiente
+4:08
+(ANDRES JAVIER GALINDO VARGAS) host. - (DANNY ALEXIS ROJAS MARMOLEJO) productivo y de productivo se pasa ambientes previos. Eso es lo que (DANNY ALEXIS ROJAS MARMOLEJO) yo sé de las parametrías nosotros o digamos que en la
+4:16
+(DANNY ALEXIS ROJAS MARMOLEJO) fase uno, Óscar tocaba que las creara prácticamente (DANNY ALEXIS ROJAS MARMOLEJO) todos los días y Daniel eh corría los jobs para
+4:24
+(DANNY ALEXIS ROJAS MARMOLEJO) que quedaban quedaran en la base (ANDRES JAVIER GALINDO VARGAS) Ah, entonces sí, sí es lo que te es lo que medio me
+4:32
+(ANDRES JAVIER GALINDO VARGAS) temía, pero lo que sucede es que claro, digamos que - (DANNY ALEXIS ROJAS MARMOLEJO) Oracle. (ANDRES JAVIER GALINDO VARGAS) cada día se realiza una copia de lo que hay de
+4:40
+(ANDRES JAVIER GALINDO VARGAS) producción al ambiente de desarrollo a nivel de de host de esas (ANDRES JAVIER GALINDO VARGAS) tablas. Entonces, por eso se pisan todos los días
+4:48
+(ANDRES JAVIER GALINDO VARGAS) y toca volver a cargar de alguna manera la parametría, - (DANNY ALEXIS ROJAS MARMOLEJO) Así (ANDRES JAVIER GALINDO VARGAS) digamos, volver a cargarla y correr los jobs que alimentan de - (DANNY ALEXIS ROJAS MARMOLEJO) es.
+4:56
+(ANDRES JAVIER GALINDO VARGAS) host a Oracle, pero sí me temía algo de eso. Entonces, digamos - (DANNY ALEXIS ROJAS MARMOLEJO) Sí, (ANDRES JAVIER GALINDO VARGAS) que inicialmente la parametría tendríamos que hacerla aquí - (DANNY ALEXIS ROJAS MARMOLEJO) señor.
+5:04
+(ANDRES JAVIER GALINDO VARGAS) desde host y correr los procesitos que sí no sé, nos toca (ANDRES JAVIER GALINDO VARGAS) averiguar bien cómo cuáles son los jobs de funcionamiento para que alimente
+5:12
+(ANDRES JAVIER GALINDO VARGAS) la tabla Oracle, o sea, con esos parámetros y se pueda (ANDRES JAVIER GALINDO VARGAS) consumir allá en en el APX para que cargue eso.
+5:20
+(ANDRES JAVIER GALINDO VARGAS) Pero entonces lo que me nace la duda (ANDRES JAVIER GALINDO VARGAS) es lo que dices ahí en eso la lista de
+5:28
+(ANDRES JAVIER GALINDO VARGAS) todos esos concesionarios y todo eso, de dónde, o sea, cómo sabemos que (ANDRES JAVIER GALINDO VARGAS) debería ir ahí o qué deberíamos tener, ¿no? O sea, como los datos
+5:36
+(ANDRES JAVIER GALINDO VARGAS) primarios que queríamos a - (JAIR STIVEN RODRIGUEZ VARGAS) Yo lo vi por acá, es que (ANDRES JAVIER GALINDO VARGAS) parametrizar. - (JAIR STIVEN RODRIGUEZ VARGAS) no lo encuentro. Ustedes me ayudaron a buscar. Yo vi que ayer hablaban de ni
+5:44
+(JAIR STIVEN RODRIGUEZ VARGAS) nombre. Ángela lo mencionó en algún lado, pero es que no lo (ANDRES JAVIER GALINDO VARGAS) Bueno, si no no - (JAIR STIVEN RODRIGUEZ VARGAS) encuentro.
+5:52
+(ANDRES JAVIER GALINDO VARGAS) preocupes, yo le pregunto al viejoillo - (JAIR STIVEN RODRIGUEZ VARGAS) Yo sé, yo sé que eso (ANDRES JAVIER GALINDO VARGAS) ahorita. - (JAIR STIVEN RODRIGUEZ VARGAS) está por acá. A ver, yo ayer lo vi que Hugo lo
+6:00
+(JAIR STIVEN RODRIGUEZ VARGAS) puso. Sí, no. Entonces, déjame yo miro aquí una (ANDRES JAVIER GALINDO VARGAS) Eso porque lo que yo te digo, la - (JAIR STIVEN RODRIGUEZ VARGAS) presentación
+6:08
+(ANDRES JAVIER GALINDO VARGAS) mi propuesta y para ese pedacito, digamos, es en la (ANDRES JAVIER GALINDO VARGAS) UNTA, es la tabla donde me imagino que vienen y consultan y se cargan toda
+6:16
+(ANDRES JAVIER GALINDO VARGAS) la a la tabla Oracle, crear una sección exclusiva para este (ANDRES JAVIER GALINDO VARGAS) pedacito y generar la parametría con la información de
+6:24
+(ANDRES JAVIER GALINDO VARGAS) los concepcionarios y demás. y hacer la réplica para (ANDRES JAVIER GALINDO VARGAS) que se pueda tomar allá en Oracle y pues eh aquí el compañero cuando vaya a - (JAIR STIVEN RODRIGUEZ VARGAS) rápidamente.
+6:32
+(ANDRES JAVIER GALINDO VARGAS) consumir la información ya esté alimentado la información en en esa tabla (ANDRES JAVIER GALINDO VARGAS) y se tome de allá. Lo
+6:40
+(ANDRES JAVIER GALINDO VARGAS) que sí - (JAIR STIVEN RODRIGUEZ VARGAS) Pues eso es lo que eso es lo que creo que ese es el camino, viejo (ANDRES JAVIER GALINDO VARGAS) toca. Listo. Lo que sí tengo que averiguar es
+6:48
+(ANDRES JAVIER GALINDO VARGAS) con Óscar y y él me dijiste que te ayudaba también a correr - (JAIR STIVEN RODRIGUEZ VARGAS) Andrés. (ANDRES JAVIER GALINDO VARGAS) los los job de Jos, eso atrás corre todo como para entender un
+6:56
+(ANDRES JAVIER GALINDO VARGAS) poquito cómo se alimentan entre los dos ecosistemas. Yo era (ANDRES JAVIER GALINDO VARGAS) colos. Era Óscar y quién me dijiste,
+7:04
+(ANDRES JAVIER GALINDO VARGAS) David. - (DANNY ALEXIS ROJAS MARMOLEJO) Óscar Oñate. Bueno, Óscar Oñete es el que (DANNY ALEXIS ROJAS MARMOLEJO) el que dejaba la parametría en
+7:12
+(DANNY ALEXIS ROJAS MARMOLEJO) post y Daniel era el que ejecutaba los jobs, pues (JAIR STIVEN RODRIGUEZ VARGAS) Sí. - (DANNY ALEXIS ROJAS MARMOLEJO) como para tenerlos en ambientes previos en ese
+7:20
+(ANDRES JAVIER GALINDO VARGAS) Listo, vale, vale, vale. Ah, okay. Para bajar la parametría (ANDRES JAVIER GALINDO VARGAS) de producción a desarrollo y y Osquillas la - (DANNY ALEXIS ROJAS MARMOLEJO) momento. ¡Epa! ¡Epa!
+7:28
+(ANDRES JAVIER GALINDO VARGAS) llenaba y ahí yo creo que la la alimenta ya en Oracle. Bueno, vamos a - (DANNY ALEXIS ROJAS MARMOLEJO) Ajá. (ANDRES JAVIER GALINDO VARGAS) averiguar ese - (DANNY ALEXIS ROJAS MARMOLEJO) Sí,
+7:36
+(DANNY ALEXIS ROJAS MARMOLEJO) señor. (DANNY ALEXIS ROJAS MARMOLEJO) usuarios que estoy pidiendo acá la contraseña para poder entrar
+7:44
+(ANDRES JAVIER GALINDO VARGAS) pedacito. Pero bien, claro, con ese pedacito que - (DANNY ALEXIS ROJAS MARMOLEJO) aquí en la (ANDRES JAVIER GALINDO VARGAS) hiciste, o sea, que que hiciste en el canal,
+7:52
+(ANDRES JAVIER GALINDO VARGAS) nos ayuda mucho como a a ir mapeando la (ANDRES JAVIER GALINDO VARGAS) el - (JAIR STIVEN RODRIGUEZ VARGAS) Sí, es que así se ve como más, digamos que puedes - (DANNY ALEXIS ROJAS MARMOLEJO) Gracias.
+8:00
+(JAIR STIVEN RODRIGUEZ VARGAS) tenderlo más tangiblemente. Yo la verdad pues yo te considero un teso porque para (JAIR STIVEN RODRIGUEZ VARGAS) mí me parece superclicado, o sea, no quedas medio vi
+8:08
+(ANDRES JAVIER GALINDO VARGAS) cuento. Sí, digamos, digamos que, o - (JAIR STIVEN RODRIGUEZ VARGAS) las pantallas y eso es muy enredado, o sea, no no entiendo (ANDRES JAVIER GALINDO VARGAS) sea, ¿qué es lo que sucede? nosotros, o sea, nosotros tenemos dos - (JAIR STIVEN RODRIGUEZ VARGAS) nada.
+8:16
+(ANDRES JAVIER GALINDO VARGAS) dos escenarios en digamos en este proyecto que yo yo veo. (ANDRES JAVIER GALINDO VARGAS) Uno pues es la parte bash que te comentaba, digamos, de ese archivito que nos
+8:24
+(ANDRES JAVIER GALINDO VARGAS) llega y está la parte online que son estas pantallas. (ANDRES JAVIER GALINDO VARGAS) En lo que vi, nosotros tenemos pues tres componentes
+8:32
+(ANDRES JAVIER GALINDO VARGAS) que actúan online y algunos otros componentes que actúan (ANDRES JAVIER GALINDO VARGAS) bash. Entonces, digamos que estas pantallas y todo van a venir consumiendo
+8:40
+(ANDRES JAVIER GALINDO VARGAS) los componentes online, los que se (ANDRES JAVIER GALINDO VARGAS) componen y de alguna manera hay unas parametrías para
+8:48
+(ANDRES JAVIER GALINDO VARGAS) que se carguen estas variables, digamos, de alguna forma y nos (ANDRES JAVIER GALINDO VARGAS) lleguen a nosotros a los componentes si. Hay uno
+8:56
+(ANDRES JAVIER GALINDO VARGAS) para simulador y hay otro que lo (ANDRES JAVIER GALINDO VARGAS) vi para, si no estoy mal es ese, sino que es que no podido conseguir a los
+9:04
+(ANDRES JAVIER GALINDO VARGAS) compañeros a Óscar y a Rubén, son los que más conocen como más o menos o sobre todo creo (ANDRES JAVIER GALINDO VARGAS) que Rubén de este tema creo que ellos lo habían manejado, sino que creo que están
+9:12
+(ANDRES JAVIER GALINDO VARGAS) entregando proyectos hoy, como que han estado ahí super reventados. (ANDRES JAVIER GALINDO VARGAS) Entonces, digamos que vamos cargando información a nivel
+9:20
+(ANDRES JAVIER GALINDO VARGAS) de estos parámetros que se vuelve (ANDRES JAVIER GALINDO VARGAS) espejo en las tablas de Oracle, digamos, los APX van y consumen esa base de datos - (DANNY ALEXIS ROJAS MARMOLEJO) Ok.
+9:28
+(ANDRES JAVIER GALINDO VARGAS) y las van cargando ahí. Y al final, digamos que (ANDRES JAVIER GALINDO VARGAS) hemos cargado ya todo lo que es pantalla web de
+9:36
+(ANDRES JAVIER GALINDO VARGAS) vehículo, nos llega nuestro Six. ¿Qué hace eso? Eso (ANDRES JAVIER GALINDO VARGAS) digamos que de alguna manera hay una lógica para
+9:44
+(ANDRES JAVIER GALINDO VARGAS) pring toda interesante donde (ANDRES JAVIER GALINDO VARGAS) coge a la fecha son 17 variables. La fecha tenemos 17
+9:52
+(ANDRES JAVIER GALINDO VARGAS) variables, pero ahorita con esto va a crecer y por allá el programa lo (ANDRES JAVIER GALINDO VARGAS) que hace es que por un orden de llegada de las variables
+10:00
+(ANDRES JAVIER GALINDO VARGAS) va y busca una clave ID. Eso le (ANDRES JAVIER GALINDO VARGAS) digamos por orden y por secuencia le dice, miren, a la
+10:08
+(ANDRES JAVIER GALINDO VARGAS) variable ejemplo de Buró le tocó la letra A. A la (ANDRES JAVIER GALINDO VARGAS) variable, ejemplo, aquí de concesionario le tocó la C, pero ese
+10:16
+(ANDRES JAVIER GALINDO VARGAS) algoritmo ya de alguna forma está definido para pring. Entonces él arma una (ANDRES JAVIER GALINDO VARGAS) clave allí como con unas letras, va a la tabla de esa unra y le
+10:24
+(ANDRES JAVIER GALINDO VARGAS) dice, "Ah, para esta clave ID, o sea, para este ID de estas 23, (ANDRES JAVIER GALINDO VARGAS) que sería lo que nos tocaría desarrollar, a la fecha está en las 17,
+10:32
+(ANDRES JAVIER GALINDO VARGAS) digamos, manda manda A, B, C, DF, no sé qué, (ANDRES JAVIER GALINDO VARGAS) él va a busca la tabla y dice, ahí está la tasa de acuerdo
+10:40
+(ANDRES JAVIER GALINDO VARGAS) a la definición del algoritmo de esta base." Entonces es algo como así, (ANDRES JAVIER GALINDO VARGAS) ¿sí? algo como así que nos tocaría, digamos, crecer
+10:48
+(ANDRES JAVIER GALINDO VARGAS) nuestro desarrollo, digamos, online a nivel (ANDRES JAVIER GALINDO VARGAS) de lo que nos vaya llegar esas variables, pero en el camino
+10:56
+(ANDRES JAVIER GALINDO VARGAS) tenemos que ir definiendo esas nuevas variables a nivel de parametría. Digamos (ANDRES JAVIER GALINDO VARGAS) que con lo que hiciste, pues ya vamos teniendo como ese panorama más
+11:04
+(ANDRES JAVIER GALINDO VARGAS) claro y está chévere ese pedacito porque vamos (JAIR STIVEN RODRIGUEZ VARGAS) Sí. Y eso que esta parte solo es de vehículo web, porque es que si
+11:12
+(JAIR STIVEN RODRIGUEZ VARGAS) tú si ustedes se ponen a mirar aquí en en esta en (ANDRES JAVIER GALINDO VARGAS) entendiendo. - (JAIR STIVEN RODRIGUEZ VARGAS) este formato de necesidad que nos mostraban ayer, según lo que yo siento es
+11:20
+(ANDRES JAVIER GALINDO VARGAS) Mhm. - (JAIR STIVEN RODRIGUEZ VARGAS) que Nakar y CAP ya tienen algunos campos. (JAIR STIVEN RODRIGUEZ VARGAS) Entonces ahí es donde pues yo por eso quiero mirar las transacciones y
+11:28
+(JAIR STIVEN RODRIGUEZ VARGAS) los servicios, porque si ellos ya tienen los mismos campos, tenemos que mirar (ANDRES JAVIER GALINDO VARGAS) Sí, sí, sí, sí, - (JAIR STIVEN RODRIGUEZ VARGAS) cómo los están utilizando, que ese
+11:36
+(ANDRES JAVIER GALINDO VARGAS) sí. - (JAIR STIVEN RODRIGUEZ VARGAS) es el trabajillo que que Dani nos va a ayudar a hacer. Ojalá lo podamos (JAIR STIVEN RODRIGUEZ VARGAS) tener listo lo más pronto
+11:44
+(ANDRES JAVIER GALINDO VARGAS) Porque al menos haciendo el rompimiento así de (ANDRES JAVIER GALINDO VARGAS) uno y sabiendo lo que podamos tocar también de de este - (JAIR STIVEN RODRIGUEZ VARGAS) posible.
+11:52
+(ANDRES JAVIER GALINDO VARGAS) lado, eh podemos ir avanzando con los demás canales. (ANDRES JAVIER GALINDO VARGAS) Está bien, porque pues lo que te cuento, digamos, de más o menos de lo que yo vi, el
+12:00
+(ANDRES JAVIER GALINDO VARGAS) diseño que vi, fueron esos componentes y de la posible, digamos, (ANDRES JAVIER GALINDO VARGAS) solución que tendríamos porque una cosa, lo que te decía, esto es línea de
+12:08
+(ANDRES JAVIER GALINDO VARGAS) las pantallas que estamos cuadrando, pero en los (ANDRES JAVIER GALINDO VARGAS) en las en los qué los disco que vamos a tener, nos
+12:16
+(ANDRES JAVIER GALINDO VARGAS) toca también preguntarle a ellos, bueno, ¿y cómo va a ser el cuento (ANDRES JAVIER GALINDO VARGAS) para la parte bash que eso lo hace host? Eh,
+12:24
+(ANDRES JAVIER GALINDO VARGAS) cuando nos envíen ustedes el archivo que viene se tante allá con todos los (ANDRES JAVIER GALINDO VARGAS) valores para armar los clústeres. Ese es el uno de los
+12:32
+(ANDRES JAVIER GALINDO VARGAS) principales procesitos que viene como (ANDRES JAVIER GALINDO VARGAS) con cada uno de los de los productos ahí cargados y ese es el
+12:40
+(ANDRES JAVIER GALINDO VARGAS) que define todo el en sí, él es el que define todos los clústeres. (ANDRES JAVIER GALINDO VARGAS) ese como tal ya va viene y carga esa tabla que te digo, esa un
+12:48
+(ANDRES JAVIER GALINDO VARGAS) ra por allá y él llega y le coloca, listo, esto es toda la cantidad de (ANDRES JAVIER GALINDO VARGAS) clústeres para todo el producto, no solamente
+12:56
+(ANDRES JAVIER GALINDO VARGAS) viene vehículo, viene también, digamos, consumo (ANDRES JAVIER GALINDO VARGAS) y bueno, y varios tipos de créditos y él es el que a nivel de
+13:04
+(ANDRES JAVIER GALINDO VARGAS) ese algoritmo define los clúster que (ANDRES JAVIER GALINDO VARGAS) después va a consumir estas pantallas después de que ya esté
+13:12
+(ANDRES JAVIER GALINDO VARGAS) definido. Cuando él ya llega la información directamente de ya el (ANDRES JAVIER GALINDO VARGAS) sistema distribuido, él va y le dice, "Ah, esta es la tasa que a usted le va a tocar para
+13:20
+(ANDRES JAVIER GALINDO VARGAS) pring." Entonces, ese punto es como también importante (ANDRES JAVIER GALINDO VARGAS) irlo mirando, pero sin embargo, así irlo rompiendo a pedacitos por
+13:28
+(ANDRES JAVIER GALINDO VARGAS) canal nos sirve - (DANNY ALEXIS ROJAS MARMOLEJO) Yeah. (JAIR STIVEN RODRIGUEZ VARGAS) Sí, claro. Es que yo siento que yo siento que si lo
+13:36
+(ANDRES JAVIER GALINDO VARGAS) bastante. - (JAIR STIVEN RODRIGUEZ VARGAS) resolvemos en un lado, ya lo resolvemos en los demás. (ANDRES JAVIER GALINDO VARGAS) Sí, sí, sí, sí, - (JAIR STIVEN RODRIGUEZ VARGAS) Si me hago entender, creo que es lo
+13:44
+(JAIR STIVEN RODRIGUEZ VARGAS) mismo, porque yo si estamos si nos consumimos las mismas (ANDRES JAVIER GALINDO VARGAS) sí, - (JAIR STIVEN RODRIGUEZ VARGAS) transacciones y demás, pues yo siento que es lo mismo, la
+13:52
+(ANDRES JAVIER GALINDO VARGAS) sí, sí nos va a colaborar demasiado. - (DANNY ALEXIS ROJAS MARMOLEJO) Muchachos, ya logré entrar a la base de (JAIR STIVEN RODRIGUEZ VARGAS) verdad. Listo, si quieres - (DANNY ALEXIS ROJAS MARMOLEJO) datos.
+14:04
+(JAIR STIVEN RODRIGUEZ VARGAS) compártenos. Vamos - (DANNY ALEXIS ROJAS MARMOLEJO) Estas son unas parametrías. Bueno, yo busqué una (DANNY ALEXIS ROJAS MARMOLEJO) ahí, pero es en esta tabla. es en la
+14:12
+(ANDRES JAVIER GALINDO VARGAS) Es la 37. - (DANNY ALEXIS ROJAS MARMOLEJO) tabla eh parametría flujo (ANDRES JAVIER GALINDO VARGAS) Sí. - (DANNY ALEXIS ROJAS MARMOLEJO) con esa es la tabla
+14:20
+(DANNY ALEXIS ROJAS MARMOLEJO) CGUGH parametría flujo. Aquí están todas (JAIR STIVEN RODRIGUEZ VARGAS) aí - (DANNY ALEXIS ROJAS MARMOLEJO) las parametrías que se supone de estar ahorita
+14:28
+(DANNY ALEXIS ROJAS MARMOLEJO) acá. (JAIR STIVEN RODRIGUEZ VARGAS) como que - (DANNY ALEXIS ROJAS MARMOLEJO) Execution flow. ¿Qué es lo que debe
+14:36
+(JAIR STIVEN RODRIGUEZ VARGAS) ¿Qué lleva - (DANNY ALEXIS ROJAS MARMOLEJO) llevar? Pero déjame, (DANNY ALEXIS ROJAS MARMOLEJO) yo busco las de las
+14:44
+(ANDRES JAVIER GALINDO VARGAS) Esas creo que están en la sección, o sea, en el campo (ANDRES JAVIER GALINDO VARGAS) Creo que es el 13 - (JAIR STIVEN RODRIGUEZ VARGAS) eso?
+14:52
+(ANDRES JAVIER GALINDO VARGAS) 14 o 0117, si no estoy - (JAIR STIVEN RODRIGUEZ VARGAS) Sí. (ANDRES JAVIER GALINDO VARGAS) mal. - (DANNY ALEXIS ROJAS MARMOLEJO) de 13.
+15:04
+(DANNY ALEXIS ROJAS MARMOLEJO) Pero creo que aquí no (DANNY ALEXIS ROJAS MARMOLEJO) me aquí no me acuerdo qué es lo
+15:24
+(ANDRES JAVIER GALINDO VARGAS) No. con - (JAIR STIVEN RODRIGUEZ VARGAS) para (ANDRES JAVIER GALINDO VARGAS) B. Ah, sí, se ve con - (JAIR STIVEN RODRIGUEZ VARGAS) Así - (DANNY ALEXIS ROJAS MARMOLEJO) Ah, estas son,
+15:32
+(ANDRES JAVIER GALINDO VARGAS) B. Sí, esas - (DANNY ALEXIS ROJAS MARMOLEJO) estas (ANDRES JAVIER GALINDO VARGAS) son y esas son de políticas. Mira que - (JAIR STIVEN RODRIGUEZ VARGAS) es. - (DANNY ALEXIS ROJAS MARMOLEJO) son CB. Ajá.
+15:40
+(ANDRES JAVIER GALINDO VARGAS) dice el salario debe ser entre - (JAIR STIVEN RODRIGUEZ VARGAS) de las firmas que no coinciden. - (DANNY ALEXIS ROJAS MARMOLEJO) Ajá. (DANNY ALEXIS ROJAS MARMOLEJO) Exacto. Por ejemplo, este entre 2 y 10,000 salarios,
+15:48
+(DANNY ALEXIS ROJAS MARMOLEJO) entre 5 y 10,000 salarios, entre 2.7 y 4.1 de (DANNY ALEXIS ROJAS MARMOLEJO) salario mínimo. Todas estas son las
+15:56
+(ANDRES JAVIER GALINDO VARGAS) tal y eso y esas parametrías, digamos, de esa (ANDRES JAVIER GALINDO VARGAS) sección como tal de la sección 13 14 van 100% - (DANNY ALEXIS ROJAS MARMOLEJO) monometrías.
+16:04
+(ANDRES JAVIER GALINDO VARGAS) enfocadas a todo lo de políticas que son como eso que decía, si usted tiene entre no (ANDRES JAVIER GALINDO VARGAS) sé qué salarios O sea, tal salario, si usted es - (DANNY ALEXIS ROJAS MARMOLEJO) Eso.
+16:12
+(ANDRES JAVIER GALINDO VARGAS) eh digamos va a hacer un crédito nuevo, si no sé qué. Bueno, todo lo (ANDRES JAVIER GALINDO VARGAS) que le hayan declarado a nivel de negocio son las que se cargan en
+16:20
+(ANDRES JAVIER GALINDO VARGAS) la pantallita. Viene y lee aquí esta tabla y allá va ir la (ANDRES JAVIER GALINDO VARGAS) carga, digamos, en el front. O sea, que lo que de alguna manera
+16:28
+(ANDRES JAVIER GALINDO VARGAS) necesitaríamos nosotros es crearnos una sección, una sección de (ANDRES JAVIER GALINDO VARGAS) este estilo como la 13 14, pero enfocada a todo ese
+16:36
+(ANDRES JAVIER GALINDO VARGAS) tema de los concepcionarios y demás. (JAIR STIVEN RODRIGUEZ VARGAS) Exacto. - (DANNY ALEXIS ROJAS MARMOLEJO) Señor
+16:48
+(ANDRES JAVIER GALINDO VARGAS) Listo. Entonces, me llevo esa tarea para preguntársela bien (ANDRES JAVIER GALINDO VARGAS) a al rato del bióscar, a ver si lo veo pagando y aquí a
+16:56
+(ANDRES JAVIER GALINDO VARGAS) Rubén unas cositas que tengo como duda de esos procesos (ANDRES JAVIER GALINDO VARGAS) y y qué dijimos a que a Hugo para preguntarle bien cómo era estaba lo de los
+17:04
+(ANDRES JAVIER GALINDO VARGAS) concesionarios y demás, ¿cierto? - (DANNY ALEXIS ROJAS MARMOLEJO) Sí, aquí por ejemplo este (DANNY ALEXIS ROJAS MARMOLEJO) PH es vehículo híbrido usado. ¿Qué
+17:12
+(DANNY ALEXIS ROJAS MARMOLEJO) es? Está todo aquí. Esto (DANNY ALEXIS ROJAS MARMOLEJO) es usado, vehículo usado,
+17:20
+(ANDRES JAVIER GALINDO VARGAS) Esomm la pantallita (ANDRES JAVIER GALINDO VARGAS) va esa parametría y carga ya, ¿cierto? Digamos si tú vas y
+17:28
+(ANDRES JAVIER GALINDO VARGAS) colocas un ejemplo, si es usado o algo, él viene y lee (ANDRES JAVIER GALINDO VARGAS) directamente saca. Debes al - (DANNY ALEXIS ROJAS MARMOLEJO) tradicionales. Sí, eso valida, eso valida acá. Sí,
+17:36
+(DANNY ALEXIS ROJAS MARMOLEJO) señor. Eso valida acá. Pero pues obviamente eh porque ya (JAIR STIVEN RODRIGUEZ VARGAS) Pero - (DANNY ALEXIS ROJAS MARMOLEJO) hay una ya las parametrías hacen másh con
+17:44
+(DANNY ALEXIS ROJAS MARMOLEJO) esto en medic funciona con esto (DANNY ALEXIS ROJAS MARMOLEJO) y yo no sé si en unas en unas parametrías de riesgo, no me acuerdo
+17:52
+(DANNY ALEXIS ROJAS MARMOLEJO) en qué otro planal es que también deben estar esas (DANNY ALEXIS ROJAS MARMOLEJO) parametrías porque si hace más acá y Pero
+18:00
+(ANDRES JAVIER GALINDO VARGAS) directo. - (DANNY ALEXIS ROJAS MARMOLEJO) allá no en no sé si es en riesgos y no están esas (DANNY ALEXIS ROJAS MARMOLEJO) parametrías, no va a
+18:08
+(DANNY ALEXIS ROJAS MARMOLEJO) funcionar no va a (DANNY ALEXIS ROJAS MARMOLEJO) funcionar. No me acuerdo cuál era el equipo. Eso fue en
+18:16
+(DANNY ALEXIS ROJAS MARMOLEJO) una que estuvimos nosotros de 2 a de 8 a 6 (DANNY ALEXIS ROJAS MARMOLEJO) de la tarde, no recuerdo bien en qué canal era
+18:24
+(DANNY ALEXIS ROJAS MARMOLEJO) porque y eso fue en pruebas, o sea, nosotros tanto (ANDRES JAVIER GALINDO VARGAS) Yeah. - (DANNY ALEXIS ROJAS MARMOLEJO) preguntando esa esa parte de las pruebas
+18:32
+(DANNY ALEXIS ROJAS MARMOLEJO) y nunca nos dijeron que también las parametrías debían de estar allá. Nunca nos (DANNY ALEXIS ROJAS MARMOLEJO) dijeron eso, sino hasta ese día casi que que porque
+18:40
+(DANNY ALEXIS ROJAS MARMOLEJO) no nos funcionaba. Ya nos dijeron, "Ay, pero esas parametrías (DANNY ALEXIS ROJAS MARMOLEJO) están en tal parte y nosotros no, eso no están allá." Ah, claro,
+18:48
+(DANNY ALEXIS ROJAS MARMOLEJO) por eso es que más y nosotros como que se preguntando desde el (DANNY ALEXIS ROJAS MARMOLEJO) principio que a dónde editábamos esa parte y
+18:56
+(DANNY ALEXIS ROJAS MARMOLEJO) nadie dijo es que como le digo, esto no tiene dolientes, ese vehículo (JAIR STIVEN RODRIGUEZ VARGAS) Sí. - (DANNY ALEXIS ROJAS MARMOLEJO) web, no, eso para conseguir información o data, eso toca que mejor
+19:04
+(DANNY ALEXIS ROJAS MARMOLEJO) dicho, hacer una cadena de preguntas a un poco, ¿no? De (DANNY ALEXIS ROJAS MARMOLEJO) gente. Ni siquiera Mari se le prestaron atención en su momento.
+19:12
+(ANDRES JAVIER GALINDO VARGAS) No, - (DANNY ALEXIS ROJAS MARMOLEJO) Imagínese uno, un pobre un pobre salariado acá (ANDRES JAVIER GALINDO VARGAS) no, no es que es eso es duro - (DANNY ALEXIS ROJAS MARMOLEJO) preguntándole a un poco de gente
+19:20
+(ANDRES JAVIER GALINDO VARGAS) lo que digamos yo, o sea, y eso nos ha tocado así que hasta para mirar - (DANNY ALEXIS ROJAS MARMOLEJO) ahí. Sí, es (ANDRES JAVIER GALINDO VARGAS) esos procesitos o mirar digamos esos procesos y cómo se - (DANNY ALEXIS ROJAS MARMOLEJO) que
+19:28
+(ANDRES JAVIER GALINDO VARGAS) definía hasta un momento que bueno, digamos que (ANDRES JAVIER GALINDO VARGAS) Óscar conoce algunas cosas, pero digamos lo del pressing y eso él no lo
+19:36
+(ANDRES JAVIER GALINDO VARGAS) tenía, pero por allá creo que un compañero Rubén medio sabía algo, fue (ANDRES JAVIER GALINDO VARGAS) que medio nos dijo así unos componentes por encima. Tocó venir a
+19:44
+(ANDRES JAVIER GALINDO VARGAS) verificar que fue lo que yo le pasé ahí, Steven, pero pues es que ellos también - (DANNY ALEXIS ROJAS MARMOLEJO) toca. (ANDRES JAVIER GALINDO VARGAS) han estado más reventados con esos temas que no no nos han podido colaborar.
+19:52
+(DANNY ALEXIS ROJAS MARMOLEJO) Exacto. Y y el que medio sabe está toqueado de de (ANDRES JAVIER GALINDO VARGAS) Entonces, sí, sí, sí, sí. Sería bueno en - (DANNY ALEXIS ROJAS MARMOLEJO) tiempo, porque así nos pasó con
+20:00
+(ANDRES JAVIER GALINDO VARGAS) algún momento. Sería - (DANNY ALEXIS ROJAS MARMOLEJO) Cristian. Cristian era el que sabe esta vuelta y cuando (DANNY ALEXIS ROJAS MARMOLEJO) lo solicitáamos, no estudiando estuvo,
+20:08
+(ANDRES JAVIER GALINDO VARGAS) bueno. - (JAIR STIVEN RODRIGUEZ VARGAS) Ok. - (DANNY ALEXIS ROJAS MARMOLEJO) no nos atendía después de las 6 era que (DANNY ALEXIS ROJAS MARMOLEJO) nos regalaba un tiempo y nos quedamos en ocasiones como hasta las 7 de la
+20:16
+(DANNY ALEXIS ROJAS MARMOLEJO) de la noche mirando esa parte, pero es complejo, (DANNY ALEXIS ROJAS MARMOLEJO) es complejo con porque tampoco hay mucha información por
+20:24
+(DANNY ALEXIS ROJAS MARMOLEJO) ahí, nadie sabe. Las personas que que sabían ya no están en (DANNY ALEXIS ROJAS MARMOLEJO) el banco. Entonces es pasa mucho
+20:32
+(ANDRES JAVIER GALINDO VARGAS) No, con razón. Después cuando vaya (ANDRES JAVIER GALINDO VARGAS) evolucionando esto, sería bueno, no sé, subir información de esta
+20:40
+(ANDRES JAVIER GALINDO VARGAS) isla capturando como un un manual de todo esto (ANDRES JAVIER GALINDO VARGAS) de cómo funciona, porque - (DANNY ALEXIS ROJAS MARMOLEJO) eso. Claro, eso y no y no hay un manual, o sea, no hay una información que usted
+20:48
+(DANNY ALEXIS ROJAS MARMOLEJO) llegue y vaya y bueno, al menos esto me dio una idea más clara, (DANNY ALEXIS ROJAS MARMOLEJO) no no hay nada de eso.
+20:56
+(JAIR STIVEN RODRIGUEZ VARGAS) hacer una especie Yeah. Bueno, (JAIR STIVEN RODRIGUEZ VARGAS) es que se supone que cuando tú subes código a GitHub, los - (DANNY ALEXIS ROJAS MARMOLEJO) Sí, sí, sí.
+21:04
+(JAIR STIVEN RODRIGUEZ VARGAS) el código necesita como su pues obamente no (JAIR STIVEN RODRIGUEZ VARGAS) quemado el comentarios quemados en el código, pero sí tener una wiki donde tú
+21:12
+(JAIR STIVEN RODRIGUEZ VARGAS) puedas revisar cómo funciona, a quién debes acudir, qué (JAIR STIVEN RODRIGUEZ VARGAS) debes hacer, porque parce, según lo que yo tengo entendido y lo que ustedes me han
+21:20
+(JAIR STIVEN RODRIGUEZ VARGAS) comentado con lo que pasó en fase uno, prácticamente ir a (JAIR STIVEN RODRIGUEZ VARGAS) calidad es ir ir a calidad, ir con los ojos cerrados porque en
+21:28
+(JAIR STIVEN RODRIGUEZ VARGAS) desarrollo nunca se pudo validar y por más pruebas - (DANNY ALEXIS ROJAS MARMOLEJO) Exactamente. Epa, epa, así nos tocan (JAIR STIVEN RODRIGUEZ VARGAS) de unitarias, bueno, no sé cómo hagan las pruebas unitarias, pero por más pruebas - (DANNY ALEXIS ROJAS MARMOLEJO) todos.
+21:36
+(JAIR STIVEN RODRIGUEZ VARGAS) unitarias que tú hagas en en el código, si no (JAIR STIVEN RODRIGUEZ VARGAS) tienes cuando pase esa calidad, si no tienes como todo engranado, pues
+21:44
+(ANDRES JAVIER GALINDO VARGAS) Claro, es un un - (JAIR STIVEN RODRIGUEZ VARGAS) nunca va a (JAIR STIVEN RODRIGUEZ VARGAS) funcionar. - (DANNY ALEXIS ROJAS MARMOLEJO) No, eso es eso fue un caos. Eso fue un caos. como eso lo
+21:52
+(DANNY ALEXIS ROJAS MARMOLEJO) necesitaban para allá. Entonces, Marixa todos los días detrás (ANDRES JAVIER GALINDO VARGAS) chicharrón. - (JAIR STIVEN RODRIGUEZ VARGAS) los - (DANNY ALEXIS ROJAS MARMOLEJO) de nosotros, muchachos y esto, muchachos, y
+22:00
+(DANNY ALEXIS ROJAS MARMOLEJO) no, no, eso fue unos momentos (JAIR STIVEN RODRIGUEZ VARGAS) monstros. - (DANNY ALEXIS ROJAS MARMOLEJO) muy estresantes porque primero tener la tener
+22:08
+(DANNY ALEXIS ROJAS MARMOLEJO) que uno ir a preguntar un poco, ¿no? De cosas que que de principio (DANNY ALEXIS ROJAS MARMOLEJO) no se aclararon y se dijeron nada, porque como eso fue eh
+22:16
+(DANNY ALEXIS ROJAS MARMOLEJO) eh esto le va a tocar hacerlo a usted. Eh, y esta es la información que (JAIR STIVEN RODRIGUEZ VARGAS) Eh, - (DANNY ALEXIS ROJAS MARMOLEJO) hay. Mira a ver qué resuelve con eso y a preguntar y
+22:24
+(DANNY ALEXIS ROJAS MARMOLEJO) que nadie le información y de paso que la jefa esté ahí. Bueno, ¿cómo han (DANNY ALEXIS ROJAS MARMOLEJO) avanzado? Que han avanzado tan poquito. ¿Qué tal?
+22:32
+(ANDRES JAVIER GALINDO VARGAS) No, sí, sí, - (DANNY ALEXIS ROJAS MARMOLEJO) No, ya imaginarán ustedes a Marixa y Marixa como (JAIR STIVEN RODRIGUEZ VARGAS) Eh, sí, claro. Ella ella ella le gusta lo que yo le decía ayer
+22:40
+(ANDRES JAVIER GALINDO VARGAS) sí. - (JAIR STIVEN RODRIGUEZ VARGAS) a Andrés, porque claro, si nosotros nos reuniéramos con Mari, Mari es capaz de (JAIR STIVEN RODRIGUEZ VARGAS) que nos dice cómo es que funciona el banco al derecho y al revés. Ella - (DANNY ALEXIS ROJAS MARMOLEJO) es. Aon, porque ella es
+22:48
+(JAIR STIVEN RODRIGUEZ VARGAS) sabe muchísimo. Ella es muy - (DANNY ALEXIS ROJAS MARMOLEJO) mi técnica. Ella ella es muy técnica. Ella (DANNY ALEXIS ROJAS MARMOLEJO) ella le gusta, ¿no? Que si este servicio, bueno, y este servicio qué trae qué, qué y si
+22:56
+(DANNY ALEXIS ROJAS MARMOLEJO) no funciona esto, ¿qué hago yo? Ya empieza a indagar un poco de (DANNY ALEXIS ROJAS MARMOLEJO) cosas que mejor dicho a lo agarrar uno y lo bombardea. Uno solito lo
+23:04
+(DANNY ALEXIS ROJAS MARMOLEJO) bombardea. Eso tiene que ir preparado una reunión con ella porque (DANNY ALEXIS ROJAS MARMOLEJO) ya empieza, bueno, y si hago esto y si no está esto, ¿qué puedo hacer?
+23:12
+(DANNY ALEXIS ROJAS MARMOLEJO) ¿Qué qué debería yo hacer? O qué debería hacer el aplicativo? (JAIR STIVEN RODRIGUEZ VARGAS) tesa. Y ella y ella como fue desarrolladora ella como fue - (DANNY ALEXIS ROJAS MARMOLEJO) que
+23:20
+(JAIR STIVEN RODRIGUEZ VARGAS) desarrolladora, ya - (DANNY ALEXIS ROJAS MARMOLEJO) callado. Es que es muy técnica, por eso es que ella es muy técnica, porque ella (JAIR STIVEN RODRIGUEZ VARGAS) toca. Exacto, - (DANNY ALEXIS ROJAS MARMOLEJO) ella desarrolló
+23:28
+(JAIR STIVEN RODRIGUEZ VARGAS) exacto, chicos. Entonces, yo creo que ya tenemos como tareas, digamos que muy (ANDRES JAVIER GALINDO VARGAS) Sí, listo. - (JAIR STIVEN RODRIGUEZ VARGAS) puntuales, ¿no? O sea, eh tenemos tareas
+23:36
+(JAIR STIVEN RODRIGUEZ VARGAS) muy puntuales. Yo estoy aquí terminando de refinar el mocap. Déjenme, (JAIR STIVEN RODRIGUEZ VARGAS) yo lo reemplazo aquí rápidamente para que nos llevemos ya la idea - (DANNY ALEXIS ROJAS MARMOLEJO) Sí.
+23:44
+(JAIR STIVEN RODRIGUEZ VARGAS) puntual. Démosle aquí (JAIR STIVEN RODRIGUEZ VARGAS) refrescar. Listo. Entonces aquí selecciono concesionario. Si selecciono
+23:52
+(JAIR STIVEN RODRIGUEZ VARGAS) concesionario, entonces me aparecen todos los todos los - (DANNY ALEXIS ROJAS MARMOLEJO) Sí. (JAIR STIVEN RODRIGUEZ VARGAS) concesionarios que yo tenga parametrizados, ¿no? Casa ta ta ta ta, no sé
+24:00
+(JAIR STIVEN RODRIGUEZ VARGAS) quién. Si yo selecciono eh aquí (JAIR STIVEN RODRIGUEZ VARGAS) arriba el canal, que es la variable que nos piden fuerza de
+24:08
+(JAIR STIVEN RODRIGUEZ VARGAS) ventas, entonces me aparece el tipo de venta, si (JAIR STIVEN RODRIGUEZ VARGAS) es red de oficina, si es directa.
+24:20
+(JAIR STIVEN RODRIGUEZ VARGAS) Y si fue directa me pide el código el (JAIR STIVEN RODRIGUEZ VARGAS) asesor. Démosle
+24:32
+(JAIR STIVEN RODRIGUEZ VARGAS) continuar.com. Entonces aquí, Dani obligatorio, (JAIR STIVEN RODRIGUEZ VARGAS) ¿no? Eh, hay que validar en qué servicio, porque ya tú me
+24:40
+(JAIR STIVEN RODRIGUEZ VARGAS) mostraste en el video que ya sabemos que sí devuelve la (JAIR STIVEN RODRIGUEZ VARGAS) prenda, pero según lo que yo veo es que aquí lo categorizan
+24:48
+(JAIR STIVEN RODRIGUEZ VARGAS) como reto gigante, que eso es sencillo, (JAIR STIVEN RODRIGUEZ VARGAS) ¿no? Reto gigante, no preguntamos qué garantía, sino
+24:56
+(JAIR STIVEN RODRIGUEZ VARGAS) clasificamos por los ingresos del cliente. Entonces, lo que tú me mostraste ahorita en (JAIR STIVEN RODRIGUEZ VARGAS) el video es que sale la prenda, ¿sí o no? dependiendo de los
+25:04
+(JAIR STIVEN RODRIGUEZ VARGAS) ingresos, pero lo que lo que están pidiendo es que el cliente - (DANNY ALEXIS ROJAS MARMOLEJO) Ajá. (JAIR STIVEN RODRIGUEZ VARGAS) también pueda - (DANNY ALEXIS ROJAS MARMOLEJO) Si va anexar
+25:12
+(JAIR STIVEN RODRIGUEZ VARGAS) decidir Sí. Entonces, yo, por ejemplo, voy a poner aquí 3 (JAIR STIVEN RODRIGUEZ VARGAS) millones. Aquí sí o sí va a ir con prenda garantía sin nada por
+25:20
+(JAIR STIVEN RODRIGUEZ VARGAS) prenda de negocio. Pero si yo pongo aquí 6 millones, - (DANNY ALEXIS ROJAS MARMOLEJO) prenda. (JAIR STIVEN RODRIGUEZ VARGAS) perdón, son nu son cinco salarios, ¿no? 9 millones, el cliente puede
+25:28
+(JAIR STIVEN RODRIGUEZ VARGAS) seleccionar sí o no. Y esa selección, creo que yo te - (DANNY ALEXIS ROJAS MARMOLEJO) Sí, Queda (JAIR STIVEN RODRIGUEZ VARGAS) pasé una imagen, pues en ese momento tú me viste que no entendías muy
+25:36
+(JAIR STIVEN RODRIGUEZ VARGAS) bien el tema, ¿no? Que estabas con poco perdido, pero espera, yo miro por (JAIR STIVEN RODRIGUEZ VARGAS) acá algo. Miro, miro, miro por aquí. Yo te pasé una
+25:44
+(JAIR STIVEN RODRIGUEZ VARGAS) imagen. Mira, (JAIR STIVEN RODRIGUEZ VARGAS) algo así era la respuesta que yo te decía. Si él requería prenda,
+25:52
+(JAIR STIVEN RODRIGUEZ VARGAS) tú podrías mandar esos esos valores, me (JAIR STIVEN RODRIGUEZ VARGAS) imagino que en el en el formato, ¿no? Eso lo - (DANNY ALEXIS ROJAS MARMOLEJO) uno.
+26:00
+(JAIR STIVEN RODRIGUEZ VARGAS) revisa ya cuando tengas los (JAIR STIVEN RODRIGUEZ VARGAS) servicios y ya, chicos, yo creo que sería eso.
+26:08
+(JAIR STIVEN RODRIGUEZ VARGAS) Entonces, más o menos, ¿cuánto cree que se puedan demorar haciendo esa (JAIR STIVEN RODRIGUEZ VARGAS) investigación? - (DANNY ALEXIS ROJAS MARMOLEJO) Pues eh yo espero tenerla
+26:16
+(JAIR STIVEN RODRIGUEZ VARGAS) Se - (DANNY ALEXIS ROJAS MARMOLEJO) ahorita a final de la tarde. Final de la tarde. Eh me (JAIR STIVEN RODRIGUEZ VARGAS) los se lo agradecería, chicos, porque el lunes tenemos la sesión - (DANNY ALEXIS ROJAS MARMOLEJO) preguntas y
+26:24
+(JAIR STIVEN RODRIGUEZ VARGAS) con - (DANNY ALEXIS ROJAS MARMOLEJO) voy a voy a mirar voy a mirar ahorita en la tarde. Esto, yo te voy a (DANNY ALEXIS ROJAS MARMOLEJO) pedir un permisito. Yair media horita. Voy a ver si
+26:32
+(JAIR STIVEN RODRIGUEZ VARGAS) Marsa. - (DANNY ALEXIS ROJAS MARMOLEJO) me pego un sueñito un poquito, media hora porque me está (DANNY ALEXIS ROJAS MARMOLEJO) a reventar la cabeza. Y ya retomo esto y al
+26:40
+(DANNY ALEXIS ROJAS MARMOLEJO) final de la tarde te tengo info de de toda esta (JAIR STIVEN RODRIGUEZ VARGAS) Entonces el Ya sabes, necesitamos el las
+26:48
+(JAIR STIVEN RODRIGUEZ VARGAS) pantallas, inventario de servicios por pantallas, - (DANNY ALEXIS ROJAS MARMOLEJO) cosa. (JAIR STIVEN RODRIGUEZ VARGAS) ¿no? Inventario de servicios por - (DANNY ALEXIS ROJAS MARMOLEJO) Ajá.
+26:56
+(JAIR STIVEN RODRIGUEZ VARGAS) pantallas por - (DANNY ALEXIS ROJAS MARMOLEJO) Oi. (JAIR STIVEN RODRIGUEZ VARGAS) pantallas. ¿Cuáles servicios son?
+27:04
+(JAIR STIVEN RODRIGUEZ VARGAS) ¿Cuáles vamos a (JAIR STIVEN RODRIGUEZ VARGAS) modificar? ¿Cuáles
+27:12
+(JAIR STIVEN RODRIGUEZ VARGAS) servicios van a ser nuevos para (JAIR STIVEN RODRIGUEZ VARGAS) consumir la parametría
+27:20
+(JAIR STIVEN RODRIGUEZ VARGAS) de host? (JAIR STIVEN RODRIGUEZ VARGAS) Y entonces me imagino que viejo Andrés en el tema de host tú ya
+27:28
+(JAIR STIVEN RODRIGUEZ VARGAS) validarías como ese tema de la parametría y eso, los campos que se (ANDRES JAVIER GALINDO VARGAS) Listo. Sí, yo - (JAIR STIVEN RODRIGUEZ VARGAS) necesitan capturar de los
+27:36
+(ANDRES JAVIER GALINDO VARGAS) yo ahorita valió. Voy a ver si como estoy un poquito a los compañeros para (ANDRES JAVIER GALINDO VARGAS) tener un poquito ese flojo. Espero que los pueda conseguir
+27:44
+(ANDRES JAVIER GALINDO VARGAS) y te cuento el progreso. (JAIR STIVEN RODRIGUEZ VARGAS) concesionarios. ¿En dónde son? Tú mencionabas ahorita si
+27:52
+(ANDRES JAVIER GALINDO VARGAS) Listo. Van - (JAIR STIVEN RODRIGUEZ VARGAS) eran Oracle o en dónde más van. En Oracle y en qué (ANDRES JAVIER GALINDO VARGAS) digamos inicialmente en hobs en la
+28:00
+(ANDRES JAVIER GALINDO VARGAS) umtapa. - (JAIR STIVEN RODRIGUEZ VARGAS) más. Oracol o en Bueno, - (DANNY ALEXIS ROJAS MARMOLEJO) Así (ANDRES JAVIER GALINDO VARGAS) O, Jos. - (JAIR STIVEN RODRIGUEZ VARGAS) yo te voy a poner acá o en host. Tú ya sabes, enjos, tú ya sabes
+28:08
+(JAIR STIVEN RODRIGUEZ VARGAS) que más o menos en qué parte van y qué más - (DANNY ALEXIS ROJAS MARMOLEJO) es. (JAIR STIVEN RODRIGUEZ VARGAS) necesitamos por tu lado. Bueno, el tema de los grupos, yo aún no entiendo muy bien cómo se relaciona
+28:16
+(JAIR STIVEN RODRIGUEZ VARGAS) ese tema de los grupos porque ayer mencionaban algo acá (JAIR STIVEN RODRIGUEZ VARGAS) que no sé si te diste cuenta, aquí hablan de los grupos,
+28:24
+(JAIR STIVEN RODRIGUEZ VARGAS) mira, tabla como insumo para enclosar el closer, grupo uno, (JAIR STIVEN RODRIGUEZ VARGAS) grupo dos, grupo tres, grupo cuatro, grupo cinco y grupo
+28:32
+(ANDRES JAVIER GALINDO VARGAS) Esh - (JAIR STIVEN RODRIGUEZ VARGAS) seis. Tú, Hugo, te pasó las historias, creo que él te las (ANDRES JAVIER GALINDO VARGAS) Él me sí, él me mostró las las - (JAIR STIVEN RODRIGUEZ VARGAS) mostró,
+28:40
+(ANDRES JAVIER GALINDO VARGAS) historias, pero tengo que entrar un poquito - (JAIR STIVEN RODRIGUEZ VARGAS) ¿no? Yo mire, (JAIR STIVEN RODRIGUEZ VARGAS) pues yo la verdad no digamos que hay que revisar es
+28:48
+(JAIR STIVEN RODRIGUEZ VARGAS) puntualmente esto, no es que las mires de una vez porque es que esas historias no están ya (ANDRES JAVIER GALINDO VARGAS) Ah. - (JAIR STIVEN RODRIGUEZ VARGAS) definitivas, están sujetas a cambios,
+28:56
+(JAIR STIVEN RODRIGUEZ VARGAS) sí, no están refinadas, pero entonces lo lo que yo quiero es que tú mires cómo (JAIR STIVEN RODRIGUEZ VARGAS) es que ellos están intentando relacionar los grupos, porque si te das
+29:04
+(JAIR STIVEN RODRIGUEZ VARGAS) cuenta acá en esta historia así lo dice. dice actualmente (JAIR STIVEN RODRIGUEZ VARGAS) identificaciones porque ta únicamente nombrados como - (DANNY ALEXIS ROJAS MARMOLEJO) ni
+29:12
+(JAIR STIVEN RODRIGUEZ VARGAS) red según corresponde para el caso web son estivados con un solo (JAIR STIVEN RODRIGUEZ VARGAS) producto para los canales de validar. ¿Qué hice
+29:20
+(JAIR STIVEN RODRIGUEZ VARGAS) acá? Aquí dice algo (JAIR STIVEN RODRIGUEZ VARGAS) para los dos canales se debe validar si - (DANNY ALEXIS ROJAS MARMOLEJO) Sí.
+29:28
+(JAIR STIVEN RODRIGUEZ VARGAS) para web deben tener indiferencial tal como crear crear un (JAIR STIVEN RODRIGUEZ VARGAS) campo. Se debe incluir un nuevo campo NIT y nombre del
+29:36
+(JAIR STIVEN RODRIGUEZ VARGAS) concesionario para paga comisión (JAIR STIVEN RODRIGUEZ VARGAS) en todas las ciudades. Las variables paga comisión
+29:44
+(JAIR STIVEN RODRIGUEZ VARGAS) CSF, mercado directo, relet y Grupo Pago en la comisión de (JAIR STIVEN RODRIGUEZ VARGAS) Conexionarios. Ta ta ta. Esto de compra de cartera no va, no se ven unificar y se
+29:52
+(JAIR STIVEN RODRIGUEZ VARGAS) ven quedar en el clúster de vehículo. Tabla como insumo para encontrar el (JAIR STIVEN RODRIGUEZ VARGAS) clúster. Aquí ponen grupo tal, grupo tal, no sé qué. Y aquí ponen como
+30:00
+(JAIR STIVEN RODRIGUEZ VARGAS) una imagen. Te va a pasar esta por si por si es un insumo que (ANDRES JAVIER GALINDO VARGAS) que funciona. - (JAIR STIVEN RODRIGUEZ VARGAS) crees que que sí. Igual esto no es definitivo,
+30:08
+(JAIR STIVEN RODRIGUEZ VARGAS) ¿no? Porque lo que yo hablé con es que tampoco pues y que fue algo que yo le dije (JAIR STIVEN RODRIGUEZ VARGAS) a Mari, nosotros también aún de estamos como aterrizando
+30:16
+(JAIR STIVEN RODRIGUEZ VARGAS) la definición en los discoveries. Entonces, no podemos (JAIR STIVEN RODRIGUEZ VARGAS) tener una versión ya final, pero siempre
+30:24
+(JAIR STIVEN RODRIGUEZ VARGAS) eliminar. Listo, ahí se los paso al (JAIR STIVEN RODRIGUEZ VARGAS) chat. Y ya, chicos, creo que esto sería por el
+30:32
+(ANDRES JAVIER GALINDO VARGAS) Listo, listo. Entonces vamos - (DANNY ALEXIS ROJAS MARMOLEJO) Listo, listo. (ANDRES JAVIER GALINDO VARGAS) revisando y cualquier avance te lo comento. Listo. - (DANNY ALEXIS ROJAS MARMOLEJO) Steven, estamos diciendo
+30:40
+(JAIR STIVEN RODRIGUEZ VARGAS) momento. Sí, yo cualquier cosa les voy pues me (ANDRES JAVIER GALINDO VARGAS) Listo. Bueno, vale. - (JAIR STIVEN RODRIGUEZ VARGAS) van contando, yo estoy pendiente. - (DANNY ALEXIS ROJAS MARMOLEJO) ahí. Vale, vale,
+30:48
+(ANDRES JAVIER GALINDO VARGAS) Gracias. - (JAIR STIVEN RODRIGUEZ VARGAS) Bueno, bueno, team, cuídense mucho. Coa? - (DANNY ALEXIS ROJAS MARMOLEJO) vale. Muchas gracias.
