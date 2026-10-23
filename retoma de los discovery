@@ -1,0 +1,1425 @@
+Vale, equipo, muy buenas tardes a todos. Eh, primero muchísimas gracias por su
+0:07
+asistencia y les agradecemos también del lado del equipo la participación que
+0:11
+tengan sobre la sesión. Eh, la idea es que podamos retomar el
+0:16
+proyecto de pricing vehículo. Eh, se venía trabajando anteriormente hace eh
+0:23
+algún par de meses, se le había dado prioridad, como ustedes conocen, al tema
+0:29
+de políticas de riesgo. La idea es que retumemos desde donde nos habíamos
+0:32
+quedado eh en cuanto a las definiciones que ya venían cerradas y teníamos
+0:39
+pendiente las validaciones por el lado UEX. Sin embargo, Angelita, eh antes de
+0:46
+iniciar con esa retoma, me gustaría que pudiéramos validar desde el lado del
+0:50
+sponsor eh qué es lo que se requiere para este proyecto para que empecemos
+0:56
+también con ese recorderis que qué requerimos para este proyecto,
+1:00
+qué necesitamos validar y qué objetivo tenemos.
+1:04
+Vale, eh buenas tardes a todos. Pues el objetivo del pricing de vehículo es
+1:09
+fortalecer el modelo actual. eh tanto para tasa fija como para variable,
+1:15
+buscando mejorar la rentabilidad del pues como tal del producto. Entonces,
+1:20
+por eso actualmente pues el PR cuenta con tres variables, lo que es buró,
+1:25
+ingresos y situación laboral. se identifica incorporar unas variables
+1:30
+adicionales para poder tener un esquema más robusto y pues alineado también al
+1:37
+comportamiento de los clientes. Ese es el objetivo. Entonces, dentro de
+1:42
+las variables que se había comentado que se deben implementar, eh corresponde el
+1:47
+grupo de pago de comisión. Eh, ese grupo de pago de comisiones, dependiendo el
+1:52
+tipo de concesionario al nivel o grupo en donde se encuentre como tal
+1:57
+segmentado, va a tener una tasa e y esa tasa está dada por la por la comisión
+2:03
+que se le cancele, que el banco le cancele a él. Entonces, entre más
+2:07
+comisión, pues digamos que haber una un incremento como tal en la tasa. También
+2:13
+tendríamos la variable de prenda o no prenda, es decir, que si el cliente toma
+2:17
+el vehículo con eh sin prenda, pues va a tener un diferencial con relación en
+2:22
+tasa lo que lo toma con prenda. Actualmente, pues esa variable no está
+2:26
+incluida. eh tipo de combustible eh LT o loalio, que es el porcentaje de
+2:32
+financiación y eh la diferenciación si es un vehículo nuevo o si es un vehículo
+2:39
+usado. Esa es como eh las variables que se requieren y adicionar dentro del
+2:46
+modelo. Vale, de acuerdo, Angelita, muchísimas
+2:54
+gracias. Eh, sobre el punto en el que habíamos
+2:58
+quedado, Huguillo, adelante, ya te iba a dar la palabra. Gracias.
+3:02
+Vale, muchachos. Buenas tardes. Sí, como lo comenta Angelita, efectivamente
+3:08
+estamos retomando aquí el proyecto a raíz de una serie de cambios que nos
+3:12
+pidieron que se detuvo y la alta gerencia pues nos está pidiendo
+3:18
+eh retomar el proyecto. Yo estoy proyectando esta imagen, no sé si la la
+3:23
+vean. ¿Ven mi pantalla, muchachos?
+3:29
+Sí, sí se ve. Vale, vale. Esto fue lo que se armó en
+3:33
+su momento. Como lo explicaba Ángela, son cinco variables que se proponen
+3:37
+desarrollar, pues, para mejorar todo el modelo. Esto se definió hace
+3:42
+aproximadamente dos meses, eh donde se pedía que eh
+3:48
+estas variables se incluyeran dentro de los canales CAP, web y NA.
+3:53
+Eh, he compartido una serie de documentación con el equipo. Ya BP veo
+3:59
+aquí a BPD BP también dio su concepto de riesgos, estuvo en su momento validando
+4:06
+esto y pues lo que buscamos es ratificar que estas variables son las que vamos a
+4:12
+trabajar en los diferentes canales. Entonces, muchachos, yo previo a esto,
+4:18
+el equipo de ingeniería estuvo devaluando, estuvo haciendo un análisis
+4:22
+así muy rápido y entiendo que tiene una serie de de inquietudes de este de este
+4:29
+de este desarrollo. No sé si Yair o Dani nos expresan ahí las inquietudes.
+4:38
+Eh, sí, Ugillo, pues teníamos algunas dudas que nosotros te las compartimos
+4:42
+ayer. Ya te comentamos cuáles son
+4:45
+puntualmente, digamos, de mi parte y tanto de parte de Andrés Javier, que es
+4:49
+el que nos va a ayudar con el tema de host.
+4:52
+Eh, hablan de un tema de grupo de comisión, pero pues aún no hemos
+4:56
+determinado muy bien cómo se va a manejar,
+5:00
+o sea, eh digamos que el grupo de comisión no va a aplicar para todos los
+5:04
+canales, ¿no? Según lo que tenemos entendido,
+5:13
+en lo que se en lo que se presenta aquí en el cuadro de cheque
+5:21
+aquí y me corrige Ángela, que generar los campios de concesionarios en web y
+5:26
+en car serían esos dos canales que utilizaríamos es ese grupo, ¿no? Y aquí
+5:32
+se inición grupo uno, grupo dos, grupo tres, hasta el seis.
+5:37
+Sí, pero sí dentro de eso se contemplan todos los canales. No sé si de pronto un
+5:43
+poco la inquietud de el compañero era eso, porque acá hay un grupo de el grupo
+5:47
+número cinco que corresponde a eh read o lead y el grupo número seis que
+5:53
+corresponde a compra de cartera. Y lo que lo pues digamos que un poco el reto
+5:58
+es poder revisar cómo se hace esa marca porque pues dado que
+6:04
+en los FR no está como nosotros pues lo habíamos
+6:08
+pensado en su momento cuando pues inició todo el proyecto, eh que dentro del
+6:15
+dentro de tanto de NA de CAP y NACAR también esté la opción de
+6:23
+diligenciar el concesionario. y por detrás tener una tabla en donde
+6:29
+esté si el concesion, por ejemplo, concesionario Jorge Cortés esa tabla por
+6:34
+debajo eh le haga la marcación si corresponde a grupo número uno, dos o
+6:38
+tres. Con relación al grupo 5 y grupo 6, que es leads, mercado directo y compra
+6:45
+de cartera, si había quedado como, o sea, digamos que validar con cómo se
+6:52
+podía identificar que ese esa operación era de la red o si era un lead o un
+6:58
+mercado directo, pero básicamente pues la identificación de concesionarios como
+7:02
+se había contemplado era eso, una tabla por debajo en donde pues esa se
+7:07
+actualizara por parte de producto eh con el nombre del concesionario NIT y
+7:12
+el grupo al que corresponde. Con base en esa tabla, pues ya se hicieran los
+7:17
+cálculos internos del cálculo pues de de la tasa.
+7:23
+Yo, Angelita, aquí para dar claridad, entonces vamos a desengranar una por una
+7:27
+porque no quiero que me ocurra lo mismo que me pasó con Seminodos ahorita en lo
+7:31
+último que ajustamos. Listo, hay quear bien delgadito. Entonces, de cara a web
+7:37
+y ACAP habría que establecer una nueva caja, captura en el front, donde alguna
+7:45
+manera yo voy a saber qué concesionario es. ¿Correcto?
+7:48
+¿De acuerdo? Es decir, yo tendría que tener por detrás una parametría, lo que
+7:54
+sea, para que en el frontal salga la información precargada, por decirlo así,
+8:01
+y que allá el señor de la web o del CAP seleccione, porque saldrá como una
+8:06
+información ahí, yo seleccionaré Jorge Cortés, porque entro ese listado dirá
+8:10
+Jorge Cortés. Entonces yo seleccioné, seleccionaré Jorge Cortés, que es el
+8:15
+nombre del concesionario, o sea, eso será por concesionarios, ¿correcto?
+8:20
+Exactamente. Es decir, que yo si él selecciona ya
+8:23
+Jorge Cortés por debajo es tan inteligente que en esa misma pramadera.
+8:28
+Sí, señor. Eh, el grupo de Jorge Cortés es uno. Si es uno, entrará uno al
+8:34
+clúster. O sea, habrá muy seguramente habrá un clúster que diga grupo uno, con
+8:39
+más otras variables da la tasa. Grupo dos más otras variables da la tasa y así
+8:44
+sucesivamente. ¿Correcto? Exacto. Exacto, María. O sea, por lo que
+8:47
+lo que habíamos hablado en su momento era que por debajo por debajo va a haber
+8:52
+una tabla con todos los concesionarios y dependiendo esa esa ese concesionario
+8:58
+le vamos a asignar tabla uno, eh grupo uno, grupo dos, lo que sea. Y pues habrá
+9:03
+que revisar que paramétricamente todos los meses o cada que se haga algún
+9:07
+cambio se pueda ajustar, porque por ejemplo hoy es grupo uno, pero resulta
+9:11
+que el otro mes es grupo dos. Entonces, poder actualizar esa tabla por debajo y
+9:16
+lo que te dices tanto en web como en CAP, inclusive en NACAR, porque van a
+9:20
+haber operaciones que también se radican manuales en NAAR, o sea, que no llegan
+9:23
+directo de ni de CAP ni de web. Eh, se pueda diligenciar el nombre, el
+9:29
+concesionario para que por debajo vaya y cruce y diga lo que tú dices, Jorge
+9:33
+Cortésa corresponde al grupo número uno. Okay. Entonces, e eso es una base de
+9:41
+datos. Entonces toca aquí pensar, señores, eh esa base de datos muy
+9:45
+seguramente va a haber una descarga para que el negocio sepa cómo está la
+9:49
+información allá en esa base de datos y dos, debe haber un proceso de carga,
+9:53
+modificación o borrado. Entonces, para que lo incluyen ahí, ¿no? Una cosa es el
+9:59
+reporte, decir, "Oiga, en esa base de dates tengo esta información para que
+10:02
+allá los de negocio tengan claro qué información tiene." Y otra es otro
+10:06
+proceso de de adición, de eliminación o de modificación.
+10:12
+Exacto. Ahí nos faltaría es la parte del grupo cinco y del grupo seis,
+10:18
+que el grupo cinco es un negocio que puede ser de la red de el de la
+10:24
+comercializadora de mercado directo y el grupo seis corresponde a compra de
+10:28
+cartera. Entonces, bueno, digamos que para en este momento para vehículo web,
+10:32
+pues compra de cartera no existe, pero para lo que es CAP y NAAR, eh, pues esa
+10:38
+identificación de, o sea, como digamos que en la tabla yo tengo muy claro que
+10:42
+el grupo número uno al grupo número cuatro, pues marcamos los concesionarios
+10:46
+y y seleccionamos el que corres y cómo puedo cómo puedo identificar el
+10:49
+cinco o sea, el cinco yo no hay lío. Si entra por cómo sé, por ejemplo, cómo
+10:55
+diferencio en NAAR, porque los de la red son nakar,
+11:00
+¿cómo puedo diferenciar que no son leads del de la red? ¿Cómo puedo diferenciar
+11:04
+esos dos? Porque el ladit se da de alta también en
+11:07
+Naar, ¿no? Eh, sí. O sea, lad se da entra por web,
+11:12
+entra por web, eh, se da de alta en Nakar. Exactamente.
+11:16
+Claro. Entonces, yo, ¿cómo sé que la operación que estoy dando de alta en
+11:19
+NAAR corresponde a un preaprobado, por decirlo de allá del
+11:25
+señor del señor vehículo que está en la web? Porque en vehículo no queda en
+11:29
+firme, con lo cual esa misma operatoria la hacen allá en un señor Naka, la
+11:33
+repiten, por decirlo así. ¿Cómo identifico esa operatoria
+11:37
+versus la que nace propiamente de la red?
+11:42
+Exactamente. ¿Qué marca haya en Nakar? ¿Cómo yo puedo
+11:45
+identificar eso? ¿Hay alguno en NAAR, algún tipo de información que yo pueda
+11:50
+identificar que esta operación es producto de un Lad o es de una pura y
+11:55
+dura de la red? ¿Hay algo dentro del del canal, dentro del NAAR que yo pueda
+12:01
+identificar? Eso actualmente, o sea, que yo sepa
+12:06
+factualmente, no mal. Y también digamos que de cara a que el cliente diligencie
+12:11
+la información, también nos tocaría validar con UEX de qué manera no
+12:16
+enreamos al cliente, ¿sí me entiendes? O sea, digamos, yo lo estoy haciendo yo
+12:19
+sola acá en mi computador y hago todo el proceso. Entonces, ¿cómo en la pantalla
+12:24
+le coloco que no me vaya a seleccionar el concesionario? Porque pues digamos si
+12:28
+él coloca, ay, yo estoy pensando ir a hacerlo Jorge Cortés, entonces él
+12:31
+coloque Jorge Cortés y pues digamos que ahí haga como si se le fuera a pagar,
+12:35
+pero realmente yo estoy en mi casa haciendo el proceso solita.
+12:39
+Eso es como también como el el reto que veíamos que que habría que ir.
+12:42
+Pero una pregunta, una pregunta, una pregunta, una pregunta. Si entra el de
+12:46
+Jorge Cortés, ¿no entra como con una con un asesor?
+12:53
+Sí. O sea, digamos que cómo identifico que entra un asesor y
+12:56
+cómo identifica que Marita Guerrero entró en el canal en la web. Hablemos
+13:00
+propiamente aquí en la web. Marita entró por allá, nadie me atendió. Entonces, yo
+13:05
+misma hago mi operatoria en la web. Uno. Y el otro escenario es, ¿hay algún
+13:09
+asesor detrás que hace eso, pero lo hace en nombre de Marita o él tiene
+13:14
+posibilidad de colocar asesor? Porque eso detrás hay un tema de modelo de
+13:17
+comisiones, ¿no? Eh,
+13:21
+sí, sí, María. Ahí cuando tú entras ahí por la web, pues está, o sea, tú puedes
+13:27
+autogestionarte. Exacto.
+13:29
+Y hay una pantalla que te dice, eh, asistió algún asesor y ahí hay unos
+13:36
+campos para diligenciar. Si si tú te autogestionas, pues pasas derecho, o
+13:41
+sea, no dices, "¿Te asesor te acompañó algún asesor?" Simplemente le das no y
+13:45
+sigue autogestionado. Cuando es acompañamiento de un gestor,
+13:49
+sí, pues sí se esa parte. Exacto. Y es el
+13:54
+la ciudad donde estás haciendo la gestión
+13:58
+y la cédula del gestor que estáendo el negocio.
+14:01
+Por eso. Entonces ahí toca mirar porque ya los datos están. Yo no le voy a pedir
+14:04
+nada más. Oiga, si Marita dijo que no lo asistía ningún asesor, eso entra como un
+14:09
+lead a Nakar. Toca mirar es en Nakar cómo identifico cuando lo vayan a dar de
+14:15
+dar de cuando lo vayan a dar de alta en Nakar, porque NAC nuevamente. Sí. Y si
+14:21
+es un tema de un asesor, pues es que por dentro yo ya tengo que lo está
+14:24
+atendiendo un asesor. Entonces necesito de alguna manera identificar en un algo
+14:30
+una pregunta que esto va a a la siguiente. Claro, yo doy de alta eso en
+14:35
+la web, en web página blanca, pero ¿cómo se entera allá?
+14:41
+en eso lo nace en CAP o en todo el 100% en NAAR. Creo que nace en CAP en las
+14:48
+dos, o sea, o sea, en vehículo web eh la información cuando queda aprobado queda
+14:54
+en una ruta tantia y esa tantia toman la información y lo montan en [ __ ] Y para
+14:59
+CAP, eh, cuando se genera automáticamente la aprobación, pues ya
+15:04
+queda montado el scoring en Nakar y entiendo que cuando en CAP queda elevado
+15:09
+el scoring, eh, pues ya lo que hace la fábrica de
+15:13
+Ah, sí, pero la pregunta del millón es la siguiente, ¿todos nacen en página
+15:17
+blanca? ¿Listo? Todos. Sí. Entonces, ahí toca diferenciar que en el informe yo
+15:23
+puedo identificar esta operación fue autogestionada, no sé si lo hay. Si lo
+15:27
+hay, pues mejor. Si no lo hay, toca decir, esta operación fue estado
+15:31
+gestionada y esta operación tiene un asesor con la información del asesor. Si
+15:36
+tú me dices, esa información cae a un tantia, ¿cierto? En el CAP,
+15:41
+¿cómo la dan de alta? Y el NAAR, ¿cómo la dan de alta? Es que eh digamos que
+15:46
+que son dos caminos nuevos. El o sea el primer siempre lo que se le ha dicho a
+15:50
+la fuerza comercial es el primer punto es vehículo web, pero
+15:55
+como vehículo web nosotros todo toda la oferta no la tenemos eh ahí, o sea,
+16:00
+digamos no está tasa variable, no hay 14 cuotas, no hay compra de cartera, bueno,
+16:04
+digamos que no hay no está completa toda la oferta. Entonces, el primer punto, lo
+16:09
+que pase por vehículo web, okay, aprobado, pero si no, entonces el lo
+16:14
+páralo ahí, páralo ahí. Cuando nace en vehículo web,
+16:18
+¿qué hace? Ah, bueno, cuando cuando nacen entonces
+16:21
+eso son dos caminos. Entonces, el cliente lo lo gestionan por vehículo
+16:25
+web. cuando nace por vehículo web, o sea, que se le genera la aprobación. El
+16:30
+paso siguiente es que el eh eso llega a una ruta tantia, eh el
+16:36
+ejecutivo lo radica por bonita, o sea, radica en bonita el caso y lo que hace
+16:40
+la fábrica es con base en esa información que está en la tantia monta
+16:45
+el scoring en es donde está la estrategia. Toca mirar
+16:50
+en esa ruta de Tanti a qué le está llegando, qué información, para que en
+16:55
+esa información que tenga ahí el asesor cuando lo monte por Bonita
+17:00
+Exacto. entrar a validar, oiga, es por entrar a
+17:03
+validar en bonita y mirar, oiga, ¿qué es autogestionado? porque eso entraría como
+17:08
+grupo cinco o que es por asesor, que eso ahí tendrá con ahí tendrá que ser el
+17:13
+concesionario. Con lo cual veo yo que esto tocaría mirar bonita, porque lo de
+17:19
+Bonita cae en cap o no. ¿Dónde cae lo bonita?
+17:23
+No, no, no, Mariel, en Bonita es solo el front para que ellos radiquen la
+17:27
+operación, pero eso no cae a cap. O sea, el de bonita es la gestión con el con el
+17:33
+asesor, el workflow, pero lo hacen en la cara a la par. Sí,
+17:37
+exactamente. Entonces, lo que hace lo que hace la fábrica es va y revisa y
+17:41
+dice, "Ah, tengo el caso radicado en bonita de vehículo, aprobación
+17:45
+automática, vehículo web." Entonces él va y coge la tantia y tal cual lo que
+17:49
+sale ahí va y lo monta en Nacar para generar el scoring, la aprobación del
+17:53
+scoring, pese a que por debajo ya digamos que previamente hay una
+17:56
+aprobación, pero esa aprobación no queda en ningún lado.
+17:59
+Firme. Exacto. Tocaba que la de alta en Nakar, eso sí,
+18:02
+tocar que lo lo monten de de nuevo nuevamente en Nakar. Entonces, lo que
+18:06
+hace literal la fábrica es tomar ese esa información, la transcribe y va y la
+18:11
+monta en NAC. Entonces, lo que lo que ve pues digamos que no sé qué camino si
+18:15
+estén de acuerdo es en vehículo web, en la parte en donde dice que si el que si
+18:21
+fue autogestionada, o sea, no sé, te atendió alguna persona, si la persona
+18:26
+coloca que no, pues que no le habilitemos el listado de
+18:29
+concesionarios. Sí, valió.
+18:31
+Sí. Y y si él dice, "Sí, me pues si lo atendió una persona, pues realmente el
+18:37
+que está llenando eso es el asesor." Y ya hay concesionaria.
+18:40
+Lo atendió. Exacto. La atendió a la cédula 1 2 3 y ahí le de paso para que
+18:46
+le active el listado de concesionarios y ahí sí podamos diferenciarlo.
+18:50
+Vidí, ahí está válido y toca mirar el reporte porque en el reporte le debe
+18:54
+llegar esa información a quien lo va a colgar en bonita. Bueno, yo no sé si en
+18:58
+bonita, pero que en CAP tenga en CAP, no, sino en Nakar tenga la información,
+19:03
+porque ahí toca mirar en en Nakar qué maniobra vamos a hacer para que Nakar yo
+19:09
+pueda identificar si se catalogó como cinco o se catalogó
+19:13
+como 1, dos, tres o cuatro, ¿no? Porque esos son concesionarios.
+19:16
+Sí. Ahí lo que yo veo lo que veo, María, es que en la ruta Tantia habría que
+19:22
+incluir ese campo de de concesionario y o autogestionado, o sea, no sé. digamos
+19:28
+que ese sí o no que nos marque y si y el listado del concesionario. Entonces,
+19:33
+autogestionado sí, entonces pues la marca de concesionario va a venir vacía,
+19:37
+autogestionado, ¿no? Y ahí va el concesionario Jorge Cortés. Con ese
+19:42
+Jorge Cortés el la persona de la fábrica en Nacar va y monta el score y dice,
+19:47
+"Ah, la señora se gana tanto, no sé qué." y que haya un campo que seleccione
+19:51
+el concesionario. Entonces, va seleccionar a Jorge Cortés y por debajo
+19:55
+por allá en el sistema va el Jorge Cortés va y lo marca como grupo uno.
+20:00
+Ah, no, sí, sí, sí, sí. Desde que tenga yo el concesionario ya por detrás
+20:04
+tendría que yo validar esa tabla maestra donde voy a decir Jorge Cortés a qué
+20:08
+grupo pertenece. Entonces uno lo agarro y luego lo mandaré al Scor sino al a
+20:14
+tasaar o a pricing, como la quieran llamar. Listo, ahí me quedó supercaro el
+20:18
+punto cinco, el grupo cinco y ah, bueno, y en qué momento se utiliza CAP.
+20:24
+Ah, bueno. Y entonces CAP se utiliza cuando no le generamos aprobación por
+20:29
+web. Entonces, eh lo que te decía, 14 cuotas eh tasa variable, entonces no el
+20:36
+señor, yo quiero tasa variable porque las tasas son mejores. Eh o eh bueno,
+20:41
+todo lo o inclusive porque de pronto en vehículo web con el con lo que él se
+20:47
+ganas que reporta el sistema, le da negado. Sí. Digamos que el señor se gana
+20:52
+2,0000 de pesos en una empresa, pero él percibe ingresos adicionales que no le
+20:56
+está tomando la herramienta. Entonces, esos ingresos, o sea, cuando va por CAP,
+21:01
+eh, pues ya posiblemente el sistema lea esos ingresos adicionales y le genere
+21:06
+como una viabilidad. Tengo una tengo una pregunta ahí. ¿Cómo
+21:10
+llega CAP? O sea, yo sé que son las los escenarios que no están contemplados en
+21:16
+página blanca, pero ¿cómo llega a CAP? Eh, ¿quién dice? O sea, el cliente va
+21:21
+allá a página blanca y dice, "Oiga, no, a mí no me interesa esto." ¿Cómo es la o
+21:25
+cómo lo contactan? ¿Cómo cómo llega ese cliente para que le cuelguen en cap?
+21:29
+¿Cómo? Si quieres me me dejas, Hugo, porfa un
+21:32
+segundito proyectar y más o menos es que necesito que aquí el equipo
+21:36
+porque el modelo de operación de este producto para que podamos tener en
+21:41
+cuenta todos los puntos. Por eso cuestiono tanto. Perdóname ahí angelita,
+21:45
+pero necesito detallar al mínimo para tenerlo super claro. Mari y está eso es
+21:50
+lo que quería comentar. Eh, esto que se está indicando es es un circuito, ¿no?
+21:56
+Ese circuito es lo que actualmente se manejan. Eso entiendo es lo que tú nos
+22:00
+vas a presentar o si hay algún manual, algún circuito, algún modelo no nos
+22:04
+pueda facilitar. Ángela, ¿vale? Sí, si quieres porf me dejas eh
+22:08
+proyectar, me learas un segundito y les muestro el que te voy a compartir que
+22:13
+corresponde. Ay, me avisan si ya está para yo saber porque es que tengo que
+22:17
+mirar en dónde tengo que colocar la caja, hablar con el canal, venga el
+22:21
+reporte, todo eso para poder mirar la traza del dato, para poder llegar al
+22:25
+dato al pricing. Sí, es por eso. Exacto. Entonces, ¿cómo funciona el Les
+22:29
+voy a explicar cómo está la aprobación y ahí ya lo vamos viendo. Entonces, pues
+22:33
+digamos, bueno, tenemos el mercado, el camino del mercado directo, o sea, que
+22:37
+el cliente entra directo por la página de BBVA y hace todo el flujo, o sea, él
+22:41
+sentadito en su casa y dice, "Quierro, ta ta ta". Pero tenemos el pues el que
+22:45
+el que más se vende acá, que es el de el concesionario. Entonces el cliente llega
+22:50
+al concesionario, eh lo que hace el concesionario es lo recibe y pues él
+22:54
+dice que quiere financiación, que pasa esa primera mano a nosotros, o sea, a
+22:59
+nosotros no nos dan todos los clientes de una vez, sino que tú, digamos, Mario,
+23:03
+vas a un concesionario, de primera mano te atiende el asesor de concesionario,
+23:08
+dice, "Ah, señora, eh, Maritza, ¿qué es lo usted qué referencia quiere?" Ta ta.
+23:12
+Entonces, bueno, ya tú te enamoras del vehículo y dice, "¿Necesita
+23:16
+financiación?" Sí, necesito financiación. ¿Qué hace ahí? Diligenciar
+23:19
+el formulario del concesionario. Entonces, tú diligencias formulario de
+23:24
+concesionario con y adjuntas la cédula y ese formulario rota con todas las
+23:29
+financieras. ¿Sí? Entonces, se lo pasan a Santandera, a BBVA, a bueno, a todos.
+23:34
+Y lo que hace el asesor del BBVA es con esos documentos que reciben del cliente,
+23:41
+entonces revisa el perfil. Entonces va y verifica a ver si tú eres empleada al
+23:46
+área independiente o demás y sea okay eh Mari puede pasar por vehículo web. Lo
+23:51
+perfilan, o sea, ya ingresan pues la información, cuánto necesita, además le
+23:56
+genera un aprobado. Bueno, el viable ya no ya no está. Este está desactualizado
+24:00
+porque pues eliminaron los viables y rechazado, ¿verdad? O aprobado o
+24:05
+rechazado, cuando le genera la aprobación se le notifica al
+24:08
+concesionario. Entonces le dice, "Mira, la señora eh Mari le dieron una
+24:12
+aprobación por 50 millones." ¿Qué hace después entonces ya cuando cuando el
+24:17
+concesionario le dice al BBVA, "Listo, ya el crédito queda usted?" Porque pues
+24:21
+digamos que a veces es el mejor postor, el que más paga comisión demás.
+24:24
+Entonces, cuando ya el el concesionario le autoriza que gestione como tal el
+24:29
+crédito, el ejecutivo lo radica en BPM7. Y ahí es lo que hablamos, que con la
+24:36
+ruta Tantia el la fábrica monta el el crédito en NAAR.
+24:41
+M, ya él tal cual transcribe la información de
+24:45
+la ruta Tantia, lo transcribe en NAAR y eh con eso pues ya riesgos lo que hace
+24:51
+es ratificar esa aprobación. O sea, si no ha cambiado condiciones y demás, pues
+24:55
+ya la ratifica, aprueba y le da toda la continuidad y
+24:57
+enaca. Perfecto. Y ahí continúa. Y cuando es el otro,
+25:01
+entonces es el cliente no es un perfil de vehículo web, o sea, puede o que haya
+25:05
+salido rechazado o lo que te decía 14 cuotas o tasa variable.
+25:10
+Entonces él él por eso digamos que acá de primera mano revise el perfil para
+25:14
+ver si lo perfila por vehículo web o si lo perfila por cap. Entonces, si no es
+25:19
+perfil vehículo web, va por cap igual pasa ahí sí ya es es netamente el
+25:24
+gestor, o sea, ahí sí ya no lo puede hacer un una un autogestión, ingresa
+25:30
+datos personales y pues igual puede dar una aprobación, ahí sí da una viabilidad
+25:34
+o un rechazo, completa los datos y el crédito se
+25:39
+genera en NAC, o sea, ahí queda eh sí queda el crédito en firme en Nakar y
+25:43
+luego lo queda elevado. Entra un alguien de riesgos y le da continuidad en Nacar.
+25:47
+Eso ya lo conocen. Exacto. Y ahí pues ya cuando es aprobado
+25:50
+en firme, pues de una vez le dan la carta y le notifican al concesionario.
+25:54
+Ahí hay una parte que pues eh hay una pantalla de la integración de BPM con de
+25:59
+CAP con BPM. Entonces, en la última parte, el ejecutivo diligencia pues los
+26:04
+datos de la primera pantalla de Bonita y le da clic y pues ya el crédito queda
+26:08
+radicado en Bonita automáticamente. Cuando el crédito es es viable, el
+26:13
+crédito pasa a una etapa que es la de validación documental en bonita, o sea,
+26:18
+esa etapa es de fábrica. Cuando el crédito queda aprobado,
+26:22
+de una vez pasa directamente a a recepción aprobado, que esa es una etapa
+26:28
+de comercial. para ya darle continuidad pues ya toda la parte de formalización
+26:34
+pues que ya esta vez es después de aprobado ta ta ta y se desembolso,
+26:37
+pero ese es como como el el flujo general
+26:41
+ya ya a mí me ya me quedó super pues a mí me yo ya lo tenía más o menos idea,
+26:45
+pero pues me hicieron un refresque ahí. Gracias Angelita. Entonces sigamos con
+26:48
+las variables. Vale, Hugo, ahí con relación a lo que
+26:51
+nos dices que en ese flujo donde deberíamos incluir las nuevas variables,
+26:55
+las nuevas variables quedarían dentro tanto de vehículo o como de cap.
+26:59
+Entonces ahí nos toca mirar es en las pantallas de vehículo cuando le estoy
+27:03
+diciendo al cliente que tome el crédito eh si lo si lo quiere gestionado o no y
+27:09
+de igual manera en campo cuando estoy haciendo el proceso entonces le digo
+27:14
+exactamente tal cual pero digamos que ahí viene ese flujo puntual
+27:17
+toca tocar los frontales Ugina y toca tocar los frontales ya toca mirar dentro
+27:21
+de cada flujo en qué pantalla es la idónea para colocar la información en
+27:26
+los casos que aplique no si está autogestionado No se colocará el tema de
+27:31
+del concesionario. Si está el asesor, colocar se activará la caja de
+27:36
+concesionar en el CAP. Exactamente. No, en el CAP si tiene que haber un
+27:43
+asesor, ¿no? Con lo cual ahí siempre se tendrá que prender ahí creería yo el
+27:47
+código del concesionario. Eh, bueno, ahí hay no
+27:54
+va el asesor, pero ahí sí María habría de pronto una acá como ya es interno y
+27:58
+ya lo podemos capacitar al comercial y demás. en esa caja de concesionario o no
+28:03
+sé si se haría una cajita adicional en donde diga que si el crédito fue por
+28:08
+concesionario. Exacto. Señor, el crédito genera comisión y bueno ahí le hacemos
+28:13
+una explicación de pues en la capacitación. Si es comisión relacione
+28:17
+el concesionario, si no es comisión no relacione nada. Más o menos así para
+28:21
+poder tener como esa diferenciación interna en cap.
+28:24
+Sí. si fue autogestionado o asesorado. Si fue autogestionado, pues no le pongo
+28:29
+el asesor. Si fue asesorado, le colocaré el concesionario para poder identificar
+28:34
+los n rubros de la comisión. Ahí ya me quedó supercaro. Y el y el caso número
+28:40
+el caso, bueno, ese es el cinco, ¿no? El seis. El se es compra de ah bueno,
+28:45
+compra de cartera actualmente no lo gestionamos por por web, entonces ese
+28:50
+sería únicamente por ni lo ni lo vas a gestionar tampoco por
+28:55
+pues pues a futuro en el proyecto que es en la fase tres si se estima que se
+29:00
+incluya compra de cartera. Okay. O sea, que ya tocaría mirar este
+29:05
+escenario para lo de pricing, Angelita, que lo tengas supercar. Exactamente.
+29:09
+Pero bueno, compra de cartera hoy en día está en el CAP.
+29:13
+En el CAP INACAR. En el CAP INACAR. Y yo puedo identificar
+29:17
+que es compra de cartera en cada canal. En C puedo identificar que es qué es
+29:20
+compra de cartera de la masa. Pues por el subproducto sería Mario, o sea, la
+29:26
+manera de nosotros identificarlo actualmente es por subproducto.
+29:29
+Tengo tipificado en algún lado los subproductos que son compra de cartera.
+29:34
+Eh, en las pantallas de NA14, el nombre del su producto dice CK.
+29:42
+Es que toca mirar bien eso. Eso, chicos, toca mirarlo muy bien. ¿Cómo vamos a
+29:46
+identificarlo de compra de cartera? Porque es que eso cuando lo hacemos a
+29:49
+nombre a en función del del nombre, pues no no es lo más idóneo. Sí, ¿no?
+29:56
+O alguien se le puede mañana nace otro llega otro product manager por poner un
+30:00
+ejemplo y no me le pone eso y después se queda por fuera y por qué no está
+30:04
+funcionando acá. Entonces ese tipo de cosas dejarlo con el hombre, no toca
+30:07
+mirar bien eso, el de compra de cartera, luego hacemos una sesión puntual para
+30:11
+mirar en dónde lo identificas en cada canal para ver qué otro día se nos se
+30:15
+nos presenta, lo podemos generar. Listo, aquí programa una sesión puntual para
+30:19
+mirar compra de cartera. Listo, ahí check. Listo, el campo número uno.
+30:24
+Perfecto, ya para mí quedó claro. No sé si a Steven le quedó duda frente a Ah,
+30:29
+no, él ya dice que ya chulo. Listo, sigamos con el siguiente campo.
+30:35
+Listo. El siguiente es eh Préndale espérame que Hugo, Señor.
+30:42
+Eh, quería ya para cerrar este este punto que estábamos mirando eh en el
+30:48
+formato pues angel menciona web y me incluyo aquí te lo agrego para que quede
+30:57
+una. Vale. A ver,
+31:00
+vale. Mari, yo tengo ahí una duda.
+31:04
+Yo no sé si con lo de APIs también esto se tenga que contemplar.
+31:09
+Muy seguramente sí. Bueno, esa es una esa es una esa es una
+31:16
+pregunta que tenía porque en esta primera sesión, bueno, por allá que se
+31:20
+hizo hace dos meses se hablaba de estos canales, ¿sí? No, no, no miramos APIs,
+31:27
+¿no? Entonces vamos a incluir en esta en este
+31:31
+desarrollo API o lo dejamos para una fase con
+31:35
+Sí, yo digo que nos centremos propiamente en esto y luego mandamos.
+31:39
+Esa es mi propuesta, ¿no, Angelita, revísate. Meter apiz en una segunda
+31:42
+fase, porque esto se va a engordar más. Y después me van a decir, "¿Y por qué
+31:46
+nos demoramos tanto en subir a la producción la primera fase?" Que vaya
+31:50
+web cap, web, cap y nakar. Sí.
+31:54
+Ahí yo tendría una una sola segunda fase,
+31:58
+una sola duda rápida, Mari. O sea, digamos, la en la PIC lo entregamos
+32:02
+Autolando, ¿sí? Él hace el proceso y pues en ese en ese
+32:06
+motor tenemos solo las tres variables actuales. Pero cuando ya vayamos a hacer
+32:12
+el pues ese ese eseengrana seenggrana enar.
+32:18
+Eh, seenggrana. Cuando dice engrana en Nácar, ¿a qué te refieres con segrana?
+32:21
+No, no, no es que se engrana. O sea, quedan las piezas de tal manera
+32:24
+transversales. ¿Qué es lo que va a pasar hoy en día? Si hoy yo estoy llamando el
+32:29
+pricing, voy a enfocarme en Apple. Si yo llamo hoy el pricing, pues hoy no le voy
+32:33
+a informar el el el tipo de de concesionario autogestionado, por
+32:40
+decirlo así, con lo cual no va a haber un clúster para eso. Entonces, tendrás
+32:44
+que Sí, no tenemos que buscar convivencia. Lo que me lo que logro
+32:50
+decirte es las piezas van a ser transversales. Es decir, si yo lo dejo
+32:55
+listo para esto, debería funcionar para cuando monte API. Claro, API, que hay
+33:00
+que acondicionar, oiga, que que yo pueda diferenciar cuál es el concesionario,
+33:05
+cómo lo llevo hasta el punto donde determino que tiene pricing y será se
+33:10
+tendrá que ir a la misma base de datos, que es lo que vamos a dejar en la
+33:12
+primera fase. Si hay que hacer unos ajustes para la
+33:15
+integración, pero lo robusto ya sube con esta primera fase. Pero lo que voy es,
+33:20
+por ejemplo, o sea, en en APIs es que bueno, yo no conozco muy bien el
+33:24
+proyecto, pero si el cliente lo gestionan por las APIs y le da casa del
+33:30
+15. Ah, no, te va a ver diferente. Claro,
+33:32
+porque no es que no estás no tiene la lógica por debajo.
+33:35
+Claro, ese es el tema. Ahí tienen que mirar porque si meten
+33:38
+apis pues es todo, o sea, entre más le coloquen Angelita,
+33:43
+ojo que hay un limitante de personas, hay unentante en tiempo. Entonces yo lo
+33:46
+que te digo es si tú lo el cliente lo vas a hacer en todos los canales,
+33:51
+pensemos el ejercicio, en APIs no te va a engranar porque no está integrado.
+33:56
+Está la transversaralidad, pero no está integrado. Entonces ahí toca tocar apis,
+33:59
+toca tocar todas las capas debajo. Sí. María esa era como la duda, o sea, que
+34:06
+acá le doy 15 y cuando lo vaya a montar me da 18, pues entonces va a decir, como
+34:11
+si lo me estudiar con 15. Lo tendrían que chequear si lo
+34:14
+necesitan, pues más largo el tiempo. Pero una duda, una duda, o sea, en APIS
+34:20
+el scoring queda en firme, o sea, ya queda en
+34:23
+Tengo entendido, tengo tengo entendido que sí. Yo no tengo la certeza. Me
+34:27
+tocaría averiguar. Creo que los APIs no se están dando de cero. Creo que los
+34:33
+APIs sí se están. No sé aquí, Sergio, todas las operaciones que nacen creo que
+34:37
+sí porque queda una aprobación y creo que la toman en Nacar, creo.
+34:41
+O sea, quedan en firme, no tiene que volverlo a reprocesar desde
+34:45
+cero como ocurre en web, página blanca. Pero y el tomar, digamos que como el
+34:51
+pricing tomaría todas esas variables, ese no tomaría esas variables y no
+34:55
+seguiría tomando las tres y le da la tasa o eso se chocoloquea y le da la
+34:59
+No, no se chocoloquea. No, no, no. Hay que asegurar que si no lo montamos en la
+35:03
+fase uno, sí debe seguir, debo yo asegurar dentro del proyecto que siga
+35:09
+atendiendo pricing con las tres variables. Ya en una fase de posterior
+35:14
+le incluyo las tres variables más y debería operarte sin ningún problema.
+35:19
+Claro que implica tocar el frontal, tocar el API, tocar lo que toque haya
+35:25
+que tocar por debajo para que el dato llegue a Nakar y en todo.
+35:30
+Sí. Ah, listo. Pero si nosotros si nosotros vemos que se
+35:34
+podría que dentro del esto ya el ajuste que hagamos ah, no, porque es que
+35:38
+vehículo web, ¿no? Bueno, tendríamos que mirar. Sí, yo opino que sea para una
+35:44
+segunda fase, pero si en en análisis determinamos o revisamos que que el
+35:51
+ajuste que voy a hacer para web página blanca aplica para API, yo te digo,
+35:56
+mira, aplica, lo podemos incluir. Yo te voy a decir, no, no aplica. Todas las
+36:00
+piezas por debajo hay que son otras, con lo cual sí hay que meterlo una fase dos.
+36:05
+Sí, ya listo.
+36:06
+Déjanos analizar ya el desarrollo cuando lo estemos analizando y y en función de
+36:11
+eso determinamos y lo mandamos a una fase posterior o lo dejamos acá en
+36:16
+función de que lo que yo toque para página blanca le aplica APIs. ¿Listo?
+36:21
+Con esa premisa. Ah, listo, listo,
+36:29
+listo. Entonces, yo estoy dejando, Marios,
+36:40
+el tema de APIs dependiendo del análisis que se haga en ingeniería, se incluye o
+36:45
+no en esta fase. Vale. Así es, así es. función del software.
+36:48
+Sí, está bien. Listo. Seguimos con el
+36:53
+siguiente. Siguiente es eh bueno, no vimos el
+36:59
+primero, no sé por qué arrancamos este grupo de canal que origina canal que
+37:03
+origina la venta. Me corregis por Vale, porque pues y según es que
+37:08
+recapitulando lo que entiendo es que el primero no lo íbamos a utilizar porque
+37:12
+se reemplazaba para en el segundo se metía el grupo cinco y el grupo seis.
+37:18
+que el grupo cinco era leads, red y comer y el grupo seis era compra de
+37:23
+cartera. Entonces, el primer campo no aplica,
+37:26
+o sea, que este no lo desarrollamos. Sí, este no se desarrolla.
+37:29
+Eh, sí, según eso entiendo que no. Okay. Entonces este este lo voy a
+37:35
+colocar aquí. No va, no, no va dentro de esta.
+37:41
+Sí, por eso se había como colocado en naranjita porque era un poco más
+37:46
+complejo de identificar. Entonces lo que se definió era con el grupo CCO y grupo
+37:51
+seis, que ahí contemplan esos dos, o sea, mercado directo y compra de
+37:54
+cartera. Vale, este es este es para que lo
+37:56
+ratifuchen como lo estamos retomando una vez. Este seigó en ese momento, aquí lo
+38:02
+queda en queda con este observación. Listo, vamos
+38:08
+para la prenda sin prenda. Prendarrado
+38:14
+en lo que estábamos pensando en la cambio de la parametría. Señorita
+38:18
+Angelita, o aquí qué es eh ese prenda. Ah, bueno, ese ese era lo
+38:22
+del también lo de UT, eh, porque como actualmente el en vehículo web el
+38:29
+cliente si se gana más de cinco salarios mínimos, automáticamente
+38:33
+el crédito le queda sin prenda y si se gana menos de cinco, el crédito le queda
+38:38
+con prenda. Pero, ¿cómo vamos a tener ese diferencial de tasa de que si que si
+38:44
+lo quiere con prenda es más económico que si lo quiere sin prenda? Entonces sí
+38:48
+habría que revisar en esas pantallas de UEX cómo le pregunto eso al cliente, o
+38:54
+sea, cómo le digo, eh, lo quiero comprenda, lo quiero sin prenda. Bueno,
+38:57
+y a partir de esa identificación que quiere el cliente lo quiera o no
+39:02
+comprenda, ahí si se le habilite y pues ya pues ya ya pueda como tal dar
+39:09
+finalizado el flujo en en cómo se llama, en CAP y en y en NAAR, pues si es con el
+39:17
+subproducto que se hace ese control, porque como dependiendo la el tipo de
+39:21
+garantía que tenga atado eh corresponda no prenda. Exacto. Pero en web sí es esa
+39:29
+como Pero es que esto esto viene muy amarrado
+39:32
+a lo que habíamos pensado en la asignación del subproducto. Es decir, si
+39:37
+en función que mi buró es alto y que dio un tovalo alto, entonces no le implica
+39:44
+pedirle la prenda, pero le dejaré habilitado en el frontal si requiere o
+39:49
+no prenda. Y él te dirá, "Oiga, sí, déjemelo prendado porque me va a dar una
+39:53
+mejor tasa." puede decir, "No, a mí no me interesa." Pero esto viene muy
+39:57
+amarrado. O sea, yo ya lo entiendo. Pero chicos, aquí toca entrar a validar cómo
+40:03
+juega esto con la asignación del subproducto,
+40:06
+porque para mí están muy amarrado los dos, o sea,
+40:11
+eh porque en función del subproducto yo puedo pedirle una prenda eh en el
+40:17
+sentido de que puede tener un mejor buró y me da un low to value supremamente
+40:22
+gordo, con lo cual yo le digo, "Oiga, señor, sí, mire, usted lo puede prend.
+40:26
+Si usted lo prenda, le voy a dar una mejor tasa. Si no lo prende, no lo
+40:30
+prenda aquí al banco, pues bueno, tú tienes la elección. Esa es esa es una,
+40:34
+pero hay otra donde en función de lo que meo, sí o sí me tiene que dar prenda,
+40:40
+¿sí me entiendes? No, en todos los casos se va a activar la prenda. Eso es lo que
+40:43
+quiero que analices, Angelita. ¿En qué casos se va a activar y en qué casos no?
+40:47
+Ah, sí, sí, sí. O sea, Mari, digamos que se se tendría que activar de acuerdo al
+40:52
+tope mínimo de ingresos prenda, o sea, yo no lo voy a habilitar al a que un
+40:57
+señor que se gana dos salarios mínimos lo diga, lo quiere con prenda o sin
+41:00
+prenda. Porque por política ese señor no puede sin prenda. Sería solo los que por
+41:04
+motor eh el sistema vaya y me diga, "Ah, okay, la persona se gana más de cinco
+41:09
+salarios mínimos, este señor sí lo puedo habilitar con o sin prenda." Al a los de
+41:14
+prenda siguen prendados. Sí, chao. Ahí sí ya ni les pregunto.
+41:17
+Okay, anótalo ahí. Pero yo quisiera que nosotros técnicamente, muchachos,
+41:22
+miremos cómo lo dejamos listo para la parametría de asignación del producto.
+41:28
+Sí, exacto. Porque porque hay, Mari, lo que
+41:30
+yo veo es que en la matriz de vehículo web eh actualmente pues bueno, solo
+41:36
+tenemos la opción del sin prenda cuando el señor se gana cinco salarios mínimos.
+41:39
+Entonces esa matriz nos toca habilitarla, ampliarla, o sea, a que lo
+41:44
+pueda esos mismos como replicarlos a que tenga eh comprenda y y pues digamos que
+41:50
+esa respuesta del señor sea clave, o sea, cuando el [ __ ] que quiere
+41:53
+comprenda, pues automáticamente vaya y le marque o le active en la matriz de
+41:59
+sus productos esa parte de comprenda. Claro, pero fíjate que esto no estaba
+42:02
+pensado aquí, entonces aquí entra un ingrediente que nos toca modificar la
+42:06
+matriz de asignación de su producto, ¿no? Pero sí, Mari, porque si el cliente
+42:10
+lo quiere comprenda por defecto por debajo, sí tendrían que eh modificar.
+42:13
+Claro. Pero lo que yo te digo, Angelita, no es válido. Lo que yo te digo,
+42:16
+Angelita, es que cuando se tocó este tema de pricing, todavía no teníamos en
+42:20
+el radar que nos toca modificar la matriz de asignación del subproducto.
+42:26
+Sí. Aquí como ya ese proceso lo avanzamos cuando miramos el tema de
+42:32
+seminuevos, eh compra instantánea y ese tema, de ahí
+42:37
+salió, que fue las últimas charlas antes de que Rosy se fuera a vacaciones. dijo
+42:41
+Maricillo, a mí no me a mí me interesa que en función de la asignación del
+42:45
+subproducto yo le pueda activar o no activar la caja porque yo ya tengo el
+42:50
+buró, tengo el valal, o sea, tengo más información que hará que la tasa más
+42:57
+cercana al cliente y ya es de libre albedrío del cliente. Entonces aquí sí
+43:01
+hay que cambiar la no cambiar darle una escalabilidad a la pieza de asignación
+43:07
+de su producto. Eso es de cara a web página blanca. Listo, muchachos.
+43:11
+Entonces, para que quede aclarado, o sea, esto es un insumo más.
+43:14
+¿Sabes? Pero eso sí se había contemplado. De hecho, en la parte de de
+43:18
+compra de compra instantánea, eh, se indicó que esta, o sea, que ese
+43:23
+desarrollo no digamos que no no lo tenían como pues tan rápido de realizar
+43:27
+y que se hacía en con pricing por esa razón del diferencial de los ingresos.
+43:33
+Claro. Lo que parece como cambiaron la prioridad nuevamente, Angelita.
+43:37
+Sí. No, no, pero, pero, o sea, digamos que compré instantánea dijeron como eso
+43:41
+no lo vamos a hacer, sino lo vamos a hacer es cuando salga pricing por este
+43:44
+tema de los ingresos. Bueno, yo tengo otra versión, pero
+43:48
+bueno, dale, ahí toca ahí sí ahí toca tocar, eh, Hugo, la
+43:53
+matriz la matriz de asignación de su producto.
+43:57
+Exacto. Para que lo que sea superior a cinco salarios mínimos eh se se pueda
+44:03
+con o sin prenda porque actualmente
+44:08
+actualmente el sistema solo lo que sea superior a cinco le da sin prenda.
+44:12
+Entonces ahí toca colocar ese tema que para mí es si requiere o no prenda y en
+44:18
+función de lo que la lógica tiene que prender o apagar el campo allá en el
+44:22
+frontal en página blanca. Esto solamente aplica para página blanca.
+44:27
+Y adicionalmente el tema de toalo, que para mí sí es importante el valo en la
+44:31
+parametría. Sí, porque en el en el en CAP eh el cliente, perdón, el asesor
+44:37
+selecciona el subproducto, entonces él ya sabe que dependiendo el tipo de
+44:42
+ingresos se le habilita el subproducto que le corresponde. Entonces, se le
+44:46
+habilitan los con prenda y sin prenda o se le habilitan solo los con prenda.
+44:50
+Sí, en página blanca, Ugín es el tema de prenda y lo to solamente para página
+44:56
+blanca. Ya el cap seguirá operando con la maquinaria detrás y ya seleccionarán
+45:02
+allá como lo tienen. No, eso no lo vamos aí. El el cap si tiene elo, Mari.
+45:07
+Y bueno, Nacar, no sé si creo que Nakar no
+45:11
+no Nakar no lo tiene. Toca mirar ahí eso.
+45:16
+Listo. Toca mirar de CAP ya lo tiene, con lo cual no aplica. Nakar por
+45:21
+validar. Listo. Para que lo anotes ahí. CAP ya
+45:26
+aplica el hoy, ya lo tiene. Prenda y lo tuvalue
+45:31
+y capar por revisar.
+45:43
+Listo. Perfecto. Siguiente campo.
+45:47
+Yo tengo yo tengo una duda ahí, Mari, porque ahí mencionan otra, ¿no? Prenda,
+45:52
+prenda FGA sin prenda y otra. Digamos que casos se clasifican como otra.
+45:57
+Ah, bueno, no sé. Para mí es prenda y sin prenda. Pare de contar.
+46:01
+Es que también FGA no es prenda. Ojo que FGA no es
+46:04
+prenda. FGA es un respaldo económico. Dado caso el cliente llegue a a cómo se
+46:11
+dice, a sí,
+46:13
+a incumplir su pago, digamos. Y lo que se hablará prenda
+46:17
+normal, prenda FGA, bueno, digamos que se le cambia el nombre que sea solo FGA
+46:22
+sin prenda. Y dice que, o sea, pues digamos que de cara a que el desarrollo
+46:28
+no quede eh quemado, sí se puede dejar, digamos que si llegas en algún futuro,
+46:34
+digamos, no sé, en unos 5 o 10 años que creen otro tipo de garantía, pues que se
+46:39
+pueda de una vez adicionar ahí. Lo que pasa es que lo que pasa es que para mí
+46:43
+el para mí es solamente dos, prenda o sin prenda. Pare de contar. Ah, que ya
+46:48
+luego el subproducto te haga exigible una garantía real 305 y mañana te haga
+46:55
+exigible una garantía 308. No lo sé, pero para mí es prenda o sin prenda. FGA
+47:00
+no aplica, Angelita, porque vehículo no tiene la funcional, me corrigen, pero el
+47:05
+único que tiene la funcionalidad FGA o bueno, me corrigen porque yo en su
+47:09
+momento no lo tenía. consumo y lo tiene ahorita preaprobados, preaprobados que
+47:14
+se le incorporó, pero vehículo no lo tiene FGA.
+47:17
+No, no, no, no lo tiene, Mari, pero sí se busca que también está dentro de unos
+47:21
+de un proyecto que está en el backlock que vehículo tenga FGA. Espero digamos
+47:25
+que estamos como dejándolo por si más adelante crean el FGA, pues que pueda
+47:31
+estar. Claro. Pero a ver, a lo que yo quiero es
+47:34
+y aquí va mi pregunta, es ¿qué hace diferente que se aprenda o FGA? No es
+47:39
+una prenda, no es una prenda, o sea, no me lo puedes
+47:42
+catalogar dentro de la caja de prenda porque no aplica FGA prenda,
+47:47
+pero pero ahí lo que buscamos es que eh o sea,
+47:50
+pero es otro campo, debería ser otro campo, debería ser otro campo porque es
+47:54
+que FGA es un respaldo económico. Una cosa es que me digas prenda y sin
+47:58
+prenda, listo. otro campo. Aiga, venga, cuando tenga FGA me lo controle como
+48:02
+otra variable. Que si tiene FGA le doy una mejor tasa porque es que va a estar
+48:06
+respaldado por el fondo de Garantías de Antioquia. Sí, pero es otro campo. No me
+48:11
+lo mezcles con prendas y prendas porque FGA tiene cobro de comisión. El
+48:16
+cliente tiene que pagar esa comisión que en su momento era alta. Creo que ya
+48:19
+ahorita en función de unas cluster por allá de FGA se le asigna el gasto. El
+48:24
+cliente dice, "Aiga, ¿le interesa?" Así sí, sí me interesa. No, yo que voy a
+48:28
+pagar toda comisión. No me interesa. Sí, pero es otro rubro, no es prenda y sin
+48:33
+prenda, es otro rubro totalmente diferente.
+48:36
+O sea, FGA por debajo no tiene algún tipo de garantía así sea informativa o
+48:41
+algo así, o sea, como ficticia, no sé, la 1 2 3 para poder identificar.
+48:45
+Tendría que mirar, no estoy segura. Espérame, yo pregunto acá,
+48:51
+pero al final lo que yo te digo es al final yo te digo, no me mezcles los dos
+48:55
+temas. FGA todavía no lo tenemos en la mira. Para que funcione FGA tienes que
+49:00
+incorporar tu flujo a todas las piezas de FGA. Y si tú quieres incluirlo como
+49:05
+un campo más allá, se tendrá que analizar en su momento. En este momento
+49:10
+meterlo ahí me parece que no. pues lo puedes meter ahí, pero no va no
+49:15
+va a cumplir. O sea, yo no te puedo hacer un desarrollo pensando en algo que
+49:19
+todavía no está implementado. Sí, no sé cómo lo verán a llamar las piezas, cómo
+49:24
+va a llegar allá en cada canal, porque esto tiene una presa FG es transversal,
+49:29
+pero tienes que incorporarlo al flujo. Venga, ¿en qué punto lo voy a
+49:33
+incorporar? ¿Cómo va a funcionar allá en el flujo de página blanca? ¿Tengo el
+49:37
+dato? ¿No tengo el dato? Entonces yo te digo, la puedes colocar ahí, yo no te la
+49:41
+voy a quitar, pero en este momento se omite, o sea, puedes dejarla ahí, pero
+49:45
+es un valor bruto ahí porque no vamos a hacer nada con esa variable. Sí.
+49:49
+Y si se incorpora en otra, pues ya sería un digamos que una fase dos del
+49:55
+desarrollo. Claro. ¿Qué va a pasar cuando tú
+49:57
+incorpores FGA? Tienes que tener en cuenta lo de pricing,
+50:01
+pero cuando ya tengas, si tú tienes en tu valor incluir FGA en el flujo de
+50:06
+vehículo, ah, sí, señor, inclúyo, pero venga, quiero incluirlo dentro del
+50:09
+pricing. Sí, inclúyame el tema de pricing, porque necesito que aquí en
+50:13
+Pricing, aparte de que si tiene prenda o no, venga, el cliente cogió el su
+50:18
+crédito con FGA, sí, entonces démosle mejor tasa, pero ya es una variable que
+50:22
+no es prenda y sin prenda. ¿Me hago entender?
+50:25
+Ya. Sí, señora. Listo. Entonces, prenda y sin prenda.
+50:36
+Muchachos, dentro de la de lo que se comentó por allá en las sesiones
+50:40
+iniciales, Luis Javier comentaba que esto dependa
+50:45
+sin prenda irlo a buscar en la tabla que desplegar.
+50:51
+Ah, bueno, no, no importa. Sí, sí, sí. van a valorar para tenerlo en cuenta,
+50:56
+para tener en cuenta ese esa tabla, ¿no? Ah, creo que esa esa tabla es la que
+51:01
+marca la el tipo de garantía que si es si es 3 asociación,
+51:07
+esa la es la asociación de la garantía versus el su producto. Ah, si este su
+51:11
+producto le voy a hacer exigible la 305 y la 601. Ah, este subcto le va a ser
+51:16
+exigible la 306 y el 601. Ahí está la relación producto versus garantía.
+51:22
+Pero no, déjalo ahí, no, no sobra. O sea, ese no tengo problema. Y FGA no
+51:27
+aplica. FGA no aplica. O sea, lo quieren dejar ahí, déjalo. Pero FGA no entra
+51:31
+dentro del alcance de este proyecto porque no es únicamente que coloque ahí,
+51:35
+no es toda la trascendencia de incorporar dentro del flujo la
+51:39
+funcionalidad FGA. Sí, que lo tenemos. Una una duda ahí, Mari, es decir, que
+51:44
+ese no generaría ningún desarrollo ni en NACAR ni en CAP porque lo que hacen es
+51:49
+con base en el subproducto que se genere, van y miran por debajo el tipo
+51:53
+de garantía que tenga y no funciona así
+51:57
+al de prenda y no prenda, sí, o sea, en función del subproducto, yo voy mira si
+52:02
+tiene una prenda. Si tengo una prenda, eh, es que puede darse el escenario
+52:06
+porque el cliente puede decir, "Oiga, quiero prendar."
+52:09
+Entonces, ya indiferentemente la parametría, yo tengo que decirle al
+52:13
+sistema aprendo. Sí, que debería estar como opcional la garantía, no va a ser
+52:18
+obligatoria, va a ser opcionable. Entonces sí toca cambiar eso dentro del
+52:22
+sistema, muchachoso, porque a nivel de host sí hay que hacer un cambio. Es
+52:25
+decir, oiga, mírate que el subproducto me está diciendo que tengo, Mírate que
+52:30
+aquí ya va a comenzar a a entrar en un segundo plano, digo yo, sí, el tema de
+52:36
+la garantía. Y ya voy a decir por qué. Porque eso lo va la batuta se la va a
+52:41
+mandar es el señor eh parametría de la asignación del subproducto. Oiga, en
+52:46
+función de estas variables, pídame la prenda. Ah, bueno, voy allá y le pido la
+52:51
+prenda y allá el cliente no va a tener opción de no de apagarlo. Ah, venga. En
+52:58
+función de esta variable, yo le digo, no requiere prenda, pero allá le voy a
+53:01
+activar, señor. Venga, usted quiere prendarlo, le voy a dar mejor tasa. Sí.
+53:06
+Entonces le mando un sí y ahí a nivel de host tengo que tener claro, si le manda
+53:12
+un s vaya y me cree la prenda, si le mando un no me crea la prenda. Entonces
+53:17
+esta tabla ya pasa a un segundo plano. Mírate que ya no va a ser como está
+53:21
+paramétricamente, sino como está en la parametría de asignación de su producto,
+53:25
+porque ya no es tan quemado a nivel de su producto, sino en función del
+53:29
+comportamiento del cliente, un buró, el tubalue, bueno, no sé qué otras
+53:34
+variables necesitan ahí que me si prenda o no prenda.
+53:37
+Mari, discúlpame, ahí me queda una duda con relación a que es eh con prenda o
+53:42
+sin prenda. Sí, cuando cuando digamos que actualmente
+53:45
+uno en NAAR le pide eh al equipo de operaciones que le revise ese señor qué
+53:50
+condiciones del RAR tiene, entonces va y dice, eh, buró 500, eh situación laboral
+53:56
+del empleado, eh, ingresos 7 millones de pesos. Entonces uno dice, "Ah, mira." Y
+54:00
+ahí uno va y mira si la tasa le está dando correcta o no. en este evento que
+54:04
+les digamos que la esa variable de prenda, entonces, ¿cómo sería para
+54:09
+identificar en esa casilla o en ese digamos que de donde tengo las siete o
+54:14
+cinco variables del RAR que tiene o no tiene prenda?
+54:19
+Eh, no, tú lo puedes mirar si tiene una garantía atada,
+54:24
+o sea, ahí sería como garantía atada, porque es que tú lo vas a ver después de
+54:27
+la formalización, ¿sí o no? Sí, pero pero lo que hoy es digamos que un
+54:32
+vehículo sin prenda tiene una garantía tal que es la 390.
+54:36
+Ah, no, eso es definición que nos digan. Ojo que claro, a nivel de vehículo hay
+54:40
+un rubro que eso fue por una un requerimiento por allá de riesgo. Oiga,
+54:44
+si no tenga prenda, créame la garantía porque yo necesito tener. Claro, aquí
+54:47
+toca decir, oiga, ¿qué tipo de prenda le voy a dar de alta?
+54:50
+Exactamente. Entonces, o sea, digamos que si la garantía es 306 o 305,
+54:55
+márquelo como si fuera un vehículo con prenda. Pero si es una garantía
+55:00
+diferente a esas dos, ahí sí colóquelo como
+55:02
+es un tema de definición. Entonces toca definir cuáles son prenda y cuáles son
+55:06
+sin prenda, porque es que en ambos escenarios el crédito queda con una
+55:10
+garantía atada. ¿De acuerdo?
+55:16
+Eh, equipo, qué pena. Yo me tengo que retirar, es que mañana tenemos comité de
+55:20
+precios y tengo que ir a revisarlo para mirar la propuesta que vamos a enviar a
+55:24
+financiera. Entonces, eh, Ángela. Eh, vale. Sí, la sesión es hasta
+55:29
+las 5. Programamos nueva sesión para continuar. Vale, yo coordino con J con
+55:33
+Felipe. Vale. Bueno, muchas gracias a todos. Que estén bien.
+55:36
+Okay. Hasta luego.
+55:37
+Gracias. Bueno, muchachosas
+55:40
+a todos. Buena tarde. Muy amable. Hasta luego.
+55:42
+Gracias. Buena tarde. Hasta luego. Hor
