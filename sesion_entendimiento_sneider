@@ -1,0 +1,683 @@
+Claro, esa es como una de las primeras
+0:04
+preguntas que tiene que creo que tiene Andrés.
+0:09
+Sí, sí, tal cual. Lo que sucede es que digamos a la fecha muchas digamos de las
+0:16
+parametrías que hay en a nivel de vehícul de vehículo web, pues digamos
+0:22
+que su origen está en host, ¿no? En una transacción que es la es una tabla que
+0:27
+se consulta que es la UGDT37. ya tiene todo lo que es por concional a
+0:33
+todo lo que son las políticas de vehículo. Digamos que a la fecha pues eh
+0:39
+un trabajo que nos tocaría, digamos, realizar aquí a nivel de J es o crear
+0:43
+una nueva sección o nuevas parametrías, digamos, a nivel de host. Eh, pues ya tú
+0:49
+sabes, todo el tema, digamos, de mostrarla para qué es, para qué se va a
+0:53
+realizar y bueno, todo su procedimiento largo para que se pueda de alguna forma
+0:58
+también realizar la réplica con la base de datos de Oracola, pues en el proceso
+1:04
+de APX y demás vaya y lo consulte directamente esa tabla, ¿no? por temas,
+1:08
+digamos, de complicidad y computacional y de motor es más sencillo pues ir ahora
+1:15
+que que venir hasta Jos y consultarlo. La pregunta de nosotros éramos era,
+1:20
+digamos la siguiente. Nosotros digamos en alguna manera diríamos, pues no nos
+1:24
+matemos, digamos, haciendo esa parametría acá en host y volviendo a
+1:29
+hacer y los desarrollos para poder replicar la información, sino hagámoslo
+1:32
+en Oracle, creemos, no sé, una tabla nueva o una base de datos nueva o algo,
+1:38
+digamos, directamente sobre ese motor donde tuviéramos la parámetría y una vez
+1:43
+fueran nuestros, digamos, servicios allá a consultar y traer pues esa lista
+1:48
+desplegable de los concesionarios que necesitamos. Entonces, una de las
+1:53
+preguntas era, ¿qué tan engorroso es este proceso?
+1:57
+Digamos, ¿qué propuesta, digamos, de alguna manera podríamos, digamos, hacer
+2:01
+nosotros? Una tablita, una base de datos nueva, digamos, como esa definición,
+2:06
+digamos, a tu conocimiento, qué lineamiento podríamos llegar a hacer
+2:10
+para llegar como hasta ese punto. Esa es como la pregunta inicial que tendríamos
+2:16
+nosotros como con este tema. ¿Listo? Entonces, para responderte esa
+2:21
+pregunta, vamos a entrar a mirar por el tema de
+2:26
+comencemos con la parte de las bases de datos.
+2:30
+Hagamos un ejemplo de que nos permitieron utilizar la CUGH,
+2:35
+que es una base de datos ya establecida para montar nuestras parametrías de
+2:40
+vehículo, donde vamos a tener la información de concesionarios.
+2:44
+¿Sí? ¿Listo? Entonces ahí primero tenemos que hacer un proceso de gestión
+2:48
+de base de datos donde tenemos que entrar a hacer la validación de los esqu
+2:53
+de es la validación de los nuevos campos, definición con el tema de data
+3:00
+hubierto el proceso del power design que tiene
+3:04
+que ser una persona que tenga esos permisos y hacer todo el proceso de
+3:08
+certificación. Si viéramos a nivel de ese tema de bases
+3:11
+de datos, nosotros nos estaríamos demorando más o menos mes, mes y medio,
+3:17
+solo en el proceso de definición y para que llegue a desarrollo.
+3:21
+Teniendo en cuenta el tema de la tabla, si nosotros hacemos la tabla, tenemos
+3:27
+que pensar en que no hay un servicio que me traiga estas consultas.
+3:33
+tenemos que entrar a a crear un servicio ASO parecido al catalogra
+3:39
+consultas de la base de datos. Tenemos que comenzar a mirar también una
+3:43
+transacción APX que se conecta con el servicio ASO
+3:49
+y tenemos que comenzar a mirar en la lógica de negocio que me haga vaya y me
+3:54
+consulte la tabla de la CUGH donde vamos a tener las parametrías. Entonces ya
+3:59
+tenemos desarrollo SASO y APX. más el tema de la base de datos.
+4:05
+Sí, para mí eso lo que implicaría pues más o
+4:09
+menos desarrollo a nivel desarrollo, solo desarrollo, sin certificación y
+4:14
+sino producción diría que dos meses, así a nivel de tiempos y a nivel de
+4:22
+esfuerzo, pues la creación del servicio vaso, definición de metada,
+4:26
+todo ese proceso más todo el tema de APX, e la conexión a la base de datos, a
+4:32
+la nueva tabla, las consultas, pregunta de este tema también va
+4:37
+reportería, ¿cierto? La reportería.
+4:43
+¿Cómo? Perdón, se te fue la señal. Ah, bueno. Y
+4:50
+también entraría a ver las reporterías porqueo que en la reportería se tiene
+4:55
+que agregar el campo del concesionario. Entonces ahí tocaría entrar también a
+5:01
+mirar en reporterías cómo irían las consultas. y cómo se manejaría.
+5:07
+Tener en cuenta que las reporterías de vehículo actualmente están en host.
+5:12
+Ahí tocaría entrar a mirar también con negocio cómo es esa implicación.
+5:18
+Okay. Sí, sí, sí. Si la reportería creo que está a nivel de Jos.
+5:25
+Exacto. Acá tenemos otra posibilidad.
+5:30
+Es cuando te refieres a reportería, hablas de la ruta Tante, algo así, el
+5:34
+documento. Ah, bueno, esas variables hay que
+5:37
+incluirlas en ese documento. Exacto.
+5:42
+Listo. Acá hay otra opción. No sé si ustedes han visto los procesos
+5:50
+LRBA que hace,
+5:54
+o sea, los procesos LRBA que toman la parametría de la unta.
+5:59
+y la suben a la al distribuido. No sé si las han visto, las conocen.
+6:06
+No las conocemos. Creo que no las conocemos. Sí
+6:10
+que existen, que es así como se hace hoy en día los procesos para políticas de
+6:15
+vehículo web. Se acciones especiales para esas políticas, pero digamos no
+6:21
+desconocemos, digamos, el flujo del manejo de de estos procesos.
+6:26
+¿Listo? Entonces, si quieres ven acá, les comparto un momentico pantalla
+6:30
+porque esta puede ser una segunda posibilidad.
+6:38
+Perdón, acá les muestro mi mejor herramienta de diseño. La que va
+6:43
+es que la fecha que dieron fue hoy. Entonces
+6:50
+vamos a comenzar con la parte de host. en host.
+6:56
+Cuando nosotros creamos unas parametrías, pongamos ejemplo la parte
+7:00
+de la definición de los subproductos que tenemos para vehículo,
+7:04
+nosotros vamos a la unta, a la unta de la T37,
+7:10
+que que es la UGDT T37 en cierta sección, en este caso para
+7:17
+vehículos la 1314. Nosotros acá le ponemos el canal. Listo.
+7:23
+Este es el ejemplo de cómo está funcionando actualmente. Entonces acá
+7:27
+nosotros ponemos subproducto uno, subproducto uno, subproducto dos,
+7:35
+subproducto n. Sí, ponemos el subproductos.
+7:40
+Listo. Todo esto nosotros lo definimos en host.
+7:44
+Luego en un batch, él coge por acá y él ejecuta por allá un LRBA.
+7:53
+él ejecuta un LRBA, el cual lo que hace,
+8:01
+perdón, perdón, él ejecutar por acá con el RBA, que lo que hace es que
+8:07
+viene acá y va host.
+8:11
+Entonces, el de host trae todo el tema de las parametrías.
+8:18
+Entonces, todo este tema que venía acá, él comienza a validar desde la sección
+8:22
+13 14 T corresponde al canal B. él va como
+8:28
+organizando esa información y con esa información
+8:34
+él viene por acá y se va por acá a unas bases de datos
+8:40
+distribuidas de la exacta exactamente la CUGH
+8:46
+intermedio que hay un control M o algo así que lo carga
+8:50
+Sí, sí, el control M es el que se encarga de hacer la orquestación, o sea,
+8:56
+todo este proceso de Acá lo lo bajéoslo acá un poquito. Todo este proceso de acá
+9:03
+tiene por acá un control M. Dejmoslo acá.
+9:06
+Un control M distribuido. Exacto.
+9:09
+Okay. Un control M. que el control M lo que
+9:12
+hace es yo llego acá, voy al RBA y el RBA comienza a hacer todo esto.
+9:20
+Sí, igual digamos acá host para su carga de
+9:26
+parametrías, ya tiene su definición y tiene su H que ya existe.
+9:33
+Bueno, entonces volviendo acá al tema, esta que ya es una base de datos
+9:36
+distribuida, eh,
+9:41
+acá tenemos una CUGH que es una base de datos Oracol.
+9:48
+Es una base de datos Oracolía acá de host y la va organizando en la
+9:56
+tabla eh, ¿cómo es?
+10:00
+TCUGH parámetri
+10:06
+y él en esta tabla comienza a organizar toda la información.
+10:10
+Exactamente. Yo acá tengo un ejemplo donde él organiza acá
+10:15
+esto, ¿cómo si esto acá?
+10:20
+Entonces, si se fijan acá tiene el flow UGT37,
+10:24
+la sección 1314 para el para el canal PC. Y acá él tiene un valor, este valve.
+10:35
+Entonces él hace este proceso, creo yo, que diario, donde él comienza a cargar
+10:40
+estas parametrías que tiene la T37 y las actualiza en una base distribuida que ya
+10:46
+existe, que es exactamente las bases de datos de parametrías.
+10:51
+Sí. Okay.
+10:54
+Pregunta dudas hasta acá hasta el momento.
+10:57
+Ahí vamos. Bien, tengo una una dudita adicional. Ejemplo, yo quiero crear una
+11:03
+sección nueva en la UNTA. Ah, pues a ese punto iba pues después de
+11:12
+eso. Ah, listo, listo.
+11:13
+Entonces, que por eso decía que tenemos una alternativa acá.
+11:18
+Entonces, digamos que nosotros queremos crear una sección,
+11:21
+ejemplo, la 1317, que esta va a corresponder a la
+11:27
+información de los concesionarios, ¿cierto? Ejemplo,
+11:33
+entonces nosotros acá definimos definimos la sección, llenamos,
+11:42
+recordemos que en esas secciones juntas solo tenemos dos campos, el ID y tenemos
+11:48
+la descripción, ¿cierto? Entonces, en estos campos, en la
+11:53
+descripción, yo pondría el nombre de la constructora
+11:59
+y en el ID ya buscaría una definición. Si viene por canal
+12:04
+más, eh, puede ser acá un consecutivo más el canal,
+12:14
+tener en cuenta pues mucho este valor de cómo se va a manejar.
+12:18
+¿Listo? Entonces nosotros tenemos esta
+12:24
+definición, creamos todas las parametrías, hacemos todo el proceso del
+12:28
+alta. Sí, listo. Entonces,
+12:33
+el RBA pues va a ser lo mismo. Va acá a la parte host, toma esta parametría
+12:41
+y la va a tomar y la va a llevar acá. Vamos,
+12:46
+¿qué es lo que debemos tener en cuenta de que toca mirar si acá en el RBA
+12:50
+tenemos que hacer el mapeo de la 1317, que en el ejemplo es la nueva sección?
+12:58
+Entonces, ya acá tenemos un ajuste no más, digamos, de principio, que sería
+13:04
+ajuste el RBA para mirar la sección. Ah, bueno, dos ajustes con la definición de
+13:09
+la nueva sección en host, ¿cierto? Exacto.
+13:14
+Ya llevamos dos ajustes, pero en este no tenemos que gestionar
+13:19
+tanto la base de datos, tenemos que hacer todo ese proceso por allá que se
+13:24
+tiene que hacer con DBA, sino que simplemente hacemos el proceso desde
+13:29
+host, definimos el manual y pues explicamos los temas de las parametrías
+13:36
+que creo que es mucho más fácil hacer toda la gestión de la base de datos,
+13:40
+¿cierto? O sea, ese proceso de alta de estas
+13:45
+transacciones a nivel de host, pues digamos, yo tenía, o sea, tengo
+13:49
+entendido que hay que hacer algunas sesiones, creo que toca hablar con
+13:52
+Marita. Bueno, toca hacer varias varias sesiones explicando el por qué esa nueva
+13:57
+sección a nivel de la digamos de la UNTA y levantar creo que una información, un
+14:04
+manual o cosas así y alguien que la vaya a administrar. que yo tengo entendido
+14:09
+que también tiene como un proceso ahí digamos burocrático, por decirlo así
+14:15
+para poderla tener. Y adicional pues toca hacer desarrollos en el en el RBA
+14:20
+para que él pueda leer esa sección. Tengo entendido yo qué es lo que se
+14:25
+tendría ahí. Exacto. Entonces, hasta acá nosotros ya
+14:30
+tenemos un flujo donde sí, la mayoría es burocrático,
+14:33
+o sea, la mayoría es ir a las sesiones con Maritza, explicarle el manual de del
+14:39
+usuario, hacer la explicación de las parametrías
+14:44
+y pues justificar exactamente por qué necesitamos esta sección para las para
+14:54
+los concesionarios. ¿Para qué lo vamos a utilizar? ¿Por qué motivo? ¿Qué vamos a
+14:59
+hacer? ¿Por qué necesitamos que se suban las parametrías distribuido, etc? Sí.
+15:05
+Okay. Pero sí, ¿qué qué por mucho tendríamos
+15:07
+que mirar? alguien que esté certificado en el RBA,
+15:12
+que si ya tienes alguien, Perfecto. Entonces, si te fijas, o sea, si lo
+15:17
+miramos a nivel de tiempos, digámosle con una revisión a nivel de tiempos,
+15:21
+pues a nivel de tiempos esto nos ahorra por acá mucho,
+15:26
+mucho en gestión porque pues la base de datos toca estar con sesiones también lo
+15:30
+mismo, ir a sesiones con DBA, definir los campos, mirar que estén en el RCN,
+15:36
+que estén en el en el space que ellos necesitan, que haya
+15:42
+pasado por la ida de Alexia Aparte de eso, pues ir las sesiones,
+15:47
+mirar configuración, luego comenzar a hacer el tema de el DL, mirar que pase
+15:53
+bien, mirar el tema de indexados, etc, etc, etc.
+16:00
+Es mucho más proceso entrar a mirar una tabla nueva a nivel de APX, a nivel de
+16:05
+distribuido, que hacer ese proceso por la nueva sección o a mí me parece. Sí.
+16:13
+Okay. Okay. Igual igual nosotros digamos lo que comentaba bien acá de las cinco
+16:19
+variables que vamos a incluir muchas y si no casi son todas por decirlo así eh
+16:27
+de alguna forma como la idea es que sean paramétricas, o sea, que podamos eh
+16:32
+hacerlas crecer con el tiempo a necesidad, todas tendrían, digamos, de
+16:36
+alguna manera esa situación que le daríamos una sección nueva de alguna
+16:40
+forma la parametría y las incluiríamos allá para que pues ya los los servicios
+16:46
+la pudiera leer lo más o menos ese es como el mecanismo, por decirlo así, a
+16:52
+modo general que usaríamos, ya que sí es más sencillo, o sea, tú
+16:59
+dices es más sencillo irnos por el lado de host y hacer esta réplica que irnos
+17:03
+por el lado de Oracle a crear la tabla. El lío es ese LRB quién, ¿cierto,
+17:14
+Steven? Sí, no, yo pues desconozco, ¿no? Hasta
+17:21
+ahora estoy como no sé quién sea el experto en eso.
+17:27
+Ahí tengo otra duda, Andrés. Pues tú, Andrés y Cristian, ¿no? Con el tema de
+17:31
+los grupos, ¿cómo lo relacionan en el formato de necesidad?
+17:35
+A ti tú tienes claridad de cómo funcionan esos grupos, Andrés.
+17:39
+No, yo sí no no sé cómo realmente es la verdad es
+17:45
+la primerita es que también voy a hacer algo así
+17:49
+porque podrías aprovechar este espacio para para resolver ese ese tema de los
+17:53
+grupos. yo que en esa variable de grupo de comisión, grupo de pago de comisión,
+17:58
+mercado directo, pues relacionan mucho el grupo uno, grupo dos, grupo tres,
+18:04
+grupo cuatro, grupo cinco, que son relits CSF directo y grupo seis de
+18:10
+compra de cartera. Perdimos a Cristian,
+18:17
+creo. Ah, sí, sí, sí, se nos fue.
+18:30
+Que creo que eso de los grupos era lo que también decía Giovan queía que que
+18:35
+nosotros esperábamos que ya que ya nos dieran esa info, ¿sí o no,
+18:40
+David? que ya tuviéramos cómo escriba esa esa info de esos grupos y cómo iban
+18:45
+discriminado y todo para tener como más más claro ese proceso.
+18:49
+Hola, hola, hola, hola. Perdón, perdón, se me fue, se me fue el
+18:53
+internet un momentico. Tranqui, Cristian.
+18:58
+Sí, no sé, yo les estoy haciendo una pregunta.
+19:02
+Aparte del nombre del concesionario, ¿qué otra información se necesita?
+19:10
+Ejemplo, Nit del concesionario, nombre del concesionario,
+19:14
+NIT y nombre. Nit y nombre, no más.
+19:18
+Pues esas dos son seguras, esas van a la FIFA.
+19:21
+Exacto. Necesitan, no sé, dirección, sala de ventas, etc., etc. Información o
+19:28
+solo estas dos. Pues es que eso que tú mencionas,
+19:37
+¿sí? ¿Por qué? Eh, exactamente, en este caso es importante
+19:41
+porque, ejemplo acá, digamos, yo te, perdón, acá vuelvo a compartir pantalla.
+19:48
+Listo. Eh, no sé si ya la pueden ver. Sí, señor. Ya.
+19:53
+Listo. Si yo acá en esta parte la de la 1317,
+20:01
+si yo en esta parte de acá yo solo necesito
+20:06
+nit y necesito nombre concesionario, pues a mí me sirve hacer esto porque
+20:15
+crear una tabla con dos campos pues no me no me va a hacer beneficio, ¿cierto?
+20:23
+porque pues voy a necesitar nit nombre, entonces no
+20:28
+me va a servir, o sea, no me va a servir crear una tabla nueva
+20:33
+porque literalmente en la descripción sería así. En la descripción
+20:37
+sería poner acá, ejemplo 99999
+20:42
+que se corresponde al nit y acá nombre concesionario
+20:48
+y lo podemos separar con un pipe. Listo. Eso con lo que mencionas, eh, Cristian,
+20:55
+qué pena interrumpirte. Hay, digamos que hay una requisito puntual es el nit y el
+21:01
+nombre, ¿cierto? Pero esa información debe ser paramétrica y debe estar
+21:05
+sincronizada en los tres canales, o sea, en NAAR, en CAP y en web.
+21:10
+Exacto. Pues para mí eso igual me, o sea, si es más, si si entramos a mirar
+21:16
+NACAR, también es más factible entrar a una base de datos host, mirar una tabla
+21:21
+donde podamos montar parametrías. Lo otro que yo tengo entendido es que
+21:29
+digamos ese nic concepcionario va también de
+21:34
+alguna forma distribuido en grupos, ¿no? Que tenemos como cinco grupos, entiendo
+21:39
+yo. Cada grupo tiene un peso a nivel, digamos, de la comisión, imagin
+21:45
+que va a tener el el concesionario por venta. Entonces, algunos van a
+21:50
+pertenecer al grupo uno y algunos otros van a pertenecer a X grupo.
+21:57
+Ah, entiendo. Igual digamos si si nosotros entramos a mirar solo estas
+22:01
+tres variables. Mira, yo acá ya las tengo en una
+22:06
+descripción y yo esto lo puedo gestionar ya en una
+22:10
+base de datos distribuidos. Aló. Aló. ¿Me
+22:15
+oyen? Tengo una duda, Cristian. Si el día de
+22:21
+mañana saliera otra variable. Ahí te escuchamos. Yo te escucho.
+22:27
+Hola, hola, hola. ¿Me oy? Sí, sí, sí.
+22:32
+Escuchazos. Hola. Hola.
+22:38
+Ah, vale, vale. Perdón, no los oí.
+22:44
+Pero bueno, si entramos a mirar lo mismo, si entramos a mirar que tenemos
+22:47
+solo estos tres parámetros, yo acá los puedo organizar
+22:52
+porque imagínate una tabla así, una tabla
+22:56
+que llame t cugh eh concesionario, ejemplo.
+23:03
+Y en esta parte de concesionario, yo solo le agregué el ID,
+23:10
+el NIT, el nombre constructora
+23:14
+y el group. Pues para mí una tabla así es
+23:20
+ineficiente porque no tengo datos relevantes.
+23:27
+Mientras que yo la manejo acá a nivel de host, la puedo manejar más sencillo y
+23:32
+puedo sincronizar las parametrías que ya tocaría explicar el manejo, mostrar el
+23:37
+manual de usuario, pero es más factible manejarlas en los distintos canales que
+23:43
+hace una base de datos distribuida de esta manera.
+23:46
+Sí, sí, sí, tienes razón porque eh ejemplo lo que decía ahorita llegó una
+23:51
+nueva variable, entonces me distribuyó o no sé si se
+23:59
+No, yo sí escucho. Andrés, ¿nos escuchas?
+24:08
+Houston. Houston. No, no los oigo.
+24:16
+Ingresar a la00. Pero entonces la clave eso es,
+24:30
+Andrés, super importante todas las dudas que tengas.
+24:34
+Perdón, perdón. Hola. Hola. Listo, ya los oigo.
+24:38
+Ahora sí. Listo, listo. Entonces ese punto que que
+24:44
+tocabas ahí es como lo importante porque digamos si nosotros nos fuéramos por tal
+24:49
+cual como es un distribuido llegar a Steve mencionaba algo importante, decía,
+24:53
+bueno, me llegó una nueva variable, una nueva descripción para algo, tendría que
+24:57
+yo hacer un momento. Dme un segundo, porfa.
+25:02
+Dale, dale.
+25:24
+Entonces, ¿en qué estamos? Estamos revisando, haciendo el versus de
+25:30
+yo creo la parametría en F y si creo la tablita ya en en Oracle, ¿no? Entonces
+25:36
+mencionábamos que ejemplo si a mí me llegara con el futuro lo que se tiene
+25:41
+una nueva variable, entonces sería digamos un nuevo campo. Tendría que eh
+25:45
+alterar esa tabla de alguna manera. Sería como un poco más complejo llegar a
+25:50
+hacer eso que ir a colocar en el campo ese de la parametría del restable
+25:57
+o la nueva descripción, por decirlo así. Exacto.
+26:13
+Pero entonces, muchachas, ¿qué han pensado?
+26:18
+Andrés, tú con el diseño que tenías estabas apuntando por ese lado.
+26:23
+Sí, está apuntando por ese lado. Hacerlas aquí en host. lo que desconocía
+26:28
+es el proceso que implica pues llevarlas al distribuido porque de alguna manera
+26:35
+pues sabía que consultaba Oracola, digamos este pedacito bien. Si es que me
+26:40
+había mencionado algo light, pero pues en el diseño que tenía tenía apuntado
+26:44
+así hasta que ese día que hablamos con Óscar te acuerdas que nos dijo, "No, eso
+26:48
+no se maten haciendo todo enfo, sino vayan a Oracle." Pero como que es más
+26:52
+dispendioso ese por allá que por el otro, ¿no?
+26:55
+Sí, claro. Igual acá tener en cuenta de que pues en esta parte acá también punto
+27:04
+a nivel de cos y distribuido, pues como est es data de consulta que va
+27:09
+hacia el front, cualquier caso es de host es más fácil generar un ajuste
+27:14
+listar todo un nuevo servicio de consulta por consultas de parametrías.
+27:21
+que para mí, digamos, acá en la CUGH ya existen los métodos de consulta de
+27:26
+parametrías y por medio de variables se puede entrar a hacer esas consultas,
+27:31
+pero pues toca hacer la creación de un nuevo servicio solo para consultar las
+27:35
+parametrías de concesionario. Mientras que por acá se podría entrar a
+27:40
+hacer una revisión de cómo se manejan listords y pues hacer las consultas
+27:44
+directamente esas parametrías que eso se podría validar con la tercera host.
+27:50
+Igual plantear por ahí el lado, de pronto sale sale más sencillo.
+27:57
+Vale, vale. Bueno, muchachos,
+28:00
+CR, yo tengo una pregunta así como si ya te tienes que ir
+28:06
+la última pregunta es que Dani no está aquí, pero yo ya
+28:10
+tenía claro que pues con esta parametría teníamos que crear un servicio y demás,
+28:14
+¿no? para que lo pueda consumir el front. Ese proceso de la creación del
+28:18
+servicio, tú dijiste que se demoraba más o menos cuánto,
+28:23
+ah, no. La creación del servicio, o sea, a nivel de desarrollo ya sería
+28:29
+mirar pues la implicación, porque a nivel de APX yo digo que en una
+28:34
+semana ya está, porque ya hay maneras de consultar las parametrías y es solo
+28:40
+mirar qué datos yo le voy a enviar, literal.
+28:44
+Ya lo que toca entrar es a mirar los ajuntes de ASO, que entonces tocar la
+28:48
+creación del del servicio, definición de los campos, temas de la metadata, etc.,
+28:55
+etc.c, etc, etc, etc. Pero pues igual ese servicio tienen que
+29:00
+pensarlo de que no solo va a ser para el concesionario, sino que va a ser para
+29:04
+las parametrías de la T37 de la unta. Entonces, tienen que imaginarlo de esa
+29:11
+manera. Sí. ¿Será que no existe un servicio actual de esa
+29:16
+parametría T37? No creo. En distribuido, no. Para distribuido,
+29:21
+no. Actualmente está L Records que bajos,
+29:26
+pero a nivel distribuido no hay ningún servicio.
+29:30
+Okay. Según lo que yo te entiendo, o sea, hay que crear el servicio, eh
+29:35
+ajustar el lazo de hacer la definición de la metadata, los campos y hay que
+29:41
+validar que el servicio sea, por decirlo así, genérico, que consulte cualquier
+29:46
+parametría. Exacto. Entonces tienen que tener mucho
+29:49
+en cuenta eso. Pero
+29:52
+porque la idea de definir el servicio, la idea no es que sea solo para lo
+29:57
+solo para ese catálogo. Solo para el catálogo concesionario,
+30:01
+sino transversal. Exacto.
+30:05
+Que imagino que hoy en día consulta, pero para algo específico, ¿no? Y vamos
+30:08
+porque vehículo tiene eso de lo de las políticas. lo que hicieron hace poco,
+30:13
+eh, de unas políticas como que específicas de esa fase uno y él
+30:18
+consulta la 13 14 y acuerdo a esas políticas pues tiene una lógica
+30:23
+especial. Imagino que el servicio hoy en día está dedicado solamente a consultar
+30:28
+ese catálogo de datos, ¿cierto? revisar ese pedacito, ¿no?
+30:36
+Sí, exacto. Bueno, muchachos, qué buena con ustedes.
+30:39
+Yo los tengo que dejar. Vale, Cristian, muchas gracias.
+30:43
+Muchas gracias. Vale, vale. Con gusto.
+30:45
+Bueno, bueno, muchachos, chao, chaos,
+30:49
+chao. ¿Cómo lo viste, viejo Javi?
+30:55
+Puis
