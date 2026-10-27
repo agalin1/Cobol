@@ -1,0 +1,804 @@
+{
+  "info": {
+    "_postman_id": "fa98e61e-2055-453f-9c58-77fa55e2bed6",
+    "name": "InchCapeAPIS V2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48725906",
+    "_collection_link": "https://go.postman.co/collection/48725906-fa98e61e-2055-453f-9c58-77fa55e2bed6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "APX",
+      "item": [
+        {
+          "name": "CPOVT002",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "followRedirects": true,
+            "disableUrlEncoding": false,
+            "disableCookies": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "client-identification-type",
+                "value": "1"
+              },
+              {
+                "key": "manager-user",
+                "value": "ZG12001"
+              },
+              {
+                "key": "user-code",
+                "value": "ZG12001"
+              },
+              {
+                "key": "workstation-code",
+                "value": "work"
+              },
+              {
+                "key": "request-id",
+                "value": "98423108724"
+              },
+              {
+                "key": "branch-code",
+                "value": "0072"
+              },
+              {
+                "key": "operation-date",
+                "value": "20230110"
+              },
+              {
+                "key": "mac",
+                "value": "value-mac"
+              },
+              {
+                "key": "header-name",
+                "value": "QP06"
+              },
+              {
+                "key": "country-code",
+                "value": "CO"
+              },
+              {
+                "key": "authorization-version",
+                "value": "01"
+              },
+              {
+                "key": "accounting-terminal",
+                "value": "VIRT"
+              },
+              {
+                "key": "operative-entity-code",
+                "value": "0001"
+              },
+              {
+                "key": "client-document",
+                "value": "30000057"
+              },
+              {
+                "key": "language-code",
+                "value": "ES"
+              },
+              {
+                "key": "authorization-code",
+                "value": "0"
+              },
+              {
+                "key": "channel-code",
+                "value": "OB"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "ip-address",
+                "value": "0.0.0.0"
+              },
+              {
+                "key": "app",
+                "value": "30000057"
+              },
+              {
+                "key": "product-code",
+                "value": "0001"
+              },
+              {
+                "key": "subtype-code",
+                "value": "01"
+              },
+              {
+                "key": "origin",
+                "value": ""
+              },
+              {
+                "key": "currency-code",
+                "value": "COP"
+              },
+              {
+                "key": "secondary-currency-code",
+                "value": "COP"
+              },
+              {
+                "key": "environ-code",
+                "value": "01"
+              },
+              {
+                "key": "contact-identifier",
+                "value": "value-contact-identifier"
+              },
+              {
+                "key": "version-code",
+                "value": "01"
+              },
+              {
+                "key": "aap",
+                "value": "30000057"
+              },
+              {
+                "key": "operative-branch-code",
+                "value": "0001"
+              },
+              {
+                "key": "entity-code",
+                "value": "0013"
+              },
+              {
+                "key": "operation-time",
+                "value": "122830"
+              },
+              {
+                "key": "service-id",
+                "value": "value-service-id"
+              },
+              {
+                "key": "logical-terminal",
+                "value": "terminal"
+              },
+              {
+                "key": "sequence-id",
+                "value": "0"
+              },
+              {
+                "key": "type-code",
+                "value": "01"
+              },
+              {
+                "key": "remaining-time",
+                "value": "20000"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "user-agent",
+                "value": "PostmanRuntime/7.29.2"
+              },
+              {
+                "key": "logical-transaction-code",
+                "value": "CPOVT002"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ValidateDataIn\": {\n        \"processId\": \"123456\",\n        \"person\": {\n            \"firstName\": \"Pepito\",\n            \"middleName\": \"Emilio\",\n            \"lastName\": \"Perez\",\n            \"secondLastName\": \"Perez\",\n            \"birthDate\": \"1992-10-11\",\n            \"identityDocument\": {\n                \"documentType\": {\n                    \"id\": \"CC\"\n                },\n                \"documentNumber\": \"17042008\",\n                \"expeditionDate\": \"1989-06-11\"\n            },\n            \"gender\": {\n                \"id\": \"MALE\"\n            }\n        },\n        \"contactDetails\": [\n            {\n                \"contactDetailType\": \"MOBILE\",\n                \"mail\": \"xxxx@a.co\",\n                \"number\": \"3100000000\"\n                \n            },\n            {\n                \"contactDetailType\": \"EMAIL\",\n                \"mail\": \"xxxx@a.co\",\n                \"number\": \"3100000000\"\n            }\n        ]\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dev-apx-runtime-co.hub1.work-02.nextgen.igrupobbva/APX_Runtime_Online/PGRestService?=",
+              "protocol": "https",
+              "host": [
+                "dev-apx-runtime-co",
+                "hub1",
+                "work-02",
+                "nextgen",
+                "igrupobbva"
+              ],
+              "path": [
+                "APX_Runtime_Online",
+                "PGRestService"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Request for transaction QWAIT001-01-ES"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "GT 12000078",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let tsec = pm.response.headers.toObject().tsec;\r",
+              "\r",
+              "pm.globals.set('tsec_desarrollo',tsec);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "empty",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"authentication\": {\r\n    \"userID\": \"12000078\",\r\n    \"consumerID\": \"12000078\",\r\n    \"authenticationType\": \"61\",\r\n    \"authenticationData\": [\r\n      {\r\n        \"idAuthenticationData\": \"\",\r\n        \"authenticationData\": [\r\n          \"\"\r\n        ]\r\n      }\r\n    ]\r\n  },\r\n  \"backendUserRequest\": {\r\n    \"userId\": \"\",\r\n    \"accessCode\": \"\",\r\n    \"dialogId\": \"\"\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/TechArchitecture/co/grantingTicket/V02",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "TechArchitecture",
+            "co",
+            "grantingTicket",
+            "V02"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST vehicles",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const idProcess = response.data.idProcess;\r",
+              "pm.environment.set(\"idProcess\", idProcess);\r",
+              "console.log(\"idProcess guardado:\", idProcess);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"applicationId\": \"AUTOLAND\",\r\n    \"collaboratorId\": \"1\",\r\n    \"dealer\": {\r\n        \"clientId\": \"001\",\r\n        \"organizationName\": \"AUTOLAND\",\r\n        \"identityDocument\": {\r\n            \"documentType\": {\r\n                \"id\": \"NIT\"\r\n            },\r\n            \"documentNumber\": \"y5DGKsPl350hx9PPsDGHgw==\",//830004993\r\n            \"verificationDigit\": \"+oEWVSDiv4V3BsgfU4rdMA==\" //8\r\n        },\r\n        \"dealerName\": \"CASATORO S.A. BIC\",\r\n        \"salesRoom\": \"CASATORO S.A. BIC - CR 57\"\r\n    },\r\n    \"loan\": {\r\n        \"requestAmount\": {\r\n            \"amount\":48000000,\r\n            \"currency\": \"COP\"\r\n        },\r\n        \"term\": \"84\",\r\n        \"cityOperation\": \"11001\",\r\n        \"loanType\": \"12\"\r\n    },\r\n    \"bussinesAgent\": {\r\n        \"name\": \"6VsCbo8JNNNZCXXHRLGGkg==\",\r\n        \"identityDocument\": {\r\n            \"documentNumber\": \"CoRfGO6XnFwHaT2NbFSgbw==\", //24820701\r\n            \"documentType\": {\r\n                \"id\": \"CC\"\r\n            }\r\n        },\r\n        \"contactDetails\": [\r\n            {\r\n                \"contact\": {\r\n                    \"contactDetailType\": \"EMAIL\",\r\n                    \"address\": \"ch9X0ALlz1nOeLxm/8kH5jurVOahJv6nFg07qgKxYMoA/ccpfrUqQt3WAAx+t8B2\"\r\n                }\r\n            }\r\n        ]\r\n    },\r\n    \"vehicle\": {\r\n        \"price\": {\r\n            \"value\": 85000000,\r\n            \"currency\": \"COP\"\r\n        },\r\n        \"detail\": {\r\n            \"status\": \"NEW\",\r\n            \"year\": \"2026\",\r\n            \"brand\": {\r\n                \"id\": \"001\",\r\n                \"description\": \"Mazda\",\r\n                \"model\": \"CX20\"\r\n            },\r\n            \"vehicleType\": {\r\n                \"id\": \"0001\",\r\n                \"description\": \"TRADICIONAL-VEHICULO\"\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/vehicles",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "vehicles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST prospect-customers",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}"
+          },
+          {
+            "key": "Third-Party-Collaborator-Id",
+            "value": "1"
+          },
+          {
+            "key": "Third-Party-Application-Id",
+            "value": "INCHCAPE"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"applicationId\": \"AUTOLAND\",\r\n    \"collaboratorId\": \"1\",\r\n    \"person\": {\r\n        \"firstName\": \"JUAN\",\r\n        \"middleName\": \"NUNEZ\",\r\n        \"lastName\": \"PRUEBA\",\r\n        \"secondLastName\": \"EMAIL\",\r\n        \"birthDate\": \"1980-05-05\",\r\n        \"identityDocument\": {\r\n            \"documentType\": {\r\n                \"id\": \"CC\"\r\n            },\r\n            \"documentNumber\": \"1053791940\",\r\n            \"expeditionDate\": \"1998-06-12\"\r\n        },\r\n        \"gender\": {\r\n            \"id\": \"MALE\"\r\n        }\r\n    },\r\n    \"contactDetails\": [\r\n        {\r\n            \"contact\": {\r\n                \"contactDetailType\": \"MOBILE\",\r\n                \"number\": \"3507740524\"\r\n            }\r\n        },\r\n        {\r\n            \"contact\": {\r\n                \"contactDetailType\": \"EMAIL\",\r\n                \"address\": \"viviendadigitalbbva@gmail.com\"\r\n            }\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/vehicles/{{idProcess}}/prospect-customers",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "vehicles",
+            "{{idProcess}}",
+            "prospect-customers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST tasks",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/tasks/{{idProcess}}?applicationId=AUTOLAND&collaboratorId=1",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "tasks",
+            "{{idProcess}}"
+          ],
+          "query": [
+            {
+              "key": "applicationId",
+              "value": "AUTOLAND"
+            },
+            {
+              "key": "collaboratorId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET simulate",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}",
+            "type": "text"
+          },
+          {
+            "key": "Third-Party-Collaborator-Id",
+            "value": "INCHCAPE",
+            "type": "text"
+          },
+          {
+            "key": "Third-Party-Application-Id",
+            "value": "1",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/vehicles/{{idProcess}}/simulates?applicationId=AUTOLAND&collaboratorId=1",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "vehicles",
+            "{{idProcess}}",
+            "simulates"
+          ],
+          "query": [
+            {
+              "key": "applicationId",
+              "value": "AUTOLAND"
+            },
+            {
+              "key": "collaboratorId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH simulate",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}",
+            "type": "text"
+          },
+          {
+            "key": "Third-Party-Collaborator-Id",
+            "value": "INCHCAPE",
+            "type": "text"
+          },
+          {
+            "key": "Third-Party-Application-Id",
+            "value": "1",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"applicationId\":\"INCHCAPE\",\r\n    \"collaboratorId\":\"1\",\r\n    \"laboralInformation\": {\r\n        \"incomes\": [\r\n            {\r\n                \"incomeType\": {\r\n                    \"id\": \"FIXED\"\r\n                },\r\n                \"incomeValues\": [\r\n                    {\r\n                        \"currency\": \"COP\",\r\n                        \"amount\": 6000000,\r\n                        \"frecuency\": \"MONTHLY\"\r\n                    }\r\n                ]\r\n            }\r\n        ],\r\n        \"totalDeductions\": {\r\n            \"amount\": 1500000,\r\n            \"currency\": \"COP\"\r\n        },\r\n        \"totalPossessions\": {\r\n            \"amount\": 5000000,\r\n            \"currency\": \"COP\"\r\n        },\r\n        \"employer\": {\r\n            \"companyName\": \"aauAn3bjyQNVZq22lo6R1ovJAen21kRrQ/UbauxrDFs=\",\r\n            \"identityDocument\": {\r\n                \"documentType\": {\r\n                    \"id\": \"NIT\"\r\n                },\r\n                \"documentNumber\": \"n+NebVgfuTB3PTtH5cofSg==\",\r\n                \"verificationDigit\": \"gPHWpuIhJTwvPKs5YDv89g==\"\r\n            },\r\n            \"economicActivityInfo\": {\r\n                \"activity\": {\r\n                    \"id\": \"0142\",\r\n                    \"description\": \"OtrasClasificaciones\",\r\n                    \"internalClassification\": \"1A\"\r\n                }\r\n            }\r\n        },\r\n        \"employee\": {\r\n            \"employmentSituation\": {\r\n                \"id\": \"3\",\r\n                \"description\": \"Fijo\"\r\n            },\r\n            \"occupation\": {\r\n                \"id\": \"IB\",\r\n                \"description\": \"Abogado\"\r\n            },\r\n            \"employmentHistory\": {\r\n                \"dateContinuity\": \"2020-10-01\"\r\n            }\r\n        },\r\n        \"selfEmployed\": {\r\n            \"economicActivityInfo\": {\r\n                \"group\": {\r\n                    \"id\": \"1A\",\r\n                    \"description\": \"ACTIVIDADES AGROPECUARIAS\"\r\n                },\r\n                \"sector\": {\r\n                    \"id\": \"000000001\",\r\n                    \"description\": \"AGRI., GANADERIA, CAZA Y ACT DE SERV CONEXAS\"\r\n                },\r\n                \"activity\": {\r\n                    \"id\": \"0142\",\r\n                    \"description\": \"Actividad Agropecuaria\",\r\n                    \"internalClassification\": \"1A\"\r\n                }\r\n            },\r\n            \"employmentSituation\": {\r\n                \"id\": \"3\",\r\n                \"description\": \"INDEPENDIENTE\"\r\n            }\r\n        }\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/vehicles/{{idProcess}}/simulates",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "vehicles",
+            "{{idProcess}}",
+            "simulates"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST proposals",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "tsec",
+            "value": "{{tsec_desarrollo}}"
+          },
+          {
+            "key": "",
+            "value": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"applicationId\": \"AUTOLAND\",\r\n  \"collaboratorId\": \"1\",\r\n  \"customer\": {\r\n    \"birthData\": {\r\n      \"country\": {\r\n        \"id\": \"CO\"\r\n      },\r\n      \"state\": {\r\n        \"id\": \"11\",\r\n        \"name\": \"Bogotá D.C\"\r\n      },\r\n      \"city\": {\r\n        \"id\": \"001\",\r\n        \"description\": \"Bogotá\"\r\n      }\r\n    },\r\n    \"identityDocument\": {\r\n      \"documentType\": {\r\n        \"id\": \"CC\"\r\n      },\r\n      \"documentNumber\": \"1053791940\",\r\n      \"expeditionData\": {\r\n        \"country\": {\r\n          \"id\": \"CO\"\r\n        },\r\n        \"state\": {\r\n          \"id\": \"11\",\r\n          \"name\": \"Bogotá D.C\"\r\n        },\r\n        \"city\": {\r\n          \"id\": \"001\",\r\n          \"description\": \"Bogotá\"\r\n        }\r\n      },\r\n      \"issueDate\": \"1998-06-12\"\r\n    },\r\n    \"isPep\": true,\r\n    \"location\": {\r\n      \"country\": {\r\n        \"id\": \"CO\"\r\n      },\r\n      \"state\": {\r\n        \"id\": \"11\",\r\n        \"name\": \"Bogotá D.C.\"\r\n      },\r\n      \"city\": {\r\n        \"id\": \"001\",\r\n        \"description\": \"Bogota\"\r\n      },\r\n      \"observation\": \"Apt 302 Torre 15\",\r\n      \"address\": \"OTR DIAGONAL 59 3 43\"\r\n    }\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}/auto-loans/v0/vehicles/{{idProcess}}/proposals",
+          "host": [
+            "{{sv-host}}"
+          ],
+          "path": [
+            "auto-loans",
+            "v0",
+            "vehicles",
+            "{{idProcess}}",
+            "proposals"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "POST proposals",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "tsec",
+                "value": "{{tsec}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customer\": {\r\n    \"birthData\": {\r\n      \"country\": {\r\n        \"id\": \"CO\"\r\n      },\r\n      \"state\": {\r\n        \"id\": \"11\",\r\n        \"name\": \"Bogotá D.C\"\r\n      },\r\n      \"city\": {\r\n        \"id\": \"001\",\r\n        \"description\": \"Bogotá\"\r\n      }\r\n    },\r\n    \"identityDocument\": {\r\n      \"documentType\": {\r\n        \"id\": \"CC\"\r\n      },\r\n      \"documentNumber\": \"79877472\",\r\n      \"expeditionData\": {\r\n        \"country\": {\r\n          \"id\": \"CO\"\r\n        },\r\n        \"state\": {\r\n          \"id\": \"11\",\r\n          \"name\": \"Bogotá D.C\"\r\n        },\r\n        \"city\": {\r\n          \"id\": \"001\",\r\n          \"description\": \"Bogotá\"\r\n        }\r\n      },\r\n      \"issueDate\": \"1980-08-01\"\r\n    },\r\n    \"isPep\": true,\r\n    \"location\": {\r\n      \"country\": {\r\n        \"id\": \"CO\"\r\n      },\r\n      \"state\": {\r\n        \"id\": \"11\",\r\n        \"name\": \"Bogotá D.C.\"\r\n      },\r\n      \"city\": {\r\n        \"id\": \"001\",\r\n        \"description\": \"Bogota\"\r\n      },\r\n      \"observation\": \"Apt 508 Torre 1\",\r\n      \"address\": \"Cr 5 # 1 21\"\r\n    }\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{sv-host}}/auto-loans/v0/vehicles/{id-process}/proposals",
+              "host": [
+                "{{sv-host}}"
+              ],
+              "path": [
+                "auto-loans",
+                "v0",
+                "vehicles",
+                "{id-process}",
+                "proposals"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "authorization",
+              "value": "000000000"
+            },
+            {
+              "key": "content-encoding",
+              "value": "gzip"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=UTF-8"
+            },
+            {
+              "key": "date",
+              "value": "Wed, 21 May 2025 23:13:52 GMT"
+            },
+            {
+              "key": "p3p",
+              "value": "CP=\"NON CUR OTPi OUR NOR UNI\""
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "x-frame-options",
+              "value": "sameorigin"
+            },
+            {
+              "key": "x-content-type-options",
+              "value": "nosniff"
+            },
+            {
+              "key": "responsewarningcode",
+              "value": "12118001"
+            },
+            {
+              "key": "access-control-expose-headers",
+              "value": "Accept-Encoding, Accept, Content-Type, tsec, consumerrequestid, authenticationchallenge, authenticationtype, authenticationdata, authenticationstate, contactid, consumeruuid, consumerapplicationid, perimetertsec, authorization, responsewarningcode, responsewarningdescription, cuf, prefer, phoneNumber, Location, X-RHO-PARENTSPANID, X-RHO-TRACEID, preferredauthenticationtype, X-HTTP-Method-Override, Access-Control-Allow-Methods, iv-remote-address, thirdparty-x-forwarded-for, thirdparty-user-agent, thirdparty-geolocation, thirdparty-calculated-scoring, thirdparty-deviceid, vnd.bbva.security-client-certificate, order-preferredaction, authenticationresponse, Access-Control-Max-Age, BCS-Device-Id, BCS-Device-OS-Name, BCS-Device-Model-Name, BCS-Device-Model-Manufacturer, BCS-Device-Screen-Size, BCS-Device-OS-Version, BCS-Device-DPI, BCS-Device-App-Name, BCS-Device-App-Version, Third-Party-Application-Id, ECS-Signature-Platform-Use-Case, BCS-Process-Code, BCS-Operation-Tracer, BCS-Process-Tracer, vnd.bbva.user-id, order-preferredaction, order-id, order-accepteddisclaimers, x-forwarded-for, Date, x-dmz-orgn, onsite-accountTerm, onsite-logicalTerm, Akamai-BM-Telemetry, order-hmac, order-signed, BCS-Third-Party-Session-Id, Cache-Control, clave, Content-Encoding, ECS-Entry-Point-Zone, firma, Geolocation, Third-Party-Collaborator-Id, user-agent, Via"
+            },
+            {
+              "key": "cache-control",
+              "value": "no-cache,no-store,must-revalidate"
+            },
+            {
+              "key": "tsec",
+              "value": "ZXlKaFlYQWlPaUl4TWpBd01EQTNPQ0lzSW10bGVWWmxjbk5wYjI0aU9qRXNJbUZ3Y0Vsa0lqb2lRVkJRTVNJc0ltdHBaQ0k2SWtGUVVERXViRzlqWVd3dU1TSXNJbVZ1WXlJNklrRXhPVEpIUTAwaUxDSnJaWGxVZVhCbElqb2liRzlqWVd3aUxDSmhiR2NpT2lKa2FYSWlMQ0owYzJWalNXUWlPaUl6TkdabFltSXpNQzAwT0RNMUxUUmhOVFF0T1dGaFl5MHhPR016TlRsaFlUUmtPR01pZlEuLkEwNlZfaWhEMHFtSGlXOHcuZzVGR2NmSHJUSVp5eEFmdmllcnhGLWExLWJHVHRPTURXck5WdEk2YVdUS1JJY1RYdEdXODQxeXlBOTYtUjBmRTQ4VVoxdnIxQU15cmZVa3AtLVVpNTJMNFZ0TUJLTE1TQVRMc0pabl96eExYMlNRbWowX0NpR0dxU1BQMjRRN2U3TkVZUHV0S1ZTTkFXSzk4bzQzWUZsMm1EbWtLaDU2YWo4YUJiZUtNS3NwdmNwRUwzMzRjQmFtZGRDZzR4NHZoa29QVDBuNG55RkpWQ1dweUpMR3MtS09MY3gyS0daVVZxUF8xTFNiU1dlYkdWaTBzelBtdmhMcU5rVE1VcGhsTGZuZU02V0ktQnBuTi15VFBaQWZ1czY0UlMzRmNsSzhYSUlGeHRsbzBJV2ExZXM4QlJuTUJPTHItVVV0U3FtYUVRU0VGVDNrTjgwVTlOaFFrUkx4VlhDUXpGcm55UXdqaHdVcW8tMGFPUzNzUVMxYXNUVVJVS1FPSElOZm5rdUtaQmM3NFhLYmh1LUYwUnlJNVNfc0NEMTVlU3Y1TUNMOWhkRlJ4b0pXSEFyS0FyR3ExZk4yUERTczJ3bHQ1bUhyZFNhNjZ0UmVxZktjWjZBM3JhOTJrN3UwT1hyelA2MTVtcE1Sek5ocV9OOWFMNGdjUXlQMHV1eVlfV2pDdEwycDhmM3ZleUpmWUhyTmMtN3hIS0pxcEx6dGI0MFdWTVQwTTNoUjZXNlpaMW5nWVFQVWNidHJOZXVMaVFJT1VyOVhGaFE0YnNJODA3M2c2VHp0Y2lzRDU4WmZGV25NeWVxLWlSaE9walBMTGVTVEFlVzUwUkhUTDJTOGNrU3NIdF8zTmpma3hocnFSdXpNUFo1SXl6ZWJ6c2dBdW8zVTYwcGwxRTBweFdDTGcwWHhQRFN1d3ROcjJMSmd5Ml9ZaUdncFI2WjA5Qi1LOVRGTVJIdlpHNlJZcEM1NEdtaFRQOXpEc0g5amNfLV8zbVBaOW16alBWSUowNnNJVDdiWEl5OFNSNm9ucWF0dHpaMmdySVI1M1pDVHhjTmJkS2RGWWxZZmthWXBEbkpzWHJjYjROd1NxWE81cjQ0bWE0YXZaY2tURkNaREhpbFV5S1EtZU5jeXZBVllkWmk1bTlINkJPSklmN2NyNlo2czR3dXJyUTJnUmNfSFM3V3lKSjNySkhsSG5uZjVxWEppSG1EeDVDVE9HWm1IVFM0aXRmVVd2cE1NLXNXWVBfWEVjRjRPXzlPanJ0RVRyTnNRYWkwS2ZNb2E5VUFGYWdCVzFLOWdvbjczNVptUTNFeVU1QVpEdFBYNDZRMG5JQ3VFZzlSWTBYSUZsLnZiNURPOFBVRWxLQlFadVV1dHAydmc="
+            },
+            {
+              "key": "expires",
+              "value": "-1"
+            },
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "x-xss-protection",
+              "value": "1; mode=block"
+            },
+            {
+              "key": "consumerrequestid",
+              "value": "975143ee-2afc-4e96-8672-831e97934556"
+            },
+            {
+              "key": "authorization-version",
+              "value": "0"
+            },
+            {
+              "key": "responsewarningdescription",
+              "value": "1ER NOMBRE CLIENTE DEBE INFORMARSE"
+            },
+            {
+              "key": "content-security-policy",
+              "value": "script-src 'self'"
+            },
+            {
+              "key": "strict-transport-security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "referrer-policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "access-control-allow-methods",
+              "value": "GET, POST, DELETE, PUT, OPTIONS, PATCH"
+            },
+            {
+              "key": "access-control-allow-headers",
+              "value": "Accept-Encoding, Accept, Content-Type, tsec, consumerrequestid, authenticationchallenge, authenticationtype, authenticationdata, authenticationstate, contactid, consumeruuid, consumerapplicationid, perimetertsec, authorization, responsewarningcode, responsewarningdescription, cuf, prefer, phoneNumber, Location, X-RHO-PARENTSPANID, X-RHO-TRACEID, preferredauthenticationtype, X-HTTP-Method-Override, Access-Control-Allow-Methods, iv-remote-address, thirdparty-x-forwarded-for, thirdparty-user-agent, thirdparty-geolocation, thirdparty-calculated-scoring, thirdparty-deviceid, vnd.bbva.security-client-certificate, order-preferredaction, authenticationresponse, Access-Control-Max-Age, BCS-Device-Id, BCS-Device-OS-Name, BCS-Device-Model-Name, BCS-Device-Model-Manufacturer, BCS-Device-Screen-Size, BCS-Device-OS-Version, BCS-Device-DPI, BCS-Device-App-Name, BCS-Device-App-Version, Third-Party-Application-Id, ECS-Signature-Platform-Use-Case, BCS-Process-Code, BCS-Operation-Tracer, BCS-Process-Tracer, vnd.bbva.user-id, order-preferredaction, order-id, order-accepteddisclaimers, x-forwarded-for, Date, x-dmz-orgn, onsite-accountTerm, onsite-logicalTerm, Akamai-BM-Telemetry, order-hmac, order-signed, BCS-Third-Party-Session-Id, Cache-Control, clave, Content-Encoding, ECS-Entry-Point-Zone, firma, Geolocation, Third-Party-Collaborator-Id, user-agent, Via"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"messages\": [\n        {\n            \"code\": \"functionalError\",\n            \"message\": \"12118001#1ER NOMBRE CLIENTE DEBE INFORMARSE\",\n            \"parameters\": [],\n            \"type\": \"FATAL\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "1.GT 12000078",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.globals.set(\"tsec\", postman.getResponseHeader(\"tsec\"));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "empty",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"authentication\": {\r\n    \"userID\": \"12000078\",\r\n    \"consumerID\": \"12000078\",\r\n    \"authenticationType\": \"61\",\r\n    \"authenticationData\": [\r\n      {\r\n        \"idAuthenticationData\": \"\",\r\n        \"authenticationData\": [\r\n          \"\"\r\n        ]\r\n      }\r\n    ]\r\n  },\r\n  \"backendUserRequest\": {\r\n    \"userId\": \"\",\r\n    \"accessCode\": \"\",\r\n    \"dialogId\": \"\"\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{sv-host}}}/TechArchitecture/co/grantingTicket/V02",
+          "host": [
+            "{{sv-host}}}"
+          ],
+          "path": [
+            "TechArchitecture",
+            "co",
+            "grantingTicket",
+            "V02"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}
