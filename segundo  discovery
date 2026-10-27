@@ -1,0 +1,1311 @@
+estábamos mirando el la semana pasada, eh pues en este cuadro están censadas
+0:05
+las variables que estamos que se proponen trabajar en el desarrollo en el
+0:09
+proyecto y miramos las tres primeras que son grupo pago comisión, prenda y
+0:15
+imprenda y pues la idea es continuar con la
+0:19
+revisión de las siguientes variables. Entonces eh la siguiente variable es
+0:24
+tipo de combustible eh aparece como diferenciador de mercado.
+0:29
+selección de una lista de desplegable para selección de un tipo de
+0:33
+combustible. Aquí dentro de dentro de lo que se menciona en el formato de la
+0:41
+entidad eh se indica que debe quedar en ACAR ya está y en web y revisar eh todo
+0:49
+lo que corresponde a eh a Nakar. ¿Vale? Entonces, la idea
+0:55
+de esto es dejar un un desplegable de selección y la propuesta es gasolina,
+1:01
+híbrido eléctrico y otros.
+1:05
+Eso sí, ¿no? Por favor. De acuerdo. Sí, señor. Buenas tardes a
+1:09
+todos. Eh, para aclarar en CAP eh el campo está pero eh solo está eh híbridos
+1:19
+y híbridos eléctricos y gasolina. No está el campo otros y en web está igual
+1:27
+solo híbridos eléctricos y gasolina.
+1:33
+Okay. Entonces ahí entonces el el Exacto. Ahí habría que
+1:38
+incluir los campos en y validar si el el campo otro se incluye en los otros dos.
+1:48
+Vale, yo le estoy dejando aquí. es garantizar que esta estos
+1:53
+este convobos, por decirlo así, esté estos estos conceptos. Vale,
+2:00
+vale. Okay. E de esto, ¿algo algo algo
+2:04
+adicional? ¿Algún equipo de ingeniería? Andrés,
+2:09
+sí, yo te una preguntica ahí. O sea, que en este campo como tal, digamos, como
+2:13
+tal, nos llegaría ya la el valor fijo, digamos, por ejemplo, a hos el canal que
+2:19
+lo envíe, digamos, para procesar, no sé, el simulador, lo pring llegaría ya fijo,
+2:25
+diría es gasolina, es híbrido, es otros, pero no tendríamos que hacerle ninguna
+2:31
+parametrización diferente al a eso, ¿sí? O sea, nos llegaría ya fijo ese valor,
+2:35
+no tendríamos que hacerle nada raro a nivel de lógica, ¿cierto?
+2:43
+Uno va a la pantallita y selecciona el tipo y de selección de combustible y
+2:48
+pare de contar. Ahí no habría nada más a nivel de de esos valores, ¿cierto?
+2:53
+Sí, Andrés, ahí la propuesta es eh selección
+2:58
+de un convoor donde van a tener estos tipos de combustión. Sí. es donde el
+3:05
+usuario o la persona que va a ingresar a la al módulo pueda seleccionar esos tres
+3:11
+tipos de de eh tres tipos de concepto. ¿Sí? Otra cosa es, no sé si allá por
+3:18
+debajo en el host debamos llamar esa información para que se pinte en el
+3:24
+pron, para que se pinte en cada pron. ¿Sí me va a entender? Sí, sí, te
+3:30
+comprendo. Sí, estaba pensando que digamos, por ejemplo, por temas de que
+3:34
+si algún día se le quiere dar mantenimiento o crecer ese tipo de
+3:37
+combustible o no se algo espectacular que sucede, de pronto sería lo que hemos
+3:41
+hablado con Steven de de pensar también una tablita en oráculo, algo que la
+3:45
+consume y él la cargue por si algo, pero bueno, lo miraríamos nosotros, pero pues
+3:49
+era como la la duda que tenía, pero sí te se comprendo ahí. Gracias. Sí,
+3:54
+finalmente que nuestro pendiente es dejar esto lo
+3:59
+más dinámicos que se puede, ¿no? Listo. Que en caso de que exista en este
+4:04
+caso en este campo campo tipo de condución, podamos seleccionar
+4:10
+eh que si se ingresó uno o quitamos uno que sea paramétrico tanto incluir como
+4:16
+de quitar. Sí. Perfecto. Listo.
+4:21
+Okay. Eh, algo adicional, muchachos, este campo que tengamos que comentar
+4:25
+aquí con con Ángel Gusta. Yo sí tengo dudas con respecto al a la
+4:33
+selección de otros, ¿no? Digamos que que abarca ese campo.
+4:38
+Ese es en el evento en que se llegue a generar, no sé, digamos, a gas, a, o
+4:44
+sea, otro hidrógeno u otro tipo de combustión que no se esté contemplando
+4:50
+actualmente. Okay. gas y hidrógeno, pero igual
+4:57
+simplemente seleccionan otros y ya continúa el flujo, ¿verdad?
+5:03
+Eh, en este momento sí, pero pues ya digamos llega a generarse algún otro
+5:10
+tipo de vehículos y sería como que lo parametricen no como otro, sino con el
+5:15
+nombre que corresponda, ¿no? Sí.
+5:31
+Vale, muchachos. E claro el tema, ¿no? Andrés
+5:38
+de mi parte sí. Okay. Vale.
+5:41
+Sí, señor. Eh, muchachos, para el siguiente valalum
+5:45
+este el campo de porcentaje de financiación que ti Ángel estaba por
+5:51
+preguntarte. Este PE, ¿qué es? Este dice perdida esperada.
+6:00
+Eso es perdida esperada. Entonces, o sea, es ah, discúlpame, ese
+6:11
+ese, o sea, el el valor de -70 y mayor a 70 está dado por de acuerdo a la pérdida
+6:18
+esperada. Entonces, por eso en su momento y de igual manera también lo que
+6:24
+son buro ingresos y situación laboral. Entonces, eh en su momento se
+6:30
+identificaron esos clúster de acuerdo a ese a ese a esas tres variables y eh la
+6:36
+pérdida que generaban cada uno. Entonces ahí lo que determinó riesgos y acá que
+6:43
+está buen me corriges es e poder determinar un rango entre menor a 70 y
+6:48
+menor y mayor a 70 que es como un corte de pérdida esperada que que generaban.
+6:56
+Es así, ¿cierto? Sí. Es menor igual a 70 y mayor a 70.
+7:03
+Exacto. O sea, digamos que eh internamente
+7:06
+equipo, pues esa parte esa columna de pues no
+7:10
+no digamos que no no interfiere, o sea, es más solo el menor y el mayor. El el
+7:17
+rango ya no lo determinó riesgos que es ese. Entonces, pues ese es más
+7:21
+informativo de por qué sale el menor o el mayor a 70.
+7:27
+Este, un buen día. Este porcentaje es fijo o posiblemente
+7:34
+cambie. Entendería que se puede cambiar,
+7:39
+¿cierto? Sí, así es. Digamos que como dice
+7:43
+Ángela, en este momento se estimó ese, pero posiblemente puede cambiar en un
+7:47
+futuro. Exacto. Entonces sí, sí, también Hugo y
+7:50
+equipo en o estos campos no dejar los quemados, sino paramétricos. O sea, es
+7:55
+decir, que que ahí en adelante si no sé la en el otro año riesgos diga que ya no
+8:01
+es 70, sino que es 60 o 50, pues que que el ajuste no requiera un desarrollo
+8:08
+adicional, sino que se pueda hacer como como tal ese cambio.
+8:14
+Eh, perdón, yo veo que ahí dice menor o igual a 70 y menor que 70.
+8:21
+Ah, es mayor, no es ahí creo que mayor a 70 en vez de menor este mayor.
+8:48
+Vale. Te preguntaba esto porque al final si ustedes requieren cambiar ese campo
+8:52
+pues tendríamos que hacerlo en desarrollo. Entonces se solicita
+8:56
+paramétrico. De acuerdo. Y en la columna C también de
+9:00
+pronto para que lo cambies. Eso
+9:07
+en la columna C. Es que también estamos. Ese campo actualmente está parcialmente
+9:15
+en CAP, o sea, digamos, el cliente coloca el valor del carro y eh coloca
+9:20
+cuánto necesita y ahí hay un campo que dice como porcentaje de financiación. En
+9:25
+web no está y en NAAR habría que revisar. Entiendo que no está, pero pues
+9:31
+no sé si ya el equipo ha hecho como esa consulta interna. Sí se encuentra.
+9:46
+Hola. Hola. Buenas tardes. No entendí algo. Me perdí ahí. O sea, cuando dice
+9:51
+que hay un campo que se digita literalmente se está escribiendo 70% o
+10:00
+75%. No, en como funciona en CP es que el cliente eh
+10:07
+eh perdón, el ejecutivo coloca el valor del carro y cuánto necesita de
+10:12
+financiación y en la parte inferior hay un campo en donde le coloca cuánto
+10:18
+cuánto es es LTB, o sea, es un campo calculado. Sí,
+10:24
+sí. Si quieres me dejas proyectar un segundito, Hugo, y te muestro cómo se
+10:29
+visualice en cap. Acá ya
+10:34
+esto mejor así. Listo. Acá ya están viendo mi pantalla.
+10:37
+Sí, sí,
+10:39
+sí, sí. Listo. Entonces, espérenme un segundo.
+10:42
+Entonces, acá está el monto. Sol. Entonces, valor de la compra, eh, o sea,
+10:49
+valor cuando hablamos de valor de la compra es valor del carro. Y acá monto
+10:53
+solicitado 15,500. Entonces ahí el sistema automáticamente
+10:58
+le hace el cálculo y le dice que el porcentaje de financiaciones es el eh es
+11:03
+el 73%. O sea, este campo no lo tiene que
+11:07
+digitar el asesor, sino que con base en el valor de la compra y en en el monto
+11:11
+solicitado, acá hay un un campo que le hace ese cálculo.
+11:19
+¿Listo? Vale, eso en CA en NAAR habría que revisar si el campo del valor del
+11:26
+carro se encuentra y el campo de valor de financiación para que también haga
+11:31
+ese cálculo interno, o sea, que le haga la división del valor y
+11:38
+listo, listo. Ese es un campo de porcentaje, pero capit decimales, ¿sí?
+11:44
+Por ejemplo, 70.5. ese campo creo que no sé si si ahí es, o
+11:51
+sea, si ese lo está trayendo con decimales, creo que no, pero pues sí
+11:55
+habría que habría que revisarlo por lo que indica que es mayor a 70, entonces
+12:01
+creo que era 70.01, algo así que hay en correo que que
+12:07
+corresponde a ese tema del LTB. Entonces que si es 70.01
+12:12
+ya se cuenta como mayor a 70. Y si es menor a S, pues ya es menor a
+12:18
+70. Entonces si si hay que tener en cuenta los decimales por esa causal,
+12:24
+¿cierto? Y o sea, pensando cómo iría ya en una
+12:44
+matriz. eh diría en en valor si el estilos
+12:48
+rangos o ya ese sería el rango mínimo y máximo permitido
+12:53
+en ese es el el mínimo y el máximo, Óscar. Entonces ahí lo que lo que
+12:59
+nosotros pensamos es que el sistema haga como una fórmula y le diga si es mayor a
+13:05
+70.01 por Bueno, no tengo bien el dato del del
+13:09
+decimal, pero si es mayor a 70.01, 01, entonces lo califica como
+13:15
+como x, no sé, y si es menor a tanto, entonces ese es como el peso que le que
+13:21
+le va a dar al RAR. Y ese entonces hay que qué pena
+13:28
+reiterar, pero entonces de pronto más adelante que riesgo diga que cambia el
+13:33
+LTB, entonces que eso sea paramétrico. O sea, ahí es más más que todo como por
+13:45
+decir algo 70, ¿sí? Todo lo que sea menor o igual a 70 o todo lo que sea
+13:49
+mayor a 70, o sea, el anclaje es 70. Son exacto, son solo dos, mayor o menor.
+13:57
+O sea, más adelante puede ser 75, 80. Exactamente. Exacto. O sea, no no lo
+14:04
+sabemos, pero lo que buscamos es que quede muy paramétrico para que más
+14:08
+adelante no pueda ser un desarrollo, sino que lo podamos pues ya ajustar eh
+14:13
+rápidamente y pues ya dar continuidad. Yo yo lo había entendido como se hace en
+14:19
+la asignación de subctos que uno le dice de este rango a tal rango, pues está su
+14:23
+producto, no aquí no es así. Aquí es 70 y todo lo que sea menor o igual e no
+14:30
+aplica o o no. Acá lo que acá lo que o sea lo que
+14:36
+busca LTB es tener un peso en el en el RAR. Sí. Entonces, por ejemplo, yo le
+14:43
+voy a calificar mejor al cliente, o sea, o le voy a dar una mejor tasa si el
+14:48
+señor me saca menos del 70% o si me o si me porque digamos que eh en ese en ese
+14:55
+punto eh no sé en ese, discúlpame, tú le puedes silenciar un segundito que te
+15:01
+escucho un poquito de ruido. Gracias. Entonces, ese ese 70 menor
+15:07
+mayor a 70 o menor a 70 lo que busca es tener un digamos que todo va a ser un
+15:13
+como una licuadora de de puntos que le voy a dar y al final entre si el cliente
+15:18
+saca un si saca el vehículo menor, o sea, si saca menos del 70% del valor del
+15:23
+carro, yo le voy a ofertar una mejor tasa. ¿Sí? Entonces, por ejemplo, dentro
+15:28
+de las variables del RAR, esa me va a puntear eh 1 1 y si es mayor a 70 me va
+15:34
+a puntear 0.5, ejemplo. Entonces al final cuando el señor me vaya a hacer
+15:40
+toda la, o sea, con todos los pesos de cada una de las variables, si el señor
+15:44
+saca por menor a 70%, me va a dar una tasa del 16. O sea, ya es digamos que
+15:49
+haciendo toda la licuadora. Y si lo sacan mayor al 70%, 16.50 50 mayor a 70%
+15:56
+porque quiere decir que este señor de o lo que ha dicho riesgos es que los que
+16:00
+sacan más del 70% es más riesgoso. Sí, porque pues yo le estoy presando un
+16:05
+monto mayor. Entonces eso nos va a servir, Óscar, para poder eh dentro de
+16:11
+todas las variables y todos los pesos que se le van a asignar al RAP
+16:15
+determinar qué puntaje le doy más al 70 y qué puntaje le doy si saca menos del
+16:21
+70. Pero eso no es eso es diferente al tema de los subproductos. O sea, una
+16:26
+parte es como lo de los subproductos es vamos a tener en o bueno, ya lo digamos
+16:31
+ya lo tenemos en compra instantánea y ya lo tenemos en otros productos en donde
+16:37
+ese subproducto máximo se puede financiar hasta el 60%
+16:42
+por ejemplo en compra instantánea. Pero eso es diferente a este peso de acá del
+16:46
+RAR. O sea, yo voy a tener subproductos o voy a tener toda la oferta que voy a
+16:51
+financiar hasta el 100%. Pero si el señor me saca el 70%, menos
+16:57
+del 70% del vehículo, yo le voy a dar una mejor tasa a que si saca más del
+17:03
+70%. Bueno, y eso metido con las variables de que si lo quiere con
+17:07
+prenda, si lo quiere sin prenda, si lo quiere nuevo, si lo quiere bueno y con
+17:11
+los pesos de las de los concesionarios y demás, todo esa licuadora al final me va
+17:16
+a generar una tasa y eso me hace, digamos que esa variable del 70 es una
+17:22
+como de las de los actores que participan ahí.
+17:28
+Listo, listo. O sea, y para a ver si si entendí o
+17:33
+pero pero no es en el Hugo, no es en el buró, o sea, lo que se busca es tener un
+17:38
+peso en el, o sea, en la en el total de la pues del RAR, pero no ese campo no es
+17:46
+del burro. Inge, lo que lo que entiendo, perdón que
+17:49
+que interrumpa. Lo que entiendo es que hay que tener una clave para cada valor,
+17:53
+o sea, ya no sería un rango en la misma clave, sino una clave para cada valor.
+17:57
+Sí. O sea, eso es lo que quiero aterrizar. Ahorita está 70%, ¿sí? más
+18:02
+adelante para ese mismo campo no se van a establecer, por decir algo, eh a
+18:07
+futuro. Eh hoy está el 70, pero quiero que, por ejemplo, los que estén entre el
+18:12
+1 y el 50% se les genere una tasa y los que estén del 50 se al 80. Eso pue eso
+18:20
+puede pasar, o sea, a futuro también puede pasar eso, o sea, que no solo
+18:24
+tengamos esos dos rangos de 70 y mayor a 70 y menor a 70, sino que de pronto
+18:30
+riesgos diga, "Okay, hemos visto que los que eh financian del 0 al 30% son super
+18:36
+buenos perfiles, entonces esos les podemos dar una super mega tasa especial
+18:40
+a los de 30 a 80 y de 80 a 100." O sea, en este momento no, pero sí se podría
+18:48
+dentro del desarrollo contemplar que esos campos no sea solo 70 y o sea mayor
+18:53
+a mayor a x y menor a x, sino que de pronto poder ampliar un poco el rango.
+18:59
+Sí. Okay. Se convertiría entonces si fuera
+19:06
+en ese rango sería de 0 a 70 y de 70 en adelante.
+19:10
+Y si fuera más adelante sería pues pues de cero no de 0.1
+19:15
+porque pues cero no es como si no financiara el cliente
+19:20
+o de uno. Sí, sí, sí, sí, sí. Lo estaba pensando
+19:26
+aú así con el tema de la licuadora que para cada valor específico podría tener
+19:32
+una asignación puntual. Entonces se podría dar ese rango que
+19:37
+entonces tiene o tiene una tasa superior al que
+19:42
+exactamenteis no tendría más preguntas, no sé si
+19:59
+quiere preguntar vale, Gracias. Dime.
+20:04
+Y el de el de no usado, el AP es la es lo mismo que es la pérdida esperada y
+20:10
+con base en esa pérdida esperada, riesgos hace un ejercicio y dice, "Okay,
+20:15
+los perfiles más riesgosos son los clientes que sacan un vehículo usado
+20:19
+porque eh pues se comportan peor que un nuevo. O sea, digamos que el cliente,
+20:27
+entre comillas, por ejemplo, como es un usado, puede tener pérdida, o sea, que
+20:31
+tenga que tener reparación de motor y demás. Entonces, el cliente diga, ay,
+20:34
+pues ya no pago más ese crédito porque pues ese esa chatarra vieja, entre
+20:39
+paréntesis, pues no la pago. Sí. a diferente que un vehículo nuevo, pues
+20:43
+que tiene una pérdida esperada eh un poco eh menor que lo que es un vehículo
+20:49
+usado. Entonces, esa diferenciación en tasa también por eso la hacemos entre
+20:54
+nuevo y usado. Entonces, entre un vehículo nuevo va a tener una tasa menor
+20:58
+o un peso o digamos que dentro de todo el peso de las variables del RAS, la el
+21:03
+vehículo nuevo va a tener un, por ejemplo, eh si le vamos a poner pesos un
+21:08
+uno. Y si es un vehículo usado, un dos, o sea, entre más entre si el cliente
+21:13
+saca un vehículo usado, entonces le voy a dar una tasa del 17, ejemplo, y si
+21:18
+saca un vehículo nuevo, le voy a dar una tasa del 16.
+21:24
+Ahí en ese variable se incluye seminuevos.
+21:28
+Eh, seminuevos está catalogado como usados, o sea, ahí solo lo de seminuevos
+21:34
+es porque el vehículo es usado de 4 años de antigüedad máximo, pero sigue con su
+21:40
+digamos que su apellido principal es usado.
+21:44
+Y compra instantánea. Igual compra instantánea es un vehículo, una
+21:47
+financiación de un vehículo nuevo que se financia el 60%, pero su apellido
+21:51
+original es un vehículo nuevo. Al igual que una compra de Ah, bueno,
+21:57
+habría que revisar la parte de compra de cartera. Compra de cartera es
+22:01
+catalogado, pues digamos que es una es un usado, ¿sí? Porque pues porque
+22:06
+nosotros compramos la cartera de otra entidad, pero pues ese vehículo como tal
+22:10
+es usado. Vale, de esto,
+22:25
+bueno, aquí se menciona que está en web. Eh, esto también tendríamos que
+22:31
+manejarlo por un combos un combos de selección, ¿no? Nuevo usado.
+22:37
+Esto a futuro, no sé,
+22:39
+a futuro, a futuro, Hugo, no sé si ahí se puede incorporar la el tema de compra
+22:44
+eh de compra de cartera. Entonces, aquí eso iba a preguntar, ¿no?
+22:50
+O sea, futuro tendríamos que, no sé, sí,
+22:53
+eh incluirlo como dinámico, paramétrico para incluir, por ejemplo, este que tú
+22:59
+estás dirigiendo de compra de cartera. Exactamente.
+23:03
+Entonces ahí ahí yo lo voy a colocar que esto sería un combo de selección.
+23:14
+Ese ese combot actualmente, ¿cómo lo indican? En en C está, perdón, en web
+23:19
+está. Eh, en CAP también está estado del
+23:23
+vehículo nuevo o Angelito, qué pena con me puedes
+23:38
+indicar esto que acabas de no he dicho. Ah, sí. O sea, que el eh es un que se
+23:45
+diligencia el cliente en web está porque el cliente dice, "Dime tipo de vehículo
+23:50
+que quieres." Si es un vehículo, no es un usado. En CAP está ahí, ahí la
+23:55
+tablita que tienes al ladito, el pantallazo del CAP Retail, ahí en la
+23:59
+estado del vehículo. Mira, ahí se evidencia que es nuevo el cuadrito que
+24:04
+es el que que tienes a la derecha donde este. Míralo. Mm. Ahí mira en la parte
+24:09
+de estado del vehículo, la primerita esa es ahí sale si es nuevo, si es usado.
+24:15
+Esto es capos que actualizar ese como
+24:19
+en en cab en web. No sé si registra, creo que no, porque en Naar es más con
+24:26
+el subproducto, entonces habría que revisar también si ese si ese campo se
+24:31
+incluye. Bueno, yo voy a colocar aquí pensar.
+24:51
+Okay. De de esto, ¿algún comentario? Ócar, Steven, Andrés.
+25:00
+No, por ahora de mi parte no. No, señor. No sé, Steven tiene alguna
+25:06
+algún comentario. No, de mi parte no. No sé los chicos.
+25:10
+Dani, si tienes comentarios respecto a eso.
+25:18
+Buenas tardes. Qué pena. Buenas tardes. Eso de nuevo usado. Sí, Hugo.
+25:25
+Sí, sí. Ahí la propuesta es generar este combobox
+25:32
+lo que iba a decir que actualmente en web eh pues son
+25:36
+checks que se seleccionan nuevo o usado. Entonces, eso cambiaría a un combobox
+25:42
+con estas opciones. Eh,
+25:46
+más que cambi utilizar lo que tenemos. No, en C ni en web ya están.
+25:52
+Pero está solo nuevo y usado. ¿Ea compra de cartera entraría o por el momento
+25:56
+solo vamos con nuevo usado? nuevo usado son los que debemos desarrollar y la
+26:03
+idea es que esto quede dinámico o paramétrico para que a futuro podamos
+26:07
+incluir otro concepto. Por ejemplo, compra de cartera.
+26:12
+Es que a eso es lo que yo es que ahorita no hay un combob box, son son
+26:17
+seleccionables, o sea, están por aparte. Eso no es un combob box. Por eso le digo
+26:22
+que si se va a transformar esa parte de de ser chequeables hacer un comboo box
+26:29
+o cómo se va a manejar. Discúlpame ahí. ¿En qué parte estás
+26:33
+hablando? En en web. En web.
+26:36
+Ah, en web. Ah, no, no sé. En web. Por eso les digo es que en web está las dos
+26:41
+opciones. Está dice usado y se chequea o nuevo y se chequea. Si lo vamos a
+26:46
+cambiar un combob box para que sea parametrizable con cualquier otro que se
+26:51
+le quiera agregar después, hay que cambiar esa forma de capturar ese esa
+26:55
+variable. Pero pero en este caso, en este momento
+26:59
+no, porque pues el cliente selecciona un nuevo y usado y ya está.
+27:03
+Es que esa es la pregunta. se va a cambiar a Combobox o por ahora seguimos
+27:07
+manejando nuevo y usado. Pero eso no es un Combobox.
+27:11
+No, no es un Combobox. Entonces es, o sea, que
+27:15
+es es un check. Es un check. Un combobox es una lista desplegable que está nuevo,
+27:20
+usado, compra cartera, X, Y, Z y todas las opciones que se puedan meter
+27:26
+ahí. Eso mismo no es en este momento un combobots para que el cliente seleccione
+27:30
+si es uno nuevo, si es un usado. Es que
+27:37
+visualmente no, visualmente no sé cómo lo quieran ustedes.
+27:41
+Ahí envió una imagen el chat, Ángela. Digamos que actualmente vehículo web
+27:44
+tiene dos dos como radio buton. Epa. Es que para mí un un Combobox o una
+27:52
+lista desplegable es algo como el que dice tipos de vehículos, que está
+27:56
+vehículo tradicional, híbrido, porque Ah, ya,
+28:00
+te imaginas tener nuevo, usado, compra cartera y si hay 10 tener 10 radiobuton
+28:06
+ahí, pues no visualmente, ya te entendí. O sea, ese no es una lista desplegal, es
+28:12
+una que el señor Bueno, no no no encontraba cómo se llamaba, pero ese
+28:16
+mismo dato que está ahí no se toma para verificar el tipo de vehículo cuando lo
+28:22
+vayan a estudiar en el R, o sea, seleccionando ese ese radio button que
+28:27
+tú dices o o
+28:31
+o cómo tomar la información, porque entiendo que cuando llega la ruta Tiaz,
+28:35
+si toman ese dato y hay una columna que dice si es vehículo nuevo si es vehículo
+28:40
+usado y lo toman con base en ese estado de vehículo que el cliente selecciona,
+28:45
+independiente cómo lo seleccione ahí, si sea con puntico, si sea lista
+28:48
+desplegable o lo que sea, no sé si es
+28:54
+No, pero ahí ahí es la forma en cómo se está capturando la información, o sea,
+28:58
+me entendía que no sería tan complejo. Lo que de pronto se refiere el compañero
+29:03
+es que si dicho toca tocaría hablar con UX para que
+29:08
+cambien ese front y que ese ese radion se transforme en
+29:13
+una lista desplegable para incluir esa nueva opción.
+29:15
+Exactamente. Exactamente. Porque por lo que veo está quieren agregar ese compra
+29:19
+de cartera. Por eso pero todavía no. O sea, lo que te
+29:23
+digunta a eso eso todavía no. Nosotros no
+29:26
+tenemos compra de cartera por web. Lo que estamos diciendo es de quizás más
+29:31
+adelante, de pronto en alguna oportunidad puede que llegase a a
+29:35
+tenerse producto, pero
+29:38
+pero ahorita no. Entonces, no sé si con lo que está actualmente, que es ese
+29:43
+radio button, se pueda eh de una vez tomar esa información para hacer el tema
+29:48
+del cálculo del RAR. Entiendo que ese dato la Cierto. Porque ahí se ahí ya
+29:54
+está capturando ese valor ahí, o sea, ya
+29:58
+sí. Sí, lo podemos hacer.
+30:02
+Okay, muchachos, de cara al desarrollo ya con
+30:04
+lo que nos aclaras aquí Dani, eso lo dejaríamos así, ¿no? Para no tener que
+30:09
+ser desarrollos ni buscar un combobox y valida el comentario, Dani, eh, de
+30:15
+seleccionar esto como un combobox, no vamos a cambiar un tema que ya existe,
+30:20
+que ya lo tenemos de selección. Y más bien, Angelita, este tema quedaría pues
+30:26
+el tema de compra de cartera, no sé si incluyamos acá, si me entiendes, es para
+30:32
+no cambiarle como la funcionalidad que se tiene ahora en web y y posiblemente
+30:37
+en los otros en otros en los otros canales. ¿Sí me va a entender? Sí,
+30:41
+señor. Posiblemente cuando ya desarrolle vehículo en vehículo web eh compra de
+30:46
+cartera, pues ahí tendrán que entrar a mirar estos eh las pantallas, ajustar,
+30:51
+incluir ese dato y de ese dato incluirlo dentro del RAR, si así se requiera. Sí,
+30:58
+sí, sí, así es. Okay.
+31:01
+Entonces, por ahora voy a quitar este de compra de cartera.
+31:06
+Sí. Eh, y quedaría actualizar nuevo usado
+31:11
+con lo que tenemos actualmente. ¿Listo?
+31:15
+Entonces, aquí quito esto de de Combo Box y es selección. Ese quedar
+31:22
+paramétrico tampoco va de selección, no usado, ¿vale?
+31:29
+Para no cambiar mano la web temas de la web puntualmente
+31:35
+la web es un poco engorroso completo. Vale, muchachos, aquí de esto pues este
+31:43
+es el último campo. No sé, Ángela, si tenemos que ver otro campo. Estos son
+31:48
+los propuestos. Sí. Ah, bueno, y los que los que ya están que esos no se van a
+31:52
+tocar, que es el puro ingresos y la situación laboral. Eso es la único
+31:57
+comentario que nos hacíamos que esto ya está, pero es más para asegurarlo que
+32:03
+cuando ya finalicemos el desarrollo de afectación no tengamos problema con el
+32:09
+campo que ya Exactamente. Sí, porque el RAR en este
+32:13
+momento captura esas tres variables que las tres sí están en perdón en NA.
+32:19
+Okay. Bueno, muchachos, algo recapitulando, si les parece, hacemos
+32:25
+como un recuento rápido de las variables con los que tenemos,
+32:30
+por favor. Sí, lo haces o lo presento. Si quieres, sube ahí un segundito y la
+32:36
+vamos mirando entre los dos. Sube ahí la pantallita. Entonces, tenemos el primer
+32:41
+grupo que es el pago de comisión. Ese pago de comisión está en está dado por
+32:47
+los grupos de concesionarios a los que se les vaya asignar ese grupo
+32:53
+pal la redundancia. Entonces, como que se necesitaría tener en vehículo web, en
+33:01
+Acari en CAP, un campo en donde se diligencie cuál es el concesionario.
+33:06
+Ese concesionario por debajo va a tener una tabla en donde el concesionario va a
+33:12
+estar asignado a un grupo. Ejemplo, Madiutos, grupo número uno, Jorge
+33:19
+Cortés, grupo número cuatro y así sucesivamente.
+33:25
+a partir de esa selección del concesionario. Entonces voy busco,
+33:30
+selecciono grupo Mia Autos en alguna de las pantallas, ya sea web, CAP o NA. E
+33:37
+por debajo para el cálculo del RAR me va a traer el grupo de concesionario que
+33:42
+corresponde. Sí. Y el grupo número cinco y el grupo número seis corresponderá el
+33:48
+cinco a lo que es mercado directo y el grupo seis a lo que es compra de
+33:53
+cartera. Importante ahí eh que hace falta la parte de de las visuales de
+34:00
+Experience eh de UT, perdón, de experience de UT
+34:05
+para determinar el grupo número cinco, cómo eh le doy a conocer esto al
+34:12
+cliente. cuando estoy en NAT, eh, perdón, cuando estoy en web, eh si el
+34:17
+cliente me dice que lo está que se está autogestionando, pues que no me que no
+34:23
+me seleccione el listado de grupos de concesionarios
+34:28
+y eh de igual manera al revés, si dice que si es autogestionado,
+34:35
+pues que me salga todo el listado de concesionarios que que corresponda. Sí.
+34:43
+Pero es muy eso para eso para lo que es vehículo
+34:46
+web, para lo que es NAAR y y CAP, como en este evento sí se tiene contemplado
+34:54
+que eh pues sea como tal autogestión o o o gestión propia del del gestor, pues
+35:04
+que me habilite todos los campos que correspondan, o sea, y sí que me
+35:08
+habilite que que es el que es redit o mercado directo según corresponde.
+35:15
+Ese es un formato interno, Mari. Vale, entonces de ese punto entendería
+35:23
+que queda como pendientes la parte de todo el del de UX para la experiencia de
+35:30
+cliente cuando está diligenciándole que no nos vayamos pues a confundir y eh
+35:38
+ya básicamente eso. Una preguntica de lo que acabas de
+35:43
+mencionar para el grupo. Esos son los que a nivel del banco tenemos, o sea,
+35:47
+los que acabas de mencionar. O sea, los seis los grupos hasta el grupo número
+35:52
+seis. Sí, sí. Los que acabas de mencionar son
+35:55
+todos. O sea, digamos, esos son los que podemos [ __ ] digamos, en pensar en una
+35:58
+parametría o hay algún listado que tú tengas que los pueda compartir de los
+36:02
+concesionarios, de pues de toda la información a raíz de grupos que
+36:06
+tengamos. Pues digamos que esa agrupación de
+36:10
+concesionarios aún no se ha hecho. Eso será como lo último que se haría en
+36:14
+donde no sé los 200 concesionarios dependiendo cada cada pago de comisión
+36:19
+que tenga uno, pues se va a agrupar el grupo uno, dos o lo que corresponda.
+36:23
+Se han definido esos cuatro grupos para concesionarios, pero volvemos a lo
+36:28
+mismo. Puede que se cree un grupo número cinco o un grupo número, bueno, un grupo
+36:33
+número siete, un grupo número ocho, en donde pues se se despliega un poco más
+36:38
+al detalle algún nivel de concesionario. Entonces, no sé si de igual manera ese
+36:43
+ese campo se deje paramétrico para que se incluyan o se excluyan según
+36:50
+correspondan los grupos, ¿no? O sea, que no los dejemos quemados, que son seis
+36:53
+grupos y ya, sino que se puedan habilitar eh eliminar o o crear tantos
+37:01
+grupos que correspondan, porque no sé, de pronto rentabilidad dice, estamos
+37:06
+muy, o sea, cuatro grupos de concesionarios estamos muy, o sea, los
+37:11
+estamos eh agrupando muy muy resumido, necesitamos más detalle, entonces pues
+37:18
+que nos creen más más grupos. Puede que pues eso pueda pasar. Entonces, pues
+37:23
+exacto, también los grupos que sean paramétricos.
+37:27
+Listo, perfecto. Entonces, de ese de ese punto eh creo
+37:31
+que faltaría entonces como lo de la sesión de UEX, ¿sí? Como para ir
+37:35
+cerrando como que nos falta en cada Bueno, de hecho, la sesión de Ix va como
+37:39
+muy atada al resto de experiencia porque también toca preguntarlo de prenda y no
+37:43
+prenda. Dale, Hugo. Sí. Oye, ese no podríamos tener eso lo
+37:48
+que tú comentas ahora de de tener la tabla de grupos de concesionarios.
+37:55
+E eso no tienes nada de eso que nos puedas compartir porque
+37:59
+no, pero pues básicamente ahí tendríamos ese resumen, o sea, digamos que las 200
+38:04
+concesionarios lo que nosotros sabríamos es que en el lado del el lado derecho le
+38:09
+ponemos grupo uno, grupo dos, grupo tres, pero pues eso no lo tenemos
+38:12
+cerrado, o sea, eso sería un borrador. Vale. Eh, ¿y ese borrador lo tienes?
+38:18
+No, no lo tengo. Vale, porque es que ¿por qué te lo
+38:20
+pregunto? Porque eh de finalmente nosotros vamos a hacer un desarrollo de
+38:25
+grupos, pero ese desarrollo de grupos, por ejemplo, ese eh en en cuanto a
+38:32
+definición de actos, de grupo, nombre del concesionario, eh
+38:37
+carácteres 60 caracteres, eh número de teléfono, número de 1000, si me
+38:42
+entiendes, como para ir construyendo la dinámica de la parametría y qué
+38:49
+campos debe tener cada grupo. Sí. Ay, yo tengo una duda. Nosotros en
+38:54
+en la pantalla de Dios, le vamos a decir al cliente que coloque el nombre del
+38:58
+concesionario porque pues el señor no se va a saber que Madiutos es 900 1 2 3 5,
+39:04
+o sea, él no va a saber el nit, pero por debajo cuando vayan a hacer la creación
+39:11
+de del proceso en Nar de cara que no sé, digamos que en un lado puede ser Madi
+39:16
+Autos y en el otro pueda colocar Madiuto CSA y bueno y en fin,
+39:21
+¿vale? esa eh validación interna la van a hacer con el Meet del concesionario.
+39:32
+Pues es muy probable, Angelita, porque pues sería el único dato que no
+39:38
+se repetiría, ¿no? Exactamente. Y a lo que hoy es eso, que
+39:42
+lo hayan creado como madiautos y en el otro mediautos con dos espacios y demás.
+39:48
+Sí, claro. Esa esa sería. Discúlpameila. Mm.
+39:51
+Esa sería como la llave para que no vayamos a repetirlo si elegimos el
+39:56
+nombre. Si me entiendes la llave va a ser el NIP. Entonces yo digo, hijito el
+40:01
+NIP 8600103 está ah solo me despliegas el que
+40:06
+corresponde a ese concesionario. Pero pero para vehículo web no lo
+40:11
+podemos hacer por el Net porque pues el digamos que tú estás haciendo el proceso
+40:15
+en este momento y te dicen que concesionario pues no tú no vas a saber
+40:19
+que ah no ahí entonces exacto
+40:22
+ahí en web aparecerá el nombre del concesionario. Sí. ¿Cómo va a ser? Yo,
+40:27
+por ejemplo, como cliente hecho a la web, ¿cuál es el concesionario? No, pues
+40:32
+ni idea. Ahí se le deben reflejar es el el nombre del concesionario
+40:38
+y en la ruta tantia si pues lo que me imagino yo es que en la ruta tantia si
+40:44
+salga como esa es un uso interno de acá del banco en esa ruta tantia salga el
+40:50
+nit por debajo, ¿sí me entiendes? O sea, yo seleccioné en el desplegable que es
+40:56
+Madi Autos, pero cuando le vaya a enviar el resumen al a al equipo comercial, ah,
+41:03
+perdón, a la fábrica para que monte el scoring, que haya también un campo con
+41:07
+ese nit para que él sí ya vaya a la fija y seleccione ese nit que corresponde.
+41:13
+Eso se puede decir. Ahí tengo dos pregunticas,
+41:21
+si digamos que el concesionario no existe ahí en en el listado, ¿cuál se
+41:25
+colocaría por defecto? Si el si el concesionario no existe, eh
+41:32
+no habría que hay que pues nos tendrían que reportar, por ejemplo, el ejecutivo
+41:37
+comercial que no está creado ese concesionario para actualizar como tal
+41:41
+la lista. Y, o sea, y digamos que si fuera un
+41:50
+ejecutivo, un cliente normal, pues lo radica con el conces, o sea, con un
+41:54
+concesionario por defecto o no sé si habrá un campo que diga eh no
+42:01
+encontrado para que cuando lo vayan a radicar en bonita ahí si en bonita en
+42:07
+comentarios él diga que corresponde al concesionario
+42:11
+xx y él sí ya lo radique bien en bonita. para que Nakar le haga bien el montaje
+42:16
+del crédito, pues es lo que se me ocurre, ¿no? Pues
+42:21
+ya nos tocaría como hilar un poco más, eh, pero pues no sé cómo podríamos
+42:27
+manejarlo de esa manera. Listo. Y la otra preguntita es, eh,
+42:35
+digamos que si el señor está enutos digitó o seleccionó Jorge Cortés, otro
+42:45
+diferente, eso nos perjudica de cara a lo que gente
+42:50
+seleccionó futuro. Ah, bueno, ahí le perjudica le perjudica es al cliente
+42:55
+porque, por ejemplo, Madiutos va a tener una tasa que lo que tiene Jorge Cortés.
+43:01
+Sí. Entonces, si él dice que él está en Jorge en Madiiautos, le va a dar
+43:06
+posiblemente una tasa del 16, pero si el señor selecciona que es Jorge Cortés, le
+43:11
+va a dar una tasa del 17, que eso pues ya se va a ver es al final cuando cuando
+43:17
+lo monten en Nakar y como tal le den el avance. Entonces, en ese proceso habría
+43:23
+que revisar pues qué es lo que actualmente también da y es cuando hacen
+43:27
+un reproceso, o sea, cuando ya el el le cambia un poco las condiciones o le
+43:33
+modifican en NAAR, que ya no es que el señor ya no se gana 100 millones, sino
+43:39
+que se gana eh no sé, dos salarios mínimos. Entonces él le hace el
+43:43
+reproceso y le estudia y le da la tasa que corresponde. Entonces esto mismo, o
+43:48
+sea, si él selecciona de entrada, que es un concesionario y cuando lo vayan a
+43:54
+allá ajustar en NAAR, pues ya él tendrá que modificar cuál es el concesionario
+43:59
+que corresponde y el sistema tendrá que hacer como ese cálculo de pues ya
+44:04
+nuevamente con con base en el grupo que que el concesionario tenga.
+44:10
+Eso sería como los reprocesos, ¿no? Hay una ahí tengo una duda. El el
+44:17
+sistema cuando lo montan en Nackar y modifican la información, o sea,
+44:22
+modifican es que por ejemplo ya no quiere con prenda si no lo quiere sin
+44:25
+prenda, que ya no lo quiere sinusado o que ya lo que hablamos del concesionario
+44:30
+que ya no es Jorge Cortés sino M autos. El sistema tendría que hacer otra vez el
+44:35
+recálculo del pricing, ¿cierto? Así es. Sí, porque las condiciones
+44:39
+cambian y se posicionan y y le crean unos pesos diferentes.
+44:45
+Ah, sí. Entonces, en es mismo eso mismo pasaría con acá con el grupo de
+44:49
+concesionarios. Si él de entrada dijo que está en Jorge Cortés y resulta que
+44:53
+él no está en Jorge Cortés, sino en concesionario Pepito, entonces ahí le va
+44:58
+a hacer el NAAR, le tendrá que hacer el recálculo para que le ajuste la tasa.
+45:19
+Ángela, una pregunta en en el vehículo. Esa pregunta la hizo Daniel esta mañana.
+45:24
+¿Debería pasar lo mismo cuando tú selecciones sin prenda o con prenda en
+45:28
+el canal web? Es exactamente en tanto en web como en
+45:33
+Naar, en Caps, ¿no? Hacer el recálculo. Okay.
+45:40
+En todos los canales, si el señor hace un, o sea, si cambia la información le
+45:44
+tiene que recalcular cuál sería la nueva la nueva tasa, o sea, no solo por el
+45:49
+grupo, sino por el resto de variables. Entonces resulta que el señor está está
+45:54
+haciendo el proceso y diligenció todo, pero al final dijo, "No, yo ya no quiero
+45:58
+laalion de, o sea, ya no voy a financiar el 100% del carro, sio yo tengo una
+46:04
+cuota inicial, entonces voy a financiar solo el 50% del valor del carro." O sea,
+46:08
+en el momento en que él haga nuevamente el proceso, pues le tendrá que
+46:12
+recalcular con esa nueva tasa, o sea, con tod, mejor dicho, con todas
+46:17
+las variables que el cliente modifique en algún caso.
+46:28
+Sí, aquí yo lo estoy colocando. Eh, lo que comenta
+46:35
+que siente información
+46:38
+por allá en el último en el último campo. Listo.
+46:42
+Por otro otro dato, pues esto debe quedar sincronizado en todos los
+46:47
+canales, ¿no? tanto en web como en ACAR como en C, porque al final pues es la
+46:53
+información que van a utilizar exportar cada aplicativo para arrojar un
+46:57
+resultado y ese resultado de ser igual en todos los canales.
+47:00
+Exacto. Sí. No puede ser que, por ejemplo, que nacarel haga el proceso y
+47:05
+con todas las mismas variables y le dé tasa del 16 y vayan y lo monten en web y
+47:11
+el señor le de una tasa del 19 porque pues digamos que la idea es que todos
+47:17
+estén sronizados y que tanto en Na webcap le podemos dar la misma tasa. O
+47:21
+sea, por tu parte ya está okay. Sí, listo. Sáng Ángela, gracias.
+47:28
+Listo. Entonces, de ese punto, entonces, en la primera variable nos faltaría toda
+47:32
+la parte de UEX para mirar la experiencia de cuando selecciona la el
+47:37
+combobots con el concesionario o si el señor es un particular, ¿cómo lo cómo lo
+47:43
+o sea cómo lo seleccionemos para que sea por ahí? Eso en web
+47:50
+pues en en Cabar entendería que es ya toda la lista desplegable de todo el de
+47:55
+todos los concesionarios. y dentro de esa lista de concesionarios
+47:59
+que se incluya pues lo que es mercado directo y compra de cartera para
+48:06
+que ya el la el el la el ejecutivo o o la fábrica
+48:13
+seleccione según sea el caso. en ese en esa en esa
+48:18
+información que se pueda verificar con el NID del concesionario para evitar
+48:24
+dobles validaciones o dobles espacios, digamos que esté creado dos veces o lo
+48:27
+que sea, pero para vehículo web que si el cliente
+48:31
+lo pueda seleccionar con el con el con el nombre del concesionario,
+48:38
+con el nombre y pues en en cap igual, ¿no? que pues el asesor no no sé si en
+48:44
+todos los casos tiene el concesionario ahí a la mano, pero ya en Naar pues sí
+48:48
+sería con el con el meet y con el nombre.
+48:58
+Listo. Eh, bueno, para Bueno, ahí entonces nos
+49:11
+queda nos queda pendiente para este punto. Bueno, yo coordin
+49:16
+para mirar el tema que comentas de de experiencia, ¿vale? de Ah, sí, porque
+49:22
+esa misma, o sea, quién la la de prenda no prenda. Entonces, tenemos que que lo
+49:28
+que corresponda a a que en vehículo web tenemos un reto
+49:34
+gigante y es que como le preguntamos al cliente si lo quiere con prenda o no
+49:37
+prenda cuándo supera los los salarios mínimos que que tiene permitidos para
+49:42
+hacerlo con prenda o sin prenda. Entonces, en este momento son cinco
+49:46
+salarios mínimos, ¿cómo está actualmente el desarrollo, que todos los señores que
+49:51
+se ganan más de cinco salarios mínimos, automáticamente el sistema les da una
+49:55
+aprobación sin prenda. O sea, ahí yo no le pregunto si lo quiere con prenda, si
+50:00
+lo quiere sin prenda, sino que, señor Ángel, usted se gana 10 salarios
+50:04
+mínimos, entonces el vehículo queda aprobado sin prenda. ¿Cómo acá vamos a
+50:09
+tener un diferenciación, una un un diferenciador de tasa si lo toma con
+50:14
+prenda o sin prenda? Ahí tenemos ese reto de cómo le preguntamos, o sea, de
+50:18
+el sistema primero tendrá que hacer esa validación interna en el motor para
+50:22
+determinar cuánto se gana Ángela. Entonces, Ángela se gana dos salarios
+50:26
+mínimos. Okay, Ángela sigue. Comprenda, porque pues yo no le voy a dar ninguna
+50:30
+opción porque no por política no me da para poderla abrir. Pero si Ángela en el
+50:35
+motor, cuando voy le hago la consulta de los ingresos en el motor me resulta que
+50:39
+se gana 10 salarios, bueno, más de más de cinco salarios mínimos. Ahí sí entro
+50:44
+y le hago la pregunta que habrá que revisar. ¿Usted quiere el crédito con
+50:48
+prenda o lo quiere sin prenda? para que ese campo sea el que nos determine
+50:53
+también el peso de una de las variables del RAS. En web lo tenemos con compa,
+50:59
+sin prenda, pues la variable está ahí, el o sea, el cliente lo el asesor lo
+51:05
+selecciona por el subproducto. Entonces ahí hay autoparticular con
+51:10
+prenda o autoparticular sin prenda. Y en Naar entiendo que es con el subproducto
+51:17
+van y determinan si tiene una variable 306 o 3005
+51:22
+306 para determinar que es comprenda. Si es diferente a esa variable lo toma o la
+51:29
+398 que es informativa que es imprenda. Sí,
+51:39
+sí. Ay, ahí ese es ese entonces ese punto va muy atado con el de de la lista
+51:46
+de concesionarios. Sí, eso estaba anotando aquí, Ángela, esto que esto que
+51:52
+mencionas, estas dos variables que estabas presentando,
+51:56
+eh el tema de la selección de concesionarios y prenda sin prenda en
+52:01
+web, eso debemos buscar una sesión para comentarlo. ¿Cómo va a ser la
+52:05
+experiencia de de cara a qué debe iniciar el cliente,
+52:09
+qué se le entregar, como Exacto. Y y en el momento exacto en que
+52:14
+yo le puedo preguntar eso, porque de entrada yo no le puedo preguntar lo
+52:17
+quiere con prenda o sin prenda porque como el señor no sabemos cuánto se gana,
+52:21
+pues le vamos a vamos a hacer es como ahí le vamos a preguntar algo que más
+52:26
+adelante no de pronto el cliente no pueda, como ay, yo seleccioné sin
+52:30
+prenda, pero pues no, señor, usted no puede sin prenda porque pues usted no se
+52:33
+gana lo correspondiente. Entonces sí habría que revisar con con bien muy bien
+52:38
+el punto exacto en donde le hacemos esa pregunta.
+52:42
+Sí, de acuerdo. Y las otras estas que las tres que vimos hoy, pues ya ya queda
+52:49
+claro que qué fue lo que comentamos ahora y pues nada, yo quería yo quería
+52:56
+bueno, ya hace unas 3:30 que la reunión, yo quería preguntarte, no sé cómo lo
+53:02
+ves, eh, ¿cómo ves esto para dar cierre el
+53:06
+discover de Ángel o requieres primero que veamos el tema? Pues yo creo que
+53:11
+primero miremos todo el tema de Ivet y no sé si pues sea también un un espacio
+53:16
+necesario como con Mari para que con Mari pues también eh barramos todo el
+53:21
+resto como estábamos haciendo la sesión pasada, ya que con o sea que que con el
+53:26
+equipo, con Mari, con con todos, eh pues ya muy bien de dónde vamos a tomar cada
+53:31
+campo, si les parece. Bueno, aquí está aquí está Andrés.
+53:35
+Andrés reemplaza a [ __ ] y y ¿Cómo lo ven Andrés y
+53:46
+Hola a todos. Pues Angelita, pues yo, o sea, yo veo que lo que tú dices
+53:52
+es muy valioso, pero me parece que eso de pronto ya sería más del cómo, ¿no? No
+53:57
+de lo que necesitas. O sea, yo creo que lo que se necesita
+54:02
+está claro. Ahora, si de eso que se necesita de pronto nos falta alguna
+54:06
+definición adicional, pues de pronto pasaríamos a a revisarla,
+54:14
+pero pero ya digamos en teniendo el que pues empezar a mirar el cómo, pues pues
+54:20
+de pronto ahí claramente podríamos tener sesiones lo que lo que se requiera, pero
+54:26
+que de pronto eso no fue impedimento para
+54:30
+cerrar el discord y es como como desde este punto como yo lo veo, pero no sé
+54:35
+ahí Huguillo y los demás como como lo vean.
+54:38
+Perdón, yo yo que interrumpa, pero o sea, pero si deberíamos, o sea, desde
+54:43
+desde el lado de nosotros que es sí si debería revisar antes de de cerrar el
+54:46
+discovery porque igual pues nosotros para después empezar a trabajar si
+54:51
+necesitamos llegar con con definiciones bien cerradas.
+54:56
+Vale, vale, de acuerdo, Julio. Entonces, eh sigue abierto el Discovery. Eh voy a
+55:02
+a buscar agenda. Eh, pues esto pues nos piden que esto lo hagamos s super
+55:07
+urgente. Estaba pensando mañana cómo están de agenda mañana para mirar este
+55:12
+tema de ¿Cómo lo ven, Julio, Ángela Andrés y yo te pediría si
+55:19
+se puede el miércoles, es que mañana estamos eh el miércoles en hora de la
+55:24
+tarde, si se podría miércoles que mañana tengo que entregar una
+55:29
+información y vale listo, muchachos. Entonces, déjame,
+55:34
+yo yo busco agenda, la cito miércoles en la tarde y puntualmente vamos a ver eh
+55:41
+lo que vamos a tocar en experiencia cliente para prendas sin prenda y
+55:48
+selección de concesionarios. ¿Les parece?
+55:51
+De acuerdo. Vale. Eh, Andrés, iba a hacer algún
+55:55
+comentario ya para finalizar. Sí, sí, sí, señor.
+55:58
+Adicional también pues para Ángelas que digamos que los dos frentes de del
+56:04
+proyecto pues está lo que tiene que ver est online, las pantallas y digamos de
+56:10
+lo que va llegar a simulador y a crédito, ¿cierto? Pero aparte eh digamos
+56:15
+de nuestro lado hay un proceso que es bash donde llega un archivo de tantia,
+56:21
+¿cierto?, que ya viene pues con la definición de de los datos del modelo
+56:25
+RAR. Y acá pues en hos es donde se hace la la definición de la lógica digamos de
+56:31
+del armado de ese de esa clave ID, ¿cierto? A la fecha él maneja 17
+56:36
+variables. Ahorita pues se incluirían estas cinco variables que serían las que
+56:41
+se le va a hacer ese manejo. Mi pregunta es e digamos enfocada a a esa
+56:47
+información nueva, ¿cómo nos llegaría, digamos cada variable tipificada para
+56:54
+darle ese tratamiento? Sí, es como una parte adicional que tiene el proyecto y
+57:00
+es aquí donde arma por allá el clúster y lo y lo graba como tal en la tabla rar.
+57:05
+Entonces sí valdría la pena, digamos, antes de de cerrar algo, poder como
+57:09
+revisar un poquito en detalle esta parte. Creo que en la presentación que
+57:14
+Hugo tenía había una partecita que se mencionaba el archivo y las variables
+57:19
+cómo estaban. Entonces, digamos, sacar también un tiempito para revisar esa
+57:23
+parte. Ah, vale. Pero esa parte sí sería con el
+57:27
+equipo de rentabilidad, con el equipo en su momento estaba participando Cristian
+57:34
+Alejandro Ruiz en ese tema de de ese archivo plano en donde él va a decir
+57:39
+cuáles son los cluster y pues entiendo que se duplican y que dan como 20,000
+57:43
+registros, algo así. Pero pero ese ese nivel de detalle si
+57:48
+desde producto no lo pues yo no lo manejo. Sí sería como que se pueda
+57:53
+contemplar esa sesión con el equipo de rentabilidad.
+57:58
+Vale, listo. Me dijiste que Cristian Alejandro.
+58:02
+Sí, sí, Hugo sería con con Cristian, que él fue el que envió el plano la vez
+58:08
+anterior y pues que como refrescar nuevamente
+58:12
+también ese plano que él compartió. Cristian es de Cristian, ¿qué?
+58:17
+Alejandro Ruiz. ¿Quién es de dónde?
+58:20
+Pues es que bueno, es que no sé si ahí habría que revisar con Diego Barragán
+58:25
+porque Cristian antes era el equipo de de Diego Barragán y él pasó a
+58:29
+financiera, entonces no sé si eso va a seguir siendo de financiera o si lo va a
+58:34
+manejar rentabilidad, pero él con otra persona. Entonces, de pronto para que le
+58:38
+puedan hacer la solicitud puntualmente a Diego Barragán.
+58:42
+Andrés, nos sentamos y aterizamos bien esto porque no lo entendí. Vale, listo,
+58:47
+muchachos, ya para más o menos lo que le entendí es que, o sea, como el tema de
+58:52
+retomar el el las el archivo plano con las variables del pricing, que es como
+58:57
+ya la parte en donde dependiendo a cada clúster le van a dar un peso a las
+59:01
+variables para que le dé la tasa al cliente.
+59:04
+Exacto. Creo que esa es la lo fuerte del punto y la tasa que él daría. Sí,
+59:09
+Andrés, esto validémoslo primero con Cristian Fernández.
+59:15
+Sí. Y luego cuando lo tengamos claro citamos
+59:19
+a la gente rentabilidad, ¿vale? Pero mirémoslo antes con con el equipo de
+59:22
+ingeniería, con Cristian, nuestro partner ahí,
+59:27
+Cristian Fernández, que nos está apoyando con todo este tema que que él
+59:30
+tiene conocimiento. Entonces, luego aterrizado esto con él, citamos a los de
+59:34
+rentabilidad. Vale. Listo, listo. Sí, señor. De una. Listo.
+59:38
+Okay. Bueno, muchachos, muchas gracias. Muy amable
+59:41
+ustedes. Muchas gracias. Gracias a todos. Que estén bien. Hasta
+59:43
+luego. Gracias. Hasta luego.
