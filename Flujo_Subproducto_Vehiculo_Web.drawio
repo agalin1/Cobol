@@ -1,0 +1,248 @@
+<mxfile host="app.diagrams.net" agent="Claude Code">
+  <diagram name="Flujo Subproducto Vehiculo Web" id="flujo-subproducto-web">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2780" pageHeight="1380" math="0" shadow="0">
+      <root>
+        <mxCell id="s0" />
+        <mxCell id="s1" parent="s0" />
+
+        <mxCell id="sTitle" parent="s1" style="text;html=1;fontSize=17;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;" value="¿Cómo viaja la Web a los subproductos de Vehículo y trae la información? — SDA 56742" vertex="1">
+          <mxGeometry height="26" width="1700" x="20" y="6" as="geometry" />
+        </mxCell>
+        <mxCell id="sLegend" parent="s1" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#5C6B7E;" value="&lt;b&gt;Notación:&lt;/b&gt; caja gris = dato de entrada (Front) · borde verde punteado = &lt;b&gt;hipótesis&lt;/b&gt;, NO confirmado en código · borde ámbar sólido = &lt;b&gt;confirmado en código&lt;/b&gt; (grep sobre UR7CCRAR.cbl) · caja con fondo claro = ejemplo trabajado, con datos reales." vertex="1">
+          <mxGeometry height="32" width="2200" x="20" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="sSeqLegend" parent="s1" style="text;html=1;fontSize=10.5;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#182230;" value="&lt;b&gt;Orden en el tiempo:&lt;/b&gt; ① carga lista de concesionarios &amp;#183; ② cliente diligencia perfil &amp;#183; ③ se muestra si va con prenda obligatoria &amp;#183; ④ cliente elige concesionario → resuelve grupo &amp;#183; ⑤ clic &quot;Solicitar crédito&quot; &amp;#183; ⑥ HOST confirma el subproducto" vertex="1">
+          <mxGeometry height="20" width="2720" x="20" y="68" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== A: MOCK REAL DE LA PÁGINA (Front) ===================== -->
+        <mxCell id="sPkgA" parent="s1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=8;spacingTop=6;tabWidth=260;tabHeight=22;tabPosition=left;" value="Front / Cells — mock de la pantalla real" vertex="1">
+          <mxGeometry height="1240" width="360" x="20" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCardA" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#182230;strokeWidth=1.5;align=left;verticalAlign=top;" value="" vertex="1">
+          <mxGeometry height="860" width="320" x="40" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sHdrA" parent="s1" style="text;html=1;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#8a94a3;" value="Solicitud de crédito" vertex="1">
+          <mxGeometry height="16" width="280" x="60" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="sTitleA" parent="s1" style="text;html=1;fontSize=16;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=top;" value="Simula tu Crédito de Vehículo" vertex="1">
+          <mxGeometry height="40" width="280" x="60" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="sSubtitleA" parent="s1" style="text;html=1;fontSize=9.5;fontFamily=Helvetica;align=left;verticalAlign=top;fontColor=#8a94a3;" value="Mismos campos del mock en &quot;Arquitectura Vehículo Web&quot; — aquí con valores de ejemplo para seguir un caso real de punta a punta." vertex="1">
+          <mxGeometry height="32" width="280" x="60" y="208" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sFieldTipoA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Tipo&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;Vehículo tradicional &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldEstadoA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Estado&lt;/div&gt;&lt;div style=&quot;margin-top:4px;font-size:12px;color:#182230&quot;&gt;&lt;span style=&quot;display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #1464A5;background:#1464A5;vertical-align:middle;margin-right:5px&quot;&gt;&lt;/span&gt;Nuevo&amp;#160;&amp;#160;&amp;#160;&lt;span style=&quot;display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #c7ccd4;vertical-align:middle;margin-right:5px&quot;&gt;&lt;/span&gt;Usado&lt;/div&gt;" vertex="1">
+          <mxGeometry height="44" width="280" x="60" y="292" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldValorVehA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Valor del vehículo&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;$ 120.000.000&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="338" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldValorNecA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Valor que necesitas&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;$ 70.000.000&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="382" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldPlazoA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Plazo&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;48 meses &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="426" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldIngresosA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Ingresos&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;$ 3.2 SMMLV&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldBuroA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Buró (consultado automáticamente)&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;680&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="514" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sDividerA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:9px;font-weight:bold;color:#B23A3A;letter-spacing:.4px;border-top:1px dashed #B23A3A;padding-top:6px&quot;&gt;VARIABLES NUEVAS DEL PROYECTO&lt;/div&gt;" vertex="1">
+          <mxGeometry height="24" width="280" x="60" y="566" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sFieldLTVA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;LTV — calculado automáticamente&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#B5760F;font-weight:bold;background:#FDF8EE;border-bottom:2px solid #FDF2E0;padding:3px 0 6px 6px;margin-top:2px&quot;&gt;58%&lt;/div&gt;" vertex="1">
+          <mxGeometry height="48" width="280" x="60" y="598" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldCombA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Combustible&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;border-bottom:2px solid #e3e6ea;padding:3px 0 6px 0;margin-top:2px&quot;&gt;Gasolina &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="42" width="280" x="60" y="654" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldConceA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#B23A3A;font-weight:bold&quot;&gt;Concesionario &amp;#9679; NUEVO&lt;/div&gt;&lt;div style=&quot;font-size:13px;color:#182230;background:#FDEDED;border-bottom:2px solid #f3c9c9;padding:3px 0 6px 6px;margin-top:2px&quot;&gt;Autoland S.A.S.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="48" width="280" x="60" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="sFieldGarA" parent="s1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#B23A3A;font-weight:bold&quot;&gt;Garantía / Prenda &amp;#9679; NUEVO&lt;/div&gt;&lt;div style=&quot;font-size:12px;color:#B5760F;font-weight:bold;background:#FDF8EE;border-bottom:2px solid #FDF2E0;padding:3px 0 6px 6px;margin-top:2px&quot;&gt;③ Con prenda &lt;span style=&quot;font-size:9.5px;font-weight:normal;color:#8a94a3&quot;&gt;(obligatoria, según el subproducto)&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size:9px;color:#8a94a3;margin-top:3px&quot;&gt;No es un campo que el cliente llena — se muestra solo, apenas la Matriz resuelve el subproducto (ver ③ más abajo y en el Paquete B)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="76" width="280" x="60" y="754" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sNoteA" parent="s1" style="text;html=1;fontSize=9.5;fontFamily=Helvetica;align=left;verticalAlign=top;fontColor=#5C6B7E;" value="Ingresos y Buró no son &quot;nuevos&quot; ni del canal ni del proyecto — ya existen, se agregan aquí porque son justo los datos que la Matriz de Perfilado necesita para decidir el subproducto." vertex="1">
+          <mxGeometry height="50" width="280" x="60" y="840" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sConceFlowCaption" parent="s1" style="text;html=1;fontSize=11;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#182230;" value="¿De dónde sale la lista y el Grupo de &quot;Concesionario&quot;?" vertex="1">
+          <mxGeometry height="22" width="280" x="60" y="906" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sConceServicio" parent="s1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=8;fontFamily=Helvetica;fontSize=10.5;" value="&lt;b&gt;Servicio: Concesionario → Grupo&lt;/b&gt; &lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;(nuevo, a construir)&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9.5px&quot;&gt;Al ④ seleccionar &quot;Autoland S.A.S.&quot;, consulta la tabla de la derecha y resuelve el grupo — el cliente nunca ve el grupo en pantalla, solo viaja con el resto del payload.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="280" x="60" y="936" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sConceOracle" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;T_CUGH_CONCESIONARIO&lt;/b&gt; &lt;font style=&quot;font-family:Helvetica;font-size:8px;color:#5c6b7e&quot;&gt;(Oracle, vía LRBA)&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#2E7D6B;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;NIT&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;NOMBRE&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;GRUPO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;background:#d7ece5&quot;&gt;&lt;b&gt;0900123456&lt;/b&gt;&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;background:#d7ece5&quot;&gt;&lt;b&gt;Autoland S.A.S.&lt;/b&gt;&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;background:#d7ece5&quot;&gt;&lt;b&gt;AA&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style=&quot;font-size:8px;font-family:Helvetica;color:#999999&quot;&gt;misma tabla documentada en &quot;Arquitectura Vehículo Web&quot;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="280" x="60" y="1050" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeConceLoad" parent="s1" edge="1" source="sConceOracle" target="sFieldConceA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;exitX=1;exitY=0.2;entryX=1;entryY=0.8;" value="① carga la lista al abrir la página">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="1070" />
+              <mxPoint x="360" y="724" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sEdgeConceSelect" parent="s1" edge="1" source="sFieldConceA" target="sConceServicio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;fontColor=#B23A3A;" value="④ al seleccionar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeConceServOracle" parent="s1" edge="1" source="sConceServicio" target="sConceOracle" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;fontColor=#B23A3A;" value="SELECT NIT → grupo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeTraceGarantia" parent="s1" edge="1" source="sTraceB" target="sFieldGarA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;fontColor=#B5760F;exitX=0;exitY=0.9;entryX=1;entryY=0.5;" value="③ si el subproducto trae prenda obligatoria, se muestra aquí">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="1310" />
+              <mxPoint x="400" y="1310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ===================== B: MATRIZ DE PERFILADO (HIPOTESIS) ===================== -->
+        <mxCell id="sPkgB" parent="s1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;spacingLeft=8;spacingTop=6;tabWidth=420;tabHeight=22;tabPosition=left;dashed=1;" value="Matriz de Perfilado Sub Producto — hipótesis, NO confirmada en código" vertex="1">
+          <mxGeometry height="630" width="660" x="380" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sMatrizBox" parent="s1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontStyle=1;" value="Matriz de Perfilado Sub Producto&lt;br&gt;&lt;font style=&quot;font-size:9.5px;font-weight:normal;color:#5c6b7e&quot;&gt;decide cuál subproducto aplica, ANTES de llamar a HOST&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="620" x="400" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCard0117" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;Secc. 0117&lt;/b&gt; — parámetros simulación Web vehículo/moto&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;subproductos base por tipo de bien + matriz de banderas&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#2E7D6B;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;SUBPRO&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;3968 vehículo base&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;SUBPRO_HN/HU&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;4115 híbrido&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;VEHICULO0001..0029&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;4 banderas S/N → subproducto&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="170" width="290" x="400" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCard1314" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;Secc. 1314&lt;/b&gt; — reglas de asignación por atributo (filas VE)&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ejemplo real, subproducto 4081:&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#2E7D6B;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ATRIBUTO&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;CONDICIÓN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;PLEDGESTATUS&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;= NEW&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;INCOMESAMOUNT&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;2 - 4.99 SMMLV&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;BUREAUVALUE&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;658 - 715&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;LINEFLOW&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #cfe3dd&quot;&gt;= VEVN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;CUSTOMERTYPE&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;&amp;gt;3 / &amp;lt;3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="220" width="310" x="710" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sTraceB" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF8EE;strokeColor=#B5760F;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Ejemplo trabajado:&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Ingresos 3.2 SMMLV (dentro de 2-4.99) ✓&lt;br&gt;Buró 680 (dentro de 658-715) ✓&lt;br&gt;Línea VEVN ✓&lt;br&gt;Estado Nuevo = PLEDGESTATUS NEW ✓&lt;br&gt;&lt;br&gt;Se cumplen las 4 condiciones de la fila 4081 en la sección 1314 →&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:13px;font-weight:bold;color:#B5760F&quot;&gt;la Matriz devuelve subproducto = 4081&lt;/font&gt;" vertex="1">
+          <mxGeometry height="260" width="620" x="400" y="450" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeMatriz0117" parent="s1" edge="1" source="sMatrizBox" target="sCard0117" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;" value="consulta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeMatriz1314" parent="s1" edge="1" source="sMatrizBox" target="sCard1314" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;" value="consulta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdge1314Trace" parent="s1" edge="1" source="sCard1314" target="sTraceB" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;" value="evalúa fila por fila">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeAMatriz" parent="s1" edge="1" source="sCardA" target="sMatrizBox" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;fontFamily=Helvetica;fontSize=9.5;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" value="② perfil del cliente (ingresos, buró, línea, estado)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== C: ENTREGA A HOST ===================== -->
+        <mxCell id="sHandoff" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=11;fontStyle=1;" value="Subproducto ya decidido: 4081&lt;br&gt;&lt;font style=&quot;font-size:9px;font-family:Helvetica;font-weight:normal;color:#5c6b7e&quot;&gt;viaja en la commarea como UGRAR-SUBPROD / CTPR-SUBPRO&lt;br&gt;(campo de ENTRADA — confirmado: HOST nunca lo calcula)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="260" x="1090" y="340" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeTraceHandoff" parent="s1" edge="1" source="sTraceB" target="sHandoff" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== D: HOST - LECTURAS PROPIAS CONFIRMADAS ===================== -->
+        <mxCell id="sPkgD" parent="s1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;spacingLeft=8;spacingTop=6;tabWidth=420;tabHeight=22;tabPosition=left;" value="HOST — UR7CCRAR: lecturas propias (confirmadas en código)" vertex="1">
+          <mxGeometry height="630" width="640" x="1400" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sUR7" parent="s1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=12;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=14;" value="UR7CCRAR&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;recibe el subproducto como ENTRADA&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="300" x="1420" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCard9040" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;Secc. 9040&lt;/b&gt; — SUBPRODUCTOS DE VEHÍCULO&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ELEMENTO=subproducto · RESTO=descripción&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;4081&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;VEHNVOCPCOMB90%TRA12CCF&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style=&quot;font-size:8px;font-family:Helvetica;color:#999999&quot;&gt;descripción ilustrativa, reconstruida a partir de otros subproductos ya vistos — no confirmada esta fila exacta&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="290" x="1420" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sOtherSections" parent="s1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;align=left;verticalAlign=top;spacing=8;fontFamily=Helvetica;fontSize=10;" value="&lt;b&gt;También confirmado en código&lt;/b&gt; que UR7CCRAR lee:&lt;br&gt;&lt;font style=&quot;font-size:9.5px&quot;&gt;1901 (tipo de cartera) · 1250/1254 · 0028 (tasa variable) · 9931 (compra de cartera) · otras&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;Todas para CLASIFICAR la línea ya decidida — nunca para elegir el subproducto.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="290" x="1730" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sTraceD" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF8EE;strokeColor=#B5760F;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Ejemplo trabajado:&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;UR7CCRAR hace &lt;font style=&quot;font-family:Courier New&quot;&gt;SELECT ... WHERE ELEMENTO='4081'&lt;/font&gt; sobre la sección 9040 → confirma que es un subproducto de vehículo activo (nuevo, con prenda, 90% financiado) y sigue clasificando la operación (tasa variable, compra cartera, etc.) antes de llamar a UG7CCNRA.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="600" x="1420" y="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeHandoffUR7" parent="s1" edge="1" source="sHandoff" target="sUR7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;fontFamily=Helvetica;fontSize=9.5;" value="⑤ clic &quot;Solicitar crédito&quot;, ya resuelto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeUR79040" parent="s1" edge="1" source="sUR7" target="sCard9040" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;strokeWidth=2;fontFamily=Helvetica;fontSize=9.5;fontColor=#B5760F;" value="⑥ SELECT (confirmado)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeUR7Other" parent="s1" edge="1" source="sUR7" target="sOtherSections" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;strokeWidth=2;fontFamily=Helvetica;fontSize=9.5;fontColor=#B5760F;" value="lee también">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdge9040Trace" parent="s1" edge="1" source="sCard9040" target="sTraceD" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== E: UG7CCNRA RESUELVE LAS 3 VARIABLES LIGADAS AL SUBPRODUCTO ===================== -->
+        <mxCell id="sPkgE" parent="s1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#F3F0FA;strokeColor=#6B5CA5;align=left;spacingLeft=8;spacingTop=6;tabWidth=460;tabHeight=22;tabPosition=left;" value="UG7CCNRA — resuelve las 3 variables ligadas a ESTE subproducto" vertex="1">
+          <mxGeometry height="470" width="640" x="2080" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sUG7" parent="s1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=12;fontStyle=1;fillColor=#FFFFFF;strokeColor=#6B5CA5;spacingLeft=14;" value="UG7CCNRA&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;ya tiene el subproducto = 4081&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="300" x="2100" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCard9968b" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#F3F0FA;strokeColor=#6B5CA5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;Secc. 9968&lt;/b&gt; — Prenda por subproducto&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#6B5CA5;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;background:#e4ddf2&quot;&gt;&lt;b&gt;4081&lt;/b&gt;&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;background:#e4ddf2&quot;&gt;&lt;b&gt;1 CON PRENDA NUEVO&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style=&quot;font-size:8px;font-family:Helvetica;color:#999999&quot;&gt;coherente con el nombre &quot;CP&quot; visto en VEHNVOCPCOMB&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="290" x="2100" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sCard9970b" parent="s1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#F3F0FA;strokeColor=#6B5CA5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=9.5;" value="&lt;b&gt;Secc. 9970&lt;/b&gt; — Combustible por subproducto&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#6B5CA5;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;background:#e4ddf2&quot;&gt;&lt;b&gt;4081&lt;/b&gt;&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;background:#e4ddf2&quot;&gt;&lt;b&gt;1 GASOLINA&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style=&quot;font-size:8px;font-family:Helvetica;color:#999999&quot;&gt;fila ilustrativa — &quot;COMB&quot; en el nombre no confirma el combustible exacto&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="290" x="2420" y="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sNoteNU" parent="s1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;align=left;verticalAlign=top;spacing=8;fontFamily=Helvetica;fontSize=10;" value="&lt;b&gt;Nuevo/Usado:&lt;/b&gt; no hace falta otra consulta aparte — el mismo subproducto 4081 ya venía con &lt;font style=&quot;font-family:Courier New&quot;&gt;PLEDGESTATUS=NEW&lt;/font&gt; desde la sección 1314. La sección 9971 sigue existiendo como respaldo, para los casos donde eso no alcance (ej. compra de cartera)." vertex="1">
+          <mxGeometry height="100" width="580" x="2100" y="390" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeHandoffUG7" parent="s1" edge="1" source="sTraceD" target="sUG7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#6B5CA5;" value="continúa, ya clasificado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeUG79968" parent="s1" edge="1" source="sUG7" target="sCard9968b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#6B5CA5;strokeWidth=2;fontFamily=Helvetica;fontSize=9.5;fontColor=#6B5CA5;" value="SELECT por subproducto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeUG79970" parent="s1" edge="1" source="sUG7" target="sCard9970b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#6B5CA5;strokeWidth=2;fontFamily=Helvetica;fontSize=9.5;fontColor=#6B5CA5;" value="SELECT por subproducto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== F: LAS OTRAS 2 VARIABLES - NO DEPENDEN DEL SUBPRODUCTO ===================== -->
+        <mxCell id="sPkgF" parent="s1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=8;spacingTop=6;tabWidth=460;tabHeight=22;tabPosition=left;" value="Grupo y LTV — eje totalmente independiente del subproducto" vertex="1">
+          <mxGeometry height="200" width="640" x="2080" y="600" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sNoteGrupoLTV" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;font style=&quot;font-size:10.5px&quot;&gt;&lt;b&gt;Grupo de comisión&lt;/b&gt; depende del &lt;b&gt;concesionario&lt;/b&gt; que vendió el vehículo (sección 9969, NIT → grupo) — no tiene nada que ver con cuál subproducto se eligió.&lt;br&gt;&lt;br&gt;&lt;b&gt;LTV&lt;/b&gt; es un cálculo propio (monto solicitado ÷ valor del bien) — tampoco depende del subproducto.&lt;br&gt;&lt;br&gt;Por eso estas dos NO aparecen en este diagrama con un subproducto de ejemplo: viajan por un camino aparte, ya documentado en &lt;i&gt;&quot;Arquitectura Vehículo Web&quot;&lt;/i&gt;.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="600" x="2100" y="640" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== ENSAMBLE FINAL ===================== -->
+        <mxCell id="sFinalNote" parent="s1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF8EE;strokeColor=#B5760F;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Las 5 variables confluyen en la CLAVE_ID del cliente:&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px;font-family:Courier New&quot;&gt;Prenda (con) · Combustible (gasolina) · Nuevo/Usado (nuevo) &amp;#8592; del subproducto 4081&lt;br&gt;Grupo &amp;#8592; del concesionario elegido &amp;#183; LTV &amp;#8592; del % calculado&lt;/font&gt;&lt;br&gt;&lt;br&gt;Mismo mecanismo de letras ya documentado en &lt;i&gt;&quot;Carga de un Clúster RAR&quot;&lt;/i&gt;: cada valor se busca contra lo catalogado y se arma la clave de 23 posiciones." vertex="1">
+          <mxGeometry height="170" width="640" x="2080" y="830" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sEdgeNUFinal" parent="s1" edge="1" source="sNoteNU" target="sFinalNote" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sEdgeGrupoLTVFinal" parent="s1" edge="1" source="sNoteGrupoLTV" target="sFinalNote" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

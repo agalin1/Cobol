@@ -1,0 +1,284 @@
+<mxfile host="app.diagrams.net" agent="Claude Code">
+  <diagram name="Arquitectura Vehiculo Web" id="arq-vehiculo-web">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3050" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="w0" />
+        <mxCell id="w1" parent="w0" />
+
+        <mxCell id="wTitle" parent="w1" style="text;html=1;fontSize=17;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;" value="Arquitectura Vehículo Web — SDA 56742 (pantalla real, resolución de parametría Oracle/LRBA y motor de tasa HOST)" vertex="1">
+          <mxGeometry height="26" width="1700" x="20" y="6" as="geometry" />
+        </mxCell>
+        <mxCell id="wLegend" parent="w1" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#5C6B7E;" value="&lt;b&gt;Notación:&lt;/b&gt; «component» = paso/transacción · cilindro = tabla · caja roja = campo/componente NUEVO a construir · caja ámbar = tabla HOST/DB2 · caja verde = capa Oracle/LRBA · caja morada = motor de tasa online.&amp;nbsp;&amp;nbsp;Fuente: &quot;simulación web1.png&quot;, &quot;imagen de sneider.png&quot; y &quot;capturaTablasparametricasHost-replica oracle.PNG&quot;." vertex="1">
+          <mxGeometry height="32" width="2580" x="20" y="36" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE A: FRONT / CELLS (mockup real de la pantalla) ===================== -->
+        <mxCell id="wPkgFront" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=10;spacingTop=6;tabWidth=280;tabHeight=24;tabPosition=left;" value="Front / Cells — pantalla real" vertex="1">
+          <mxGeometry height="900" width="360" x="20" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCardFront" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#182230;strokeWidth=1.5;align=left;verticalAlign=top;" value="" vertex="1">
+          <mxGeometry height="840" width="320" x="40" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wHdr" parent="w1" style="text;html=1;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#8a94a3;" value="Solicitud de crédito" vertex="1">
+          <mxGeometry height="16" width="280" x="60" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="wFormTitle" parent="w1" style="text;html=1;fontSize=17;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=top;" value="Simula tu Crédito de Vehículo" vertex="1">
+          <mxGeometry height="44" width="280" x="60" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="wFormSubtitle" parent="w1" style="text;html=1;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;fontColor=#8a94a3;" value="Te acompañamos a dar el primer paso para comprar el vehículo de tus sueños." vertex="1">
+          <mxGeometry height="36" width="280" x="60" y="214" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldTipo" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Tipo&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 8px 0;margin-top:2px&quot;&gt;Vehículo tradicional &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="46" width="280" x="60" y="258" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldEstado" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Estado&lt;/div&gt;&lt;div style=&quot;margin-top:6px;font-size:13px;color:#182230&quot;&gt;&lt;span style=&quot;display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid #1464A5;background:#1464A5;vertical-align:middle;margin-right:6px&quot;&gt;&lt;/span&gt;Nuevo&amp;#160;&amp;#160;&amp;#160;&amp;#160;&lt;span style=&quot;display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid #c7ccd4;vertical-align:middle;margin-right:6px&quot;&gt;&lt;/span&gt;Usado&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="280" x="60" y="310" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldModelo" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Modelo&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 8px 0;margin-top:2px&quot;&gt;2019 &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="46" width="280" x="60" y="368" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldValorVeh" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Valor del vehículo&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 8px 0;margin-top:2px&quot;&gt;$ 120.000.000&lt;/div&gt;" vertex="1">
+          <mxGeometry height="46" width="280" x="60" y="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldValorNecesitas" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Valor que necesitas&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 6px 0;margin-top:2px&quot;&gt;$ 70.000.000&lt;/div&gt;&lt;div style=&quot;font-size:9px;color:#8a94a3;margin-top:4px&quot;&gt;Puedes solicitar desde $1.000.000 hasta $120.000.000&lt;/div&gt;" vertex="1">
+          <mxGeometry height="66" width="280" x="60" y="472" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldPlazo" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Plazo&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 8px 0;margin-top:2px&quot;&gt;48 meses &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="46" width="280" x="60" y="548" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wDividerNuevo" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:9.5px;font-weight:bold;color:#B23A3A;letter-spacing:.4px;border-top:1px dashed #B23A3A;padding-top:8px&quot;&gt;VARIABLES NUEVAS DEL PROYECTO (propuesta)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="28" width="280" x="60" y="604" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldLTV" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;LTV — calculado automáticamente&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#B5760F;font-weight:bold;background:#FDF8EE;border-bottom:2px solid #FDF2E0;padding:4px 0 8px 6px;margin-top:2px&quot;&gt;58% &lt;span style=&quot;font-size:10px;font-weight:normal;color:#8a94a3&quot;&gt;(70.000.000 &amp;#247; 120.000.000)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="56" width="280" x="60" y="638" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldCombustible" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#8a94a3&quot;&gt;Combustible&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;border-bottom:2px solid #e3e6ea;padding:4px 0 6px 0;margin-top:2px&quot;&gt;Selecciona… &amp;#9662;&lt;/div&gt;&lt;div style=&quot;font-size:9px;color:#B23A3A;margin-top:4px&quot;&gt;Falta agregar opción &quot;Otros&quot;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="56" width="280" x="60" y="700" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldConcesionario" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#B23A3A;font-weight:bold&quot;&gt;Concesionario &amp;#9679; NUEVO&lt;/div&gt;&lt;div style=&quot;font-size:14px;color:#182230;background:#FDEDED;border-bottom:2px solid #f3c9c9;padding:4px 0 8px 6px;margin-top:2px&quot;&gt;Selecciona tu concesionario &amp;#9662;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="56" width="280" x="60" y="762" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFieldGarantia" parent="w1" style="text;html=1;align=left;verticalAlign=top;" value="&lt;div style=&quot;font-size:10px;color:#B23A3A;font-weight:bold&quot;&gt;Garantía / Prenda &amp;#9679; NUEVO&lt;/div&gt;&lt;div style=&quot;font-size:11px;color:#8a94a3;margin-top:4px&quot;&gt;Diseño UX pendiente — hoy solo aparece como texto de marketing (&quot;con o sin prenda&quot;)&lt;/div&gt;&lt;div style=&quot;font-size:9px;color:#6B5CA5;margin-top:4px&quot;&gt;Se resuelve por tabla paramétrica (sección 9968) directo en HOST — no necesita resolverse antes en el Front/Oracle, a diferencia de Grupo, N/U y LTV.&lt;/div&gt;" vertex="1">
+          <mxGeometry height="86" width="280" x="60" y="824" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wSendButton" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1464A5;strokeColor=none;fontColor=#FFFFFF;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontStyle=1;" value="Solicitar crédito" vertex="1">
+          <mxGeometry height="40" width="280" x="60" y="918" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE B: SERVICIO DE RESOLUCIÓN (nuevo) ===================== -->
+        <mxCell id="wPkgServicio" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#FDEDED;strokeColor=#B23A3A;align=left;spacingLeft=8;spacingTop=6;tabWidth=280;tabHeight=22;tabPosition=left;" value="Servicio de resolución de parametría (nuevo, a construir)" vertex="1">
+          <mxGeometry height="580" width="320" x="420" y="560" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wServicio" parent="w1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Concesionario → Grupo de comisión&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Al seleccionar el concesionario, consulta la sección &lt;b&gt;9969&lt;/b&gt; (propuesta) replicada en T_CUGH_CONCESIONARIO.&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;Nota: equivalente al &quot;1317&quot; del whiteboard de Sneider — mismo concepto, número definitivo pendiente de asignar en UMTA.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="280" x="440" y="600" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wServicioNU" parent="w1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Nuevo/Usado por subproducto&lt;/b&gt; &lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;— es una política, no un campo&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Recibe el subproducto ya resuelto (ej. compra de cartera, compra instantánea) y consulta la sección &lt;b&gt;9971&lt;/b&gt; (respaldo dedicado) — puede sobrescribir lo que el cliente seleccionó en &quot;Estado&quot;.&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;background:#FDF2E0;color:#B5760F;padding:2px&quot;&gt;Hallazgo: la sección 1314 YA tiene el atributo PLEDGESTATUS (NEW/USED) por subproducto — posible solape con 9971. Confirmar con Sneider/Negocio cuál de las dos usar, para no mantener la misma parametría en dos lados.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="200" width="280" x="440" y="760" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wServicioLTV" parent="w1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Rangos vigentes de LTV&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Tabla paramétrica nueva (propuesta, sección &lt;b&gt;9972&lt;/b&gt;) con los tramos oficiales actuales (ej. ≤70%/&amp;gt;70%), para que el Front muestre el corte correcto aunque cambie con el crecimiento del negocio.&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;Distinto del catálogo automático de letras del batch (UGDTNRA 01-23): esto es la definición de negocio, no la traducción a letra.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="280" x="440" y="980" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeConceServ" parent="w1" edge="1" source="wFieldConcesionario" target="wServicio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=10;fontColor=#B23A3A;" value="al seleccionar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE C: PARAMETRIA ORACLE / LRBA ===================== -->
+        <mxCell id="wPkgOracle" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;spacingLeft=10;spacingTop=6;tabWidth=320;tabHeight=24;tabPosition=left;" value="Parametría Oracle / LRBA (arquitectura confirmada por Ingeniería)" vertex="1">
+          <mxGeometry height="960" width="850" x="780" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wControlM" parent="w1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="Control-M" vertex="1">
+          <mxGeometry height="50" width="160" x="1075" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wLRBA" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontStyle=1;" value="LRBA&lt;br&gt;&lt;font style=&quot;font-size:9.5px;font-weight:normal&quot;&gt;batch de replicación&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="1075" y="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wHostCaption" parent="w1" style="text;html=1;fontSize=12;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#182230;" value="HOST — UGDTT37: estas secciones se CREAN aquí y se REPLICAN a Oracle" vertex="1">
+          <mxGeometry height="22" width="540" x="800" y="276" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCard9968" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="&lt;b&gt;9968 — Prenda por subproducto&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ELEMENTO=subproducto · RESTO(1:1)=prenda+desc&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;3195&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;1 PRENDA AUTO NUEVO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;3280&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;3 SIN PRENDA NVO HIBR&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;4086&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;2 PRENDA FGA USADO&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="190" width="260" x="800" y="306" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCard9969" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="&lt;b&gt;9969 — NIT concesionario → Grupo&lt;/b&gt; &lt;font style=&quot;font-family:Helvetica;font-size:8px;color:#999999&quot;&gt;(≈1317 Sneider)&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ELEMENTO=NIT(11d) · RESTO(1:2)=grupo+(3:60)=nombre&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;0900123456&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;02 XYZ SAS&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;0901654321&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;01 ABC LTDA&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;DEFAULT&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;04&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="190" width="260" x="1080" y="306" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCard9970" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="&lt;b&gt;9970 — Combustible por subproducto&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ELEMENTO=subproducto · RESTO(1:1)=combustible+desc&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;3195&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;1 GASOLINA&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;3280&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;2 HIBRIDO/ELECTRICO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;4083&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;1 GASOLINA&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="190" width="260" x="800" y="506" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCard9971" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="&lt;b&gt;9971 — Nuevo/Usado por subproducto&lt;/b&gt; &lt;font style=&quot;font-family:Helvetica;font-size:8px;color:#999999&quot;&gt;(respaldo)&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;Solo si el canal NO manda el valor directo. ELEMENTO=subproducto/flujo · RESTO(1:1)=N/U+desc&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;COMPRA_CARTERA&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;U SIEMPRE USADO (confirmado)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;COMPRA_INSTANTANEA&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;N SIEMPRE NUEVO (confirmado)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;¿otros?&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;pendiente confirmar&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="190" width="260" x="1080" y="506" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wCard9972" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="&lt;b&gt;9972 — Rangos vigentes de LTV&lt;/b&gt; &lt;font style=&quot;font-family:Helvetica;font-size:8px;color:#999999&quot;&gt;(propuesta)&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#5c6b7e&quot;&gt;ELEMENTO=tramo · RESTO=rango ini-fin&lt;/font&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;font-size:8.5px;margin-top:4px;width:100%&quot;&gt;&lt;tr style=&quot;background:#B5760F;color:#fff&quot;&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;ELEM&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;RESTO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;TRAMO1&lt;/td&gt;&lt;td style=&quot;padding:2px 4px;border-bottom:1px solid #eee&quot;&gt;000-070 (&amp;le;70%)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;TRAMO2&lt;/td&gt;&lt;td style=&quot;padding:2px 4px&quot;&gt;071-100 (&amp;gt;70%)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style=&quot;font-size:8px;font-family:Helvetica;color:#999999&quot;&gt;editable por Negocio si cambian los cortes&lt;/font&gt;" vertex="1">
+          <mxGeometry height="190" width="260" x="800" y="706" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wNote1314" parent="w1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;align=left;verticalAlign=top;spacing=8;fontFamily=Courier New;fontSize=10;" value="&lt;font style=&quot;font-family:Helvetica&quot;&gt;&lt;b&gt;1314-VE&lt;/b&gt; &lt;font style=&quot;color:#5c6b7e;font-weight:normal&quot;&gt;(ya existe hoy, no es nueva)&lt;/font&gt; — reglas de asignación de subproducto por atributo (PLEDGESTATUS, INCOMESAMOUNT, BUREAUVALUE, LINEFLOW…). &lt;b&gt;PLEDGESTATUS&lt;/b&gt; ya trae NEW/USED por subproducto — posible solape con 9971, confirmar con Sneider cuál usar.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="260" x="1080" y="706" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wOracleParam" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10.5;fontStyle=1;" value="T_CUGH_PARAMETRY&lt;br&gt;&lt;font style=&quot;font-size:9px;font-family:Helvetica;font-weight:normal;color:#5c6b7e&quot;&gt;genérica, formato crudo (pipe-delimited)&lt;br&gt;espejo de TODAS: 1314, 9968, 9969, 9970, 9971, 9972&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="230" x="1360" y="306" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wFormatNote" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacing=8;fontFamily=Courier New;fontSize=9.5;" value="&lt;font style=&quot;font-family:Helvetica;font-weight:bold&quot;&gt;Formato propuesto 9969:&lt;/font&gt;&lt;br&gt;99999999999 | concesionario | grupo&lt;br&gt;&lt;font style=&quot;font-family:Helvetica;font-size:8.5px;color:#5c6b7e&quot;&gt;(NIT 11 díg · nombre · grupo, separado por &amp;#124;)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="230" x="1360" y="476" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wOracleConce" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10.5;fontStyle=1;" value="T_CUGH_CONCESIONARIO&lt;br&gt;&lt;font style=&quot;font-size:9px;font-family:Helvetica;font-weight:normal;color:#5c6b7e&quot;&gt;estructurada, solo para 9969&lt;/font&gt;&lt;br&gt;ID&lt;br&gt;NIT&lt;br&gt;NOMBRE&lt;br&gt;GRUPO" vertex="1">
+          <mxGeometry height="170" width="230" x="1360" y="586" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeCM" parent="w1" edge="1" source="wControlM" target="wLRBA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA9968" parent="w1" edge="1" source="wLRBA" target="wCard9968" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA9969" parent="w1" edge="1" source="wLRBA" target="wCard9969" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA9970" parent="w1" edge="1" source="wLRBA" target="wCard9970" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA9971" parent="w1" edge="1" source="wLRBA" target="wCard9971" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA9972" parent="w1" edge="1" source="wLRBA" target="wCard9972" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBA1314" parent="w1" edge="1" source="wLRBA" target="wNote1314" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9;fontColor=#2E7D6B;" value="lee">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBAParam" parent="w1" edge="1" source="wLRBA" target="wOracleParam" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;" value="replica TODAS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeLRBAConce" parent="w1" edge="1" source="wLRBA" target="wOracleConce" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;fontColor=#2E7D6B;" value="además estructura 9969 aparte">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeServOracle" parent="w1" edge="1" source="wServicio" target="wOracleConce" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=10;fontColor=#B23A3A;" value="SELECT NIT → grupo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeServNU" parent="w1" edge="1" source="wServicioNU" target="wOracleParam" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=10;fontColor=#B23A3A;" value="SELECT subproducto → N/U (9971)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeServLTV" parent="w1" edge="1" source="wServicioLTV" target="wOracleParam" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=10;fontColor=#B23A3A;" value="SELECT rangos vigentes (9972)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeServNUASO" parent="w1" edge="1" source="wServicioNU" target="wASO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;fontColor=#B23A3A;" value="N/U validado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeServLTVASO" parent="w1" edge="1" source="wServicioLTV" target="wASO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;fontColor=#B23A3A;" value="LTV según rango vigente">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE D: CAPA DIGITAL / APIS ===================== -->
+        <mxCell id="wPkgDigital" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;spacingLeft=10;spacingTop=6;tabWidth=260;tabHeight=24;tabPosition=left;" value="Capa Digital / APIs — CUGH (ASO)" vertex="1">
+          <mxGeometry height="840" width="380" x="1670" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wASO" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacing=10;fontFamily=Courier New;fontSize=10.5;" value="&lt;b&gt;Operaciones ASO&lt;/b&gt;&lt;br&gt;POST /v1/offers/counter-offers &lt;font style=&quot;font-family:Helvetica;color:#5c6b7e&quot;&gt;(CUGHTO01)&lt;/font&gt;&lt;br&gt;GET .../counter-offers/{id} &lt;font style=&quot;font-family:Helvetica;color:#5c6b7e&quot;&gt;(CUGHTO03)&lt;/font&gt;&lt;br&gt;PATCH .../confirmation-offers &lt;font style=&quot;font-family:Helvetica;color:#5c6b7e&quot;&gt;(CUGHTO04)&lt;/font&gt;&lt;br&gt;POST .../installment-plans/simulates &lt;font style=&quot;font-family:Helvetica;color:#5c6b7e&quot;&gt;(CUGHTS02)&lt;/font&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-family:Helvetica;font-size:9.5px;color:#5c6b7e&quot;&gt;Recibe el payload con TODAS las variables ya resueltas por el Front (LTV calculado, combustible, grupo, prenda).&lt;/font&gt;" vertex="1">
+          <mxGeometry height="220" width="340" x="1690" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wMatriz" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;b&gt;Matriz de Perfilado Sub Producto&lt;/b&gt; &lt;font style=&quot;font-size:9.5px;color:#999999&quot;&gt;«hipótesis, no confirmada en código»&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Decide el subproducto final (ej. 305 con prenda) usando secciones 0117/1314 — probablemente vive aquí, en capa digital.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="130" width="340" x="1690" y="370" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeFrontASO" parent="w1" edge="1" source="wSendButton" target="wASO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;fontFamily=Helvetica;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.2;" value="envía payload">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeServASO" parent="w1" edge="1" source="wServicio" target="wASO" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=block;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;fontColor=#B23A3A;" value="grupo ya resuelto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeASOMatriz" parent="w1" edge="1" source="wASO" target="wMatriz" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE E: PUENTE HOST ===================== -->
+        <mxCell id="wPkgPuente" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=8;spacingTop=6;tabWidth=140;tabHeight=22;tabPosition=left;" value="Puente HOST" vertex="1">
+          <mxGeometry height="180" width="200" x="2100" y="340" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wAPX" parent="w1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=11;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=14;" value="APX&lt;br&gt;&lt;font style=&quot;font-size:9.5px&quot;&gt;CPOVT002 / PGRestService&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="2120" y="390" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeASOtoAPX" parent="w1" edge="1" source="wASO" target="wAPX" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;fontFamily=Helvetica;fontSize=10;" value="invoca transacción">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== PAQUETE F: HOST - MOTOR DE TASA ===================== -->
+        <mxCell id="wPkgHost" parent="w1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=10;spacingTop=6;tabWidth=260;tabHeight=24;tabPosition=left;" value="HOST — motor de tasa Vehículo" vertex="1">
+          <mxGeometry height="840" width="620" x="2370" y="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wUR7" parent="w1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=12;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=14;" value="UR7CCRAR&lt;br&gt;&lt;i&gt;«simulación»&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;commarea UGWCRAR · no persiste&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="300" x="2390" y="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wUG7" parent="w1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=12;fontStyle=1;fillColor=#FFFFFF;strokeColor=#6B5CA5;spacingLeft=14;" value="UG7CCNRA&lt;br&gt;&lt;i&gt;«motor de tasa»&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;arma CLAVE_ID de 23 letras, solo lectura&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="300" x="2390" y="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeAPXUR7" parent="w1" edge="1" source="wAPX" target="wUR7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;fontFamily=Helvetica;fontSize=10;" value="CICS LINK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wEdgeUR7UG7" parent="w1" edge="1" source="wUR7" target="wUG7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;" value="CALL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wTnra" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FDF2E0;strokeColor=#B5760F;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=11;fontStyle=1;" value="UGDTNRA (DB2)&lt;br&gt;&lt;font style=&quot;font-size:9.5px;font-family:Helvetica;font-weight:normal&quot;&gt;reg 01-23 / 99 / 90 — igual que en el diagrama de carga de clústers&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="300" x="2390" y="370" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeUG7Tnra" parent="w1" edge="1" source="wUG7" target="wTnra" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#B5760F;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#B5760F;" value="SELECT por CLAVE_ID">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wNewSections" parent="w1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#F3F0FA;strokeColor=#6B5CA5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Courier New;fontSize=10;" value="UGDTT37 (DB2) — tablas paramétricas, resueltas aquí mismo en HOST&lt;br&gt;&lt;font style=&quot;font-size:9px;font-family:Helvetica;color:#5c6b7e&quot;&gt;9968 prenda · 9970 combustible — &lt;b&gt;mecanismo confirmado&lt;/b&gt;, igual que en el diagrama de carga de clústers&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8.5px;font-family:Helvetica;color:#999999&quot;&gt;Estas mismas 2 secciones también se replican a Oracle (ver capa Parametría Oracle/LRBA) — UG7CCNRA igual sigue leyendo su copia local en DB2.&lt;br&gt;Grupo (9969) y Nuevo/Usado (política 1314) ya NO necesitan respaldo aquí — Web los resuelve antes, vía el Servicio de resolución + Oracle.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="220" width="290" x="2690" y="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wEdgeUG7New" parent="w1" edge="1" source="wUG7" target="wNewSections" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;strokeColor=#6B5CA5;strokeWidth=2;fontFamily=Helvetica;fontSize=10;fontColor=#6B5CA5;" value="lee (respaldo)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== NOTA FINAL ===================== -->
+        <mxCell id="wOpenQ" parent="w1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=11;" value="&lt;font color=&quot;#2E7D6B&quot;&gt;&lt;b&gt;MECANISMO YA DEFINIDO PARA LAS 5 VARIABLES&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:10.5px&quot;&gt;&lt;b&gt;Prenda (9968)&lt;/b&gt; y &lt;b&gt;Combustible (9970)&lt;/b&gt;: tabla paramétrica resuelta &lt;b&gt;en HOST&lt;/b&gt; por UG7CCNRA, igual que en el diagrama de carga de clústers.&lt;br&gt;&lt;b&gt;Grupo (9969)&lt;/b&gt;, &lt;b&gt;Nuevo/Usado (9971, con posible solape en 1314)&lt;/b&gt; y &lt;b&gt;LTV (9972)&lt;/b&gt;: resueltos &lt;b&gt;antes de llamar a HOST&lt;/b&gt;, por el Servicio de resolución + Oracle.&lt;br&gt;&lt;br&gt;Las secciones 1314/9968/9969/9970/9971/9972 &lt;b&gt;se crean en HOST y se replican a Oracle por igual&lt;/b&gt; (ver las tarjetas arriba) — la diferencia es solo quién las consulta primero para esta operación puntual.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="200" width="850" x="780" y="1160" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
