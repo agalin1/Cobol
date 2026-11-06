@@ -1,0 +1,2120 @@
+0:00
+Voy a dar inicio a la grabación y eh en este momento Hugo, te cedo la
+0:09
+palabra. La sesión es toda tuya. Buen día.
+0:14
+Eh, Juan Felipe, aquí arranca Rocío, ¿no?, que ella nos va a explicar el
+0:17
+proyecto. Muchas gracias, Hugo, muy querido, por
+0:22
+darme la palabra. ¿Cómo está en equipo? Bueno, eh para los que no me conocen, yo
+0:27
+me presento, soy Rocío López, soy la gerente de Vehículo Partnerships y hoy
+0:32
+estamos reunidos para poder hablar de lo que esta SDA pretende y esto está
+0:38
+compuesto de dos grandes capítulos. El primer capítulo pretende que el pricing
+0:44
+de vehículo que existe en este momento para el producto, que está compuesto por
+0:49
+unas variables que son puro ingreso y situación laboral se vuelva más robusto,
+0:56
+incluyendo varias variables, admitieron un invitado, varias variables
+1:03
+adicionales que serán eh eh incluidas en una matriz que está
+1:08
+elaborando el área de rentabilidad para que el precio precio que se le cobre a
+1:12
+cada cliente responda a las condiciones del negocio que está tomando. Entonces,
+1:18
+de esa manera vamos a poder cobrar la tasa de interés que puede dar soporte a
+1:25
+la rentabilidad de cada negocio. Como variables tenemos varias. Hugo, eh, si
+1:30
+tú puedes, por favor, proyectar lo que te mandó Ángela de la tabla, yo te
+1:34
+agradecería para poder dar contexto. Eh, aquí tenemos varias variables que vamos
+1:40
+a integrar en el proyecto. Si tienes la tablita que te mandó
+1:46
+Ángela. Okay, gracias. Esta
+1:52
+sí, señor. Mil gracias. Okay. Entonces, tenemos que aparte de las puro
+1:57
+ingreso y citación laboral, como lo acabo de mencionar, que están resaltadas
+2:00
+en amarillo, que existen, ahora vamos a integrar nuevas variables. Entonces,
+2:05
+¿cómo son esas nuevas variables? Para los que nunca han trabajado en
+2:10
+vehículo, les voy a contar que vehículo paga una comisión a los concesionarios.
+2:15
+es una comisión por recibir el cliente referido. Para pagar esa comisión
+2:20
+tenemos diferentes tablas de comisión que eh tenemos negociadas con cada uno
+2:27
+de los concesionarios y esas tablas eh de comisión están agrupadas por grupos
+2:32
+de concesionarios. Así pues, eh la primera variable que vamos a integrar es
+2:39
+cuánto se le paga al aliado, es decir, el aliado o concesionario en qué grupo
+2:45
+de comisión está eh referente al pago. Tú tienes la tabla donde se muestra el
+2:51
+ejemplo de cómo son los pagos de comisión por grupo, Hugo, para que la
+2:55
+puedas, por favor, proyectar. Esa está en la necesidad de la petición.
+3:02
+Yo creo que sí. Déjame ver si está allí. Baja, por favor,
+3:26
+baja. No hay más.
+3:32
+No pasa nada, si quieres sigue proyectando y yo les voy a proyectar el
+3:37
+ejemplo de la tabla para que me pueda explicar mejor cómo es que pagamos las
+3:40
+comisiones. Un segundo, la estoy cando.
+4:04
+Un segundo, por favor. Ya se las No dejes de proyectar que yo
+4:21
+proyecto esto y ya y ya vuelvo y suelto la pantalla.
+4:26
+Quiero que todos conozcan, equipo, cómo está siendo pagada la comisión de los
+4:31
+concesionarios. Espérate que se me cerró. de los concesionarios. En este
+4:37
+momento ustedes pueden ver mi pantalla
+4:40
+claramente ven mi pantalla.
+4:46
+Sí, señora. Sí, señora.
+4:48
+Aquí pueden apreciar en este nivel de comisión. Voy a utilizar el puntero para
+4:52
+que lo puedan apreciar. Aquí este nivel de comisión ustedes pueden apreciar cómo
+4:57
+están clasificadas los pagos de las comisiones.
+5:01
+Aquí encontramos que esta es el grupo de comisión. que lo hemos llamado inchc
+5:06
+porque así se llama el importador con el que tenemos una alianza que nos ganamos
+5:10
+en una licitación que tiene ya renovación por tercer año. Como notarán,
+5:15
+todo lo que se venta por iscape, todo lo que se venta de las marcas que
+5:19
+importacape, importa nueve 10 marcas, le estamos pagando a 7.31% 31%
+5:29
+del monto desembolsado. Repito, todo lo que se financi.
+5:42
+Los concesionarios que se encuentran clasificados en este grupo doblea A, que
+5:48
+son 27, ellos pagan en promedio 4.67
+5:54
+del monto desembolsado. Los concesionarios que están
+5:58
+clasificados en el grupo B, que son si, perdón, en el grupo A, que son 37,
+6:06
+pagan 17, pagan 3.43. Los del grupo B pagan 290, los del grupo
+6:14
+C pagan 312, las motos pagan 230 y los que tienen
+6:20
+modelo fijo están pagando, hay varios modelos fijos, pagan 241.
+6:26
+Como verán los 190 concesionarios, aquí no les dado
+6:31
+190 porque aquí hay unas personas naturales y aquí hay concesionarios que
+6:36
+están tanto en estos grupos como en este de arriba. Ya les voy a explicar por
+6:40
+qué, pero los 190 concesionarios que tenemos trabajando en este momento, cada
+6:46
+uno de ellos pues recibe un pago de comisión correspondiente a uno si
+6:52
+importa y perdón si vende marcas importadas por iscape y dos al grupo al
+6:58
+que pertenece para las marcas que no son. Voy a poner un ejemplo. Autoland es
+7:06
+un concesionario que está clasificado en el grupo doble A. Para las marcas que él
+7:12
+vende de Inskip le pagamos el 731. Pero para las marcas que no vende de
+7:19
+Incapet, sino vende masa o vende otro tipo de marcas, le pagamos el 467.
+7:25
+Entonces, ¿cómo tiene que ser la lógica? Solamente hablando de este tema del
+7:30
+nivel de comisión. Cuando yo tenga un cliente al que le
+7:34
+identifique que va a financiar un Suzuki que lo importa, yo ya sé que yo al
+7:43
+concesionario le voy a pagar una comisión del 731
+7:48
+y como le voy a pagar esta comisión que como notarán es mucho más alta que el
+7:53
+resto, pues la tasa de interés que le voy a correr al cliente pues será más
+7:56
+alta que el resto. Pero si por el contrario identifico que
+8:00
+el cliente va a comprar un MA, un Ford, cualquier otra marca que no sea de ISK,
+8:08
+entonces yo tengo que identificar la marca para Inskionario
+8:14
+para saber en qué grupo está y me vengo a la tarifa que yo le pago al
+8:19
+concesionario para que en el pricing yo sepa cuál es la tasa que le tengo que
+8:24
+cobrar al cliente, porque él va a comprar ese carro en ese concesionario.
+8:30
+Si el carro que compran ese concesionario es de una marca diferente
+8:33
+a ISKE, pues se tendrá que tener la lógica del grupo al que pertenece el
+8:39
+concesionario. Si la marca que va a comprar es una
+8:42
+marca de lo que importa Inchcape, ahí el criterio primordial será que la marca es
+8:48
+de Inscape y tendrá que ir a tomar la tarifa que se paga para
+8:53
+esta es la explicación de la primera variable que es la más compleja.
+8:58
+Obviamente, pues en los discoveries que tengamos seguiremos analizando con mayor
+9:02
+detalle eh pues toda la construcción de la lógica del desarrollo. Hasta aquí,
+9:08
+por favor. ¿Tienen preguntas de esta primera variable?
+9:16
+No veo que esté en la tabla. Eh, Rocío, sí, ahí esto que tú acabas de
+9:22
+explicar, esto se está haciendo, entiendo manual, ¿no? Todo este
+9:26
+está haciendo ¿Qué? manual. ¿Cómo así manual?
+9:30
+O sea, se está haciendo el cálculo, el cálculo manual,
+9:34
+calculando el tema de las de los porcentajes y demás. ¿O esto en dónde
+9:38
+está? Voy a traducir tu pregunta a ver si te
+9:42
+la entendí. ¿Dónde está la base de las de los
+9:48
+concesionarios y todas las comisiones que se paga? Si está un está un sheets
+9:51
+que nos alimenta todos los meses la comercializadora. Esa es tu pregunta.
+9:55
+Ajá. Ah, okay. Sí, señor. Esa es una base que se carga en alguna herramienta.
+10:01
+No, no se carga en ningún lado. Está en un ships, no está en un repositorio,
+10:06
+¿no? Esta información de cuánto se le paga a cada concesionario está un
+10:10
+sheets. Contesta tú.
+10:15
+Okay. Y eso es lo que se quiere eh desarrollar para que todo esto que tú
+10:20
+estás explicando quede automático y se Claro. Entonces vamos a tener que saber
+10:24
+cómo la ecomer que tiene que entregar la información de de cada concesionario, de
+10:30
+lo que se le está pagando, etcétera, cómo queda cargado en algún lugar para
+10:34
+que esa información la tome y el pring pueda calcular. Ahora la tabla. A ver,
+10:39
+los concesionarios están clasificados en una tabla, o sea, cada concesionario
+10:44
+pertenece a un grupo. Hay concesionarios en el A, hay concesionarios en el B, hay
+10:49
+concesionarios en el C. Sí, eso, eso está dado. Esa clasificación la tenemos
+10:54
+en un ships. Vuelve y juega. Sí, porque la información de comisiones no está en
+10:58
+ningún repositorio, está en sheets que nosotros los tenemos eh
+11:03
+los tiene el producto, los tiene la comer, incluso los tiene operaciones
+11:07
+porque operaciones paga las comisiones de los concesionarios. Sí. Entonces esa
+11:12
+información está en sheets que se tienen a disposición. Toca entonces mirar dónde
+11:17
+se va a colocar. Con eso contesté tu preguntas. Eh,
+11:21
+cuando tú hablas Rocío, cuando tú hablas de chip, ¿eso qué es? Che es una hoja
+11:27
+electrónica de el sistema de Google Office del Google que manejamos todos
+11:33
+para trabajar. Lo que ustedes llamaban Excel, pero es que Excel es de Office.
+11:38
+SHIPS es la hoja de cálculo de las herramientas de Google.
+11:45
+Okay, entendido. Sí, señor.
+11:48
+Eh, Rocío, no sé si si me permites, yo quisiera hacer aquí una aclaración antes
+11:52
+de que nos enredemos. Todo el tema de comisiones se calcula y
+11:57
+se paga y se liquida en un aplicativo que se llama GrandNet.
+12:02
+Si no lo han cambiado, ¿no? Ahí lo lo calculan. Ahí este proyecto no va a
+12:07
+meter mano, eso está funcionando, eso es independiente este proyecto. Aquí no
+12:13
+vamos a hacer nada sobre el cálculo de las comisiones. Aquí lo que tenemos que
+12:17
+identificar es el concesionario y el grupo al cual pertenece el
+12:21
+concesionario. Y de acuerdo a eso, el área de rentabilidad
+12:26
+armará su archivo, que por cierto no veo en esta sesión a nadie de rentabilidad.
+12:30
+El área de rentabilidad armará el archivo asignando la tasa teniendo en
+12:35
+cuenta cada grupo. Me explico con un ejemplo. Para el grupo, para los
+12:39
+concesionarios que el grupo esté en AA aa asignará una tasa de 20. Para los de
+12:44
+sola A asignará una tasa de 15. Para los de B asignará una tasa de 10. Ellos
+12:49
+asignan la tasa. Nuestra tarea en este en este proyecto es identificar el
+12:54
+concesionario para identificar a qué grupo pertenece. Es para que no nos
+12:59
+enredemos en el tema de comisiones. Así es. Sí, está invitado Diego
+13:03
+Barragán, pero no está presente y debería estar invitada Andrea de Diego
+13:08
+Barragáno. Por favor, que no es así no la veo.
+13:13
+Andrea no está invitada. Bueno, para que por favor Hugo o quien
+13:19
+está citando pues la puedan Andrea Nadine Gutiérrez. Bueno,
+13:24
+porque Andrea es la que está generando esa matriz de la que Olgita acaba de
+13:27
+hablar. Aquí simplemente era para explicarles cómo está clasificados los
+13:31
+grupos y para contarles en promedio cuánta tarifa es la que se les paga a
+13:36
+cada grupo. Luis Javier, adelante. Vale, una consulta. Lo que hemos logrado
+13:43
+averiguar de cómo funciona el pring diferentes variables, en este caso, pues
+13:52
+las que sean seis o las que sean, lo que armamos es que armamos una especie de
+13:57
+llave, que esa llave es la que denominamos el clúster. ¿Sí? El clúster
+14:02
+lo que hace es que luego de que de que jugamos con esas variables, llamo jugar,
+14:07
+pero pues es un término coloquial, jugamos con esas variables, armamos esa
+14:11
+llave de clúster, nos vamos y encontramos una tasa que está asignada a
+14:17
+ese clúster, que es el resultado de esa serie de variables. Y esa es la tasa
+14:22
+la asignamos al cliente, al cliente o al nuevo crédito que están haciendo.
+14:27
+Así es como funciona. Pero ahora cuando me empiezan a hablar de tasas y
+14:31
+comisiones y que es que si le cobro más comisión le cobro más tasa, pues
+14:35
+entonces me desligo un poco de lo que es el pricing y me hago la pregunta, ¿es
+14:41
+que al pringado? Claro, claro, se le va a meter todas
+14:48
+estas variables al pring. Entonces, si me permiten, voy a presentarles cómo es
+14:52
+el pring actual para que se hagan una idea. Bueno, este es el pricing actual.
+14:58
+Lejer, tal como tú lo tú lo acabas de de contar, mire, se los presento. Espérese
+15:04
+que está cargando mi pantalla. A como demoraba.
+15:11
+Listo. Miren, les presento el precio en actual. Se los pongo más chiquito para
+15:15
+que ustedes lo puedan conocer. Qué pena lo pequeño, pero es que quiero
+15:20
+que comprendan cómo es. Fíjense que aquí tenemos el buró. Si quieren vengan por
+15:26
+un momentico, les voy mire, buró, ingreso,
+15:31
+situación laboral, si ven, buró, ingreso, situación
+15:38
+laboral, estamos hablando de personas con contrato a término fijo o
+15:41
+pensionados. hace la combinación y acá lo que ustedes
+15:47
+están viendo es que tiene una taza, ¿sí la ven? Para otro buró, para otro
+15:54
+ingreso, para la misma situación laboral, tenemos la segunda tasa.
+15:59
+Para un mismo buró, pero con un ingreso menor, para la misma situación laboral,
+16:04
+tenemos otra tasa. Y así sucesivamente. Así sucesivamente. Ahora sí se los voy a
+16:11
+poner pequeño. Se los voy a poner más pequeñito. Ustedes van a encontrar que
+16:16
+tenemos n número de clústers que hacen la combinatoria entre buró, ingreso y
+16:23
+situación laboral que es para empleados. Y verán
+16:27
+que está la misma cantidad de clústers, pero ahora combinando con temporal o
+16:34
+autónomo y tienen otra tasa. Y fíjense bien que estos clústers, este es el
+16:41
+prising, este es el RAR que hay hoy. Claro, si me permites, eh, lo que nos
+16:47
+estás contando, perfecto, pero yo lo que entiendo es que ahora vamos a tener una
+16:51
+nueva variable ahí en medio de la K y la L donde estás ubicada que se va a llamar
+16:55
+comisión. Y lo que es va a haber más variables, Luis, que van a ir a partir
+17:00
+de la E. Se van a armar tantas columnas como el cuadro que estaba mostrando
+17:05
+donde la quieras colocar va una variable más que se va a llamar comisión. Y
+17:10
+entiendo esa comisión, pues más que la tasa tiene una A, B, C, una A y los las
+17:16
+indicadores que lo estás nombrando. Pero entonces mi pregunta es la, no sé si si
+17:21
+esté yo equivocado, pero no sé si es tanto como que eh si yo encuentro una A,
+17:28
+una B, una C, una A o el texto largo que tienes ahí, pues tenga una tasa que haga
+17:34
+caso a ese clúster o si por el contrario, cuando yo identifique la A,
+17:39
+la B, la C, la W A o la letra que quieras ahí vayamos a otro lugar, a otra
+17:45
+parametría, busquemos la tasa de la comisión y el aplicativo tenga que
+17:48
+hacer, señor. No, señor. Entonces, te voy contestando, Luis Javier. El archivo
+17:52
+que te acabo de mostrar será el archivo único que tenga todas las tasas con
+17:57
+todas las combinaciones y en estos 24 minutos solamente te he explicado la
+18:03
+primera variable que se dice grupo de pago de comisión.
+18:07
+ese archivo que te acabo de mostrar va a ser tan grande que ahí va a estar van a
+18:12
+estar todas las combinaciones posibles. El desarrollo lo que tiene que ir a
+18:18
+buscar es cuando el cliente está pidiendo un crédito tiene que mirar cada
+18:23
+una de las variables, la la cuánto buró tiene, cuánto ingreso tiene,
+18:30
+qué situación laboral tiene, en qué grupo está el concesionario donde va a
+18:35
+comprar el carro y sigue el resto de de variables que ya les voy a explicar. El
+18:39
+mismo archivo tendrá la tasa. El desarrollo lo que tiene que ir a buscar
+18:44
+en ese archivo la combinación, encontrar la tasa y cobrarla.
+18:51
+Pero lo que no va a pasar, lo que no va a pasar, permítame, señora Olga, le me
+18:56
+le cuelo ahí en la en la intervención, pero lo que estás diciendo es va a tener
+19:01
+n combinaciones con n tasas teniendo en cuenta las posibles combinaciones de
+19:07
+combinaciones que tienen, más lo que no va a hacer es que tenga que hacer
+19:11
+cálculos adicionales de que vaya y mire la tasa alta de comisión, la tasa más
+19:15
+baja de comisión y compararla con la tasa del préstamo. No, no. Él tiene que
+19:21
+[ __ ] las variables del negocio y venir a buscarlas en la tabla del pring. Ya.
+19:28
+Ahora, que la tabla del pricing es compleja. Sí, es compleja. Es grande. Es
+19:33
+grande. Sí, porque fíjate, te la acabo de mostrar solo para tasa fija y
+19:39
+solamente te mostré las que están en amarillo. Acá estaburó ingresos y
+19:42
+situación laboral y te mostré tasa fija. No alcancé a mostrarles tasa variable
+19:47
+que tiene exactamente lo mismo, pero si es tasa variable cobra otras tasas
+19:51
+diferentes. Entonces hoy está para tasa fija y para tasa variable con estas
+19:56
+tres. Ahora lo vamos a tener toda esta combinación que se está explicando.
+20:03
+Olguita, complementame, porfa. Eh, sí, Javi, ahí lo único que en este proyecto
+20:08
+lo único que tenemos que identificar es el concesionario y la categoría al cual
+20:13
+pertenece el concesionario y el clúster asigna la tasa. O sea, rentabilidad nos
+20:18
+dará el archivo, pero
+20:19
+para no, o sea, para ratificar lo que te dice Rocío, no tienes que hacer cálculos
+20:25
+adicionales de nada, nada. No tienes que hacer ningún cálculo, solamente
+20:30
+identificar si es un concesionario categoría A, B o C y ubícalo en el
+20:35
+cluster y ya le hacenas la tasa del cler. No, no tienes que hacer cálculoso.
+20:41
+Yo soy un poquito terco y resulta que si a mí en el en el archivo ya me están
+20:45
+dando el nivel de comisión que es a a A a A B C, bueno, lo que se venga ahí y
+20:53
+esa nivel de comisión ya está dentro de los clorses, dentro de las posibles n
+20:58
+combinaciones que ya hay y esas combinaciones ya tienen una tasa. Pues a
+21:03
+mí me queda la duda el por qué yo tengo que ir a preguntar el concesionario si
+21:07
+en últimas a mí me interesa es el la combinación del clúster y que y la que
+21:12
+da. Claro. Entonces yo te voy a contestar.
+21:15
+Ah, buenoita. Bueno, voy a hacer voy a apitar una
+21:18
+tablita un momentico para ser más didáctica.
+21:22
+Vale, mira, Javi,
+21:26
+es que pasa lo siguiente. Aquí te voy a aumentar esto,
+21:32
+por favor. No, no, no te puedo compartir el pricing.
+21:36
+No, no te lo puedo compartir. Rentabilidad,
+21:40
+no te lo puedo. Mira, Javi,
+21:42
+imagínate que este es las nuevas variables que vamos a trabajar.
+21:48
+Aquí en una columna vamos a tener la categoría del vehículo. Efectivamente
+21:52
+vamos a tener la famosa A, B o C. En alguna parametría
+21:58
+tenemos que identificar eh tenemos que tener la llave del
+22:03
+concesionario versus a qué grupo pertenece. Sí, cuando yo ingrese
+22:09
+autolano autonal, marcal y lo que sea, que será con el número de nid demás,
+22:14
+vamos a ir a una parametría y vamos a identificar a qué categoría pertenece.
+22:19
+Cuando identifiquemos la categoría, deberá existir un clúster que tenga la
+22:24
+categoría del vehículo, que tenga el tipo de gasolina, si es nuevo, el buró,
+22:29
+todas las demás variables. Y aquí tiene una tasa. Entonces, simplemente yo ubico
+22:34
+a ese clúster con las características que el cliente del vehículo que el
+22:38
+cliente va a comprar y de él y lo lo ubico en el cluster que para este
+22:42
+ejemplo sería una este esto sería un cluster y le asignaré esa tasa. No sé si
+22:48
+complemento, te complemento en algo. E Javi, Yuguito y todos. Miren, párate al
+22:54
+guitar la doble a porf. Bien. Autolan es doble A. Cuando yo tengo el negocio,
+23:02
+cuando yo tengo el negocio, yo voy a necesitar saber si ese cliente va a
+23:07
+comprar en ese concesionario al que le estoy pagando esa comisión.
+23:12
+Yo voy a necesitar saber en el front
+23:18
+y en el momento de la formalización el concesionario donde está comprando.
+23:24
+Necesito saberlo porque necesito identificar que Autolan está en el grupo
+23:30
+A. En el front nadie va a escribir doble A,
+23:35
+ningún cliente, ningún gestor, nada de eso. En el front lo que tenemos es una
+23:40
+Rocío López está pidiendo al crédito de un carro que me está diciendo que va a
+23:45
+comprar una marca Suzuki y que quiere comprarlo en el concesionario Autolajo.
+23:52
+En la formalización voy a poder corroborar que sigue
+23:56
+comprando el Suzuki y que lo sigue comprando en Autolano. O más bien
+24:00
+pongámoslo con el ejemplo de verdad, un Mazda compraba en Autolic,
+24:05
+como los datos que tengo en el en el en el flujo de la solicitud del crédito son
+24:13
+que es más, que es Autoland y que no es una marca Suzuki que es la
+24:18
+de Insk. Ya voy a saber que el grupo al que pertenece Autolan es doble A. ¿Cómo
+24:23
+lo sé? Porque tendré que ir a buscar Autolan en una tabla.
+24:28
+Cuando busque Autolan en una tabla y me diga que hace parte del grupo A, ya
+24:31
+puedo ir al pricing y buscar el resto de combinaciones que toditas están en la
+24:36
+solicitud de crédito, que no las he alcanzado a explicar. Sí, solamente
+24:40
+estaba explicando la del grupo de concesionario.
+24:43
+Luego las otras es muchísimo más sencillo porque las otras que ya las
+24:47
+vamos a ver adicional al puro o al ingreso a la
+24:51
+situación laboral son si tiene prenda o no prenda, que eso lo sé porque la
+24:56
+solicitud viene con esa información que si el carro es a gasolina o es
+25:00
+eléctrico, eso también viene la solicitud de crédito y así sucesiv que
+25:06
+si es nuevo usado, eso también viene la solicitud de crédito. Todas las otras
+25:10
+variables vienen en la solicitud, todas. La que no viene la solicitud per sé es
+25:16
+doble, A, B, C o D. Esa toca ir a buscarla en una tabla para saber qué
+25:20
+grupo es y saber cuánto le puedo cobrar. Cuando yo
+25:25
+Vale, vale. Lo voy a decir, lo voy a lo voy a decir con
+25:28
+lo voy a decir con mis palabras a ver si entendí para que todos todos tengamos la
+25:33
+plena claridad. Yo soy Luis Javier que estoy en el
+25:36
+concesionario de la 72 con novena y soy el asesor. Sí. y estoy vendiendo un
+25:41
+vehículo. Entonces, yo lo que hago es que allá en mi tablet o en mi portátil o
+25:46
+donde sea que esté así levantando la información del cliente, lo que voy a
+25:50
+digitar es estoy en este concesionario, no sé si coloco dirección o coloco NIT,
+25:55
+lo que sea. Lo que va a pasar es que por debajo con ese NIT me voy busco un nivel
+26:01
+de comisión y ese nivel de comisión es el que le envío al evaluador para que
+26:07
+arme el clúster y él es el que me va a dar la tasa. Es así.
+26:10
+Sí, Javi, lo dijiste bien. Ahora no tiene que digitar la dirección.
+26:14
+Imagínate si era un camello. Yo te lo cuento porque yo ya monté esto en otro
+26:16
+banco. Yo te cuento cómo lo hice. Bien,
+26:19
+lo que sea. Ya lo monté en otro banco. ¿Qué se hace?
+26:22
+Se hace una lista desplegable que tiene el nombre del concesionario, es
+26:26
+muchísimo más fácil encontrar autonal o autoland o el que sea. Pum, lo picas.
+26:31
+Sí, Marcali, Continutos, no sé qué tin lo picas. Sí. Entonces, tú amas una
+26:36
+tabla de concesionario, una tabla de concesionarios para que tú puedas
+26:41
+escogerlo y obviamente por ciudad porque pues hayo, hay que armar la tabla de
+26:45
+concesionarios. Tú como gestor, tú picas el concesionario. Hm. Pero por ejemplo,
+26:51
+cuando piques el concesionario también vas a tener que identificar la marca
+26:55
+porque te recuerdo que Incap importa unas marcas y esa se tiene que cobrar
+27:00
+una tasa más alta y un concesionario como Autolan puede vender las marcas de
+27:06
+y también puede vender otras marcas diferentes a Insk. Eso quiere decir que
+27:12
+un cliente puede estar en Autonal, Autoland, sí, el gestor está ahí, lo
+27:16
+está atendiendo. Él tiene que colocar que está en Autol Autonal, Autoland
+27:22
+y tiene que colocar la marca al ladito. Tiene que colocar la marca si es Suzuki,
+27:27
+Subaru, no sé qué o Mazda. Cuando identifique que es Suzuki, suar o
+27:31
+no sé qué, pum, inmediatamente sabe que es Inchcape, que es el importador.
+27:38
+Si es diferente a esas marcas, lo deja clasificado en el grupo doble A. ¿Me
+27:42
+expliqué esa parte de la lógica? Sí.
+27:47
+Uy, no, espera. Ah, yo me embolateé, Rocío, espérate.
+27:49
+Claro, es que lo voy a repetir despacio se lo repito. Es que sean necesarios.
+27:54
+Sí, yo se yo se lo repito. Escolita,
+27:57
+espérame, espérame, espérame un segundito.
+28:00
+Dime. Eccape. Es el importador y bueno, trae x
+28:03
+marcas. Sí,
+28:06
+pero nosotros no es suficiente con
+28:10
+identificar el concesionario para saber en qué categoría.
+28:15
+No es suficiente, el guitarte el desafío más grande de este desarrollo.
+28:21
+Hay 29 concesionarios comisiones.
+28:25
+Hay 29 concesionarios en Colombia que trabajan con el importador inche.
+28:32
+Esos 29 concesionarios son multimarca. Pueden vender marcas de Inchcape y
+28:41
+pueden vender marcas que no importa Inscape, si me importa más de importador
+28:48
+o Astara o otros importadores. Entonces, no es suficiente con
+28:55
+identificar el concesionario, que creo que ya todo el equipo compró ya esa
+28:59
+parte del del entendimiento. Tengo que identificar el concesionario,
+29:05
+pero también tengo que identificar si lo que va a financiar ese concesionario es
+29:10
+una marca de inchep y eso ocurre solo en 29 concesionarios de los 190 que
+29:15
+tenemos. Entonces, hay que pensar cómo hacemos
+29:19
+esa lógica en el desarrollo, porque tenemos la lista de concesionarios
+29:24
+y las marcas que importa. Uno podría meter el jurgo de marcas que
+29:29
+tiene Colombia, es fase cololdantero. Sí, pero también podremos pensar las
+29:34
+marcas que importan donde identifiquemos que es este concesionario
+29:40
+que vende una marca Inscap que es la que quiere el cliente, debe cobrar la tasa
+29:43
+más cara porque lo importa y es al que más comisión le estamos pagando hoy.
+29:49
+Y tú tienes esa relación de marcas versus concesionarios que deben
+29:53
+estar en cadastros. O sea, que tú nos puedes entregar la tabla de que dice
+29:57
+doble a el nombre de los concesionarios y las máscaras que las marcas que
+30:03
+entonces toca capturar esa información y someterle una parametría para que valide
+30:06
+el sistema. Exacto. Olito. Eso es lo que toca hacer.
+30:08
+Entonces toca cada concesionario toca colocarle las marcas. Entonces vuelve y
+30:12
+juega. Lo más importante es simplificar de los
+30:16
+29 concesionarios adscritos a que venden las marcas de y venden otras marcas. Sí,
+30:23
+el resto, la parametría funcionaría perfecto con que solo identifica el
+30:27
+concesionero o ahí lo busca en el grupo y cobra, no tiene que buscar la marca.
+30:31
+Me expliqué porque uno puede hacer el desarrollo
+30:34
+mucho más robusto y es que le mete todas las barcas a todos los concesionarios y
+30:39
+al final como para qué. La marca solo se necesita para las marcas que agrupan
+30:45
+Inchip. ¿Me expliqué? Sería importante que por favor nos
+30:51
+regales un una muestra o un ejemplo en vía correo de Escape y de los otros,
+30:58
+pero al final Javi entendería que en la parametría tenemos que meter nit del
+31:04
+concesionario, nombre del concesionario y marcas.
+31:08
+Hay que revisar eso. Esa parametría es robusta. O sea, eso no lo
+31:13
+Por eso quiero un ejemplo, porque no todavía no me no encajo bien, o sea,
+31:18
+entiendo lo que dice les el ejemplo. Sí, tranquila, yo le saco
+31:22
+para para encajar cómo hace cómo hace el por ejemplo autonal vende un Subaru, eso
+31:29
+lo importa es autonal, yo escojo el Nid Autolan,
+31:34
+yo escojo el Nid Autolan, escojo que es un Subaru y esa combinación
+31:40
+Exacto. Me debería dar una comisión, una categoría de AA, pero si escojo una
+31:47
+categoría. No, no, no, no. Una categoría de inchcape.
+31:51
+Ah, bueno, sí que es la primera que se la más alta. La más pero si todos por
+31:57
+favor terminar.
+31:59
+Pero si estoy en Autolan y escojo un Kia, me debería dar una categoría B.
+32:07
+Doble A. Ajá. Bueno, es un ejemplo, Ruso.
+32:09
+Sí, sí, sí. Eso es exactamente eso es. Estoy en Autoland, voy a tomar un Suzuki
+32:15
+categoría Inc. Estoy en Autoland, voy a tomar Maza, categoría.
+32:20
+Eso solo ocurre, equipo, para 29 concesionarios de los 190. No piensen
+32:26
+que eso ocurre para todo. No, pero igual hay que presentarles su
+32:29
+solución como si fuera todo. Ah, okay, Mari. Okay. Tiene que ser
+32:33
+transversal. O sea, no puedo pensar. Pero yo tengo una pregunta aquí, Rosy.
+32:38
+Voy a Señora,
+32:39
+a ver. Yo yo es que yo estoy aquí, no he intervenido porque estoy esperando que
+32:43
+ustedes allá eh hablen y para poder entender aquí en mi mente el tema.
+32:48
+Sí, yo tengo el el el concesionario y el concesionario tiene unas marcas,
+32:55
+entonces hay unas marcas que están dentro de skate y hay otras marcas que
+32:59
+no lo están. ¿Listo? Lo que está como escape
+33:03
+se prenderá algún Yo estoy pensándolo a nivel de los clusters de pricing. Listo,
+33:07
+yo ya voy hacia allá. ¿Cierto? Entonces, si la variable está
+33:10
+prendida, porque él tiene una combinación de variables, él le va a
+33:14
+entregar una tasa a al cliente, ¿correcto? Si está en skate, si no está
+33:19
+en skate, estas categorías a a cómo se la marca que, o sea, aparte de eso,
+33:25
+decir marca A, marca B, marca C, marca H. Entonces, la marca A va a tener un
+33:31
+nivel de comisión AA, la marca B va a tener un nivel de comisión A y así
+33:35
+sucesivamente. ¿O cómo? ¿Quién tipifica esas marcas, esos niveles de comisión?
+33:40
+A, A, B, C, ¿quién lo conoce? O sea, eso alguien tiene que cargar eso en alguna
+33:45
+parametría de modo que Correcto. Se va a tener que es XX, por
+33:50
+ponerle un nombre a la marca y esa XX dice, "Oiga, yo voy a esa parametría y
+33:55
+la XX es nivel de comisión B." ¿Correcto?
+34:00
+Sí, mi Mari, su mercó unos minutos después de haber iniciado, ¿cierto? Sí,
+34:05
+sí, sí, mi Rosa. A ver, eso lo explicamos al comienzo, lo
+34:07
+voy a volver a repetir, no hay problema. Ya, los 190 concesionarios están
+34:12
+clasificados en un nivel de comisión que lo ves ahí en la pantalla en la
+34:17
+columna G. O están en o también pueden estar en doble A o en B porque son
+34:24
+multimarcas. O están en C o están en motos o están en Fijo. Todos los
+34:30
+concesionarios están ellos en un nivel de ellos.
+34:35
+Voy a volver a repetir. Los 190 concesionarios cada uno tiene un nivel
+34:39
+de comisión, sea W A, A, B, C, motos o fijo. Los 190.
+34:47
+29 concesionarios que son multimarca venden las marcas de Inskip.
+34:52
+Esos 29 son de Inchip también. Es decir, Autolan estará como Incit y
+35:00
+Autoland también estará como doble A. porque son multimarca.
+35:06
+¿Dónde está eso? Hoy en día las comisiones se pagan en Grannet. Hoy en
+35:11
+día la clasificación de los grupos las tiene Grannet. Granet tiene la
+35:16
+clasificación, tiene autolan en qué grupo está, tiene autos en qué grupo
+35:22
+está, si está en el doble A, en el A, en el B, en el C, eso lo debe tener gran
+35:27
+neta. Sí, yo también lo tengo en un archivo, pero pues en el sistema está en
+35:31
+Gran Neta, allá está clasificado porque allá en Granet es donde se pagan las
+35:36
+comisiones. Ya. Ahora, lo que el desarrollo tiene que entrar a
+35:41
+identificar, que es el superdafío, es que cuando identifique Autoland sabe que
+35:47
+está en el doble A, dónde está en Grannet,
+35:51
+pero también tiene que identificar la marca que está financiando y donde sea
+35:54
+Suzuki tiene que cobrar la tarifa de inchip o la tasa de inchip, perdón,
+35:59
+tiene que cobrar en el pricing la tasa de inchip.
+36:03
+Hasta ahí te contesté, mi Mario. No, es que yo tengo aquí una confusión y
+36:06
+es la siguiente. Pricing para mí es asignación de tasa a un crédito y tú me
+36:12
+hablas de cobro de comisión. Entonces, ¿en dónde hacen más o va a haber un
+36:16
+pricing para asignación de comisiones? Claro. Entonces ahí después siguió la
+36:20
+explicación de que hoy el pricing que tú conoces tiene lo que está pintado en
+36:26
+amarillo, puro ingresos y situación laboral. ¿Te acuerdas? Asignar, sí, que
+36:31
+es asignar tasa. a un cliente dependiendo a sus características.
+36:35
+Perfecto. Entonces, hoy tenemos puro, ingreso y situación laboral, que no sé
+36:40
+si ya habéis checado cuando yo les mostré cómo está el pricing de hoy. Sí,
+36:43
+sí, sí, sí, sí, sí. Sí. Entonces, tenemos combinaciones de
+36:46
+buró con combinaciones de situación laboral con combinaciones de ingreso.
+36:51
+Perfecto. Y para cada una de las combinaciones,
+36:54
+pues hay una tasa. Sí.
+36:55
+Para el que tiene mejor buró, pues la tasa es más bajita. Para el que tiene un
+37:00
+peor buró, pues la tasa es más alta. Para el que es empleado, la tasa es más
+37:04
+bajita, pero para el que es autónomo, la tasa es más alta. Y así sucesivamente.
+37:09
+Entonces, se hacen diferentes combinaciones de características para
+37:12
+poner la tasa. Así es el RAR de hoy. Así es. Es RAR que y tenemos un RAR para
+37:17
+fija y un RAR para variable con las mismas combinaciones.
+37:22
+A ese RAR que tenemos hoy le vamos a meter muchísimas variables, Mari,
+37:26
+muchísimas al mismo RAR, en el mismo lugar, al mismo archivo. El mismo RAR
+37:31
+ahora va a tener muchas más variables. El mismo RAR se va a multiplicar tantas
+37:38
+veces como sea necesario porque vamos en combinatorias porque vamos a meter más
+37:42
+variables. Sí. Ahora estoy explicando la variable
+37:46
+más compleja, la del grupo de pago de comisiones. Entonces, ¿qué es lo que
+37:51
+pretendemos, Mari? Que aparte del ingreso y la situación laboral, si tú
+37:57
+identificas que el cliente está comprando el carro en Autolan, que vende
+38:02
+Suzuki, que lo importa Inskip, le cobras la tasa posible de la combinación.
+38:08
+Obviamente vas a vas a jugar la combinatoria con su buró, su ingreso y
+38:14
+su situación laboral. Es decir, para el mejor buró del mejor ingreso de
+38:22
+empleados que compran
+38:25
+carros en el concesionario de Autolan que es doble A, pero que está
+38:31
+vendiéndole un Suzuki, pum, subida de categoría a Inskit. A ese cliente le vas
+38:37
+a cobrar la mejor tasa posible dentro de lo que vas a cobrar con Inskip.
+38:43
+La mejor tasa es la mayor tasa. Le voy a dar, le voy a pagar la menor. Escúchame
+38:48
+eso. Escúchame eso. Como tiene el mejor puro,
+38:51
+como tiene más bien lo hacía al revés, tú cobras la tasa inchake y comienzas a
+38:57
+bajarle la tasa en la combinatoria dependiendo si tiene el mejor ingreso,
+39:01
+el mejor buró, si es empleado, si tiene una prenda yente con ingresos
+39:05
+supremamente altos, cliente de valor, vehículos de alta.
+39:10
+Exacto. Exacto, Mari. Exacto. Puedo volverlo a decir. Tú vas a cobrar la
+39:14
+tasa alta si es un carro que importa insc.
+39:18
+Pero cuando él lo combine con el resto de variables, yo comienzo a bajarle la
+39:22
+tasa. Es decir, si es la más alta, pero si es empleado, ah, pues es más bajita.
+39:29
+Si tiene opuró de 890, ah, pues más bajita. Si tiene el ingreso de más de
+39:35
+ocho, de 8 o 10 millones de pesos, ah, pues es 20. y eso nuevo. Ah, pues es
+39:40
+menos riesgo. Y me explico. Entonces, el pricing va a ser todas esas
+39:46
+combinatorias. El desarrollo no lo tiene que pensar. El
+39:50
+pricing que está haciendo rentabilidad es el que está haciendo esa
+39:54
+hipermegatabla. No han acabado de construirla.
+39:58
+Si no, me encantaría poderla traer Hugo. Y esa sí es la que te vamos a compartir.
+40:03
+Me explico, Hugo, cuando ya me la entrega Diego Barragán. Claro que la van
+40:06
+a tener porque esa es la tabla que alimenta el desarrollo,
+40:10
+que tendrá todas las combinatorias, todas, todas, todas. Esa claro que se
+40:16
+suministra. La que hoy tengo no te la voy a mandar porque es que esa tabla que
+40:20
+tengo no me la va a quedar. Yo te tengo que entregar la tabla que entrega Diego
+40:23
+Barragán y Andrea que va a tener todas las combinatorias. Entonces, hasta ahí,
+40:28
+Mari, te estoy contestando. Sí, ahí es claro. Tengo una preguntas
+40:33
+frente a a esas variables. ¿Por qué las meten? ¿Qué tiene que ver la comisión
+40:39
+en un pricing? O sea, claro, te lo voy a explicar. Me encanta
+40:42
+tu pregunta. ¿Por qué la comisión tiene que verse en
+40:46
+un pricing? Mari, cuando uno mira la rentabilidad del negocio.
+40:50
+Sí. El negocio, les voy a a relatar un Pige
+40:54
+rapidito. Uno presta un crédito y lo que uno cobra
+40:59
+primero pues es la tasa de interés. Luego a ese a ese ingreso pues que le
+41:05
+quita lo que le costó ese colocar ese crédito, el fondeo, ¿sí? los recursos y
+41:09
+yo llego al margen. Pero cuando llego al margen en el PG
+41:14
+hay una resta que se hace antes de entregar el margen y en el PIG de un
+41:20
+negocio tengo que saber cuánto le pagué al concesionario por haberme entregado
+41:25
+ese negocio. Y no es lo mismo cobrar una tasa del 16% efectivo anual a un cliente
+41:33
+que compró en un concesionario al que yo le pago el 3% de comisión que a un
+41:38
+cliente que está comprando un Suzuki en donde va a pagar el 7.3 de comisión.
+41:43
+Entonces el costo que yo le pago al concesionario lo voy a transferir a la
+41:48
+tasa del cliente. Sí, ya te entendí. entre mayor comisión,
+41:54
+pues la tasa va a ser un poco más superior, o sea, le va más caro
+41:59
+para yo no asumir como banco ese costo directo.
+42:02
+Claro, porque es que hoy yo le estoy cobrando a los clientes lo mismo, lo
+42:06
+mismo de acuerdo a su perfil, independiente dónde compre independiente
+42:10
+yo el gasto que estoy teniendo. Entonces, yo estoy sacrificando mi
+42:15
+rentabilidad porque yo no estoy transfiriéndole al cliente en la tasa la
+42:20
+comisión que me está costando que él compre ese carro en ese concesionario
+42:25
+que yo le pago 7.3. Total, es que no sé, habría que
+42:31
+pensarlo. Para mí es claro el por qué. Sí, lo que pasa es que
+42:36
+más, pero ahora equipo, esta explicación que yo
+42:39
+acabo de dar del qué nos lleva a meter la comisión en el pricing, ¿alguno tiene
+42:45
+alguna inquietud sobre ese racional que me parece super importante, es
+42:48
+importante que todo el equipo comprenda la razón por la cual estamos metiendo el
+42:54
+pago de la comisión o el grupo que en el que está clasificado el concesionario
+42:59
+con el que le pagamos la comisión a la tasa del cliente.
+43:03
+Conclusión, estamos transfiriendo el peso, la importancia, el gasto de la
+43:12
+comisión a la tasa que le vamos a correr al cliente, porque de lo contrario el
+43:16
+producto no es rentable. Totalmente de acuerdo.
+43:21
+¿Alguien tiene alguna inquietud sobre esa racional? Luis Javier, tú tienes,
+43:25
+Javi. Sí. Eh, Mari, yo lo que les entiendo y
+43:30
+lo voy a dividir en dos partes es lo siguiente. el cálculo de la, bueno, más
+43:35
+bien el buscar la tasa, digamos que no tiene modificación porque lo vamos a
+43:40
+seguir haciendo con el clúster que que vamos a armar en atención a cada una de
+43:45
+las variables y ellos van a cargar pues el la n combinaciones que serán la n
+43:51
+cantidad de llaves para tener la la las tasas que que que tienen o que van a a
+43:56
+proyectar. El reto está en que una de las variables del clúster va a ser el
+44:02
+nivel de comisión. Y ese es el que vamos a tener que ir a averiguar en función
+44:07
+del concesionario y la marca eh que tenga que tenga asociado. En última, la
+44:13
+comisión no nos va a interesar en el cálculo porque lo que nos va a interesar
+44:18
+es el nivel de comisión de acuerdo a esa combinación que va
+44:23
+Sí, que se le catalogación que Perfecto. Me siento muy feliz del
+44:29
+entendimiento. Me encanta que me parafraseen para saber
+44:33
+si si lo estamos logrando, pero Javi, lo has dicho perfecto. A ustedes no les
+44:38
+importancia pagar el 7, el 8, el 10, el 15, el 12, el cu, no. Ustedes tienen que
+44:43
+ir a saber el concesionario en qué grupo está y la marca para que con esa
+44:47
+asociación lo ubican. ubican si es grupo o a B, C, el que sea
+44:54
+y se van al pring, pum, hacen la combinatoria de las varéoles y
+44:58
+identifican el precio. Bueno,
+45:03
+es cómo lo vamos a hacer para el dato en otro lado. Ah,
+45:08
+sí, es que a mí no me hacía Max el tema de la comisión del concesionario, pero
+45:12
+en últimas no. Eso es lo de menos. Es lo de menos.
+45:15
+Catalogación de la comisión. Catalogación. El problema va a ser esa
+45:19
+parametría, cómo la vamos a armar.
+45:22
+De acuerdo. De acuerdo. Ahora, Javi, equipo y Mari,
+45:27
+sí era importante explicarles qué significa doble A, porque pues si
+45:31
+ustedes no comprenden qué significa esas clasificaciones, pues después cuando
+45:35
+estén haciendo el desarrollo no van a entender lo que queremos lograr. Sí.
+45:39
+Ahora que para efectos del desarrollo lo que tienen que ir a buscar es el
+45:42
+concesionario de la marca en una tabla y después de eso ir a buscar el pring. Ah,
+45:45
+sí, correcto. Eso es. Pero sí era importante que que yo explicara que qué
+45:52
+significa eso. Sí, pues porque de lo contrario pues no vamos a tener el
+45:56
+entendimiento y y el desarrollo no nos puede quedar como queremos. Sí.
+46:01
+Sí, Rosa, igual es importante porque nosotros podemos tener otra idea
+46:04
+diferente. Conocer el concepto del por qué y para
+46:10
+qué y en función de su correcto. Ahora, equipo, son las 4:52.
+46:17
+Déjenme ver cuánto tiempo nos queda. Eh, nos queda media hora. Entonces,
+46:26
+ya habiendo comprendido la lógica de la primera variable que vamos a meter
+46:32
+al pricing actual, permítanme, les explico las siguientes. Son
+46:39
+muchísimo más fáciles. Sí. Entonces, aquí en este cuadro que te
+46:45
+entregó Ángela María, te dice, "Paga comisión a conicionario o
+46:51
+paga o es mercado directo, reds, perapados y el segundo es grupo de pago
+46:56
+comisión." Hugito, hágame el gran favor de ubicarse en la B5.
+47:04
+Pago, grupo pago de Comisión Concesionaria Marca
+47:07
+B5. Ahí
+47:10
+sí, en la B5. Ese grupo pago de Comisión Concesionarca es el que llevo una hora
+47:17
+en la explicación. Okay.
+47:19
+Necesitaba explicar lo más complicado para explicar el resto. Bueno, entonces
+47:25
+yo me voy a devolver a la B4. Listo, equipo
+47:29
+sí, me voy a devolver a la B4. Ubícate en la
+47:32
+B4, Huguito. Hazme el favor. Listo. Entonces, equipo, fíjense lo que
+47:38
+pasó. Cuando yo quiero venir
+47:43
+a comprar carro financiado con el banco, yo tengo diferentes canales por los
+47:49
+cuales yo llego a pedir el crédito. ¿Listo?
+47:53
+El canal más grande es el canal concesionario.
+47:58
+El canal concesionario está conformado por 190 concesionarios
+48:04
+que hoy tienen alianza conmigo. Sí. donde yo les recibo los negocios, yo
+48:11
+tengo un contrato firmado, yo les pago una comisión. Listo.
+48:15
+Sí, eso. Y eso pesa
+48:19
+Y eso pesa el 95% de mi negocio. ¿Pesa qué, Rosy? ¿El qué? el 95% de mi
+48:27
+negocio. Okay,
+48:28
+listo. Pero hay otro 5% equipo que no llega por
+48:34
+el canal concesionario. Y antes de pasar a explicarles dónde no llega, voy a
+48:38
+decir lo obvio, porque a veces lo obio no es tan obvio. Sí.
+48:43
+Que llegue un negocio por canal concesionario significa que un cliente
+48:47
+entró a una sala de ventas, dijo que quería financiación, el
+48:52
+concesionario le entrega ese cliente al gestor de la Comer. El gestor de la
+48:59
+Comer simula, si obtiene aprobación automática, super
+49:03
+chévere, 10 minutos y le quedó aprobado. Si le dio viabilidad, le pide papeles al
+49:08
+cliente y luego sigue con el proceso de estudio.
+49:11
+El hecho de que el cliente llegue por la sala de ventas del concesionario implica
+49:17
+que el concesionario me lo refirió y si me lo refirió, yo le pago una comisión.
+49:22
+Así es. 95% del negocio está ahí. Listo. Vamos
+49:26
+para el otro cinco. El otro 5% es cuando el cliente no llega a una sola ventas
+49:32
+del procesioner. Entonces vamos a explicar cómo llega.
+49:37
+Puede llegar por la red. Entonces me voy para una oficina, me siento en frente
+49:42
+del gestor, le digo, "Oye, quiero comprar un carro, ¿me ayudas?" Claro,
+49:46
+claro, señor Rocío. Yo le doy el crédito, "Listo, arranquemos. Ahí no hay
+49:50
+ningún sala de ventas de ningún concesionario.
+49:53
+Ahí yo estoy llegando a pedir un crédito y el crédito pues me lo va a simular, me
+49:59
+lo va a estudiar, me dará aprobación automática o me daré debilidad, me
+50:02
+pedirá papeles y seguirá el curso. Cuando yo llego y me siento en una
+50:09
+oficina, en algunos casos yo sé lo que quiero
+50:14
+comprar. Yo le digo, Carolina, yo voy a comprar
+50:18
+una Toyota. ¿Estás segura? Sí. V a comprar una Toyota. ¿Dónde? En Dis
+50:23
+Toyota. Allá es donde yo la vi. Pero yo quiero que usted me dé el crédito.
+50:27
+Listo. Habrá otros clientes que lleguen y digan, "Yo estoy entre un Nissan, un
+50:32
+Kia, un Chevrolet, pero todavía no me decido.
+50:36
+Yo lo que necesito son 100 millones de pesos. Usted eso y yo comienzo a buscar
+50:40
+y yo ya le traigo la factura del carro que va a comprar.
+50:42
+Lao. Listo, mi madre. O sea, eso es lo que
+50:46
+ocurre en red de oficinas. Sí. Tendremos que pensar cómo se construye
+50:51
+el precio inicial que le voy a dar para después en el momento de la
+50:54
+formalización le cobre el precio que es, ¿no? Porque en el momento de la
+50:58
+formalización para esos clientes, incluso para clientes que en el
+51:03
+concesionario hayan dicho, imagínense que yo esté en autoando y yo arranqué
+51:09
+por un Suzuki, pum, me aprobó con la tasa y yo a la
+51:13
+formalización digo, "¿Sabes qué? Me gustó más este Mazda que estaba aquí al
+51:16
+lado. La tasa me baja. O sea, que con la formalización, Mari,
+51:23
+hay que tener presente que hay que hacer un reproceso porque tengo que verificar
+51:27
+la marca en la que voy a la marca en la que voy a desembolsar.
+51:36
+No le veo problemas si tiende hacia abajo, pero si tiende hacia arriba
+51:39
+tendrías que hacer un reproceso porque tienes que volver a hacer un score.
+51:42
+Así es. Sí, señora. Entonces, ya ya termino la explicación del del renglón,
+51:48
+mi Olguita, y ya atiendo las preguntas. Entonces, red de oficinas, listo,
+51:53
+equipo. Entonces, un cliente puede llegar a la red de oficinas. Hay otros
+51:57
+clientes que no van a la red, tampoco van a las salas. Están el domingo en su
+52:01
+casa, después de alerzo y dicen, "Ay, yo yo
+52:04
+como que quiero comprar un carro." Espere a ver qué hay por acá. Y
+52:08
+comienzan, se meten a Google y comienza a decir, "Quiero financiar carro." Pum,
+52:12
+aparece, entra a BBA, pum, entró a BBA en la web y dice, "¿Cómo simula,
+52:18
+obtenito en minutos?" Yo, "¿Cómo así? ¿Me lo pueden dar ya? Y yo como cliente
+52:22
+puedo autogestionarme en vehículo web, yo meto, contesto lo que me preguntan,
+52:28
+enter y pum, me puede dar aprobación automática." Y ese cliente no estuvo en
+52:32
+la sala de ventas, ese cliente no fue a una oficina, ese cliente lo hizo solo.
+52:38
+Se llaman leads, son los leads autogestionados.
+52:42
+Fíjense que si es un lead autogestionado,
+52:45
+yo no pago comisión al concesionario porque yo lo estoy atendiendo a él. El
+52:50
+concesionador no me lo refirió. Él llegó solito a mí por los buenos oficios de la
+52:55
+gente de marketing que hace que cuando yo quiera comprar un carro por todos
+52:59
+lados me bombardean para que yo me meta en vehículo web y lo tome. ¿Listo?
+53:06
+Otra opción, este banco genera preaprobados. Entonces
+53:10
+resulta que es que eh doña Marita ha sido un excelente cliente y entonces le
+53:15
+va a salir un preapruado vehículo y le salió el prapruado vehículo. Le llega un
+53:18
+correo y le dice, "Es hora de cambiar tu carro."
+53:21
+Entonces Marisa dice, "Hola, como que sí, es hora de cambiar mi carro."
+53:25
+Entonces le dice, "Pues haz clic acá para que te atendamos." Y te comienzan a
+53:29
+atender, Mari, la gente de la Commer de e de la fuerza de ventas que ellos
+53:34
+decidan para atender los praprobados y ellos te dan el crédito y tú compras
+53:38
+donde tú quieras. Ese cliente no es del concesionario, ese cliente es del banco
+53:43
+y yo no le pago comisión. Entonces, lo primero que tengo que identificar en la
+53:47
+cascada de lógica es, ¿ese llegó por un concesionario o ese cliente llegó por un
+53:53
+canal directo? He explicado red, he explicado leads, he
+53:58
+explicado preaprobados y ahora les voy a explicar mercado directo. El mercado
+54:02
+directo es una agrupación que tenemos con la comercializadora,
+54:07
+en la cual la Comer puede atender clientes que ellos mismos han manejado
+54:14
+en el pasado. Sí. cuando han tenido su cliente que le
+54:19
+compré el carro y él lo ayudó, ese cliente puede ser incluso de otro banco.
+54:23
+El gestor ya viene a trabajar para este banco y él sabe que Rocío López está
+54:27
+agradecidísima con él porque le ayudó con el crédito y él lo guarda en su
+54:30
+propia base. Entonces él me llama y me dice, "Rocío, usted no quiere cambiarle
+54:35
+el carro." Oiga, chino sabe que sí. Mire que ya pasaron 4 años y estoy enamorado
+54:39
+de un carro. Listo, yo la atiendo. Ese cliente no paga comisión, se llama
+54:42
+mercado directo. Y mercado directo también, ¿qué va a hacer, equipo? Pues
+54:47
+la compra de cartera. Cuando la Comer se encarga de contactar a los clientes que
+54:53
+no pudo venderles el crédito de vehículo, desembolsaron a otro banco y
+54:57
+luego luego los llama y le dice, "Deó a Rocío, usted no quiere que yo le compre
+55:00
+la cartera." Yo le digo, "Pues sabe que sí, terminó eso siendo carísima esa tasa
+55:04
+con ese banco y yo estaba aburrida. Yo más bien no conocé." listo, le hace el
+55:08
+crédito de compra cartera y se lo trae para el banco. Yo no pago comisión.
+55:12
+Entonces, fíjese que hay dos grandes grupos, el de la concesionaria
+55:17
+y el resto que no paga comisión. Yo en la cascada tengo que identificar por
+55:22
+dónde llegó el cliente y después de que identifique que llegó el cliente, leer
+55:27
+en el pricing la variable que corresponda.
+55:31
+Sí. Entonces, repito, equipo, el 95% llega por los concesionarios. Entonces,
+55:36
+yo identifico que llegó por concesionario, identifico el
+55:40
+concesionario, identifico el grupo eh al que pertenece, identifico la marca
+55:46
+pasajer SK y voy en la segundo renglón de clasificación. Entonces, ya expliqué
+55:51
+el canal por dónde llegó y el grupo de concesionario a que pertenece. Hasta
+55:56
+aquí, ¿qué pregunta hay para seguir con el resto?
+55:59
+Yo tengo yo tengo varias yo tengo varias.
+56:04
+Dale. ¿Qué? Adelante. Escucho.
+56:14
+No oigo. ¿Me oyen, equipo? ¿Me oyen?
+56:18
+Creo que Mari, que Mari dijo que le diéramos un segundo.
+56:22
+Ah, ya. Perdón, eso no lo escuché. Ah, aparte de Mari, entendimos la
+56:29
+diferencia entre que venga de un concesionario y
+56:33
+venga de un canal que no paga comisión. Sí, yo tengo varias preguntas para ir
+56:38
+aquí analizando aquí con el equipo de ingeniería. A ver, todo lo que entra por
+56:42
+el CAP es de concesionaria. No, no, no, no,
+56:47
+no, no.
+56:49
+Entonces, ¿cómo yo identifico en el CAP qué es de concesionario y qué no es de
+56:53
+concesionario? Tienes que meter variables, tienes que
+56:56
+tocar los fronts porque tú no tienes cómo identificarlo.
+57:00
+Habría que crear una lógica. Por ejemplo, Mari, si es compra de cartera,
+57:03
+pues eso no viene por un concional total.
+57:06
+Ese es el único que lo veo fácil. Sí. y los demás su producto, eso se puede
+57:11
+identificar, pero si es si es eh tasa de marca, o
+57:18
+sea, mercado directo del cliente que es de Edwin Berreal, que es el gerente de
+57:21
+marca y me está atendiendo a mí no viene a un concesionario, hay un subproducto
+57:24
+de tasa de marca, por eso lo puedes identificar.
+57:28
+Bueno, tocaría mirar ahí ya sentarnos en otra sesión de poder identificar, de
+57:33
+poder yo a nivel ya, porque yo me paro es en el frontal, ¿no? Oiga, yo estoy en
+57:37
+el CAP. ¿Cómo identifico si viene concesionario o no? Y y para saber si
+57:42
+debo si internamente puedo identificarlo con otra variable o obligatoriamente me
+57:48
+toca meter un un campo adicional. No, eso es lo que haría.
+57:51
+Correcto. Será otra sesión porque toca [ __ ] todos los subproductos a ver
+57:55
+cuáles de ellos identifican el canal, si falta alguno o no falta, si toca meterle
+58:00
+la mano a CAP o no. Sí, habría que mirar tanto en CAP, web y
+58:05
+NAAR, que son los tres frontales donde y API.
+58:11
+Ah, bueno, pero los API normalmente son concesionarios, ¿no? Sí,
+58:19
+sí, sí, señora.
+58:23
+¿Qué otra pregunta del canal, Mari para continuar? De acuerdo.
+58:26
+Para mí, para mí es claro, ya toca ir más detalle para saber qué cómo
+58:31
+identificar qué viene con concesionario y qué viene y qué no para poder saber
+58:36
+qué tendrá comisión y qué no tendrá comisión.
+58:39
+Así es, Mar. Podemos pasar equipo al a la prenda y sin prenda. Eh, Hugito,
+58:45
+señor. Sí, ahí yo coloqué Mari, ahí nos toca
+58:48
+sentarnos armar una matriz, ¿no? Empezar a clasificar la información que será
+58:52
+llave para todo esto. ¿Correcto?
+58:57
+Listo. Paso a identificar prenda y sin prenda.
+59:05
+Tenemos el producto prenda y sin prenda. Para prenda y sin prenda tenemos
+59:09
+subproductos, como lo puso aquí Angelita,
+59:12
+identificación por su producto. Entonces, todo lo que es prenda, pues
+59:15
+tiene su producto de prenda y todo lo que es no prenda, pues tiene productor
+59:18
+de no prenda o sin prenda. Entonces ahí la llave será el sucto, Mari y equipo.
+59:26
+Eso, Ros Yo tengo una una una pregunta y y ya
+59:31
+te voy a decir por qué. Porque en algún momento del tema de riesgos
+59:37
+yo le tengo atado una garantía por el tema de que estoy vendiendo un vehículo
+59:42
+A, pero no necesariamente lo vendí comprenda, ¿te acuerdas? Un
+59:48
+tema de riesgos. Si no estoy mal, tendríamos que profundizar, pero en mi
+59:51
+cabeza se me viene ese tema porque claro, si yo tengo una garantía de de un
+59:57
+vehículo, yo asumo que ya es prenda, o sea, el vehículo está prendado
+1:00:01
+al al, ¿cómo se dice? Al banco. Son su producto con prenta, tiene que haber una
+1:00:06
+prenta y eso se tiene que garantizar en el momento de la formalización. Yo no
+1:00:10
+puedo. Es que señor
+1:00:12
+tendríamos que identificar de otra manera porque es que no quiero amarrarlo
+1:00:15
+al subproducto. Ah,
+1:00:17
+habría que chequear otro otro escenario. Es que pegarle todo al su producto. No
+1:00:21
+me convence. Bueno, listo. Mi marcera cómo es.
+1:00:25
+Olguita, daleamos. Revisamos, solo para que estemos absolutamente
+1:00:31
+nivelados. Te robo la pantalla un segundo.
+1:00:34
+Solo para que estemos absolutamente nivelados. Quiero recordar una cosa.
+1:00:39
+El pricing se ejecuta cuando yo pico el botón del scoring, del credit scoring.
+1:00:45
+Cuando yo pico ese botón, se ejecuta todo el pricing.
+1:00:49
+Eso, ¿qué significa? que todas las variables, todas las variables que se
+1:00:54
+quieran medir las debemos tener antes de ejecutar el score.
+1:00:59
+Si una variable cambia, Rocío, si una variable cambia, necesariamente hay que
+1:01:04
+volver a hacer otro scoring porque no hay forma
+1:01:10
+de modificar eso en la formalización, porque acuérdate que con el pricing es
+1:01:14
+con el que se evalúa la operación y eso es por lo que va a todos los motores y a
+1:01:18
+los diccionarios de riesgos. Esa era la claridad que quería hacer para que
+1:01:22
+supieran que nosotros solamente tenemos dos pantallitas y que cuando picamos
+1:01:27
+cuando picamos el score ahí es cuando se ejecuta el precio.
+1:01:31
+Habría que mirar otros escenarios ahí, Olguita, porque es tú das de alta y yo
+1:01:36
+te hago una aprobación de para un crédito de 100 millones para un crédito
+1:01:40
+de Malda, por poner, pero mi cliente dice, "Ay, ¿sabe qué? Ay, a mí ya no me
+1:01:44
+gusta el Malda, me gusta esto y me respeta los 100 millones."
+1:01:47
+Hay unos reprocesos. Esos reprocesos que es lo que menciona Rosí es, si la tasa
+1:01:53
+llega a bajar y mi cuota es baja, habría que mirar que yo no haga un reproceso,
+1:01:58
+cómo vuelvo, cómo cómo de alguna manera no pierdo ese crédito y todo lo que
+1:02:03
+avance. Sí, pero si llega su cobro la tasa que es, no, no hago el
+1:02:07
+reproceso, pero tengo que cobrar la tasa correcta. Claro, porque la tasa tiende a
+1:02:10
+baja con la cual cuota baja y no veo. Sí, es habríamos que revisar ese
+1:02:14
+escenario porque en algún momento lo tocamos con riesgos y se pensó, habría
+1:02:18
+que ratificarlo y si sube ahí sí hay un reproceso porque tengo que volver a
+1:02:23
+hacer un scoring. La cota subió ta ta. Sí,
+1:02:26
+hoy en día, Olguita, no hay reprocesos cuando la tasa baja.
+1:02:30
+¿Y cómo hacen? Simplemente le bajan la tasa en el
+1:02:34
+momento de la formalización y ya. No te sé contestar, Olguita. Esa
+1:02:39
+respuesta técnica no me la Angelita, de pronto te contesta ya la próxima semana
+1:02:44
+que ya llegas. Sí, guárdate esa pregunta para Angelita, porfa. Te lo pido. Sí,
+1:02:49
+que no me sea la respuesta. Por Bueno, Carlos,
+1:02:56
+hola, Rosío. Pensando un poco con respecto al momento
+1:03:02
+de la formalización, ¿sí?
+1:03:05
+Y por el lado en que la tasa sube, porque el cliente decidió un cambio de
+1:03:10
+vehículo y entonces las nuevas variables hace que la tasa ya no sea el 20, sino
+1:03:17
+que sea el 25. Eso va a afectar,
+1:03:20
+pero no va a ser no va a ser tan terrible.
+1:03:22
+Sí, pero con seguridad van air momentos como pasa con los hipotecarios, que
+1:03:27
+afecta la capacidad de pago del cliente. Puede que pase aquí está citado riesgos.
+1:03:32
+hubo aquí tiene que estar rentabilidad y
+1:03:36
+tiene que estar riesgos porque esa pregunta estar a riesgos porque este
+1:03:39
+plan de pagos ya no le va a dar y por lo tanto,
+1:03:42
+¿correcto? Entonces lo que tenemos que hablar con riesgos es cómo vamos a
+1:03:45
+manejar para que cuando haya esos cambios eh cómo vamos a manejar para que
+1:03:51
+ese plan de pagos tenga una algura para evitar negar. Le vamos a decir,
+1:03:57
+"No, si compras un Suzuki no te presta. Si compras un más de así
+1:04:01
+lo que a lo que me preocupo a mí es un poco orientado al RCP y que sucede hoy
+1:04:06
+con hipotecarios que en ese en ese sentido
+1:04:10
+lo que pasa es que tienen que reprocesar todo el crédito y nace desde cero porque
+1:04:15
+NACAR, en el especial Nakar no permite devolverlo a un estado anterior o si lo
+1:04:22
+devuelves tienes que elevarlo nuevamente para que lo pruebe y no lo deja probar
+1:04:25
+quién lo aleamente. O sea, cuando ya te cuando ya no te dio capacidad. Sí,
+1:04:30
+correcto. Ah, correcto. Tendremos que los riesgos
+1:04:33
+tiene que volver la operación a un estado que ya no es aprobado
+1:04:37
+resuelto, ¿sí? Sino que es el estado anterior para que se haga otra vez esa
+1:04:42
+aprobación y ahí vamos a tener pérdida en tiempo y afectación de RCP al
+1:04:46
+cliente. Lo
+1:04:48
+de acuerdo. Entonces, tenemos que tomar nota de esto que estás mencionando para
+1:04:52
+charlarlo con el área de riesgos que debería haber estado invitado acá.
+1:04:55
+Bonito. Entonces, aquí tiene que estar eh Diego Tobar y
+1:05:00
+sí, ellos invitaron, pero bueno, para la próxima sesión
+1:05:03
+tienen que estar sí o sí porque tenemos que mirar esos escenarios por RCP no
+1:05:08
+podemos negar y volver a empezar, perdemos el cliente.
+1:05:11
+Tan sencillo como perder el cliente. Sí, porque el negocio de vehículo, el de
+1:05:17
+vienda, da un poquito más de tiempo. El de vehículo, tú le contestas en 10
+1:05:21
+minutos, le contestas en una hora lo perdiste.
+1:05:25
+Eso para la aprobación. Ya para la formalización pues tenemos que tener la
+1:05:29
+agilidad necesaria para poder reprocesar lo que tengamos que reprocesar y que
+1:05:34
+riesgos tenga una holgura. Hay que entrar a revisar con ellos qué tanta
+1:05:38
+holgura vamos a poder tener para evitar negarla,
+1:05:42
+pero sí cobrar la tasa que tenemos que cobrar porque también los prácticos la
+1:05:46
+oficina no puede modificar la aprobación. ¿Cómo
+1:05:51
+tiene que devolverla? tiene que volver a elevarla. Si en el caso que la oficina o
+1:05:54
+quien lo esté haciendo en ese frontal no tiene eh
+1:05:59
+la atribución para modificarla.
+1:06:04
+¿Correcto? Solo tenemos que hablar con riesgos porque yo no te lo puedo
+1:06:07
+contestar ahorita. Y si sabemos que eso hoy pasa así, pues tenemos que hablar
+1:06:12
+con riesgos cómo lo vamos a manejar, porque de lo contrario, cuando todos se
+1:06:16
+van quedando por capacidad de cuando la tasa suba, cuando escojan el
+1:06:20
+concesionario con la marca, la combinación que es la tasa más cara,
+1:06:25
+pues tenemos que mirar por RCP que no vayamos a perder el cliente.
+1:06:30
+Gracias por tu anotación. Agradezco a Hugo que tome nota para elevarlo en el
+1:06:33
+siguiente discovery. Nos quedan casi 15 minutos, equipo.
+1:06:38
+Gracias Carlos por haber hecho esa pregunta que es muy importante, muy
+1:06:43
+importante. Sí. Entonces, siguiente. Tenemos que
+1:06:48
+identificar si el carro es un carro gasolina o un carro híbrido y eléctrico,
+1:06:52
+porque como no sé si sepan, nosotros hoy tenemos una tasa muy especial para los
+1:06:58
+carros híbridos y eléctricos. y no está en pricing, la tenemos atada a
+1:07:04
+subproductos. Entonces, lo que vamos a hacer ahora es
+1:07:08
+hacer meter los híbridos y los eléctricos en el RAR para que cuando
+1:07:13
+identifiquemos que es un carro sostenible, pues le cobramos una tasa
+1:07:17
+barata que si fuera gasolina con la combinatoria de todas las
+1:07:23
+variables, como ya lo hemos explicado hasta el momento.
+1:07:28
+Aquí viene el destino. Yo tengo un destino que es adquirir un
+1:07:33
+carro y yo tengo otro destino que es comprar cartera. ¿Se acuerdan que se los
+1:07:36
+expliqué por el tema del canal allí arriba?
+1:07:39
+Entonces, esto también está por su producto. Si yo estoy comprando cartera,
+1:07:43
+pues la tasa es otra, diferente que si estoy adquiriendo y si estoy comprando
+1:07:46
+cartera, pues yo no pago comisión porque esa es parte del mercado directo.
+1:07:52
+Luego sigue hasta aquí vamos bien. Tocaba primero explicar el más
+1:07:58
+complicado porque los otros son más fáciles de comprender.
+1:08:03
+Luego sigue el puró, los ingresos y la situación laboral que ya está
+1:08:06
+implementado. Y luego nos quedan los de abajo, Ujitos
+1:08:11
+y Sumercem me hace el favor y baja su su scroll para poder ver los que nos
+1:08:15
+faltan. Gracias. Entonces nos queda LTB y nuevo usado.
+1:08:23
+El LTB es una sigla en inglés que significa lo
+1:08:28
+to que no es otra cosa que el porcentaje de financiación. Si es 100% es que estoy
+1:08:34
+financiando el 100% del carro. Si es 90% es que estoy financiando el 90% del
+1:08:39
+carro y entregué el 10% de cuota inicial.
+1:08:42
+Y así sucesivamente hasta 90, 80, 70 y 60. Paramos en 60 porque riesgos tiene
+1:08:49
+que estar acá en estos discoveries, por favor, para que nos pongamos de acuerdo
+1:08:54
+si el long to lo vamos a llevar hasta 60%.
+1:08:58
+Cuando un cliente entrega como cuota inicial el 40%
+1:09:02
+y solamente financia el 60%, pues la tasa de interés debería ser
+1:09:06
+mucho más baja que si financia el 100% del carro, porque al financiar el 100%
+1:09:13
+del carro estamos asumiendo un mayor riesgo. Cuando el cliente pone cuota
+1:09:18
+inicial asumimos un menor riesgo. Entonces aquí entra la variable del down
+1:09:22
+to value, que también va a tener que el price sin identificarla.
+1:09:27
+para eh pues saber qué tasa le vamos a cobrar. Entonces, nos vamos a ir por el
+1:09:33
+ejemplo. Ah, bueno. Y la última es si es nuevo o usado. Entonces, los
+1:09:39
+concesionarios pueden meter carros nuevos o carros usados. Yo tengo que
+1:09:42
+identificar si es usado, porque si es usado tengo más riesgo. Si es nuevo
+1:09:48
+tengo menos riesgo. Ustedes dirán, "¿De verdad?" ¿Por qué? Porqueamente se ha
+1:09:52
+comprobado que el que compra el carro nuevo paga en general, ¿no? Paga mejor
+1:09:57
+que el que compró el usado. El que compró el usado te da una pérdida
+1:10:00
+esperada más alta. Se comporta diferente al que compra un nuevo. Hm. Pero el
+1:10:06
+nuevo estar más enamorado del carro y paga más juicios las cuotas. El usado
+1:10:10
+pues sí tiene un comportamiento distinto. Entonces, equipo, ya con todo
+1:10:15
+esto, fíjense que la lógica va a ser. El negocio llegó por un concesionario.
+1:10:21
+Sí, llegó por Autolan. Okay. Tabla, la marca Suzuki. Okay. Se volvió Inskate.
+1:10:28
+Luego de eso, eh, Huguito, si quieres le puedes bajar de 120 por ahí a 80 para
+1:10:33
+que yo pueda hacer el ejemplo así leído rápido con todas que no me las sé de
+1:10:36
+memoria. Poquito menos, porfa.
+1:10:45
+Listo. Entonces, pero no dejas ver la primera, Huguito. No dejas ver el
+1:10:50
+renglón cuatro, le bajas otro poquito. Te lo agradezco. Entonces, lo primero
+1:10:57
+saber si llegó a un concesionario, la tasa más cara. Luego ubico que es
+1:11:01
+Autolan, que es doble A, pero es Suzuki. Pum, es Scap la taza más cara. Luego le
+1:11:07
+pongo que que m tiene prenda. Okay. Voy a hacer más suave con los prenda que con
+1:11:16
+los sin prenda. Con los sin prenda le voy a a a disminuir menos. Con prenda le
+1:11:20
+disminuyo más. Luego me doy cuenta que es un híbrido. Ah, entonces le disminuyo
+1:11:25
+bien. As gasolina, no le disminuyo tanto. Luego me doy cuenta que esa
+1:11:30
+adquisición, ¿okay? Esa adquisición, ah, es compra de cartera, es otra tasa
+1:11:35
+diferente. Le voy a bajar más. No paga comisión. Luego miro el buró. Ah, es el
+1:11:40
+mejor buró. Le bajo. Ah, es el burón más bajito.
+1:11:45
+No le bajo tanto el ingreso. Ah, gana 20 millones. Ah, le bajo. Ah, gana 4
+1:11:51
+millones. No le bajo tanto. Luego me voy al L to value. Está financiando el 100,
+1:11:57
+casi que no le bajo. Está financiando el 60, le bajo. Y luego me doy cuenta que
+1:12:03
+eso nuevo eh, le bajo, es un osado, no le bajo mucho. Esa es la lógica que
+1:12:08
+queremos que pase. Pero eso lo leen en la tabla del
+1:12:13
+pricing. No tienen que hacer ninguna fórmula ustedes. Lo que tienen es que
+1:12:17
+ubicar las variables, ir a la tabla y traer la tasa.
+1:12:25
+5 y 18 equipo. Se quedaron mudos. Se desmayaron.
+1:12:36
+No, aquí estamos. Bueno,
+1:12:41
+esta es la lógica del pricing. Yo creo que hemos cumplido el objetivo de hoy.
+1:12:47
+Era explicar la lógica. Primero, el explicar el para qué,
+1:12:53
+eh, el explicar qué queremos, el explicar la lógica de esta cascada,
+1:12:59
+el identificar para cada uno de dónde vamos a poder tomar esto.
+1:13:04
+Pues aquí mi mar es la que más conoce el banco.
+1:13:08
+Sí, los grupos de comisión están en gran neta,
+1:13:13
+es lo que nosotros les podemos decir. Sí, no les importa si le paga el cuatro
+1:13:17
+o el tres. Lo que identifican es que Autolan es grupo doble A.
+1:13:21
+Hay que pensar cómo en los front identifico que es Autoland, cómo en los
+1:13:25
+front identifico que es un Suzuki porque esas variables sí se requieren para
+1:13:29
+poder clasificar y eso no está.
+1:13:33
+Okay. Y el resto sí está, están los
+1:13:39
+subproductos o está en el cálculo el LPB, está en el
+1:13:45
+cálculo de cuánto vale el carro y cuánto vaya a financiar. El LTD hace parte del
+1:13:48
+score, lo requiere el score para poder
+1:13:52
+estudiar. El nuevo y el usado está en la factura.
+1:13:57
+Sabemos es un carro nuevo usado. El cliente también lo dice desde el
+1:14:00
+comienzo. Pasos a seguir, Huguito, que me deo ir a
+1:14:07
+otra reunión, por favor. Esto, ¿para cuándo lo quieres, Rocío?
+1:14:12
+Pues yo no, yo no. Mario, ¿para cuándo lo quiere?
+1:14:19
+Eh, nosotros necesitamos implementar esto lo
+1:14:23
+antes posible para salvar la rentabilidad del producto, que no está
+1:14:26
+dando la rentabilidad esperada. En teoría debería quedar productivo en
+1:14:32
+el tercer Q, es decir, 3 meses.
+1:14:45
+Es la expectativa que tiene de Mario para abajo. Esto tiene que
+1:14:51
+estar cuanto antes. Sergio, nuestro nuevo David Judinado,
+1:14:55
+Rocío Car y yo. Vale, Rocío, próximos pasos. Próximos
+1:15:03
+pasos. Eh, tú nos ibas a compartir una información, ¿no?
+1:15:07
+¿Cuál? Eh, los archivos que comentaste ahora,
+1:15:11
+que no ibas a compartir ahora una información de tabla. Entonces, hazme un
+1:15:15
+favor, Ojito, tú me haces el favor y me mandas un acta y me colocas lo que
+1:15:20
+necesitas que yo te comparta. ¿Por qué, Mari? Porque yo, ¿de qué saco?
+1:15:24
+Mandándoles una tabla gigante de de concesionarios con grupos. Ustedes
+1:15:30
+toman la tabla de granet. Yo no creo que tenga que mandar eso.
+1:15:34
+Lo que sí les tengo que mandar, Hugo, para que tengas la claridad tú y el
+1:15:38
+equipo, es la maqueta completa, el pricing completo que debe entregar
+1:15:43
+rentabilidad que lo está elaborando. Eso sí se los tengo que mandar. ¿Cuándo?
+1:15:47
+Cuando rentabilidad termine. Ellos me tienen que presentar avance
+1:15:52
+esta semana, más tardar la próxima porque eso hay que llevarle un reporte a
+1:15:55
+Mario lo antes posible. Entonces, cuando yo tenga el pricing completo, toda la
+1:16:01
+combinación de esto que les estoy diciendo, claro, se los comparte, pues
+1:16:05
+se los comparte rentabilidad más que yo, pero que tiene que venir a estas
+1:16:10
+reuniones de rentabilidad tiene que venir. Ese sería el archivo que les
+1:16:13
+compartiría. ¿Estamos de acuerdo? Ese es el que me estás preguntando ojito.
+1:16:19
+Ese es el que estamos el que me estás preguntando, ¿cierto?
+1:16:21
+Sí, es correcto. Ros. Ah, correcto. Sí, señor. Es el pricing.
+1:16:25
+Es el es el archivo RAR. Ese archivo RAR te lo compartiré cuando rentabilidad ya
+1:16:29
+lo entregué y ahí obviamente que irán tasas tasas
+1:16:35
+simulacro. Sí, después se decidirán las tasas reales. Pues por ahora se les
+1:16:39
+entregará unas tasas para probar. Señor Juan Felipe.
+1:16:44
+Qué buena, Rocío. No, no, solamente quería dejar claridad sobre lo que
+1:16:48
+mencionabas que para dentro de 3 meses ya estamos finalizando Q, entonces sería
+1:16:52
+más o menos para inicios del cuarto Q. ¿Es correcto?
+1:16:57
+M si preguntasun eso terminaríamos de definirlo en los próximos discoveries.
+1:17:04
+Correcto. Correcto. Yo te entiendo. Porque es que
+1:17:09
+lo que pasa es que Hugo me dice que para cuando yo lo quiero. Entonces yo le
+1:17:11
+digo, "De Mario para abajo lo queremos cuanto antes." Pues por Mario y por
+1:17:16
+todos y por la rentabilidad y por el negocio y por el producto y por todos
+1:17:18
+los que trabajamos en vehículo, pues esto un mes puesto, pero pues sabemos
+1:17:22
+que un mes es imposible. Sí. O sea, ahí permítenos eh junto con las áreas
+1:17:27
+involucradas y con el equipo en los próximos Discovery lo vamos a a ir
+1:17:31
+revisando. Eh, ya que estamos finalizando este prediscovery, eh me
+1:17:36
+gustaría entonces reunirme con Hugo, definir las personas que deben
+1:17:40
+participar en los próximos Discovery. Yo creo que te estaríamos incluyendo
+1:17:44
+también, Rocío. Y aprovecho, aprovecho para hacerte una consulta en cuanto a la
+1:17:49
+documentación que estuvimos revisando con Hugo y con Ángela.
+1:17:53
+El mapa RCA eh está pendiente porque al hablar con Ángela ella me dice que
+1:18:00
+digamos que este proyecto de de cara al cliente no existe un beneficio, que es
+1:18:06
+lo que nos indica el mapa RCA. No sé, Rocío, si en este momento no tenemos el
+1:18:10
+espacio, pero si te pudiera buscar mañana o el viernes un
+1:18:15
+la otra semana. Yo esta semana ya no puedo dotar comité de precios. Tengo BR
+1:18:19
+con holding. Yo creo que de pronto si la otra semana me buscas el espacio con
+1:18:24
+gusto ya esta semana estoy full. No puedo.
+1:18:25
+O hagamos una cosa, no no creo que sea necesaria una sesión. te pego un
+1:18:29
+chatcito y y revisamos entonces el lunes, si te parece bien, eh ese mapa de
+1:18:36
+RCA para poderlo finalizar y eh dejar sea el martes que ya Ángela está de
+1:18:41
+regreso de sus vacaciones. Te pido el favor que no me está dando la agenda ni
+1:18:45
+para un chat me da la agenda. Sí, porque me lo vas a mandar y no te voy a no te
+1:18:50
+voy a poder atender. Sí. Entonces, te pido más bien el favor que el martes
+1:18:53
+miremos un espacio pequeñito y y revisamos con calmita eso para podértelo
+1:18:58
+contestar bien. Cuenta con eso. Vale, perfecto, Rocío, de acuerdo. Y
+1:19:02
+entonces ya eh también estaríamos revisando
+1:19:06
+el espacio para que agendemos el próximo Discovery. El compromiso es que eso
+1:19:12
+empiece eh en aras del Q3. Entonces, la idea es que esos discovery queden
+1:19:17
+finalizados en lo que nos resta este Q. Así sea, así sea. E,
+1:19:25
+¿qué más les iba a decir? Yo no. Entonces, yo quedo atenta al acta de
+1:19:31
+la reunión. Obviamente, Hugo, me vas a solicitar el archivo RAR del proyecto,
+1:19:36
+así te pido que me lo solicites y me lo solicitas a mí y a Diego Barragán,
+1:19:41
+porque yo no soy la que lo construya, lo construye él. Sí.
+1:19:45
+Entonces, no lo solicitas para que lo podamos entregar como insumo para todo
+1:19:49
+el el pues digamos que afianzar el entendimiento de hoy y obviamente
+1:19:54
+apalancar el desarrollo. Vale, Rocío. Eh, sí, sin embargo, hay
+1:19:59
+soloamente una observación. En esta sesión está citado los de riesgos, el
+1:20:04
+mapa de participantes están. Vamos a hacer un feedback con ellos, pues para
+1:20:08
+que asegurar que en la próxima sesión estén ellos, ¿vale? Te loco y
+1:20:13
+aterrizamos este tema de las sesiones. Sí, porque fíjate lo delicado que
+1:20:17
+Riesgos no venga y donde acabemos los discovery y si riesgos llegue al final,
+1:20:21
+imagínense lo que puede llegar a pasar.
+1:20:24
+Ahí están invitados los que los que debían estar tocate una gestión super
+1:20:29
+individual confirmando asistencia antes de que venga, porque si tú mandas la
+1:20:33
+invitación y no llegan y y no llegan no van a llegar.
+1:20:37
+Sí, vale. Entonces toca una gestión ahí del hobby
+1:20:40
+tuyo, pues para garantizar que los que tengan que estar vengan, por favor. Eso
+1:20:44
+es parte de tu rol porque si no no vamos a lograr el objetivo de los discoveries
+1:20:48
+y se van a alargar los discoveries. Y lo peor es que cuando estemos en el cuarto
+1:20:52
+y digan otra cosa, se reprocesa todo lo que hemos dicho y nos volvemos
+1:20:55
+ineficientes. Entonces, sí, porfa, te agradezco que
+1:21:01
+que que hables con cada uno, que que hagas esa parte del rol. Te lo agradezco
+1:21:07
+mucho, Huguito. Gracias por tus buenos oficios.
+1:21:10
+Claro que sí. Listo, equipo, muchas gracias por haber
+1:21:14
+estado tan atentos en esto tan pesado. Les agradezco mucho su atención. Muy
+1:21:18
+amable. Vale, feliz tarde a todos. Les agradezco mucho la
+1:21:22
+asistencia. Estamos cerrado nuestro prediscovery. Muchísimas gracias a
+1:21:25
+todos. Un excelente día. Buenas tardes. Me faltó una parte. No se
+1:21:30
+vayan. Ay, [ __ ] No, no se vayan. Me faltó los
+1:21:33
+preprobados. No, espera, capo. Este prediscovery era para aclarar solamente
+1:21:39
+el pricing RAR. Nos faltó los preaprobados y nos faltó el RBD de
+1:21:44
+vehículo web. Hugito, ¿tú vas a citar un espacio para preaprobados y un espacio
+1:21:49
+para revés o se fue Hugo? Si está Hugo. No lo veo. Hugo, se fue.
+1:21:55
+Salió Rocío, pero entonces eh repíteme nuevamente porfa.
+1:22:01
+La SA la SA tiene tres alcances. El primero fue el que explicamos hoy, que
+1:22:07
+es el mátenas, es el pring. Listo. Sí.
+1:22:10
+El segundo es cómo le vamos a poner tasa por riesgo de cliente a los preaprobados
+1:22:16
+de vehículo. Eso se llama precios preferenciales. Si
+1:22:20
+alguien de la mesa conoce cómo es eso, ya sabrá cómo es.
+1:22:24
+Los prepruebas de vehículos son los únicos que no tienen precios
+1:22:26
+preferenciales, o sea, precio por cliente, no lo tienen. Ese es un tema
+1:22:30
+específico, no se revuelve con el RAR. Y el tercer punto es el RBD, repositorio
+1:22:35
+de venta digital, que es para vehículo web. Sugerimos desde el comienzo con
+1:22:40
+Olguita que se iban a citar Discovery separados porque son temas diferentes.
+1:22:45
+Entonces, quedó atenta a la cita de los preaprobados y quedó atenta a la cita
+1:22:50
+del RDB. Yo me llevo esta consulta, Rocío, para validarla con Hugo mañana en
+1:22:54
+en la sesión del daily que tengo con él y te confirmo para ver cómo lo vamos a
+1:22:58
+manejar, porque eso indicaría también que vamos a faar el proyecto entonces
+1:23:02
+por cada uno de esos. No, Rocío Garcés no quiere que se fasee,
+1:23:05
+Rocío Garcés quiere que se trabaje simultáneo.
+1:23:08
+Okay, entonces lo revisamos con el equipo y y todo, por favor. No quiere
+1:23:12
+paseado. Claro, inicialmente no piensa, primero sacamos pricing, después sacamos
+1:23:16
+el otro y después sacamos el otro. Garés pide que no, que unas personas hacen
+1:23:20
+pring otras personas hacen RBD y otras y otra persona hace el de
+1:23:26
+preprost que creo que es el más sencillo.
+1:23:28
+Okay, listo. Ya está Hugo acá.
+1:23:32
+Sí, yo estaba acá. Hugo, ¿por qué no me a todos? Es que son
+1:23:36
+tantos que yo no los alcancé a revisar y como estabas poniendo. Entonces, Hugo sí
+1:23:41
+está allá o creo que yo lo ya me despedido.
+1:23:45
+Ya, ya sé. Dime, dile ojito, dos puntos. Hoy trabajamos
+1:23:49
+pricing, falta preaprobados y falta RBD. Con Olguita habíamos dicho que para cada
+1:23:53
+tema sea una sesión diferente porque es demasiada información.
+1:23:58
+¿Listo? Entonces nos falta el de preaprobados y nos falta el de RBD.
+1:24:01
+Bueno, preaprobados. Dame un momento. Anoto.
+1:24:04
+Preaprobados y RBD. Repositar de ventas digitales de
+1:24:07
+vehículo. Listo. Vale.
+1:24:09
+Listo. Dos. La ventas estaba en calles de riesgos.
+1:24:15
+Sí, yo solo me retiré un momento, Rosy. Tenía pisada la sesión con otro tema,
+1:24:20
+pero volví. Estuve la única reflexión, la única reflexión que no sé si fue
+1:24:25
+cuando te retiraste, no te afanes, es que
+1:24:29
+cuando un cliente, pero sí estuviste toda la sesión, Lauris.
+1:24:32
+Sí, igual Rosi, yo reviso las notas de la sesión y los comparto igual con
+1:24:37
+Diego. Listo. Pero Lauris, para que te lleves
+1:24:40
+esto de una vez con Diego, porque necesito que Diego venga al siguiente
+1:24:43
+Discord. Así es. Sí, señor. ¿Por qué? Porque si un cliente va a
+1:24:47
+financiar un carro en Autos La Florida que está en el grupo C
+1:24:54
+y está financiando un Mazda y es y es un prenda y es un nuevo y es
+1:25:01
+un empleado y tiene el mejor buró y tal cuento y resulta que en el último minuto
+1:25:06
+ya la formalización dice, "Ay, no, pasé por Autol y me enamoré de ese Suzuki."
+1:25:10
+Sí, es por tema de balance de caja respecto a la
+1:25:13
+Entonces la tasa le va a subir a la máxima posible dentro de su perfil
+1:25:19
+y si no llega a dar capacidad deutamiento, pues no podemos decirle
+1:25:22
+negado y comienza otra vez o ahí tenemos que mirar qué va a pasar. Entonces
+1:25:27
+hablar con Dieguito si vamos a tener un brales de manejo para no negar.
+1:25:35
+Vale, Ri, lo revisamos y te cuento. Sí, de hecho, eso es algo que nos
+1:25:40
+enfrentamos hoy con los cambios de tasa hasta
+1:25:47
+pero lo revisamos. Sí, señor. Listo. Ahora sí, equipo. Muy buenas
+1:25:50
+tardes a todos. Muchas gracias, Laurita. Gracias.
+1:25:56
+Excelente tarde. Que estés muy bien. Gracias. Chao.
