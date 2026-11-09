@@ -1,0 +1,413 @@
+eh nuevos campos y si ya tenemos definido,
+0:05
+digamos, los clústeres, los nuevos clústeres y ahí ya digamos un archivo
+0:10
+final con los nuevos clústeres que iremos a montar o o como revisar bien la
+0:14
+definición de de esa matriz de lo que llega, cómo nos va a llegar la info, más
+0:20
+que todo eso. Vale, entonces podemos empezar y les
+0:34
+explico qué fue lo que de una. Espérame, pongo aquí a Ah, ya,
+0:38
+ya está grabando. Listo. De una. Sí, señor.
+0:42
+Entonces, eh, bueno, entonces, volviendo a la
+0:47
+línea de correos, yo lo primero que les compartí fue el archivo, cómo lo
+0:51
+cargaríamos en su momento. Entonces, bueno, creo que tú ya tienes este
+0:55
+archivo. Este es el TXT que cargaríamos en la ruta ya con los nuevos campos.
+1:01
+O sea, yo solo les compartí este archivo para pruebas y luego Hugo me solicitó
+1:06
+pues que le explicara cada campo cómo era, ¿no? Y este es el archivo que que
+1:10
+tú tenías que se llama proyecto RAR vehículo. Entonces en esta primera hoja
+1:16
+que se llama plano, tú vas a encontrar todos los campos con su debido nombre
+1:20
+separado, o sea, a comparación del plano que esto viene creo que separado por
+1:25
+punto y bien separado por espacios. Aquí encuentras el nombre del campo y
+1:31
+lo que viene pues en su interior. Los que están en amarillo son los campos que
+1:36
+vamos a utilizar que antes no utilizábamos. Entonces es
+1:41
+este entonces es el de colectivo, estado, vehículo, financiación,
+1:46
+tipo de persona y rango garantía. En la hoja de eh cuadre es donde vas a
+1:54
+encontrar, o sea, que se va a poner esos nuevos campos. Entonces, por ejemplo, el
+1:59
+primer campo que vamos a utilizar es el colectivo
+2:02
+que que eh que actualmente tiene seis seis rangos y los que vamos a utilizar
+2:10
+son estos. Y estos rangos, ¿qué significan? Entonces, cuando tú vas a
+2:14
+Calaboja, que se llama colectivo, entonces dices, "Ven, es que van a eh
+2:18
+van a definir tres eh seis diferentes destinos." Entonces, sería el primer
+2:23
+campo. Luego al de rango riting.
+2:29
+Alejo pregunta, "¿Esos destinos qué son? ¿Son los concesionarios o son qué?"
+2:38
+Uy, déjame, yo busco. Es que Dame un segundo que yo ya te digo qué es eso.
+2:44
+Vale, gracias. Qué pena. D un segundo. Yo con aquí antes de eso
+3:08
+Hugo, de casualidad. Tú tienes a la mano esa hoja que habemos utilizado en en los
+3:12
+prediscovery. Ya la busco yo. ¿Cuál, Cristian? ¿Cuál? La del formato
+3:19
+donde definíamos los campos. Sí, señor. Que era
+3:21
+el formato la necesidad. Sí, sí, señor. Espera, dame un momento.
+3:26
+Dale. Deja compartir, ¿eh?
+3:39
+Sí, sí, señor. Claro. Mientras de compartir
+3:44
+yo voy aquí copiando. ¿Ves mi pantalla?
+3:52
+Sí, señor. Sí, señor.
+3:55
+Esta eh esta esta menciona esta
+4:00
+sí donde donde negocio producto
+4:05
+Sí, señor. Está solicitando
+4:08
+unas nuevas variables para mejorar el modelo de cálculo de Price para
+4:14
+vehículo. Entonces ellos están solicitando
+4:18
+e incluir nuevos nuevos nuevas variables.
+4:25
+Sí. Y eh nos solicitan que se incluyan las variables de grupo
+4:31
+pago comisión concesionarios. Eso aquí lo que se propone es crear varios grupos
+4:38
+y ahí se van a clasificar los concesionarios por NI y nombre del
+4:42
+concesionario. ¿Vale? Esa es una variable. La siguiente variable es
+4:47
+prenda sin prenda. Ese es un nuevo campo que nos nos solicita. Y aquí pues en ese
+4:54
+prenda sin prenda se va se van a seleccionar prenda sin prenda otra y esa
+5:02
+pues eh lo bajaríamos de una tabla allí que ya existe
+5:07
+otra variable es el tipo de combustible. gasolina de híbrido eléctrico también lo
+5:11
+vamos a manejar por por un un campo de selección
+5:18
+donde seleccionamos estos estos tres conceptos, ¿vale? Y la siguiente es
+5:24
+laion que es el porcentaje de financiación.
+5:29
+Es otro es otro campo que nos pide. Y aquí pues aquí dan un un rango, ¿no? Eh,
+5:35
+menor igual 70%, mayor al 70 y pues esto es debemos de modelarlo allí con el tema
+5:42
+R. Y por último, el nuevo y usado que es este. Debemos es de selección nuevo y
+5:50
+usado. Debemos incluirlo los en los diferentes canales.
+5:55
+Esto tenemos que llevarlo allí en en el modelo eh RAR. Por supuesto, hay
+6:02
+que hacer unos clúster o utilizar esos clúster que tenemos ahora de vehículo e
+6:07
+incluirle estos estas nuevas variables tanto en host, NAAR, web, web vehículo,
+6:15
+eh C y Apps. Vale. Okay. Listo. Entonces, si quieres me
+6:21
+puedes volver a pasar la pantalla que ya encontré donde tenía eso.
+6:28
+Listo. Entonces, volviendo a la hoja resumen que yo tenía,
+6:34
+entonces aquí Andrés ya le puse la definición de los cinco requerimientos
+6:38
+que acabo de mencionar Hugo, yo aquí puse cuál es cuatro.
+6:42
+Entonces el de canal de originación de venta es este colectivo
+6:46
+que uno lo va a relacionar aquí en los campos, que sería este campo.
+6:51
+Y aquí están los seis tipos de digamos de sí, de de canal de originación. Luego
+6:58
+seguiría el de prenda sin prenda, que está estos cuatro tipos.
+7:03
+Luego seguiría el de tipo de combustible, gasolina, híbrido y
+7:06
+eléctrico, que aquí están los tres tipos. Aquí en la hoja que se llama
+7:10
+combustible dice cuál es cuál. O sea, con respecto a nuestro lado Andrés,
+7:15
+nosotros yo ya tengo armado lo del plano y eso
+7:19
+faltaría pues el pricing y lo de LTB menor a 70 o mayor a 70.
+7:26
+Aquí está como la definición uno y dos y el estado de vehículo que ya lo venimos
+7:29
+utilizando pues digamos en vivienda, Andre sería igual N y U en este campo.
+7:38
+Entonces, pues aquí estarían los nombres de los campos
+7:41
+y aquí estaría como pues es más información para digamos rentabilidad,
+7:45
+que es lo cómo se define el digamos el el plano de esa variable para cruzar. Y
+7:51
+entonces este es el formato actual del pricing de vehículo, o sea, existe la V
+7:57
+que es vehículo, tasa fija y existen cuatro variables, tres variables que es
+8:03
+buró, ingresos y situación. Y en el nuevo formato existirían ya
+8:09
+todas estas que es buró, ingreso, situación y las cinco variables que
+8:13
+vamos a crear. Entonces, el clúster completo sería este
+8:18
+ahí. El de colectivo serían lo de concesionario. Sí.
+8:23
+Sí, señor. Es que toman los seis valores. Ah, okay.
+8:25
+Sí, sí, señor. El de los seis valores, luego sería prenda y prenda, luego el
+8:29
+tipo de combustible, el porcentaje y nuevo y usado. Señor,
+8:36
+sí, Andrea, ahí son cinco variables, ¿no? Finalmente, ahí crean eh grupo de
+8:45
+concesionarios, el de prenda sin prenda,
+8:49
+de combustible, gasolina híbrido eléctrico, el toum que es el porcentaje
+8:54
+de financiación y el no usado. Sí, ahí ese que preguntas tú de grupo de
+9:01
+concesionario. Finalmente salieron en lo que vimos allá en las sesiones discovery
+9:07
+salieron seis grupos. Sí, seis grupos. Y ahí es donde vamos a clasificar eh toda
+9:14
+la cantidad de concesionarios. Vale, vale. Eh, si tú me puedes compartir ese
+9:22
+archivo que mostraste anteriormente, te lo agradecería.
+9:38
+Vale, entonces yo creo que nuestra parte pues de lo que hizo rentabilidad no
+9:42
+sería más. No sé si tienen alguna pregunta.
+9:45
+Sí, yo tengo ahí. Listo. Entonces, lo de colectivo
+9:48
+marcas seis, por lo que entiendo, puedes pasar a la a donde está la defin.
+9:53
+Claro. Sí, señor. Entonces, son seis seis tipos, que era lo que más
+9:56
+hablábamos ahorita. Listo. Cada uno hace referencia que
+9:59
+tienes por ahí. Entonces, ese es que ese Excel no lo
+10:03
+tengo, pero fue el que Andrea le pidió a a quién, a Hugo que aquí dice cuál es
+10:11
+cuál. Deme en un momento pues que él me lo
+10:14
+comparte y yo les pondría aquí la definición si quieren.
+10:19
+Quizás si no la tengo, yo sé que son seis grupos, pero no tengo el nombre
+10:22
+puntual. Si quieres me lo puedes compartir y lo pego ahí de una vez. Eh,
+10:26
+muchachos, ahí yo lo yo lo compartí aquí en la Mear
+10:34
+porfa o si no pages ingresos ahí en datos, en la en la pestaña de
+10:39
+datos. Eso. Perfecto.
+10:44
+Entonces aquí, pero aquí dice que qué es cada grupo o o
+10:49
+no eso está en definición. No sabemos que eh son tres grupos,
+10:56
+¿sí? Y pues este grupo una vez definamos allí junto con el sponsor, pues nos
+11:01
+definirán cómo se va a llamar cada grupo y en esos grupos qué concesionarios
+11:07
+vamos a trabajar. Ah, ya. Ah, okay.
+11:11
+Porque yo yo acabé de pegar, yo entiendo en lo que vi en una sesión, digamos ahí,
+11:17
+que digamos existen unos unos grupos y a cada uno, digamos, son como niveles de
+11:23
+la comisión y dentro de cada grupo hay una serie de concesionarios, ¿cierto?
+11:29
+digamos, estaba el doble A, el A, el B, el C, motos, algo de fijo y algo de de
+11:36
+una empresa que es la que hace, digamos, como todo el también todos los procesos
+11:41
+de de qué, de importación de los vehículos,
+11:46
+¿sí? Que hace el proceso de importación de los vehículos. Sin embargo, yo ya
+11:51
+entré ese prediscovery, está por ahí grabado, decía pues Rocío que algunos de
+12:00
+esos concesionarios, cierto, que ofertan algunas marcas de
+12:04
+vehículos, eh, son, digamos, importados por la
+12:09
+empresa de de Inchap Capet, ¿no? La que aparece como inicialmente ahí en la
+12:16
+tablita que puse. Entonces, que si hay algunos concesionarios que van a estar
+12:21
+de la misma manera en varios grupos, pero que la tasa si y la participación
+12:27
+depende si digamos el la importadora lo hace esa empresa, sería la definición
+12:35
+por ese grupo, entiendo yo. Digamos que lo que nosotros de alguna forma tenemos
+12:40
+también que variar en esa en esa matriz es como los pesos, digamos, de alguna
+12:46
+forma para armar el clúster que tendrían cada uno de esos grupos. Entonces,
+12:51
+digamos que que normalmente la lógica del del pricing, él le coloca una clave
+12:56
+ID o una o una letra dependiendo, digamos, creo que la tasa de alguna
+13:02
+forma la tasa que tiene más valor y la tasa que tiene menos valor dependiendo
+13:07
+la digamos el orden en que llegue los
+13:11
+registros y cada uno de esos grupos. Nosotros sabemos digamos quién tendría
+13:15
+más peso, digamos, entre esos grupos de alguna manera.
+13:21
+O eso nos toca o eso nos falta definirlo.
+13:26
+Yo creería que eso falta definirlo. Okay.
+13:33
+Sí. Andrea, me recuerdas tú de qué área eres, por favor.
+13:37
+De rentabilidad. Ah, okay. ¿Recuerdas? Yo yo creo que tú
+13:42
+ya habías participado en por allá hace como unos dos tres meses de este
+13:46
+proyecto. ¿Recuerdas que Rocío nos decía que esos grupos debemos armarlo y es
+13:54
+cada grupo debe tener sus condiciones, por decir financieras? Cada
+13:59
+concesionario vende eh su en este caso su vehículo y da ciertas condiciones de
+14:05
+tasa, ofertabilidad y demás. ¿Sí recuerdas?
+14:09
+Y eso estaba finalmente eso estaba en construcción. Aquí lo que se pidió es,
+14:14
+oiga, para que se tenga una idea de cómo vamos a trabajar, vamos a trabajar seis
+14:21
+grupos y lo vamos a modelar en pricing junto con este archivo que nos presenta
+14:28
+Cristian para definir finalmente cuáles son las
+14:33
+condiciones que va a tener cada grupo y cada concesionario. Esto último está por
+14:39
+definir eso pues tendrán que pasárnoslo ya lógicamente producto producto es el
+14:45
+que negocia sus tasas y condiciones, por decir financieras con otros esconarios y
+14:51
+una vez los tengan definidos, no los pasan para que nosotros imparametricemos
+14:58
+esa esas esas condiciones o esa información en nuestro desarrollo del
+15:03
+modelo pron. Sí.
+15:08
+Sí, sino que yo me quedé hasta la parte en que habíamos definido como 10 grupos,
+15:12
+si mal no recuerdo, y después salí a vacaciones, entonces no
+15:16
+sabía en que había quedado el tema, ¿no? Y y Andrea, válido, tú saliste de
+15:21
+vacaciones, se detuvo el proyecto por prioridad de otras cosas y pues ya nos
+15:27
+dieron la orden de retomar este proyecto y ya pues da debemos meterle fuerza al
+15:32
+tema. Igual estas estas son las primeras
+15:36
+sesiones que estamos haciendo para retomar de nuevo esto y pues nada,
+15:41
+seguimos traccionando el proyecto. Eh, próximamente nosotros estaremos
+15:46
+convocando ya a más sesiones para seguir aterrizando esto y en lo posible pues yo
+15:52
+cito para incluir aquí al al sponssor, en este caso a a a Ángel Hernández, a
+16:00
+Sergio, creo que tú los conoces. Mm.
+16:04
+Eso. Vale, listo. Gracias por la alineación.
+16:11
+Claro que sí, Andrea. Mucho gusto. ¿Algo más, Andrés?
+16:17
+No, no, señor. No, señor. Pues digamos que sí, lo que dice es cierto, nos toca
+16:21
+mirar y revisar bien eso porque en la sesión, pues lo que yo te decía, esa
+16:25
+tablita que yo puse ahí como imagen fue la que pude ver que tenía una cierta
+16:30
+cantidad de concesionarios. vi que en la sesión decían que son como 129,
+16:34
+129 y 20 pertenecen a varios de los grupos que que se están
+16:41
+creando. Entonces, digamos que sí es un poquito como como importante poder
+16:45
+conocer, digamos, cómo funcionarían ese esos grupos y cómo se definiría,
+16:52
+digamos, los clúster y y la lógica para definir la tasa RAR, digamos, de cada
+16:57
+uno, dependiendo de qué condiciones de lógica, porque pues de eso dependemos
+17:01
+tanto aquí el compañero Carlos que va a traar pues la parte online y la que
+17:06
+llega a los simuladores y de alta, como la parte bash que es la que arma pues la
+17:11
+la probabilidad de los clústers. Entonces, pues sí, sí estamos como ahí
+17:15
+atentos a que comencemos a mirar ese pedacito, pero era eso.
+17:20
+Eh, de tiene Andrés de eso ya tienen el archivo final, que es el mismo que nos
+17:27
+comparte eh que le envíen el correo del del archivo RAR. Es es algo por variar
+17:34
+aquí con Cristian por por por pasar o algo así,
+17:39
+¿no? No, digamos ya ya sabríamos que viene. Lo que ya nos toca es definir qué
+17:45
+va a tener peso, qué no va a tener peso, digamos, cómo va a ser la lógica del
+17:48
+armado de RAT, digamos, a nivel de de esta clave ID.
+17:53
+Entonces, esas cositas sí nos tocaría comenzarlas definiendo más que todo,
+17:57
+pues la lógica del comportamiento, ¿no? Pero de crisa pues no por ahora no sería
+18:05
+ya lo que tenemos del archivo y comenzarlo a revisar y saber qué nos
+18:09
+falta a nivel de definición. Vale,
+18:17
+vale. Gracias. Bueno,
+18:22
+sí, igual muchachos, Cristian y Andrea, nosotros estamos retomando el proyecto y
+18:29
+lógicamente pues tendremos que ir validando allí en sesiones de trabajo,
+18:36
+citaciones para seguir aterrizando y obtener la
+18:39
+información final que se va a cargar, ¿no? Pues yo tengo sesiones con con el
+18:45
+sponsor para que nos vaya entregando y pues les estaremos informando o citando
+18:48
+también a sesiones. Vale. Vale. Sí.
+18:54
+Okay. Bueno, hasta luego. Muchas gracias.
+18:57
+Gracias. Bueno, hasta luego.
+18:59
+Hasta luego. Gracias. St.
