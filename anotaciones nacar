@@ -1,0 +1,17 @@
+De acuerdo con lo conversado en la sesión con Francisco, compartimos los puntos que requieren revisión y validación con Negocio para avanzar en las definiciones pendientes y lograr el cierre del circuito en NACAR:
+
+Ventana adicional: Confirmar la viabilidad de la propuesta técnica de incorporar un botón de datos complementarios que habilite una ventana emergente específica para vehículos. Esto permitiría evitar la sobrecarga de las transacciones estándar y resolver las limitaciones de espacio en las pantallas actuales.
+
+Manejo de prenda: Definir cómo se gestionará la condición de vehículo con o sin prenda, considerando tanto la parametrización del subproducto como la decisión individual del cliente, así como las limitaciones actuales de NACAR en el punto de inicio del proceso.
+
+Tipo de combustible: Revisar y validar los valores disponibles para el campo «Tipo de combustible» en el proceso de alta de garantías de NACAR, identificando si se requieren ajustes o incorporaciones adicionales.
+
+image.png
+Alcance de subproductos: Confirmar con Negocio si los cambios propuestos aplicarán de manera transversal a todos los subproductos de la cartera de vehículos o si existen exclusiones que deban contemplarse.
+
+Lógica de cálculo y LTV: Definir si el cálculo (por ejemplo, la cuota inicial o LTV por diferencia entre el precio de compra y el valor prestado) debe mostrarse explícitamente en pantalla o si la lógica debe operar por debajo de forma interna.
+
+
+Agradecemos su apoyo en la revisión y definición de estos puntos, con el fin de consolidar los requerimientos funcionales y técnicos necesarios para continuar con el cierre del circuito en NACAR.
+
+Quedamos atentos a sus comentarios y validaciones.
