@@ -1,0 +1,214 @@
+<mxfile host="app.diagrams.net" agent="Claude Code">
+  <diagram name="Estado Actual por Canal" id="estado-actual-canales">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2760" pageHeight="1620" math="0" shadow="0">
+      <root>
+        <mxCell id="a0" />
+        <mxCell id="a1" parent="a0" />
+
+        <mxCell id="aTitle" parent="a1" style="text;html=1;fontSize=18;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;" value="Estado Actual (As-Is) — Consumo de variables de Pricing Vehículo por Canal — SDA 56742" vertex="1">
+          <mxGeometry height="28" width="1700" x="20" y="6" as="geometry" />
+        </mxCell>
+        <mxCell id="aLegend" parent="a1" style="text;html=1;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#5C6B7E;" value="&lt;b&gt;Fuente:&lt;/b&gt; ANALISIS_TECNICO_CAP_PRICING_VEHICULO_SDA_56742.docx · Analisis_Impacto_APIs_Pricing_Fase_II_SDA56742.docx · Pantallas CAP.pdf · Flujo de vehiculo desde CAP.pdf · Mapa de impacto Pricing APIS.jpg · matriz oficial de homologación por canal.&amp;nbsp;&amp;nbsp;✅ = funciona hoy · ⚠ = parcial/con hueco · ❌ = no existe en el flujo." vertex="1">
+          <mxGeometry height="30" width="2600" x="20" y="38" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== MATRIZ DE HOMOLOGACION ===================== -->
+        <mxCell id="aMatrizTitle" parent="a1" style="text;html=1;fontSize=14;fontStyle=1;fontFamily=Helvetica;align=left;verticalAlign=middle;fontColor=#182230;" value="Matriz de homologación — las 5 variables, hoy, por canal" vertex="1">
+          <mxGeometry height="22" width="700" x="20" y="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aMatrizTable" parent="a1" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;fillColor=none;" vertex="1">
+          <mxGeometry height="200" width="1020" x="20" y="110" as="geometry" />
+        </mxCell>
+
+        <!-- Usamos cajas simples en vez de shape=table para evitar fragilidad; construimos la matriz como un grid de celdas de texto -->
+        <mxCell id="mHdr0" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#182230;strokeColor=#182230;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="Variable" vertex="1">
+          <mxGeometry height="30" width="220" x="20" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mHdr1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#182230;strokeColor=#182230;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="CAP" vertex="1">
+          <mxGeometry height="30" width="200" x="240" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mHdr2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#182230;strokeColor=#182230;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="Nácar" vertex="1">
+          <mxGeometry height="30" width="200" x="440" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mHdr3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#182230;strokeColor=#182230;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="Vehículo Web" vertex="1">
+          <mxGeometry height="30" width="200" x="640" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="mHdr4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#182230;strokeColor=#182230;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" value="APIs / Inchcape" vertex="1">
+          <mxGeometry height="30" width="200" x="840" y="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mR1L" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;fontFamily=Helvetica;fontSize=10.5;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=8;" value="Grupo / Concesionario" vertex="1">
+          <mxGeometry height="42" width="220" x="20" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="mR1C1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ DTO de concesionario existe (NIT/nombre), pero SIN grupo 1-6 y se captura DESPUÉS del scoring" vertex="1">
+          <mxGeometry height="42" width="200" x="240" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="mR1C2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ Por incorporar — no parametrizado todavía" vertex="1">
+          <mxGeometry height="42" width="200" x="440" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="mR1C3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDEDED;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="❌ No existe en el flujo actual" vertex="1">
+          <mxGeometry height="42" width="200" x="640" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="mR1C4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDEDED;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="❌ Las 4 operaciones ASO no transportan grupo/concesionario hoy" vertex="1">
+          <mxGeometry height="42" width="200" x="840" y="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mR2L" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;fontFamily=Helvetica;fontSize=10.5;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=8;" value="Garantía / Prenda" vertex="1">
+          <mxGeometry height="42" width="220" x="20" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="mR2C1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ funciona, pero con codificación propia CP/NP (no las 4 categorías UGDTGAR)" vertex="1">
+          <mxGeometry height="42" width="200" x="240" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="mR2C2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ parametrizada en la transacción 371 (alta de garantía)" vertex="1">
+          <mxGeometry height="42" width="200" x="440" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="mR2C3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ se muestra en pantalla, pero no es seleccionable por el cliente" vertex="1">
+          <mxGeometry height="42" width="200" x="640" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="mR2C4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ existe pledge/guaranteeType, no mapea a las 4 categorías de negocio" vertex="1">
+          <mxGeometry height="42" width="200" x="840" y="182" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mR3L" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;fontFamily=Helvetica;fontSize=10.5;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=8;" value="Combustible" vertex="1">
+          <mxGeometry height="42" width="220" x="20" y="224" as="geometry" />
+        </mxCell>
+        <mxCell id="mR3C1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ existe (combustionType) — falta la opción &quot;Otros&quot;" vertex="1">
+          <mxGeometry height="42" width="200" x="240" y="224" as="geometry" />
+        </mxCell>
+        <mxCell id="mR3C2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ parametrizada en la transacción 371" vertex="1">
+          <mxGeometry height="42" width="200" x="440" y="224" as="geometry" />
+        </mxCell>
+        <mxCell id="mR3C3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ existe en el mock/flujo" vertex="1">
+          <mxGeometry height="42" width="200" x="640" y="224" as="geometry" />
+        </mxCell>
+        <mxCell id="mR3C4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ solo booleano isFuel — insuficiente para 3 categorías" vertex="1">
+          <mxGeometry height="42" width="200" x="840" y="224" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mR4L" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;fontFamily=Helvetica;fontSize=10.5;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=8;" value="LTV (% Financiación)" vertex="1">
+          <mxGeometry height="42" width="220" x="20" y="266" as="geometry" />
+        </mxCell>
+        <mxCell id="mR4C1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ calculado (fundedPercentage) — corte exacto vs. negocio sin confirmar" vertex="1">
+          <mxGeometry height="42" width="200" x="240" y="266" as="geometry" />
+        </mxCell>
+        <mxCell id="mR4C2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="⚠ existen importe y precio — no hay campo de % explícito" vertex="1">
+          <mxGeometry height="42" width="200" x="440" y="266" as="geometry" />
+        </mxCell>
+        <mxCell id="mR4C3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDEDED;strokeColor=#B23A3A;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="❌ no existe en el flujo real de producción (solo en mockups previos)" vertex="1">
+          <mxGeometry height="42" width="200" x="640" y="266" as="geometry" />
+        </mxCell>
+        <mxCell id="mR4C4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ existe" vertex="1">
+          <mxGeometry height="42" width="200" x="840" y="266" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mR5L" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;fontFamily=Helvetica;fontSize=10.5;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=8;" value="Nuevo / Usado" vertex="1">
+          <mxGeometry height="42" width="220" x="20" y="308" as="geometry" />
+        </mxCell>
+        <mxCell id="mR5C1" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ funciona" vertex="1">
+          <mxGeometry height="42" width="200" x="240" y="308" as="geometry" />
+        </mxCell>
+        <mxCell id="mR5C2" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ funciona" vertex="1">
+          <mxGeometry height="42" width="200" x="440" y="308" as="geometry" />
+        </mxCell>
+        <mxCell id="mR5C3" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ funciona" vertex="1">
+          <mxGeometry height="42" width="200" x="640" y="308" as="geometry" />
+        </mxCell>
+        <mxCell id="mR5C4" parent="a1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;fontFamily=Helvetica;fontSize=9.5;align=center;verticalAlign=middle;" value="✅ isNew / vehicle.detail.status" vertex="1">
+          <mxGeometry height="42" width="200" x="840" y="308" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aMatrizNote" parent="a1" style="text;html=1;fontSize=9.5;fontFamily=Helvetica;align=left;verticalAlign=top;fontColor=#5C6B7E;" value="Homologado de negocio para Garantía: Prenda / Sin prenda / Otros (Prenda FGA queda fuera de esta fase). Compra de Cartera: contemplada en CAP/Nácar; su inclusión en Vehículo Web no está definida todavía." vertex="1">
+          <mxGeometry height="34" width="1020" x="20" y="354" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== CARRIL CAP ===================== -->
+        <mxCell id="aPkgCAP" parent="a1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#FAFAFA;strokeColor=#999999;align=left;spacingLeft=10;spacingTop=6;tabWidth=160;tabHeight=24;tabPosition=left;" value="CAP — hoy" vertex="1">
+          <mxGeometry height="320" width="1020" x="20" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="cStep1" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=10;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=12;" value="Simulación / Scoring&lt;br&gt;&lt;font style=&quot;font-size:8.5px&quot;&gt;Spring MVC/JSP + CXF (portalbonitaweb)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="50" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cStep2" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=10;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=12;" value="Resultado&lt;br&gt;&lt;font style=&quot;font-size:8.5px&quot;&gt;Automática / Viable / Rechazado&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="330" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cStep3" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=10;fontStyle=1;fillColor=#FDEDED;strokeColor=#B23A3A;spacingLeft=12;" value="Radicación de la contratación&lt;br&gt;&lt;font style=&quot;font-size:8.5px&quot;&gt;AQUÍ se captura NIT/DV/Nombre/Vitrina/vendedor&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="240" x="610" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cStep4" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=10;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=12;" value="BPM7 / Bonita&lt;br&gt;&lt;font style=&quot;font-size:8.5px&quot;&gt;Elevación → Formalización (TRAM/CSB/FORM/ELEV/APRO)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="910" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cEdge1" parent="a1" edge="1" source="cStep1" target="cStep2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cEdge2" parent="a1" edge="1" source="cStep2" target="cStep3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cEdge3" parent="a1" edge="1" source="cStep3" target="cStep4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#182230;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cGapBox" parent="a1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDEDED;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=10.5;" value="&lt;b&gt;⚠ Brecha confirmada (Pantallas CAP.pdf):&lt;/b&gt; el concesionario se captura DESPUÉS del Scoring/Resultado — el pricing ya se calculó sin conocer el Grupo. Mover esta captura antes del cálculo es el cambio central que ambos escenarios deben resolver.&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#5c6b7e&quot;&gt;Nota operativa real: 14 cuotas aprobado automático y Compra de Cartera aprobada automática NO se radican hacia BPM.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="970" x="50" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="cHostBox" parent="a1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2E0;strokeColor=#B5760F;align=left;verticalAlign=top;spacing=8;fontFamily=Courier New;fontSize=9.5;" value="&lt;font style=&quot;font-family:Helvetica&quot;&gt;&lt;b&gt;Registro HOST confirmado (Flujo de vehiculo desde CAP.pdf):&lt;/b&gt; pantalla 3270 REPORT con RVE ENTIOFI, RVE CUENTA, RVE GAMA VEH, RVE DSC GAMA VEH, RVE TIPO VEH, RVE DSC TIPO VEH, RVE ESTADO VEH — ejemplo real: GAMA VEH=26.2721, TIPO VEH=PA, ESTADO VEH=N&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="970" x="50" y="690" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== CARRIL NACAR ===================== -->
+        <mxCell id="aPkgNacar" parent="a1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#F2F2F2;strokeColor=#808080;align=left;spacingLeft=10;spacingTop=6;tabWidth=160;tabHeight=24;tabPosition=left;" value="Nácar — hoy" vertex="1">
+          <mxGeometry height="140" width="1020" x="20" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="nBox" parent="a1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#808080;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=10.5;" value="&lt;b&gt;Transacción 371 — alta de garantía&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Garantía y Combustible YA están parametrizados ahí. LTV existe como importe y precio, pero no como campo de % explícito — hay que derivarlo o agregarlo. Grupo/Concesionario: por incorporar, igual que en los otros canales.&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#B23A3A&quot;&gt;⚠ Sin integración APX confirmada — necesita su propio camino de resolución (ver Escenario 1/2).&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="970" x="50" y="830" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== CARRIL WEB ===================== -->
+        <mxCell id="aPkgWeb" parent="a1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#FDEDED;strokeColor=#B23A3A;align=left;spacingLeft=10;spacingTop=6;tabWidth=200;tabHeight=24;tabPosition=left;" value="Vehículo Web — hoy (el más atrasado)" vertex="1">
+          <mxGeometry height="160" width="1020" x="20" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="wBox" parent="a1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B23A3A;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=10.5;" value="&lt;b&gt;Front → ASO (CUGHTO01/03/04, CUGHTS02) → HOST&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Según la matriz oficial de homologación: Grupo NO existe en el flujo, LTV NO existe en el flujo real de producción (solo estaba en los mockups de diseño previos de este proyecto), Garantía se muestra pero no es seleccionable.&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#B23A3A&quot;&gt;⚠ Es el canal con más trabajo pendiente de los 3 — ningún mecanismo de resolución de Grupo existe todavía en producción.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="970" x="50" y="990" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== CARRIL APIs / INCHCAPE ===================== -->
+        <mxCell id="aPkgAPI" parent="a1" style="shape=folder;whiteSpace=wrap;html=1;verticalAlign=top;fontFamily=Helvetica;fontSize=13;fontStyle=1;fillColor=#EAF5F2;strokeColor=#2E7D6B;align=left;spacingLeft=10;spacingTop=6;tabWidth=220;tabHeight=24;tabPosition=left;" value="APIs / Inchcape — hoy (pipeline real confirmado)" vertex="1">
+          <mxGeometry height="330" width="2680" x="20" y="1130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pStep1" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;spacingLeft=10;" value="ASO&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;CPOVT001-006 / CPOVR001-006&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="50" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep2" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;spacingLeft=10;" value="Handlers&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;CUGHR000 / 101 / 103 / 107 / 108&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="420" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep3" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FDF2E0;strokeColor=#B5760F;spacingLeft=10;" value="HOST — ampliar copy/layout&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;UGSI + UGLQ&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="790" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep4" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#F3F0FA;strokeColor=#6B5CA5;spacingLeft=10;" value="Clave de 23 posiciones&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;UGWCNRA+UG7CCNRA / UGWCRAR+UR7CCRAR&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="340" x="1160" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep5" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FDF2E0;strokeColor=#B5760F;spacingLeft=10;" value="Parametría NIT→Grupo y Garantía&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;UGDTGAR + UGDTT37&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="340" x="1550" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep6" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FDF2E0;strokeColor=#B5760F;spacingLeft=10;" value="Procesa variables 19/21&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;PUGDRAR3 + UG4CRAR1 (registro 99)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="340" x="1940" y="1175" as="geometry" />
+        </mxCell>
+        <mxCell id="pStep7" parent="a1" style="html=1;shape=component;align=center;verticalAlign=middle;fontFamily=Courier New;fontSize=9.5;fontStyle=1;fillColor=#FFFFFF;strokeColor=#182230;spacingLeft=10;" value="Scoring&lt;br&gt;&lt;font style=&quot;font-size:8px&quot;&gt;UGAO + UGY2 + CUGHR107&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="2330" y="1175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pE1" parent="a1" edge="1" source="pStep1" target="pStep2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="pE2" parent="a1" edge="1" source="pStep2" target="pStep3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#2E7D6B;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="pE3" parent="a1" edge="1" source="pStep3" target="pStep4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="pE4" parent="a1" edge="1" source="pStep4" target="pStep5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#6B5CA5;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="pE5" parent="a1" edge="1" source="pStep5" target="pStep6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="pE6" parent="a1" edge="1" source="pStep6" target="pStep7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#B5760F;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <mxCell id="pNote" parent="a1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D6B;align=left;verticalAlign=top;spacing=10;fontFamily=Helvetica;fontSize=10.5;" value="&lt;b&gt;Confirmado textualmente en el mapa real (Mapa de impacto Pricing APIS.jpg):&lt;/b&gt; &quot;La tabla UGDTNRA no requiere cambio de estructura física, solo lógica y reglas de procesamiento&quot; — coincide exactamente con lo ya concluido en este proyecto.&lt;br&gt;&lt;font style=&quot;font-size:9px;color:#B23A3A&quot;&gt;⚠ Discrepancia sin resolver: este mapa calcula 25.920 combinaciones de clave; el archivo real de Rentabilidad (Excel validado antes) da 20.736. Hay que reconciliar cuál es la combinatoria vigente.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="2630" x="50" y="1250" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
