@@ -1,0 +1,75 @@
+//G2JCL001  JOB CLASS=B,MSGCLASS=H,MSGLEVEL=(1,1)                       00001000
+//JOBLIB    DD DSN=COBD.ALTAMIRA.LOADLIB.BATCH,DISP=SHR                 00002000
+//**********************************************************************00003000
+//*PASO PARA BORRAR LOS ARCHIVOS QUE VA A CREAR EL JOB
+//**********************************************************************00005000
+//G2J01030  EXEC PGM=IDCAMS                                             00006000
+//SYSPRINT  DD  SYSOUT=*                                                00007000
+//SYSIN     DD  *                                                       00008000
+  DELETE    COBD.MP.FWSD1.G2JCL001.SORTCLIE.SORT                        00009000
+  DELETE    COBD.MP.FWSD1.G2JCL001.SORTCRED.SORT                        00010000
+  DELETE    COBD.MP.FWSD1.G2JCL001.TCRECLIE                             00011000
+  DELETE    COBD.MP.FWSD1.G2JCL001.SORTTCRE.SORT                        00012000
+  SET MAXCC=0                                                           00017000
+  SET LASTCC=00                                                         00018000
+//**********************************************************************00019000
+//*PASO QUE ORDENA UN ARCHIVO   (SORT)
+//**********************************************************************00021000
+//G2J01025 EXEC PGM=ICEMAN,COND=(4,LT)                                  00022000
+//SYSPRINT DD  SYSOUT=*                                                 00023000
+//SYSOUT   DD  SYSOUT=*                                                 00024000
+//SYSTIN   DD  SYSOUT=*                                                 00025000
+//SORTIN   DD  DSN=COBD.MP.FWSD1.G2JCL001.CLIENTES,                     00026000
+//             DISP=SHR                                                 00027000
+//SORTOUT  DD  DSN=COBD.MP.FWSD1.G2JCL001.SORTCLIE.SORT,                00028000
+//             DISP=(NEW,CATLG,DELETE),                                 00029000
+//             UNIT=SYSDA,SPACE=(CYL,(10,5),RLSE),                      00030000
+//             DCB=(RECFM=FB,BLKSIZE=0)                                 00031000
+//SYSIN    DD  *                                                        00032000
+    SORT FIELDS=(1,8,ZD,A)                                              00033000
+//*                                                                     00034000
+//**********************************************************************00051000
+//*PASO  PARA LLAMAR UN PROGRAMA COBOL      SIN DB2                    *00052000
+//**********************************************************************00053000
+//G2J01015 EXEC PGM=G2PGR012,COND=(4,LT)                                00054000
+//SYSPRINT DD  SYSOUT=*                                                 00055000
+//SYSOUT   DD  SYSOUT=*                                                 00056000
+//SYSABOUT DD  SYSOUT=*                                                 00057000
+//SYSDBOUT DD  SYSOUT=*                                                 00058000
+//SYSUDUMP DD  SYSOUT=*                                                 00059000
+//E1SORCRE DD  DSN=COBD.MP.FWSD1.G2JCL001.SORTCRED.SORT,DISP=SHR        00060000
+//E2SORCLI DD  DSN=COBD.MP.FWSD1.G2JCL001.SORTCLIE.SORT,DISP=SHR        00061000
+//S1TCRCLI DD  DSN=COBD.MP.FWSD1.G2JCL001.TCRECLIE,                     00062000
+//             DISP=(NEW,CATLG,DELETE),                                 00063000
+//             DCB=(RECFM=FB,BLKSIZE=0),                                00064000
+//             UNIT=SYSDA,BUFNO=30,SPACE=(CYL,(10,5),RLSE)              00065000
+//S2INCON1 DD  DSN=COBD.MP.FWSD1.G2JCL001.INCOSI1,                     000066000
+//             DISP=(NEW,CATLG,DELETE),                                 00067000
+//             DCB=(RECFM=FB,BLKSIZE=0),                                00068000
+//             UNIT=SYSDA,BUFNO=30,SPACE=(CYL,(10,5),RLSE)              00069000
+//*                                                                     00070000
+//**********************************************************************00019000
+//*PASO  PARA LLAMAR UN PROGRAMA COBOL      CON DB2                    *00052000
+//**********************************************************************00021000
+//G2J02000 EXEC PGM=IKJEFT1A,COND=(4,LT)                                00106000
+//SYSPRINT DD  SYSOUT=*                                                 00107000
+//SYSTSPRT DD  SYSOUT=*
+//SYSOUT   DD  SYSOUT=*                                                 00108000
+//SYSABOUT DD  SYSOUT=*                                                 00109000
+//SYSDBOUT DD  SYSOUT=*                                                 00110000
+//SYSUDUMP DD  SYSOUT=*
+//QRLSDB2  DD  SYSOUT=(*,,)                                             00111000
+//S1STATXX DD  DSN=COBD.MP.FWSD1.G2JCL002.STATESXX,                     00114000
+//             DISP=(NEW,CATLG,DELETE),                                 00115000
+//             DCB=(RECFM=FB,BLKSIZE=0),                                00116000
+//             UNIT=SYSDA,BUFNO=30,SPACE=(CYL,(10,5),RLSE)              00117000
+//S2STATES DD  DSN=COBD.MP.FWSD1.G2JCL002.STATESOT,                     00118000
+//             DISP=(NEW,CATLG,DELETE),                                 00119000
+//             DCB=(RECFM=FB,BLKSIZE=0),                                00120000
+//             UNIT=SYSDA,BUFNO=30,SPACE=(CYL,(10,5),RLSE)
+//SYSTSIN  DD  *
+    DSN SYSTEM(DB2)
+    RUN PROGRAM (G2PRG014) PLAN (BVDMP)
+    END
+//*
+//                                                                      00122000
